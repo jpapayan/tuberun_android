@@ -30,7 +30,7 @@ public class ClaimsBinder implements ViewBinder, OnClickListener {
 			view_claim_indexes.put(view, Integer.parseInt(s));
 			return true;
 		}
-		if (view.getId()==R.id.claims_icon) {
+		if (view.getId() == R.id.claims_icon) {
 			if (Boolean.parseBoolean(s)) view.setBackgroundResource(R.drawable.btn_check_buttonless_on);
 			else view.setBackgroundResource(R.drawable.btn_check_buttonless_off);
 			return true;
