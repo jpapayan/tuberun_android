@@ -82,6 +82,7 @@ public class ClaimActivity extends TabActivity implements OnTabChangeListener {
 	
 	@Override
 	protected void onPause() {
+		super.onPause();
 		store.storeToFile(this);
 	}
 	

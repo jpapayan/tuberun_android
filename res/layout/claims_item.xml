@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="wrap_content"
-	android:layout_width="fill_parent"
-	android:orientation="horizontal"
-	android:paddingLeft="5dip"
-	>
-	<TextView android:id="@+id/claims_icon"
-	   android:layout_width="45dip"
-	   android:layout_height="45dip"
-	   android:padding="10dp"  
-	/>
-	<TextView android:id="@+id/claims_title" 
-	    android:layout_width="fill_parent"
-		android:layout_height="wrap_content" 
-		android:padding="10dp"
-		android:gravity="left"
-		android:textSize="16sp">
-	</TextView>
+	android:layout_height="wrap_content" android:layout_width="fill_parent"
+	android:orientation="horizontal" android:paddingLeft="5dip">
+	<TableLayout android:id="@+id/favorites_line"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_gravity="center" android:stretchColumns="1">
+		<TableRow>
+			<TextView android:id="@+id/claims_icon"
+				android:layout_width="28dip" android:layout_height="45dip"
+				android:padding="10dp" android:layout_gravity="center_vertical" />
+			<TextView android:id="@+id/claims_title"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:padding="10dp" android:gravity="left" android:textSize="16sp"
+				style="@style/WhiteText">
+			</TextView>
+			<Button android:id="@+id/remove_claim" android:textOn=""
+				android:textOff="" android:layout_width="45dip"
+				android:layout_height="45dip" android:layout_gravity="top"
+				android:focusable="false" android:focusableInTouchMode="false"
+				style="@style/RemoveFavoriteButton" />
+		</TableRow>
+
+	</TableLayout>
+
 </LinearLayout>

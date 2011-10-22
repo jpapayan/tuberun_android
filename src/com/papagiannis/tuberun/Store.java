@@ -81,4 +81,8 @@ public class Store<T> {
 		return list.contains(f);
 	}
 
+	public  void removeIndex(int i, Activity activity) {
+		list.remove(i);
+		storeToFile(activity);
+	}
 }

@@ -9,7 +9,7 @@ import android.view.View;
 
 public class Claim implements Serializable
     {
-	/*
+	
         public enum ClaimType
         {
             DLR,
@@ -31,6 +31,7 @@ public class Claim implements Serializable
         public Boolean getSubmitted() {
 			return submitted;
 		}
+        /*
 		public void setSubmitted(Boolean submitted) {
 			submitted = submitted;
 			//NotifyPropertyChanged("Submitted");

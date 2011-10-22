@@ -80,6 +80,7 @@ public class Favorite implements Serializable {
 		return true;
 	}
 
+	//TODO: remove the statics and rewrite this to use the Store class, like the ClaimStore.
 	transient private static ArrayList<Favorite> favorites = null;
 
 	private static ArrayList<Favorite> getFromFile(Activity activity) {
