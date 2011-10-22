@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:orientation="vertical">
+
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:orientation="vertical">
+		
+		<TextView android:id="@+id/nearby_distance"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:paddingTop="20dp" android:paddingLeft="10dp" android:gravity="left"
+			android:textSize="16sp" style="@style/WhiteText">
+		</TextView>
+		
+		<TextView android:id="@+id/nearby_name"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:paddingBottom="10dp" android:gravity="center_horizontal"
+			android:textSize="16sp" style="@style/WhiteText" >
+		</TextView>
+		
+	</LinearLayout>
+
+
+	<TextView android:id="@+id/nearby_Piccadily" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>	
+	<TextView android:id="@+id/nearby_Metropolitan" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>
+	<TextView android:id="@+id/nearby_District" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>
+	<TextView android:id="@+id/nearby_Hammersmith" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>
+	<TextView android:id="@+id/nearby_Circle" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>
+	<TextView android:id="@+id/nearby_Northern" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>
+	<TextView android:id="@+id/nearby_DLR" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>
+	<TextView android:id="@+id/nearby_Overground" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>
+	<TextView android:id="@+id/nearby_Jubilee" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>
+	<TextView android:id="@+id/nearby_Victoria" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>
+	<TextView android:id="@+id/nearby_Bakerloo" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>
+	<TextView android:id="@+id/nearby_Waterloo" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>
+	<TextView android:id="@+id/nearby_Central" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="10dp"
+		android:gravity="center_horizontal" android:textSize="16sp"
+		style="@style/WhiteText">
+	</TextView>
+		
+</LinearLayout>
+
+

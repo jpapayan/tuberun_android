@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical">
+
+	<ImageView android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:src="@drawable/background_claims"
+		android:scaleType="centerCrop" />
+
+	<LinearLayout android:id="@+id/mainmenu"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:orientation="vertical" android:gravity="bottom"
+		android:layout_marginBottom="10dip">
+
+		<LinearLayout android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:orientation="horizontal">
+
+			<TextView android:id="@+id/text_title"
+				android:layout_height="wrap_content" android:text="Last Update: Never"
+				android:layout_width="fill_parent" android:layout_weight="5"
+				android:gravity="center_horizontal" android:textColor="#FFFFFF" />
+			<Button android:id="@+id/button_add" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text=""
+				android:layout_weight="0" style="@style/AddButton" />
+
+
+		</LinearLayout>
+
+		<ListView android:id="@+id/android:list"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:cacheColorHint="#00000000" />
+
+		<TextView android:id="@android:id/empty"
+			android:layout_width="match_parent" android:layout_height="match_parent"
+			android:gravity="center_horizontal|center_vertical" style="@style/WhiteText"
+			android:text="Do you know that you can claim your money back if your train is delayed for more than 15min?" />
+
+	</LinearLayout>
+
+</FrameLayout>

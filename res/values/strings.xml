@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">TubeRun</string>
+	<string name="status_title">Status</string>
+	<string name="departures_title">Departures</string>
+	<string name="nearby_title">Nearby</string>
+	<string name="maps_title">Maps</string>
+	<string name="claims_title">Claims</string>
+	<string name="favorites_title">Favourites</string>
+	<string name="show_weekend">Show Weekend</string>
+	<string name="show_now">Show Now</string>
+
+	<string-array name="ticket_type_spinner">
+		<item>Oyster Card</item>
+		<item>TfL Travelcard</item>
+		<item>National Rail Travelcard</item>
+	</string-array>
+	<string-array name="oyster_card_type_spinner">
+		<item>Adult</item>
+		<item>Child</item>
+		<item>Student</item>
+	</string-array>
+	<string-array name="oyster_ticket_type_spinner">
+		<item>Annual</item>
+		<item>Monthly</item>
+		<item>7 day</item>
+		<item>Pre pay</item>
+		<item>Annual + pre pay</item>
+		<item>Monthly + pre pay</item>
+		<item>7 day + pre pay</item>
+		<item>Other period</item>
+		<item>Other period + pre pay</item>
+	</string-array>
+	<string-array name="tfl_duration_spinner">
+		<item>1 day</item>
+		<item>Other period</item>
+	</string-array>
+	<string-array name="rail_duration_spinner">
+		<item>Annual</item>
+		<item>Monthly</item>
+		<item>7 day</item>
+		<item>1 day</item>
+		<item>Other period</item>
+	</string-array>
+	
+</resources>

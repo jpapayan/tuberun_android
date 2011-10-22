@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical">
+
+	<ImageView android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:src="@drawable/background_claims"
+		android:scaleType="centerCrop" />
+
+	<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@android:id/tabhost" android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="fill_parent">
+			<TabWidget android:id="@android:id/tabs"
+				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+			<ScrollView android:layout_width="fill_parent"
+				android:layout_height="fill_parent">
+
+				<FrameLayout android:id="@android:id/tabcontent"
+					android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+					<LinearLayout android:id="@+id/overview_tab"
+						android:orientation="vertical" android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:visibility="gone">
+
+						<LinearLayout android:orientation="horizontal"
+							android:gravity="center_horizontal" android:paddingTop="10dip"
+							android:layout_width="fill_parent" android:layout_height="wrap_content">
+							<Button android:id="@+id/submit_button"
+								android:layout_width="wrap_content" android:layout_height="wrap_content"
+								android:text="Submit Claim" android:layout_gravity="center">
+							</Button>
+							<Button android:id="@+id/delete_button"
+								android:layout_width="wrap_content" android:layout_height="wrap_content"
+								android:text="Delete Claim" android:layout_gravity="center" />
+						</LinearLayout>
+
+						<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+							android:paddingTop="5dip" android:paddingLeft="5dip"
+							android:layout_height="wrap_content" android:layout_width="wrap_content"
+							android:text="Reason of Delay"></TextView>
+						<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_height="wrap_content" android:layout_width="fill_parent"
+							android:paddingLeft="10dip" android:paddingRight="5dip"
+							android:paddingTop="5dip" style="@style/WhiteText"
+							android:text="For a claim to be accepted, you must have been delayed for reasons within TfL's control (i.e. no security alerts, no third party action, no bad weather, no advertised service changes)"></TextView>
+						<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+							android:paddingTop="10dip" android:paddingLeft="5dip"
+							android:layout_height="wrap_content" android:layout_width="wrap_content"
+							android:text="Claim Date"></TextView>
+						<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_height="wrap_content" android:layout_width="fill_parent"
+							android:paddingLeft="10dip" android:paddingRight="5dip"
+							android:paddingTop="5dip" style="@style/WhiteText"
+							android:text="Submit within 14 days of the delay, or you will not get a refund"></TextView>
+						<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+							android:paddingTop="10dip" android:paddingLeft="5dip"
+							android:layout_height="wrap_content" android:layout_width="wrap_content"
+							android:text="User Notes"></TextView>
+						<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_height="wrap_content" android:layout_width="fill_parent"
+							android:paddingLeft="10dip" android:paddingRight="5dip"
+							android:paddingTop="5dip" style="@style/WhiteText"
+							android:text="Enter information for your own reference (not sent to TfL)"></TextView>
+						<EditText android:layout_height="wrap_content"
+							android:paddingLeft="10dip" android:paddingRight="10dip"
+							android:paddingTop="5dip" android:layout_width="match_parent">
+						</EditText>
+						<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+							android:paddingTop="10dip" android:paddingLeft="5dip"
+							android:layout_height="wrap_content" android:layout_width="wrap_content"
+							android:text="Result"></TextView>
+						<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_height="wrap_content" android:layout_width="fill_parent"
+							android:paddingLeft="10dip" android:paddingRight="5dip"
+							android:paddingTop="5dip" android:paddingBottom="10dip"
+							style="@style/WhiteText" android:text="Not yet submitted"></TextView>
+					</LinearLayout>
+
+					<LinearLayout android:id="@+id/journey_tab"
+						android:orientation="vertical" android:layout_width="fill_parent"
+						android:layout_height="fill_parent" android:visibility="gone">
+
+						<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+							android:paddingTop="10dip" android:paddingLeft="5dip"
+							android:layout_height="wrap_content" android:layout_width="wrap_content"
+							android:text="Start Date"></TextView>
+						<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_height="wrap_content" android:layout_width="fill_parent"
+							android:paddingLeft="10dip" android:paddingRight="5dip"
+							android:paddingTop="5dip" style="@style/WhiteText" android:text="When did your journey start?"></TextView>
+
+						<LinearLayout android:orientation="horizontal"
+							android:gravity="center_horizontal" android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:paddingLeft="10dip"
+							android:paddingRight="10dip">
+
+							<Button android:layout_width="150dip"
+								android:layout_height="wrap_content" android:inputType="time"
+								android:paddingLeft="10dip" android:paddingRight="10dip"
+								android:paddingTop="5dip" android:layout_gravity="center">
+							</Button>
+
+							<Button android:layout_width="150dip"
+								android:layout_height="wrap_content" android:inputType="time"
+								android:paddingLeft="10dip" android:paddingRight="10dip"
+								android:paddingTop="5dip" android:layout_gravity="center">
+							</Button>
+
+						</LinearLayout>
+
+
+						<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+							android:paddingTop="10dip" android:paddingLeft="5dip"
+							android:layout_height="wrap_content" android:layout_width="wrap_content"
+							android:text="From and To"></TextView>
+						<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_height="wrap_content" android:layout_width="fill_parent"
+							android:paddingLeft="10dip" android:paddingRight="5dip"
+							android:paddingTop="5dip" style="@style/WhiteText"
+							android:text="At which station did you start your journey?"></TextView>
+
+						<Spinner android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:paddingLeft="20dip"
+							android:paddingRight="5dip" android:paddingTop="5dip" />
+
+						<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_height="wrap_content" android:layout_width="fill_parent"
+							android:paddingLeft="10dip" android:paddingRight="5dip"
+							android:paddingTop="5dip" style="@style/WhiteText"
+							android:text="Which line did you use when delayed?"></TextView>
+
+						<Spinner android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:paddingLeft="20dip"
+							android:paddingRight="5dip" android:paddingTop="5dip" />
+
+						<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_height="wrap_content" android:layout_width="fill_parent"
+							android:paddingLeft="10dip" android:paddingRight="5dip"
+							android:paddingTop="5dip" style="@style/WhiteText"
+							android:text="At which station did you plan to finish your journey?"></TextView>
+
+						<Spinner android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:paddingLeft="20dip"
+							android:paddingRight="5dip" android:paddingTop="5dip" />
+
+					</LinearLayout>
+
+					<LinearLayout android:id="@+id/delay_tab"
+						android:orientation="vertical" android:layout_width="fill_parent"
+						android:layout_height="fill_parent" android:visibility="gone">
+
+						<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+							android:paddingTop="10dip" android:paddingLeft="5dip"
+							android:layout_height="wrap_content" android:layout_width="wrap_content"
+							android:text="Timing"></TextView>
+
+						<LinearLayout android:orientation="horizontal"
+							android:layout_width="fill_parent" android:layout_height="wrap_content">
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="wrap_content"
+								android:paddingLeft="10dip" android:paddingRight="15dip"
+								android:paddingTop="5dip" style="@style/WhiteText" android:text="When did the delay occur?" />
+
+							<Button android:layout_width="100dip"
+								android:layout_height="wrap_content" android:inputType="time"
+								android:paddingLeft="10dip" android:paddingRight="10dip"
+								android:paddingTop="5dip" android:layout_gravity="right" />
+						</LinearLayout>
+						<LinearLayout android:orientation="horizontal"
+							android:layout_width="fill_parent" android:layout_height="wrap_content">
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="wrap_content"
+								android:paddingLeft="10dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" style="@style/WhiteText" android:text="How long did the delay last?" />
+
+							<Button android:layout_width="100dip"
+								android:layout_height="wrap_content" android:inputType="time"
+								android:paddingLeft="10dip" android:paddingRight="10dip"
+								android:paddingTop="5dip" android:layout_gravity="right" />
+						</LinearLayout>
+
+						<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+							android:paddingTop="10dip" android:paddingLeft="5dip"
+							android:layout_height="wrap_content" android:layout_width="wrap_content"
+							android:text="Location"></TextView>
+
+						<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_height="wrap_content" android:layout_width="fill_parent"
+							android:paddingLeft="10dip" android:paddingRight="5dip"
+							android:paddingTop="5dip" style="@style/WhiteText"
+							android:text="I was delayed at a given station"></TextView>
+
+						<Spinner android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:paddingLeft="20dip"
+							android:paddingRight="5dip" android:paddingTop="5dip" />
+
+						<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_height="wrap_content" android:layout_width="fill_parent"
+							android:paddingLeft="10dip" android:paddingRight="5dip"
+							android:paddingTop="5dip" style="@style/WhiteText"
+							android:text="OR I was delayed between station"></TextView>
+
+						<Spinner android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:paddingLeft="20dip"
+							android:paddingRight="5dip" android:paddingTop="5dip" />
+
+						<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_height="wrap_content" android:layout_width="fill_parent"
+							android:paddingLeft="10dip" android:paddingRight="5dip"
+							android:paddingTop="5dip" style="@style/WhiteText" android:text="and station"></TextView>
+
+						<Spinner android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:paddingLeft="20dip"
+							android:paddingRight="5dip" android:paddingTop="5dip" />
+
+					</LinearLayout>
+
+					<LinearLayout android:id="@+id/personal_tab"
+						android:orientation="vertical" android:layout_width="fill_parent"
+						android:layout_height="fill_parent" android:visibility="gone">
+
+						<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+							android:paddingTop="10dip" android:paddingLeft="5dip"
+							android:layout_height="wrap_content" android:layout_width="wrap_content"
+							android:text="Personal data"></TextView>
+						<LinearLayout android:orientation="horizontal"
+							android:paddingLeft="10dip" android:paddingRight="15dip"
+							android:paddingTop="5dip" android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="100dip"
+								android:layout_gravity="center_vertical" style="@style/WhiteText"
+								android:text="Title" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+						</LinearLayout>
+						<LinearLayout android:orientation="horizontal"
+							android:paddingLeft="10dip" android:paddingRight="15dip"
+							android:paddingTop="5dip" android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="100dip"
+								android:layout_gravity="center_vertical" style="@style/WhiteText"
+								android:text="Surname" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+						</LinearLayout>
+						<LinearLayout android:orientation="horizontal"
+							android:paddingLeft="10dip" android:paddingRight="15dip"
+							android:paddingTop="5dip" android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="100dip"
+								android:layout_gravity="center_vertical" style="@style/WhiteText"
+								android:text="Name" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+						</LinearLayout>
+
+						<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+							android:paddingTop="10dip" android:paddingLeft="5dip"
+							android:layout_height="wrap_content" android:layout_width="wrap_content"
+							android:text="Address"></TextView>
+						<LinearLayout android:orientation="horizontal"
+							android:paddingLeft="10dip" android:paddingRight="15dip"
+							android:paddingTop="5dip" android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="100dip"
+								android:layout_gravity="center_vertical" style="@style/WhiteText"
+								android:text="Line 1" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+						</LinearLayout>
+						<LinearLayout android:orientation="horizontal"
+							android:paddingLeft="10dip" android:paddingRight="15dip"
+							android:paddingTop="5dip" android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="100dip"
+								android:layout_gravity="center_vertical" style="@style/WhiteText"
+								android:text="Line 2" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+						</LinearLayout>
+						<LinearLayout android:orientation="horizontal"
+							android:paddingLeft="10dip" android:paddingRight="15dip"
+							android:paddingTop="5dip" android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="100dip"
+								android:layout_gravity="center_vertical" style="@style/WhiteText"
+								android:text="City/town" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+						</LinearLayout>
+						<LinearLayout android:orientation="horizontal"
+							android:paddingLeft="10dip" android:paddingRight="15dip"
+							android:paddingTop="5dip" android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="100dip"
+								android:layout_gravity="center_vertical" style="@style/WhiteText"
+								android:text="Postcode" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+						</LinearLayout>
+
+						<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+							android:paddingTop="10dip" android:paddingLeft="5dip"
+							android:layout_height="wrap_content" android:layout_width="wrap_content"
+							android:text="Contact data"></TextView>
+						<LinearLayout android:orientation="horizontal"
+							android:paddingLeft="10dip" android:paddingRight="15dip"
+							android:paddingTop="5dip" android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="100dip"
+								android:layout_gravity="center_vertical" style="@style/WhiteText"
+								android:text="Phone" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+						</LinearLayout>
+						<LinearLayout android:orientation="horizontal"
+							android:paddingLeft="10dip" android:paddingRight="15dip"
+							android:paddingTop="5dip" android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="100dip"
+								android:layout_gravity="center_vertical" style="@style/WhiteText"
+								android:text="Email" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+						</LinearLayout>
+						<LinearLayout android:orientation="vertical"
+							android:paddingLeft="10dip" android:paddingRight="15dip"
+							android:paddingTop="5dip" android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="wrap_content"
+								android:layout_gravity="center_vertical" style="@style/WhiteText"
+								android:text="Photocard number (if applicable)" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+						</LinearLayout>
+					</LinearLayout>
+
+					<LinearLayout android:id="@+id/ticket_tab"
+						android:orientation="vertical" android:layout_width="fill_parent"
+						android:layout_height="fill_parent" android:visibility="gone">
+
+						<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+							android:paddingTop="10dip" android:paddingLeft="5dip"
+							android:layout_height="wrap_content" android:layout_width="wrap_content"
+							android:text="Ticket Type"></TextView>
+						<Spinner android:orientation="horizontal"
+							android:paddingLeft="10dip" android:paddingRight="10dip"
+							android:paddingTop="5dip" android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:entries="@array/ticket_type_spinner">
+						</Spinner>
+
+						<LinearLayout android:id="@+id/oyster_layout"
+							android:orientation="vertical" android:paddingLeft="5dip"
+							android:paddingRight="5dip" android:paddingTop="10dip"
+							android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+							<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+								android:paddingTop="10dip" android:paddingLeft="5dip"
+								android:layout_height="wrap_content" android:layout_width="wrap_content"
+								android:text="Oyster details"></TextView>
+
+							<FrameLayout android:paddingLeft="10dip"
+								android:gravity="center" android:layout_gravity="center_horizontal"
+								android:layout_height="wrap_content" android:layout_width="match_parent">
+								<ImageView android:src="@drawable/oyster"
+									android:layout_width="wrap_content" android:layout_height="wrap_content"
+									android:paddingTop="5dip" />
+								<TextView android:text="oyster number" style="@style/WhiteText"
+									android:layout_width="wrap_content" android:layout_height="wrap_content"
+									android:paddingLeft="180dip" />
+							</FrameLayout>
+
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:paddingLeft="10dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" style="@style/WhiteText" android:text="Oyster number" />
+							<EditText android:layout_width="fill_parent"
+								android:inputType="number" android:layout_height="wrap_content"
+								android:paddingLeft="20dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" />
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:paddingLeft="10dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" style="@style/WhiteText" android:text="Oyster card type" />
+							<Spinner android:layout_width="fill_parent"
+								android:entries="@array/oyster_card_type_spinner"
+								android:layout_height="wrap_content" android:paddingLeft="20dip"
+								android:paddingRight="5dip" android:paddingTop="5dip" />
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:paddingLeft="10dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" style="@style/WhiteText" android:text="Oyster ticket type" />
+							<Spinner android:layout_width="fill_parent"
+								android:entries="@array/oyster_ticket_type_spinner"
+								android:layout_height="wrap_content" android:paddingLeft="20dip"
+								android:paddingRight="5dip" android:paddingTop="5dip" />
+
+						</LinearLayout>
+
+						<LinearLayout android:id="@+id/tfl_layout"
+							android:orientation="vertical" android:paddingLeft="5dip"
+							android:paddingRight="5dip" android:paddingTop="10dip"
+							android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+							<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+								android:paddingTop="10dip" android:paddingLeft="5dip"
+								android:layout_height="wrap_content" android:layout_width="wrap_content"
+								android:text="TfL travelcard details"></TextView>
+
+							<TableLayout android:paddingLeft="10dip"
+								android:layout_gravity="center_horizontal"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:stretchColumns="0,1">
+								<TableRow android:layout_gravity="center_horizontal"
+									android:layout_width="wrap_content" android:baselineAligned="true">
+									<ImageView android:src="@drawable/tfltravelcard"
+										android:layout_weight="1" android:layout_width="wrap_content"
+										android:layout_height="wrap_content" android:paddingTop="5dip"
+										android:layout_gravity="right" />
+									<LinearLayout android:orientation="vertical"
+										android:layout_weight="1" android:layout_width="wrap_content"
+										android:layout_height="wrap_content" android:layout_gravity="left"
+										android:paddingLeft="5dip">
+										<TextView android:text="expiry date" style="@style/WhiteText"
+											android:layout_width="wrap_content" android:layout_height="wrap_content" />
+										<TextView android:text="ticket number" style="@style/WhiteText"
+											android:layout_width="wrap_content" android:layout_height="wrap_content" />
+										<TextView android:text="issuing station" style="@style/WhiteText"
+											android:layout_width="wrap_content" android:layout_height="wrap_content" />
+									</LinearLayout>
+								</TableRow>
+							</TableLayout>
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:paddingLeft="10dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" style="@style/WhiteText" android:text="Expiry date" />
+							<EditText android:layout_width="fill_parent"
+								android:inputType="date" android:layout_height="wrap_content"
+								android:paddingLeft="20dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" />
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:paddingLeft="10dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" style="@style/WhiteText" android:text="Ticket number" />
+							<EditText android:layout_width="fill_parent"
+								android:inputType="number" android:layout_height="wrap_content"
+								android:paddingLeft="20dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" />
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:paddingLeft="10dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" style="@style/WhiteText" android:text="Issuing station" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:paddingLeft="20dip"
+								android:paddingRight="5dip" android:paddingTop="5dip" />
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:paddingLeft="10dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" style="@style/WhiteText"
+								android:text="Station where the ticket was retained (if so)" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:paddingLeft="20dip"
+								android:paddingRight="5dip" android:paddingTop="5dip" />
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:paddingLeft="10dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" style="@style/WhiteText" android:text="Travelcard duration" />
+							<Spinner android:layout_width="fill_parent"
+								android:entries="@array/tfl_duration_spinner"
+								android:layout_height="wrap_content" android:paddingLeft="20dip"
+								android:paddingRight="5dip" android:paddingTop="5dip" />
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:paddingLeft="10dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" style="@style/WhiteText" android:text="Travelcard type" />
+							<Spinner android:layout_width="fill_parent"
+								android:entries="@array/oyster_card_type_spinner"
+								android:layout_height="wrap_content" android:paddingLeft="20dip"
+								android:paddingRight="5dip" android:paddingTop="5dip" />
+						</LinearLayout>
+
+						<LinearLayout android:id="@+id/rail_layout"
+							android:orientation="vertical" android:paddingLeft="5dip"
+							android:paddingRight="5dip" android:paddingTop="10dip"
+							android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+							<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+								android:paddingTop="10dip" android:paddingLeft="5dip"
+								android:layout_height="wrap_content" android:layout_width="wrap_content"
+								android:text="National Rail Travelcard details"></TextView>
+
+							<TableLayout android:paddingLeft="10dip"
+								android:layout_gravity="center_horizontal"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:stretchColumns="0,1">
+								<TableRow android:layout_gravity="center_horizontal"
+									android:layout_width="wrap_content" android:baselineAligned="true">
+									<ImageView android:src="@drawable/railtravelcard"
+										android:layout_weight="1" android:layout_width="wrap_content"
+										android:layout_height="wrap_content" android:paddingTop="5dip"
+										android:layout_gravity="right" />
+									<LinearLayout android:orientation="vertical"
+										android:layout_weight="1" android:layout_width="wrap_content"
+										android:layout_height="wrap_content" android:layout_gravity="left"
+										android:paddingLeft="5dip">
+										<TextView android:text="ticket class" style="@style/WhiteText"
+											android:layout_width="wrap_content" android:layout_height="wrap_content" />
+										<TextView android:text="valid until" style="@style/WhiteText"
+											android:layout_width="wrap_content" android:layout_height="wrap_content" />
+										<TextView android:text="ticket number" style="@style/WhiteText"
+											android:layout_width="wrap_content" android:layout_height="wrap_content" />
+									</LinearLayout>
+								</TableRow>
+							</TableLayout>
+
+							<LinearLayout android:orientation="horizontal"
+								android:paddingLeft="10dip" android:paddingRight="15dip"
+								android:paddingTop="5dip" android:layout_width="fill_parent"
+								android:layout_height="wrap_content">
+								<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+									android:layout_height="wrap_content" android:layout_width="150dip"
+									android:layout_gravity="center_vertical" style="@style/WhiteText"
+									android:text="Ticket Class" />
+								<EditText android:layout_width="fill_parent"
+									android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+							</LinearLayout>
+							<LinearLayout android:orientation="horizontal"
+								android:paddingLeft="10dip" android:paddingRight="15dip"
+								android:paddingTop="5dip" android:layout_width="fill_parent"
+								android:layout_height="wrap_content">
+								<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+									android:layout_height="wrap_content" android:layout_width="150dip"
+									android:layout_gravity="center_vertical" style="@style/WhiteText"
+									android:text="Valid until" />
+								<EditText android:layout_width="fill_parent"
+									android:inputType="date" android:layout_height="wrap_content"
+									android:layout_gravity="center_vertical|right" />
+							</LinearLayout>
+							<LinearLayout android:orientation="horizontal"
+								android:paddingLeft="10dip" android:paddingRight="15dip"
+								android:paddingTop="5dip" android:layout_width="fill_parent"
+								android:layout_height="wrap_content">
+								<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+									android:layout_height="wrap_content" android:layout_width="150dip"
+									android:layout_gravity="center_vertical" style="@style/WhiteText"
+									android:text="Ticket number" />
+								<EditText android:layout_width="fill_parent"
+									android:inputType="number" android:layout_height="wrap_content"
+									android:layout_gravity="center_vertical|right" />
+							</LinearLayout>
+							<LinearLayout android:orientation="horizontal"
+								android:paddingLeft="10dip" android:paddingRight="15dip"
+								android:paddingTop="5dip" android:layout_width="fill_parent"
+								android:layout_height="wrap_content">
+								<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+									android:layout_height="wrap_content" android:layout_width="150dip"
+									android:layout_gravity="center_vertical" style="@style/WhiteText"
+									android:text="Travelcard duration" />
+								<Spinner android:layout_width="fill_parent"
+									android:entries="@array/rail_duration_spinner"
+									android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+							</LinearLayout>
+							<LinearLayout android:orientation="horizontal"
+								android:paddingLeft="10dip" android:paddingRight="15dip"
+								android:paddingTop="5dip" android:layout_width="fill_parent"
+								android:layout_height="wrap_content">
+								<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+									android:layout_height="wrap_content" android:layout_width="150dip"
+									android:layout_gravity="center_vertical" style="@style/WhiteText"
+									android:text="Travelcard type" />
+								<Spinner android:layout_width="fill_parent"
+									android:entries="@array/oyster_card_type_spinner"
+									android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
+							</LinearLayout>
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:paddingLeft="10dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" style="@style/WhiteText" android:text="Place of purchase" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:paddingLeft="20dip"
+								android:paddingRight="5dip" android:paddingTop="5dip" />
+							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
+								android:layout_height="wrap_content" android:layout_width="fill_parent"
+								android:paddingLeft="10dip" android:paddingRight="5dip"
+								android:paddingTop="5dip" style="@style/WhiteText"
+								android:text="Station where the ticket was retained (if so)" />
+							<EditText android:layout_width="fill_parent"
+								android:layout_height="wrap_content" android:paddingLeft="20dip"
+								android:paddingRight="5dip" android:paddingTop="5dip" />
+						</LinearLayout>
+					</LinearLayout>
+
+				</FrameLayout>
+			</ScrollView>
+		</LinearLayout>
+	</TabHost>
+
+</FrameLayout>
+

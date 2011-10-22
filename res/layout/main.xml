@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical">
+
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:src="@drawable/background" android:scaleType="centerCrop" />
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/mainmenu" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:orientation="vertical"
+		android:gravity="bottom" android:layout_marginBottom="10dip">
+
+		<!-- <TextView android:text="@string/app_name" -->
+		<!-- android:layout_width="wrap_content" android:layout_height="wrap_content" -->
+		<!-- android:layout_gravity="center" android:stretchColumns="*"/> -->
+		
+<!-- 		<Button -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:background="@drawable/home_btn_test" -->
+<!--         android:drawableTop="@drawable/home_icon_test" -->
+<!--         android:textColor="#FFFFFF" -->
+<!--         android:id="@+id/ButtonTest" -->
+<!--         android:paddingTop="32sp" -->
+<!--         android:drawablePadding="-15sp" -->
+<!--         android:text="this is text"></Button> -->
+
+		<TableLayout android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_gravity="center"
+			android:stretchColumns="*"
+			android:paddingLeft="20dip"
+			android:paddingRight="20dip">
+			<TableRow>
+				<Button android:id="@+id/button_status" android:text="@string/status_title"
+				     android:height="80dip" android:onClick="showStatusActivity"/>
+				<Button android:id="@+id/button_departures" android:text="@string/departures_title"
+				     android:height="80dip" />
+			</TableRow>
+			<TableRow>
+				<Button android:id="@+id/button_nearby" android:text="@string/nearby_title" 
+				     android:height="80dip" />
+				<Button android:id="@+id/button_maps" android:text="@string/maps_title" 
+				     android:height="80dip"/>
+			</TableRow>
+			<TableRow>
+				<Button android:id="@+id/button_favorites" android:text="@string/favorites_title" 
+				     android:height="80dip"/>
+				<Button android:id="@+id/button_claims" android:text="@string/claims_title" 
+				     android:height="80dip"/>
+			</TableRow>
+		</TableLayout>
+
+	</LinearLayout>
+
+</FrameLayout>
