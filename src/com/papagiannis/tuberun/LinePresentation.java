@@ -1,12 +1,13 @@
 package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.graphics.Color;
 
 public class LinePresentation
 {
-    public static Iterable<String> getLinesStringList()
+    public static List<String> getLinesStringList()
     {
         ArrayList<String> res = new ArrayList<String>();
         res.add(getStringRespresentation(LineType.BAKERLOO));
@@ -25,6 +26,22 @@ public class LinePresentation
         res.add(getStringRespresentation(LineType.BUSES));
         return res;
     }
+    public static List<String> getLinesStringListClaims() {
+    	ArrayList<String> res= new ArrayList<String>();
+    	res.add("Bakerloo");
+    	res.add("Central");
+    	res.add("Circle");
+    	res.add("District");
+    	res.add("Hammersmith & City");
+    	res.add("Jubilee");
+    	res.add("Metropolitan");
+    	res.add("Northern");
+    	res.add("Piccadilly");
+    	res.add("Victoria");
+    	res.add("Waterloo & City");
+    	return res;
+    }
+    
     public static int getBackgroundColor(LineType line)
     {
         int result = Color.WHITE;
@@ -121,7 +138,6 @@ public class LinePresentation
         else if (line.equals( LineType.CENTRAL) ) result = "central";
         return result;
     }
-
     public static LineType  getLineTypeRespresentation(String line)
     {
         LineType result=LineType.BAKERLOO;
@@ -142,7 +158,6 @@ public class LinePresentation
         else if (line.equals( "All") ) result = LineType.ALL;
         return result;
     }
-    
     public static boolean isValidLine(String line) {    	
         return (line.equals( "Piccadily" ) || line.equals( "Metropolitan" ) || line.equals( "District" ) || line.equals( "Hammersmith" )
         	|| line =="Circle" ) || line.equals( "Northern" ) || line.equals( "DLR" ) || line.equals( "Overground" )
@@ -150,22 +165,4 @@ public class LinePresentation
             || line.equals( "Central" ) || line.equals( "Buses" )  || line.equals( "All") ;
     }
     
-//    public static BitmapImage getMap(LineType lineType, int part)
-//    {
-//        if (lineType.equals( LineType.PICACIDILY) return new BitmapImage(new Uri("Images/map_piccadilly" + part + ".png", UriKind.Relative));
-//        else if (lineType.equals( LineType.METROPOLITAN) return new BitmapImage(new Uri("Images/map_metropolitan" + part + ".png", UriKind.Relative));
-//        else if (lineType.equals( LineType.DISTRICT) return new BitmapImage(new Uri("Images/map_district" + part + ".png", UriKind.Relative));
-//        else if (lineType.equals( LineType.HAMMERSMITH) return new BitmapImage(new Uri("Images/map_circle" + part + ".png", UriKind.Relative));
-//        else if (lineType.equals( LineType.CIRCLE) return new BitmapImage(new Uri("Images/map_circle" + part + ".png", UriKind.Relative));
-//        else if (lineType.equals( LineType.NORTHERN) return new BitmapImage(new Uri("Images/map_northern" + part + ".png", UriKind.Relative));
-//        else if (lineType.equals( LineType.DLR) return new BitmapImage(new Uri("Images/map_dlr.png", UriKind.Relative));
-//        else if (lineType.equals( LineType.OVERGROUND) return new BitmapImage(new Uri("Images/map_overground.png", UriKind.Relative));
-//        else if (lineType.equals( LineType.JUBILEE) return new BitmapImage(new Uri("Images/map_jubilee" + part + ".png", UriKind.Relative));
-//        else if (lineType.equals( LineType.VICTORIA) return new BitmapImage(new Uri("Images/map_victoria" + part + ".png", UriKind.Relative));
-//        else if (lineType.equals( LineType.BAKERLOO) return new BitmapImage(new Uri("Images/map_bakerloo"+part+".png", UriKind.Relative));
-//        else if (lineType.equals( LineType.WATERLOO) return new BitmapImage(new Uri("Images/map_waterloo" + part + ".png", UriKind.Relative));
-//        else if (lineType.equals( LineType.CENTRAL) return new BitmapImage(new Uri("Images/map_central" + part + ".png", UriKind.Relative));
-//        else if (lineType.equals( LineType.ALL) return new BitmapImage(new Uri("Images/map_all.jpg", UriKind.Relative));
-//        return null;
-//    }
 }

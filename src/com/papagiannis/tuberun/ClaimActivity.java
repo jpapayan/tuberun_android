@@ -3,6 +3,7 @@ package com.papagiannis.tuberun;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.papagiannis.tuberun.claims.Claim;
 import com.papagiannis.tuberun.claims.ClaimStore;
@@ -107,6 +108,8 @@ public class ClaimActivity extends TabActivity {
 	private TextView resultView;
 	private Button journeyStartDate;
 	private Spinner journeyStartStation;
+	private Spinner journeyLineUsed;
+	private Spinner journeyEndStation;
 
 	private void setupViewReferences() {
 		oysterLayout = findViewById(R.id.oyster_layout);
@@ -118,6 +121,8 @@ public class ClaimActivity extends TabActivity {
 		resultView = (TextView) findViewById(R.id.claim_result);
 		journeyStartDate = (Button) findViewById(R.id.claim_journey_startdate);
 		journeyStartStation = (Spinner) findViewById(R.id.claim_journey_startstation);
+		journeyEndStation = (Spinner) findViewById(R.id.claim_journey_endstation);
+		journeyLineUsed = (Spinner) findViewById(R.id.claim_journey_lineused);
 	}
 
 	private void setupViewHandlers() {
@@ -154,7 +159,7 @@ public class ClaimActivity extends TabActivity {
 			}
 		});
 
-		final ArrayList<String> stations = StationDetails.FetchTubeStationsClaims();
+		final List<String> stations = StationDetails.FetchTubeStationsClaims();
 		ArrayAdapter<String> adapter =
 				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,stations);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -164,6 +169,28 @@ public class ClaimActivity extends TabActivity {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
 				claim.journey_startstation=stations.get(position);
+			}
+		});
+		
+		journeyEndStation.setAdapter(adapter);
+		journeyEndStation.setSelection(stations.indexOf(claim.journey_endstation));
+		journeyEndStation.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+				claim.journey_endstation=stations.get(position);
+			}
+		});
+		
+		final List<String> lines = LinePresentation.getLinesStringListClaims();
+		ArrayAdapter<String> lines_adapter =
+				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,lines);
+		lines_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		journeyLineUsed.setAdapter(lines_adapter);
+		journeyLineUsed.setSelection(stations.indexOf(claim.journey_lineused));
+		journeyLineUsed.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+				claim.journey_lineused=stations.get(position);
 			}
 		});
 

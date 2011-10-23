@@ -129,7 +129,8 @@
 							android:paddingTop="5dip" style="@style/WhiteText"
 							android:text="Which line did you use when delayed?"></TextView>
 
-						<Spinner android:layout_width="fill_parent"
+						<Spinner android:id="@+id/claim_journey_lineused" 
+							android:layout_width="fill_parent"
 							android:layout_height="wrap_content" android:paddingLeft="20dip"
 							android:paddingRight="5dip" android:paddingTop="5dip" />
 
@@ -139,7 +140,8 @@
 							android:paddingTop="5dip" style="@style/WhiteText"
 							android:text="At which station did you plan to finish your journey?"></TextView>
 
-						<Spinner android:layout_width="fill_parent"
+						<Spinner android:id="@+id/claim_journey_endstation" 
+							android:layout_width="fill_parent"
 							android:layout_height="wrap_content" android:paddingLeft="20dip"
 							android:paddingRight="5dip" android:paddingTop="5dip" />
 
