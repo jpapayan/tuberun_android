@@ -163,11 +163,15 @@
 								android:paddingLeft="10dip" android:paddingRight="15dip"
 								android:paddingTop="5dip" style="@style/WhiteText" android:text="When did the delay occur?" />
 
-							<Button android:layout_width="100dip"
+							<Button android:id="@+id/claim_delay_when"
+								android:layout_gravity="center"
+								android:gravity="center" 
+								android:layout_width="100dip"
 								android:layout_height="wrap_content" android:inputType="time"
 								android:paddingLeft="10dip" android:paddingRight="10dip"
-								android:paddingTop="5dip" android:layout_gravity="right" />
+								android:paddingTop="5dip" />
 						</LinearLayout>
+						
 						<LinearLayout android:orientation="horizontal"
 							android:layout_width="fill_parent" android:layout_height="wrap_content">
 							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
@@ -175,10 +179,13 @@
 								android:paddingLeft="10dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" style="@style/WhiteText" android:text="How long did the delay last?" />
 
-							<Button android:layout_width="100dip"
-								android:layout_height="wrap_content" android:inputType="time"
+							<Button android:id="@+id/claim_delay_duration" 
+								android:layout_gravity="center"
+								android:gravity="center"
+								android:layout_width="100dip"
+								android:layout_height="wrap_content" 
 								android:paddingLeft="10dip" android:paddingRight="10dip"
-								android:paddingTop="5dip" android:layout_gravity="right" />
+								android:paddingTop="5dip" />
 						</LinearLayout>
 
 						<TextView android:textAppearance="?android:attr/textAppearanceLarge"

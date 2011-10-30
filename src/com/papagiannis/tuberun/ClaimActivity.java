@@ -8,10 +8,14 @@ import java.util.List;
 import com.papagiannis.tuberun.claims.Claim;
 import com.papagiannis.tuberun.claims.ClaimStore;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.app.Dialog;
 import android.app.TabActivity;
+import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.text.Editable;
@@ -33,6 +37,9 @@ import android.widget.SpinnerAdapter;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
 
 public class ClaimActivity extends TabActivity {
 
@@ -47,6 +54,8 @@ public class ClaimActivity extends TabActivity {
 	Claim claim;
 	ClaimStore store;
 	SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy");
+	SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+	SimpleDateFormat durationFormat = new SimpleDateFormat("mm");
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -119,6 +128,8 @@ public class ClaimActivity extends TabActivity {
 	private Spinner delayStation2;
 	private RadioButton delayAt;
 	private RadioButton delayBetween;
+	private Button delayWhen;
+	private Button delayDuration;
 
 	private void setupViewReferences() {
 		oysterLayout = findViewById(R.id.oyster_layout);
@@ -137,6 +148,8 @@ public class ClaimActivity extends TabActivity {
 		delayStation2 = (Spinner) findViewById(R.id.claim_delay_station2);
 		delayAt = (RadioButton) findViewById(R.id.claim_delay_at);
 		delayBetween = (RadioButton) findViewById(R.id.claim_delay_between);
+		delayWhen= (Button) findViewById(R.id.claim_delay_when);
+		delayDuration= (Button) findViewById(R.id.claim_delay_duration);
 	}
 
 	private void setupViewHandlers() {
@@ -206,9 +219,24 @@ public class ClaimActivity extends TabActivity {
 			}
 		});
 
-		// delay tab
-		updateJourneySpinners();
+		//////////// delay tab /////////////////////
+		delayWhen.setText(timeFormat.format(claim.delay_when));
+		delayWhen.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				showDialog(v.getId());
+			}
+		});
 		
+		delayDuration.setText(durationFormat.format(claim.delay_duration)+" minutes");
+		delayDuration.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				showDialog(v.getId());
+			}
+		});
+		
+		updateJourneySpinners();
+
+		//I don't use a buttongroup, instead I crate and manage the group manually
 		final List<RadioButton> radioButtons = new ArrayList<RadioButton>();
 		radioButtons.add(delayAt);
 		radioButtons.add(delayBetween);
@@ -286,6 +314,34 @@ public class ClaimActivity extends TabActivity {
 					journeyStartDate.setText(dateFormat.format(claim.journey_started));
 				}
 			}, d.getYear() + 1900, d.getMonth(), d.getDate());
+		}
+		else if (delayWhen.getId() == id) {
+			Date d = claim.delay_when;
+			return new TimePickerDialog(this, new OnTimeSetListener() {
+				@Override
+				public void onTimeSet(TimePicker view, int h, int m) {
+					claim.delay_when=new Date();
+					claim.delay_when.setHours(h);
+					claim.delay_when.setMinutes(m);
+					delayWhen.setText(timeFormat.format(claim.delay_when));
+				}
+			},d.getHours(),d.getMinutes(),true);
+		}
+		else if (delayDuration.getId() == id) {
+			final CharSequence[] items = {"15", "20", "25", "30", "40", "50", "59+"};
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Delay duration (minutes)");
+			builder.setItems(items, new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog, int item) {
+			    	claim.delay_duration=new Date();
+					claim.delay_duration.setHours(0);
+					claim.delay_duration.setMinutes(Integer.parseInt(items[item].subSequence(0, 2).toString()));
+					delayDuration.setText(durationFormat.format(claim.delay_duration) + " minutes");
+			    }
+			});
+			return builder.create();
+			
 		}
 
 		return null;
