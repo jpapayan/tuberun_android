@@ -21,9 +21,13 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TabHost;
@@ -110,6 +114,11 @@ public class ClaimActivity extends TabActivity {
 	private Spinner journeyStartStation;
 	private Spinner journeyLineUsed;
 	private Spinner journeyEndStation;
+	private Spinner delayAtStation;
+	private Spinner delayStation1;
+	private Spinner delayStation2;
+	private RadioButton delayAt;
+	private RadioButton delayBetween;
 
 	private void setupViewReferences() {
 		oysterLayout = findViewById(R.id.oyster_layout);
@@ -123,6 +132,11 @@ public class ClaimActivity extends TabActivity {
 		journeyStartStation = (Spinner) findViewById(R.id.claim_journey_startstation);
 		journeyEndStation = (Spinner) findViewById(R.id.claim_journey_endstation);
 		journeyLineUsed = (Spinner) findViewById(R.id.claim_journey_lineused);
+		delayAtStation = (Spinner) findViewById(R.id.claim_delay_atstation);
+		delayStation1 = (Spinner) findViewById(R.id.claim_delay_station1);
+		delayStation2 = (Spinner) findViewById(R.id.claim_delay_station2);
+		delayAt = (RadioButton) findViewById(R.id.claim_delay_at);
+		delayBetween = (RadioButton) findViewById(R.id.claim_delay_between);
 	}
 
 	private void setupViewHandlers() {
@@ -160,40 +174,104 @@ public class ClaimActivity extends TabActivity {
 		});
 
 		final List<String> stations = StationDetails.FetchTubeStationsClaims();
-		ArrayAdapter<String> adapter =
-				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,stations);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stations);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		journeyStartStation.setAdapter(adapter);
 		journeyStartStation.setSelection(stations.indexOf(claim.journey_startstation));
 		journeyStartStation.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
-				claim.journey_startstation=stations.get(position);
+				claim.journey_startstation = stations.get(position);
 			}
 		});
-		
+
 		journeyEndStation.setAdapter(adapter);
 		journeyEndStation.setSelection(stations.indexOf(claim.journey_endstation));
 		journeyEndStation.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
-				claim.journey_endstation=stations.get(position);
+				claim.journey_endstation = stations.get(position);
 			}
 		});
-		
+
 		final List<String> lines = LinePresentation.getLinesStringListClaims();
-		ArrayAdapter<String> lines_adapter =
-				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,lines);
+		ArrayAdapter<String> lines_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lines);
 		lines_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		journeyLineUsed.setAdapter(lines_adapter);
 		journeyLineUsed.setSelection(stations.indexOf(claim.journey_lineused));
 		journeyLineUsed.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
-				claim.journey_lineused=stations.get(position);
+				claim.journey_lineused = stations.get(position);
 			}
 		});
 
+		// delay tab
+		updateJourneySpinners();
+		
+		final List<RadioButton> radioButtons = new ArrayList<RadioButton>();
+		radioButtons.add(delayAt);
+		radioButtons.add(delayBetween);
+		for (RadioButton button : radioButtons) {
+			button.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					if (isChecked)	claim.setDelayAt( buttonView.getId()==delayAt.getId() && isChecked );
+					updateJourneySpinners();
+				}
+			});
+		}
+
+		delayAtStation.setAdapter(adapter);
+		delayAtStation.setSelection(stations.indexOf(claim.getDelayAtStation()));
+		delayAtStation.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+				claim.setDelayAtstation(stations.get(position));
+				delayStation1.setSelection(0);
+				delayStation2.setSelection(0);
+
+			}
+		});
+
+		delayStation1.setAdapter(adapter);
+		delayStation1.setSelection(stations.indexOf(claim.getDelayStation1()));
+		delayStation1.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+				claim.setDelayStation1(stations.get(position));
+				delayAtStation.setSelection(0);
+				delayStation2.setSelection(0);
+			}
+		});
+
+		delayStation2.setAdapter(adapter);
+		delayStation2.setSelection(stations.indexOf(claim.getDelayStation2()));
+		delayStation2.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+				claim.setDelayStation2(stations.get(position));
+				delayAtStation.setSelection(0);
+				delayStation1.setSelection(0);
+			}
+		});
+
+	}
+
+	private void updateJourneySpinners() {
+		if (claim.isDelayAtStation()) {
+			delayAtStation.setEnabled(true);
+			delayStation1.setEnabled(false);
+			delayStation2.setEnabled(false);
+			delayAt.setChecked(true);
+			delayBetween.setChecked(false);
+		} else {
+			delayStation1.setEnabled(true);
+			delayStation2.setEnabled(true);
+			delayAtStation.setEnabled(false);
+			delayAt.setChecked(false);
+			delayBetween.setChecked(true);
+		}
 	}
 
 	@Override

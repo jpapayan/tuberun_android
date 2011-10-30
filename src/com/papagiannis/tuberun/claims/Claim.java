@@ -206,7 +206,13 @@ public class Claim implements Serializable {
 	}
 
 	// delay
-	private Boolean delay_at;
+	private Boolean delay_at=true;
+	public Boolean isDelayAtStation() {
+		return delay_at;
+	}
+	public void setDelayAt(Boolean b) {
+		this.delay_at=b;
+	}
 	private String delay_atstation;
 
 	public void setDelayAtstation(String v) {
