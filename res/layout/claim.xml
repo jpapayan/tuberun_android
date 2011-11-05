@@ -239,9 +239,6 @@
 								</LinearLayout>
 							</TableRow>
 						</TableLayout>
-
-						
-
 					</LinearLayout>
 
 					<LinearLayout android:id="@+id/personal_tab"

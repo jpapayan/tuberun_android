@@ -178,6 +178,7 @@ public class ClaimActivity extends TabActivity {
 			if (ticketSpinner.getAdapter().getItem(i).equals(claim.ticket_type))
 				break;
 		}
+		if (i == ticketSpinner.getAdapter().getCount()) i=0; //the default if the claim is new
 		ticketSpinner.setSelection(i);
 		ticketSpinner.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
 			@Override
@@ -307,8 +308,8 @@ public class ClaimActivity extends TabActivity {
 		////////////personal tab /////////////////////
 		final String[] titles = getResources().getStringArray(R.array.claim_title_spinner);
 		int j=0;
-		for (i=0;i<titles.length;i++) {
-			if (titles[i].equals(claim.personal_title)) { j=i; break; }
+		for (int ii=0;ii<titles.length;ii++) {
+			if (titles[ii].equals(claim.personal_title)) { j=ii; break; }
 		}
 		personalTitle.setSelection(j);
 		personalTitle.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
