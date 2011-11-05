@@ -130,6 +130,16 @@ public class ClaimActivity extends TabActivity {
 	private RadioButton delayBetween;
 	private Button delayWhen;
 	private Button delayDuration;
+	private Spinner personalTitle;
+	private EditText personalSurname;
+	private EditText personalName;
+	private EditText personalLine1;
+	private EditText personalLine2;
+	private EditText personalCity;
+	private EditText personalPostcode;
+	private EditText personalPhone;
+	private EditText personalEmail;
+	private EditText personalPhotocard;
 
 	private void setupViewReferences() {
 		oysterLayout = findViewById(R.id.oyster_layout);
@@ -148,8 +158,18 @@ public class ClaimActivity extends TabActivity {
 		delayStation2 = (Spinner) findViewById(R.id.claim_delay_station2);
 		delayAt = (RadioButton) findViewById(R.id.claim_delay_at);
 		delayBetween = (RadioButton) findViewById(R.id.claim_delay_between);
-		delayWhen= (Button) findViewById(R.id.claim_delay_when);
-		delayDuration= (Button) findViewById(R.id.claim_delay_duration);
+		delayWhen = (Button) findViewById(R.id.claim_delay_when);
+		delayDuration = (Button) findViewById(R.id.claim_delay_duration);
+		personalTitle = (Spinner) findViewById(R.id.claim_personal_title);
+		personalSurname = (EditText) findViewById(R.id.claim_personal_surname);
+		personalName = (EditText) findViewById(R.id.claim_personal_name);
+		personalLine1 = (EditText) findViewById(R.id.claim_personal_line1);
+		personalLine2 = (EditText) findViewById(R.id.claim_personal_line2);
+		personalCity = (EditText) findViewById(R.id.claim_personal_city);
+		personalPostcode = (EditText) findViewById(R.id.claim_personal_postcode);
+		personalPhone = (EditText) findViewById(R.id.claim_personal_phone);
+		personalEmail = (EditText) findViewById(R.id.claim_personal_email);
+		personalPhotocard = (EditText) findViewById(R.id.claim_personal_photocard);
 	}
 
 	private void setupViewHandlers() {
@@ -281,6 +301,92 @@ public class ClaimActivity extends TabActivity {
 				claim.setDelayStation2(stations.get(position));
 				delayAtStation.setSelection(0);
 				delayStation1.setSelection(0);
+			}
+		});
+		
+		////////////personal tab /////////////////////
+		final String[] titles = getResources().getStringArray(R.array.claim_title_spinner);
+		int j=0;
+		for (i=0;i<titles.length;i++) {
+			if (titles[i].equals(claim.personal_title)) { j=i; break; }
+		}
+		personalTitle.setSelection(j);
+		personalTitle.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+				claim.personal_title=titles[position];
+			}
+		});
+		
+		personalSurname.setText(claim.personal_surname);
+		personalSurname.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.personal_surname = e.toString();
+			}
+		});
+		
+		personalName.setText(claim.personal_name);
+		personalName.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.personal_name = e.toString();
+			}
+		});
+		
+		personalLine1.setText(claim.personal_address1);
+		personalLine1.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.personal_address1 = e.toString();
+			}
+		});
+		
+		personalLine2.setText(claim.personal_address2);
+		personalLine2.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.personal_address2 = e.toString();
+			}
+		});
+		
+		personalCity.setText(claim.personal_city);
+		personalCity.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.personal_city = e.toString();
+			}
+		});
+		
+		personalPostcode.setText(claim.personal_postcode);
+		personalPostcode.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.personal_postcode = e.toString();
+			}
+		});
+		
+		personalPhone.setText(claim.personal_phone);
+		personalPhone.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.personal_phone = e.toString();
+			}
+		});
+		
+		personalEmail.setText(claim.personal_email);
+		personalEmail.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.personal_email = e.toString();
+			}
+		});
+		
+		personalPhotocard.setText(claim.personal_photocard);
+		personalPhotocard.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.personal_photocard = e.toString();
 			}
 		});
 

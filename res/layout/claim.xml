@@ -260,7 +260,8 @@
 								android:layout_height="wrap_content" android:layout_width="100dip"
 								android:layout_gravity="center_vertical" style="@style/WhiteText"
 								android:text="Title" />
-							<EditText android:layout_width="fill_parent"
+							<Spinner android:id="@+id/claim_personal_title" 
+								android:entries="@array/claim_title_spinner" android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 						</LinearLayout>
 						<LinearLayout android:orientation="horizontal"
@@ -271,7 +272,7 @@
 								android:layout_height="wrap_content" android:layout_width="100dip"
 								android:layout_gravity="center_vertical" style="@style/WhiteText"
 								android:text="Surname" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_personal_surname" android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 						</LinearLayout>
 						<LinearLayout android:orientation="horizontal"
@@ -282,7 +283,7 @@
 								android:layout_height="wrap_content" android:layout_width="100dip"
 								android:layout_gravity="center_vertical" style="@style/WhiteText"
 								android:text="Name" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_personal_name" android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 						</LinearLayout>
 
@@ -298,7 +299,7 @@
 								android:layout_height="wrap_content" android:layout_width="100dip"
 								android:layout_gravity="center_vertical" style="@style/WhiteText"
 								android:text="Line 1" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_personal_line1" android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 						</LinearLayout>
 						<LinearLayout android:orientation="horizontal"
@@ -309,7 +310,7 @@
 								android:layout_height="wrap_content" android:layout_width="100dip"
 								android:layout_gravity="center_vertical" style="@style/WhiteText"
 								android:text="Line 2" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_personal_line2" android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 						</LinearLayout>
 						<LinearLayout android:orientation="horizontal"
@@ -320,7 +321,7 @@
 								android:layout_height="wrap_content" android:layout_width="100dip"
 								android:layout_gravity="center_vertical" style="@style/WhiteText"
 								android:text="City/town" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_personal_city" android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 						</LinearLayout>
 						<LinearLayout android:orientation="horizontal"
@@ -331,7 +332,7 @@
 								android:layout_height="wrap_content" android:layout_width="100dip"
 								android:layout_gravity="center_vertical" style="@style/WhiteText"
 								android:text="Postcode" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_personal_postcode" android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 						</LinearLayout>
 
@@ -347,7 +348,8 @@
 								android:layout_height="wrap_content" android:layout_width="100dip"
 								android:layout_gravity="center_vertical" style="@style/WhiteText"
 								android:text="Phone" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_personal_phone" android:inputType="phone"
+							    android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 						</LinearLayout>
 						<LinearLayout android:orientation="horizontal"
@@ -358,7 +360,8 @@
 								android:layout_height="wrap_content" android:layout_width="100dip"
 								android:layout_gravity="center_vertical" style="@style/WhiteText"
 								android:text="Email" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_personal_email" android:inputType="textEmailAddress"
+								android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 						</LinearLayout>
 						<LinearLayout android:orientation="vertical"
@@ -369,7 +372,8 @@
 								android:layout_height="wrap_content" android:layout_width="wrap_content"
 								android:layout_gravity="center_vertical" style="@style/WhiteText"
 								android:text="Photocard number (if applicable)" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_personal_photocard" android:inputType="number"
+								 android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 						</LinearLayout>
 					</LinearLayout>

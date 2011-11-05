@@ -42,5 +42,11 @@
 		<item>1 day</item>
 		<item>Other period</item>
 	</string-array>
+	<string-array name="claim_title_spinner">
+		<item>Mr</item>
+		<item>Mrs</item>
+		<item>Ms</item>
+		<item>Miss</item>
+	</string-array>
 	
 </resources>
