@@ -26,6 +26,8 @@ public class TubeRun extends Activity implements OnClickListener{
         favoritesButton.setOnClickListener(this);
         View claimsButton = findViewById(R.id.button_claims);
         claimsButton.setOnClickListener(this);
+        View oysterButton = findViewById(R.id.button_oyster);
+        oysterButton.setOnClickListener(this);
         
     }
 
@@ -51,6 +53,9 @@ public class TubeRun extends Activity implements OnClickListener{
     		break;
     	case R.id.button_claims:
     		i=new Intent(this, ClaimsActivity.class);
+    		break;
+    	case R.id.button_oyster:
+//    		i=new Intent(this, OysterActivity.class);
     		break;
     	}
     	startActivity(i);

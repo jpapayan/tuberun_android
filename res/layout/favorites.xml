@@ -15,7 +15,6 @@
 
 		<LinearLayout android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:orientation="horizontal">
-
 			<TextView android:id="@+id/lastupdate"
 				android:layout_height="wrap_content" android:text="Last Update: Never"
 				android:layout_width="fill_parent" android:layout_weight="5"
@@ -23,8 +22,6 @@
 			<Button android:id="@+id/button_update" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text=""
 				android:layout_weight="0" style="@style/RefreshButton" />
-
-
 		</LinearLayout>
 
 		<ListView android:id="@+id/android:list"
