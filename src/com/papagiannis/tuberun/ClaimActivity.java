@@ -40,7 +40,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-
 public class ClaimActivity extends TabActivity {
 
 	private static final String LIST1_TAB_TAG = "Overview";
@@ -54,6 +53,7 @@ public class ClaimActivity extends TabActivity {
 	Claim claim;
 	ClaimStore store;
 	SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy");
+	SimpleDateFormat dateFormatSimple = new SimpleDateFormat("dd/MM/yyyy");
 	SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 	SimpleDateFormat durationFormat = new SimpleDateFormat("mm");
 
@@ -140,6 +140,15 @@ public class ClaimActivity extends TabActivity {
 	private EditText personalPhone;
 	private EditText personalEmail;
 	private EditText personalPhotocard;
+	private EditText ticketOysterNumber;
+	private Spinner ticketOysterCardType;
+	private Spinner ticketOysterTicketType;
+	private Button ticketTflExpiry;
+	private EditText ticketTflNumber;
+	private EditText ticketTflIssuingStation;
+	private EditText ticketTflRetainingStation;
+	private Spinner ticketTflDuration;
+	private Spinner ticketTflType;
 
 	private void setupViewReferences() {
 		oysterLayout = findViewById(R.id.oyster_layout);
@@ -170,6 +179,15 @@ public class ClaimActivity extends TabActivity {
 		personalPhone = (EditText) findViewById(R.id.claim_personal_phone);
 		personalEmail = (EditText) findViewById(R.id.claim_personal_email);
 		personalPhotocard = (EditText) findViewById(R.id.claim_personal_photocard);
+		ticketOysterNumber = (EditText) findViewById(R.id.claim_ticket_oyster_number);
+		ticketOysterCardType = (Spinner) findViewById(R.id.claim_ticket_oyster_card_type);
+		ticketOysterTicketType = (Spinner) findViewById(R.id.claim_ticket_oyster_ticket_type);
+		ticketTflExpiry = (Button) findViewById(R.id.claim_ticket_tfl_expiry);
+		ticketTflNumber = (EditText) findViewById(R.id.claim_ticket_tfl_number);
+		ticketTflIssuingStation = (EditText) findViewById(R.id.claim_ticket_tfl_issuingstn);
+		ticketTflRetainingStation = (EditText) findViewById(R.id.claim_ticket_tfl_retainedstn);
+		ticketTflType = (Spinner) findViewById(R.id.claim_ticket_tfl_type);
+		ticketTflDuration = (Spinner) findViewById(R.id.claim_ticket_tfl_duration);
 	}
 
 	private void setupViewHandlers() {
@@ -178,7 +196,8 @@ public class ClaimActivity extends TabActivity {
 			if (ticketSpinner.getAdapter().getItem(i).equals(claim.ticket_type))
 				break;
 		}
-		if (i == ticketSpinner.getAdapter().getCount()) i=0; //the default if the claim is new
+		if (i == ticketSpinner.getAdapter().getCount())
+			i = 0; // the default if the claim is new
 		ticketSpinner.setSelection(i);
 		ticketSpinner.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
 			@Override
@@ -240,24 +259,25 @@ public class ClaimActivity extends TabActivity {
 			}
 		});
 
-		//////////// delay tab /////////////////////
+		// ////////// delay tab /////////////////////
 		delayWhen.setText(timeFormat.format(claim.delay_when));
 		delayWhen.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				showDialog(v.getId());
 			}
 		});
-		
-		delayDuration.setText(durationFormat.format(claim.delay_duration)+" minutes");
+
+		delayDuration.setText(durationFormat.format(claim.delay_duration) + " minutes");
 		delayDuration.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				showDialog(v.getId());
 			}
 		});
-		
+
 		updateJourneySpinners();
 
-		//I don't use a buttongroup, instead I crate and manage the group manually
+		// I don't use a buttongroup, instead I crate and manage the group
+		// manually
 		final List<RadioButton> radioButtons = new ArrayList<RadioButton>();
 		radioButtons.add(delayAt);
 		radioButtons.add(delayBetween);
@@ -265,7 +285,8 @@ public class ClaimActivity extends TabActivity {
 			button.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					if (isChecked)	claim.setDelayAt( buttonView.getId()==delayAt.getId() && isChecked );
+					if (isChecked)
+						claim.setDelayAt(buttonView.getId() == delayAt.getId() && isChecked);
 					updateJourneySpinners();
 				}
 			});
@@ -304,21 +325,24 @@ public class ClaimActivity extends TabActivity {
 				delayStation1.setSelection(0);
 			}
 		});
-		
-		////////////personal tab /////////////////////
+
+		// //////////personal tab /////////////////////
 		final String[] titles = getResources().getStringArray(R.array.claim_title_spinner);
-		int j=0;
-		for (int ii=0;ii<titles.length;ii++) {
-			if (titles[ii].equals(claim.personal_title)) { j=ii; break; }
+		int j = 0;
+		for (int ii = 0; ii < titles.length; ii++) {
+			if (titles[ii].equals(claim.personal_title)) {
+				j = ii;
+				break;
+			}
 		}
 		personalTitle.setSelection(j);
 		personalTitle.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
-				claim.personal_title=titles[position];
+				claim.personal_title = titles[position];
 			}
 		});
-		
+
 		personalSurname.setText(claim.personal_surname);
 		personalSurname.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
@@ -326,7 +350,7 @@ public class ClaimActivity extends TabActivity {
 				claim.personal_surname = e.toString();
 			}
 		});
-		
+
 		personalName.setText(claim.personal_name);
 		personalName.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
@@ -334,7 +358,7 @@ public class ClaimActivity extends TabActivity {
 				claim.personal_name = e.toString();
 			}
 		});
-		
+
 		personalLine1.setText(claim.personal_address1);
 		personalLine1.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
@@ -342,7 +366,7 @@ public class ClaimActivity extends TabActivity {
 				claim.personal_address1 = e.toString();
 			}
 		});
-		
+
 		personalLine2.setText(claim.personal_address2);
 		personalLine2.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
@@ -350,7 +374,7 @@ public class ClaimActivity extends TabActivity {
 				claim.personal_address2 = e.toString();
 			}
 		});
-		
+
 		personalCity.setText(claim.personal_city);
 		personalCity.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
@@ -358,7 +382,7 @@ public class ClaimActivity extends TabActivity {
 				claim.personal_city = e.toString();
 			}
 		});
-		
+
 		personalPostcode.setText(claim.personal_postcode);
 		personalPostcode.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
@@ -366,7 +390,7 @@ public class ClaimActivity extends TabActivity {
 				claim.personal_postcode = e.toString();
 			}
 		});
-		
+
 		personalPhone.setText(claim.personal_phone);
 		personalPhone.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
@@ -374,7 +398,7 @@ public class ClaimActivity extends TabActivity {
 				claim.personal_phone = e.toString();
 			}
 		});
-		
+
 		personalEmail.setText(claim.personal_email);
 		personalEmail.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
@@ -382,7 +406,7 @@ public class ClaimActivity extends TabActivity {
 				claim.personal_email = e.toString();
 			}
 		});
-		
+
 		personalPhotocard.setText(claim.personal_photocard);
 		personalPhotocard.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
@@ -390,6 +414,111 @@ public class ClaimActivity extends TabActivity {
 				claim.personal_photocard = e.toString();
 			}
 		});
+
+		// ///////////oyster ticket tab///////////////////
+		ticketOysterNumber.setText(claim.ticket_oyster_number);
+		ticketOysterNumber.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.ticket_oyster_number = e.toString();
+			}
+		});
+
+		final String[] oyster_card_types = getResources().getStringArray(R.array.oyster_card_type_spinner);
+		j = 0;
+		for (int ii = 0; ii < oyster_card_types.length; ii++) {
+			if (oyster_card_types[ii].equals(claim.ticket_oyster_type)) {
+				j = ii;
+				break;
+			}
+		}
+		ticketOysterCardType.setSelection(j);
+		ticketOysterCardType.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+				claim.ticket_oyster_type = oyster_card_types[position];
+			}
+		});
+
+		final String[] oyster_ticket_types = getResources().getStringArray(R.array.oyster_ticket_type_spinner);
+		j = 0;
+		for (int ii = 0; ii < oyster_ticket_types.length; ii++) {
+			if (oyster_ticket_types[ii].equals(claim.ticket_oyster_duration)) {
+				j = ii;
+				break;
+			}
+		}
+		ticketOysterTicketType.setSelection(j);
+		ticketOysterTicketType.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+				claim.ticket_oyster_duration = oyster_ticket_types[position];
+			}
+		});
+
+		/////////////tfl ticket tab///////////////////
+		ticketTflExpiry.setText(dateFormatSimple.format(claim.ticket_tfl_expiry));
+		ticketTflExpiry.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				showDialog(v.getId());
+			}
+		});
+		
+		ticketTflNumber.setText(claim.ticket_tfl_number);
+		ticketTflNumber.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.ticket_tfl_number = e.toString();
+			}
+		});
+		
+		ticketTflIssuingStation.setText(claim.ticket_tfl_issuing);
+		ticketTflIssuingStation.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.ticket_tfl_issuing = e.toString();
+			}
+		});
+		
+		ticketTflRetainingStation.setText(claim.ticket_tfl_retainedstation);
+		ticketTflRetainingStation.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.ticket_tfl_retainedstation = e.toString();
+			}
+		});
+
+		final String[] tfl_duration_types = getResources().getStringArray(R.array.tfl_duration_spinner);
+		j = 0;
+		for (int ii = 0; ii < tfl_duration_types.length; ii++) {
+			if (tfl_duration_types[ii].equals(claim.ticket_tfl_duration)) {
+				j = ii;
+				break;
+			}
+		}
+		ticketTflDuration.setSelection(j);
+		ticketTflDuration.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+				claim.ticket_tfl_duration = tfl_duration_types[position];
+			}
+		});
+		
+		j = 0;
+		for (int ii = 0; ii < oyster_card_types.length; ii++) {
+			if (oyster_card_types[ii].equals(claim.ticket_tfl_type)) {
+				j = ii;
+				break;
+			}
+		}
+		ticketTflType.setSelection(j);
+		ticketTflType.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+				claim.ticket_tfl_type = oyster_card_types[position];
+			}
+		});
+
 
 	}
 
@@ -421,34 +550,41 @@ public class ClaimActivity extends TabActivity {
 					journeyStartDate.setText(dateFormat.format(claim.journey_started));
 				}
 			}, d.getYear() + 1900, d.getMonth(), d.getDate());
-		}
-		else if (delayWhen.getId() == id) {
+		} else if (delayWhen.getId() == id) {
 			Date d = claim.delay_when;
 			return new TimePickerDialog(this, new OnTimeSetListener() {
 				@Override
 				public void onTimeSet(TimePicker view, int h, int m) {
-					claim.delay_when=new Date();
+					claim.delay_when = new Date();
 					claim.delay_when.setHours(h);
 					claim.delay_when.setMinutes(m);
 					delayWhen.setText(timeFormat.format(claim.delay_when));
 				}
-			},d.getHours(),d.getMinutes(),true);
-		}
-		else if (delayDuration.getId() == id) {
-			final CharSequence[] items = {"15", "20", "25", "30", "40", "50", "59+"};
+			}, d.getHours(), d.getMinutes(), true);
+		} else if (delayDuration.getId() == id) {
+			final CharSequence[] items = { "15", "20", "25", "30", "40", "50", "59+" };
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Delay duration (minutes)");
 			builder.setItems(items, new DialogInterface.OnClickListener() {
-			    public void onClick(DialogInterface dialog, int item) {
-			    	claim.delay_duration=new Date();
+				public void onClick(DialogInterface dialog, int item) {
+					claim.delay_duration = new Date();
 					claim.delay_duration.setHours(0);
 					claim.delay_duration.setMinutes(Integer.parseInt(items[item].subSequence(0, 2).toString()));
 					delayDuration.setText(durationFormat.format(claim.delay_duration) + " minutes");
-			    }
+				}
 			});
 			return builder.create();
-			
+
+		} else if (ticketTflExpiry.getId() == id) {
+			Date d = claim.ticket_tfl_expiry;
+			return new DatePickerDialog(this, new OnDateSetListener() {
+				@Override
+				public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+					claim.ticket_tfl_expiry = new Date(year - 1900, monthOfYear, dayOfMonth);
+					ticketTflExpiry.setText(dateFormatSimple.format(claim.ticket_tfl_expiry));
+				}
+			}, d.getYear() + 1900, d.getMonth(), d.getDate());
 		}
 
 		return null;

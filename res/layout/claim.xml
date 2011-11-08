@@ -415,7 +415,8 @@
 								android:layout_height="wrap_content" android:layout_width="fill_parent"
 								android:paddingLeft="10dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" style="@style/WhiteText" android:text="Oyster number" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_ticket_oyster_number"
+								android:layout_width="fill_parent"
 								android:inputType="number" android:layout_height="wrap_content"
 								android:paddingLeft="20dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" />
@@ -423,7 +424,8 @@
 								android:layout_height="wrap_content" android:layout_width="fill_parent"
 								android:paddingLeft="10dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" style="@style/WhiteText" android:text="Oyster card type" />
-							<Spinner android:layout_width="fill_parent"
+							<Spinner android:id="@+id/claim_ticket_oyster_card_type" 
+								android:layout_width="fill_parent"
 								android:entries="@array/oyster_card_type_spinner"
 								android:layout_height="wrap_content" android:paddingLeft="20dip"
 								android:paddingRight="5dip" android:paddingTop="5dip" />
@@ -431,11 +433,11 @@
 								android:layout_height="wrap_content" android:layout_width="fill_parent"
 								android:paddingLeft="10dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" style="@style/WhiteText" android:text="Oyster ticket type" />
-							<Spinner android:layout_width="fill_parent"
+							<Spinner android:id="@+id/claim_ticket_oyster_ticket_type" 
+								android:layout_width="fill_parent"
 								android:entries="@array/oyster_ticket_type_spinner"
 								android:layout_height="wrap_content" android:paddingLeft="20dip"
 								android:paddingRight="5dip" android:paddingTop="5dip" />
-
 						</LinearLayout>
 
 						<LinearLayout android:id="@+id/tfl_layout"
@@ -476,15 +478,17 @@
 								android:layout_height="wrap_content" android:layout_width="fill_parent"
 								android:paddingLeft="10dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" style="@style/WhiteText" android:text="Expiry date" />
-							<EditText android:layout_width="fill_parent"
-								android:inputType="date" android:layout_height="wrap_content"
+							<Button android:id="@+id/claim_ticket_tfl_expiry"
+							    android:layout_width="fill_parent"
+								android:layout_height="wrap_content"
 								android:paddingLeft="20dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" />
 							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
 								android:layout_height="wrap_content" android:layout_width="fill_parent"
 								android:paddingLeft="10dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" style="@style/WhiteText" android:text="Ticket number" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_ticket_tfl_number"
+							    android:layout_width="fill_parent"
 								android:inputType="number" android:layout_height="wrap_content"
 								android:paddingLeft="20dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" />
@@ -492,7 +496,8 @@
 								android:layout_height="wrap_content" android:layout_width="fill_parent"
 								android:paddingLeft="10dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" style="@style/WhiteText" android:text="Issuing station" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_ticket_tfl_issuingstn" 
+								android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:paddingLeft="20dip"
 								android:paddingRight="5dip" android:paddingTop="5dip" />
 							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
@@ -500,14 +505,16 @@
 								android:paddingLeft="10dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" style="@style/WhiteText"
 								android:text="Station where the ticket was retained (if so)" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_ticket_tfl_retainedstn"
+								android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:paddingLeft="20dip"
 								android:paddingRight="5dip" android:paddingTop="5dip" />
 							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
 								android:layout_height="wrap_content" android:layout_width="fill_parent"
 								android:paddingLeft="10dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" style="@style/WhiteText" android:text="Travelcard duration" />
-							<Spinner android:layout_width="fill_parent"
+							<Spinner android:id="@+id/claim_ticket_tfl_duration"
+								android:layout_width="fill_parent"
 								android:entries="@array/tfl_duration_spinner"
 								android:layout_height="wrap_content" android:paddingLeft="20dip"
 								android:paddingRight="5dip" android:paddingTop="5dip" />
@@ -515,7 +522,8 @@
 								android:layout_height="wrap_content" android:layout_width="fill_parent"
 								android:paddingLeft="10dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" style="@style/WhiteText" android:text="Travelcard type" />
-							<Spinner android:layout_width="fill_parent"
+							<Spinner android:id="@+id/claim_ticket_tfl_type"
+								android:layout_width="fill_parent"
 								android:entries="@array/oyster_card_type_spinner"
 								android:layout_height="wrap_content" android:paddingLeft="20dip"
 								android:paddingRight="5dip" android:paddingTop="5dip" />
