@@ -149,6 +149,13 @@ public class ClaimActivity extends TabActivity {
 	private EditText ticketTflRetainingStation;
 	private Spinner ticketTflDuration;
 	private Spinner ticketTflType;
+	private EditText ticketRailClass;
+	private Button ticketRailValidUntil;
+	private EditText ticketRailNumber;
+	private Spinner ticketRailCardType;
+	private Spinner ticketRailDuration;
+	private EditText ticketRailPurschase;
+	private EditText ticketRailRetainedStation;
 
 	private void setupViewReferences() {
 		oysterLayout = findViewById(R.id.oyster_layout);
@@ -188,6 +195,14 @@ public class ClaimActivity extends TabActivity {
 		ticketTflRetainingStation = (EditText) findViewById(R.id.claim_ticket_tfl_retainedstn);
 		ticketTflType = (Spinner) findViewById(R.id.claim_ticket_tfl_type);
 		ticketTflDuration = (Spinner) findViewById(R.id.claim_ticket_tfl_duration);
+		ticketRailClass = (EditText) findViewById(R.id.claim_ticket_rail_class);
+		ticketRailValidUntil = (Button) findViewById(R.id.claim_ticket_rail_validuntil);
+		ticketRailNumber = (EditText) findViewById(R.id.claim_ticket_rail_number);
+		ticketRailCardType = (Spinner) findViewById(R.id.claim_ticket_rail_type);
+		ticketRailDuration = (Spinner) findViewById(R.id.claim_ticket_rail_duration);
+		ticketRailPurschase = (EditText) findViewById(R.id.claim_ticket_rail_purchase);
+		;
+		ticketRailRetainedStation = (EditText) findViewById(R.id.claim_ticket_rail_retainedstation);
 	}
 
 	private void setupViewHandlers() {
@@ -456,14 +471,14 @@ public class ClaimActivity extends TabActivity {
 			}
 		});
 
-		/////////////tfl ticket tab///////////////////
+		// ///////////tfl ticket tab///////////////////
 		ticketTflExpiry.setText(dateFormatSimple.format(claim.ticket_tfl_expiry));
 		ticketTflExpiry.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				showDialog(v.getId());
 			}
 		});
-		
+
 		ticketTflNumber.setText(claim.ticket_tfl_number);
 		ticketTflNumber.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
@@ -471,7 +486,7 @@ public class ClaimActivity extends TabActivity {
 				claim.ticket_tfl_number = e.toString();
 			}
 		});
-		
+
 		ticketTflIssuingStation.setText(claim.ticket_tfl_issuing);
 		ticketTflIssuingStation.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
@@ -479,7 +494,7 @@ public class ClaimActivity extends TabActivity {
 				claim.ticket_tfl_issuing = e.toString();
 			}
 		});
-		
+
 		ticketTflRetainingStation.setText(claim.ticket_tfl_retainedstation);
 		ticketTflRetainingStation.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
@@ -503,7 +518,7 @@ public class ClaimActivity extends TabActivity {
 				claim.ticket_tfl_duration = tfl_duration_types[position];
 			}
 		});
-		
+
 		j = 0;
 		for (int ii = 0; ii < oyster_card_types.length; ii++) {
 			if (oyster_card_types[ii].equals(claim.ticket_tfl_type)) {
@@ -519,6 +534,70 @@ public class ClaimActivity extends TabActivity {
 			}
 		});
 
+		// ///////////rail ticket tab///////////////////
+		ticketRailValidUntil.setText(dateFormatSimple.format(claim.ticket_rail_expiry));
+		ticketRailValidUntil.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				showDialog(v.getId());
+			}
+		});
+		ticketRailClass.setText(claim.ticket_rail_class);
+		ticketRailClass.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.ticket_rail_class = e.toString();
+			}
+		});
+		ticketRailNumber.setText(claim.ticket_rail_number);
+		ticketRailNumber.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.ticket_rail_number = e.toString();
+			}
+		});
+		ticketRailPurschase.setText(claim.ticket_rail_purchasedplace);
+		ticketRailPurschase.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.ticket_rail_purchasedplace = e.toString();
+			}
+		});
+		ticketRailRetainedStation.setText(claim.ticket_rail_retainedstation);
+		ticketRailRetainedStation.addTextChangedListener(new SimpleTextWatcher() {
+			@Override
+			public void afterTextChanged(Editable e) {
+				claim.ticket_rail_retainedstation = e.toString();
+			}
+		});
+		final String[] rail_duration_types = getResources().getStringArray(R.array.rail_duration_spinner);
+		j = 0;
+		for (int ii = 0; ii < rail_duration_types.length; ii++) {
+			if (rail_duration_types[ii].equals(claim.ticket_rail_duration)) {
+				j = ii;
+				break;
+			}
+		}
+		ticketRailDuration.setSelection(j);
+		ticketRailDuration.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+				claim.ticket_rail_duration = rail_duration_types[position];
+			}
+		});
+		j = 0;
+		for (int ii = 0; ii < oyster_card_types.length; ii++) {
+			if (oyster_card_types[ii].equals(claim.ticket_rail_type)) {
+				j = ii;
+				break;
+			}
+		}
+		ticketRailCardType.setSelection(j);
+		ticketRailCardType.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+				claim.ticket_rail_type = oyster_card_types[position];
+			}
+		});
 
 	}
 
@@ -583,6 +662,15 @@ public class ClaimActivity extends TabActivity {
 				public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 					claim.ticket_tfl_expiry = new Date(year - 1900, monthOfYear, dayOfMonth);
 					ticketTflExpiry.setText(dateFormatSimple.format(claim.ticket_tfl_expiry));
+				}
+			}, d.getYear() + 1900, d.getMonth(), d.getDate());
+		} else if (ticketRailValidUntil.getId() == id) {
+			Date d = claim.ticket_rail_expiry;
+			return new DatePickerDialog(this, new OnDateSetListener() {
+				@Override
+				public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+					claim.ticket_rail_expiry = new Date(year - 1900, monthOfYear, dayOfMonth);
+					ticketRailValidUntil.setText(dateFormatSimple.format(claim.ticket_rail_expiry));
 				}
 			}, d.getYear() + 1900, d.getMonth(), d.getDate());
 		}

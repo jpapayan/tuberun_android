@@ -572,7 +572,8 @@
 									android:layout_height="wrap_content" android:layout_width="150dip"
 									android:layout_gravity="center_vertical" style="@style/WhiteText"
 									android:text="Ticket Class" />
-								<EditText android:layout_width="fill_parent"
+								<EditText  android:id="@+id/claim_ticket_rail_class"
+								    android:layout_width="fill_parent"
 									android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 							</LinearLayout>
 							<LinearLayout android:orientation="horizontal"
@@ -583,8 +584,9 @@
 									android:layout_height="wrap_content" android:layout_width="150dip"
 									android:layout_gravity="center_vertical" style="@style/WhiteText"
 									android:text="Valid until" />
-								<EditText android:layout_width="fill_parent"
-									android:inputType="date" android:layout_height="wrap_content"
+								<Button android:id="@+id/claim_ticket_rail_validuntil"
+									android:layout_width="fill_parent"
+									android:layout_height="wrap_content"
 									android:layout_gravity="center_vertical|right" />
 							</LinearLayout>
 							<LinearLayout android:orientation="horizontal"
@@ -595,7 +597,8 @@
 									android:layout_height="wrap_content" android:layout_width="150dip"
 									android:layout_gravity="center_vertical" style="@style/WhiteText"
 									android:text="Ticket number" />
-								<EditText android:layout_width="fill_parent"
+								<EditText android:id="@+id/claim_ticket_rail_number" 
+									android:layout_width="fill_parent"
 									android:inputType="number" android:layout_height="wrap_content"
 									android:layout_gravity="center_vertical|right" />
 							</LinearLayout>
@@ -607,7 +610,8 @@
 									android:layout_height="wrap_content" android:layout_width="150dip"
 									android:layout_gravity="center_vertical" style="@style/WhiteText"
 									android:text="Travelcard duration" />
-								<Spinner android:layout_width="fill_parent"
+								<Spinner android:id="@+id/claim_ticket_rail_duration"
+									android:layout_width="fill_parent"
 									android:entries="@array/rail_duration_spinner"
 									android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 							</LinearLayout>
@@ -619,7 +623,8 @@
 									android:layout_height="wrap_content" android:layout_width="150dip"
 									android:layout_gravity="center_vertical" style="@style/WhiteText"
 									android:text="Travelcard type" />
-								<Spinner android:layout_width="fill_parent"
+								<Spinner android:id="@+id/claim_ticket_rail_type" 
+									android:layout_width="fill_parent"
 									android:entries="@array/oyster_card_type_spinner"
 									android:layout_height="wrap_content" android:layout_gravity="center_vertical|right" />
 							</LinearLayout>
@@ -627,7 +632,8 @@
 								android:layout_height="wrap_content" android:layout_width="fill_parent"
 								android:paddingLeft="10dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" style="@style/WhiteText" android:text="Place of purchase" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_ticket_rail_purchase" 
+								android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:paddingLeft="20dip"
 								android:paddingRight="5dip" android:paddingTop="5dip" />
 							<TextView android:textAppearance="?android:attr/textAppearanceSmall"
@@ -635,7 +641,8 @@
 								android:paddingLeft="10dip" android:paddingRight="5dip"
 								android:paddingTop="5dip" style="@style/WhiteText"
 								android:text="Station where the ticket was retained (if so)" />
-							<EditText android:layout_width="fill_parent"
+							<EditText android:id="@+id/claim_ticket_rail_retainedstation" 
+								android:layout_width="fill_parent"
 								android:layout_height="wrap_content" android:paddingLeft="20dip"
 								android:paddingRight="5dip" android:paddingTop="5dip" />
 						</LinearLayout>
