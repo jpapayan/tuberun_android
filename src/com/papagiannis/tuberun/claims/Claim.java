@@ -517,15 +517,14 @@ public class Claim implements Serializable {
 						postData += "&ctl00%24cphMain%24cal_tfl_expirydate%24ddl_day=" + ticket_tfl_expiry.getDay(); // 1
 																														// to
 																														// 31
-						if (ticket_tfl_expiry.getMonth() < 10)
+						if (ticket_tfl_expiry.getMonth()+1 < 10)
 							postData += "&ctl00%24cphMain%24cal_tfl_expirydate%24ddl_month=0"
-									+ ticket_tfl_expiry.getMonth(); // 01 to 12
+									+ ticket_tfl_expiry.getMonth()+1; // 01 to 12
 						else
 							postData += "&ctl00%24cphMain%24cal_tfl_expirydate%24ddl_month="
-									+ ticket_tfl_expiry.getMonth(); // 01 to 12
-						postData += "&ctl00%24cphMain%24cal_tfl_expirydate%24ddl_year=" + ticket_tfl_expiry.getYear(); // 2010
-																														// or
-																														// 11
+									+ ticket_tfl_expiry.getMonth()+1; // 01 to 12
+						postData += "&ctl00%24cphMain%24cal_tfl_expirydate%24ddl_year=" + 
+									(ticket_tfl_expiry.getYear()+1900); // 2010 or 11
 					} else
 						errors += "*TfL ticket expiry after the journey's date. ";
 				} else
@@ -558,14 +557,14 @@ public class Claim implements Serializable {
 					if (journey_started.compareTo(ticket_rail_expiry) < 0) {
 						postData += "&ctl00%24cphMain%24cal_natrail_validuntil%24ddl_day="
 								+ ticket_rail_expiry.getDay(); // 1 to 31
-						if (ticket_rail_expiry.getMonth() < 10)
+						if (ticket_rail_expiry.getMonth()+1 < 10)
 							postData += "&ctl00%24cphMain%24cal_natrail_validuntil%24ddl_month=0"
-									+ ticket_rail_expiry.getMonth(); // 01 to 12
+									+ (ticket_rail_expiry.getMonth()+1); // 01 to 12
 						else
 							postData += "&ctl00%24cphMain%24cal_natrail_validuntil%24ddl_month="
-									+ ticket_rail_expiry.getMonth(); // 01 to 12
+									+ (ticket_rail_expiry.getMonth()+1); // 01 to 12
 						postData += "&ctl00%24cphMain%24cal_natrail_validuntil%24ddl_year="
-								+ ticket_rail_expiry.getYear(); // 2010 2011
+								+ (ticket_rail_expiry.getYear()+1900); // 2010 2011
 					} else
 						errors += "*Rail ticket expiry after the journey's date. ";
 				} else
@@ -665,24 +664,24 @@ public class Claim implements Serializable {
 				postData += "&ctl00%24cphMain%24calJourneyDate%24ddl_day=" + journey_started.getDay(); // 1
 																										// to
 																										// 31
-				if (journey_started.getMonth() < 10) {
-					postData += "&ctl00%24cphMain%24calDelayDate%24ddl_month=0" + journey_started.getMonth(); // 1
+				if (journey_started.getMonth()+1 < 10) {
+					postData += "&ctl00%24cphMain%24calDelayDate%24ddl_month=0" + (journey_started.getMonth()+1); // 1
 																												// to
 																												// 12
-					postData += "&ctl00%24cphMain%24calJourneyDate%24ddl_month=0" + journey_started.getMonth(); // 1
+					postData += "&ctl00%24cphMain%24calJourneyDate%24ddl_month=0" + (journey_started.getMonth()+1); // 1
 																												// to
 																												// 12
 				} else {
-					postData += "&ctl00%24cphMain%24calDelayDate%24ddl_month=" + journey_started.getMonth(); // 1
+					postData += "&ctl00%24cphMain%24calDelayDate%24ddl_month=" + (journey_started.getMonth()+1); // 1
 																												// to
 																												// 12
-					postData += "&ctl00%24cphMain%24calJourneyDate%24ddl_month=" + journey_started.getMonth(); // 1
+					postData += "&ctl00%24cphMain%24calJourneyDate%24ddl_month=" + (journey_started.getMonth()+1); // 1
 																												// to
 																												// 12
 				}
-				postData += "&ctl00%24cphMain%24calDelayDate%24ddl_year=" + journey_started.getYear(); // 2010
+				postData += "&ctl00%24cphMain%24calDelayDate%24ddl_year=" + (journey_started.getYear()+1900); // 2010
 																										// only
-				postData += "&ctl00%24cphMain%24calJourneyDate%24ddl_year=" + journey_started.getYear(); // 2010
+				postData += "&ctl00%24cphMain%24calJourneyDate%24ddl_year=" + (journey_started.getYear()+1900); // 2010
 																											// only
 				postData += "&ctl00%24cphMain%24lb_starttime_hour=" + journey_started.getHours(); // 0
 																									// to

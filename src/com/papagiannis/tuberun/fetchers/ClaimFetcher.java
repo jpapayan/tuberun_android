@@ -46,13 +46,11 @@ public class ClaimFetcher extends Fetcher {
 		if (i == -1)
 			throw new Exception("Hidden field not located");
 		i += find.length();
-		StringBuilder res = new StringBuilder();
-		while (r.length() > i && r.charAt(i) != '"') {
-			res.append(URLEncoder.encode(r.substring(i, i + 1)));
-			i++;
-		}
-		String s = res.toString();
-		if (res.length() > 2)
+		r=r.substring(i);
+		i=r.indexOf('"');
+		r=r.substring(0,i);
+		String s=URLEncoder.encode(r);
+		if (s.length() > 2)
 			return s;
 		else
 			throw new Exception("Hidden field too short");
@@ -127,6 +125,7 @@ public class ClaimFetcher extends Fetcher {
 			String q3 = q2 + "?" + param;
 			postData = new StringBuilder("__EVENTTARGET=&__EVENTARGUMENT=&__VIEWSTATE=" + hidden2);
 			postData.append(claim.data_to_send);
+			String sss=postData.toString();
 			PostRequestTask r = new PostRequestTask(new HttpCallback() {
 				public void onReturn(String s) {
 					getCallBack3(s);
@@ -146,10 +145,10 @@ public class ClaimFetcher extends Fetcher {
 	
 	private void getCallBack3(String response) {
 		try {
-			int i = response.indexOf("CharterID%3d");
+			int i = response.indexOf("CharterID=");
             if (i > 0)
             {
-                response = response.substring(i + 12);
+                response = response.substring(i + 10);
                 i = response.indexOf("\"");
                 response = response.substring(0, i);
                 claim.refcode=Integer.parseInt(response);
@@ -161,7 +160,7 @@ public class ClaimFetcher extends Fetcher {
 		} catch (Exception e) {
 
 		} finally {
-			update();
+			notifyClients();
 		}
 	}
 

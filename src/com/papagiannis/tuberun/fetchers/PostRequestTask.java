@@ -2,6 +2,8 @@ package com.papagiannis.tuberun.fetchers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
@@ -33,8 +35,7 @@ public class PostRequestTask extends RequestTask {
 		HttpResponse response;
 		String responseString = "";
 		try {
-			if (postData==null && nameValuePairs.size()>0) post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			else if (postData!=null) post.setEntity(new StringEntity(postData));
+			post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			if (localContext==null)	response = httpclient.execute(post);
 			else response = httpclient.execute(post,localContext);
 			StatusLine statusLine = response.getStatusLine();
@@ -60,9 +61,16 @@ public class PostRequestTask extends RequestTask {
         nameValuePairs.add(new BasicNameValuePair(k, v));
 	}
 	
-	String postData;
 	public void setPostData(StringBuilder postData) {
-		this.postData=postData.toString();
+		String data=postData.toString();
+		String[] tokens= data.split("&");
+		for (int i=0;i<tokens.length;i++) {
+			String[] kv=tokens[i].split("=");
+			if (kv.length==1) 
+				nameValuePairs.add(new BasicNameValuePair(URLDecoder.decode( kv[0]), ""));
+			else	
+				nameValuePairs.add(new BasicNameValuePair(URLDecoder.decode( kv[0]), URLDecoder.decode( kv[1]) ));
+		}
 	}
 	
 }

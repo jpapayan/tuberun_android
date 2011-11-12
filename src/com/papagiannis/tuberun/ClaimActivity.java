@@ -282,11 +282,11 @@ public class ClaimActivity extends TabActivity implements Observer {
 		ArrayAdapter<String> lines_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lines);
 		lines_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		journeyLineUsed.setAdapter(lines_adapter);
-		journeyLineUsed.setSelection(stations.indexOf(claim.journey_lineused));
+		journeyLineUsed.setSelection(lines.indexOf(claim.journey_lineused));
 		journeyLineUsed.setOnItemSelectedListener(new SimpleOnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
-				claim.journey_lineused = stations.get(position);
+				claim.journey_lineused = lines.get(position);
 			}
 		});
 
@@ -703,6 +703,7 @@ public class ClaimActivity extends TabActivity implements Observer {
 			       .setNegativeButton("OK", new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
 			        	   dialog.cancel();
+			        	   if (claim.getEditable()==false) finish();
 			           }
 			       });
 			return builder.create();
@@ -743,7 +744,5 @@ public class ClaimActivity extends TabActivity implements Observer {
 	public void update() {
 		wait_dialog.dismiss();
 		showDialogMessage("Success!", "Your claim was sent successfully");
-		finish();
-
 	}
 }
