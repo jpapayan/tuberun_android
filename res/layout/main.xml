@@ -41,7 +41,7 @@
 			</TableRow>
 			<TableRow>
 				<Button android:id="@+id/button_oyster" android:text="@string/oyster_title"
-					android:height="80dip" />
+					android:height="80dip" android:singleLine="false" />
 				<Button android:id="@+id/button_claims" android:text="@string/claims_title"
 					android:height="80dip" />
 			</TableRow>

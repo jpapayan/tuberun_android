@@ -7,9 +7,12 @@ import java.util.List;
 
 import com.papagiannis.tuberun.claims.Claim;
 import com.papagiannis.tuberun.claims.ClaimStore;
+import com.papagiannis.tuberun.fetchers.ClaimFetcher;
+import com.papagiannis.tuberun.fetchers.Observer;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
@@ -40,17 +43,21 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class ClaimActivity extends TabActivity {
+public class ClaimActivity extends TabActivity implements Observer {
 
 	private static final String LIST1_TAB_TAG = "Overview";
 	private static final String LIST2_TAB_TAG = "Journey";
 	private static final String LIST3_TAB_TAG = "Delay";
 	private static final String LIST4_TAB_TAG = "Personal";
 	private static final String LIST5_TAB_TAG = "Ticket";
+	
+	private static final Integer MESSAGE_WAIT=-1;
+	private static final Integer MESSAGE_NOTICE=-2;
 
 	private TabHost tabHost;
 
 	Claim claim;
+	ClaimFetcher fetcher;
 	ClaimStore store;
 	SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy");
 	SimpleDateFormat dateFormatSimple = new SimpleDateFormat("dd/MM/yyyy");
@@ -100,6 +107,9 @@ public class ClaimActivity extends TabActivity {
 		Bundle extras = getIntent().getExtras();
 		int index = Integer.parseInt(extras.getString("index"));
 		claim = store.getAll(this).get(index);
+
+		fetcher = new ClaimFetcher(claim);
+		fetcher.registerCallback(this);
 
 		setupViewReferences();
 		setupViewHandlers();
@@ -201,11 +211,17 @@ public class ClaimActivity extends TabActivity {
 		ticketRailCardType = (Spinner) findViewById(R.id.claim_ticket_rail_type);
 		ticketRailDuration = (Spinner) findViewById(R.id.claim_ticket_rail_duration);
 		ticketRailPurschase = (EditText) findViewById(R.id.claim_ticket_rail_purchase);
-		;
 		ticketRailRetainedStation = (EditText) findViewById(R.id.claim_ticket_rail_retainedstation);
 	}
 
 	private void setupViewHandlers() {
+		submitButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				sendClaim();
+			}
+		});
+
 		int i = 0;
 		for (i = 0; i < ticketSpinner.getAdapter().getCount(); i++) {
 			if (ticketSpinner.getAdapter().getItem(i).equals(claim.ticket_type))
@@ -313,8 +329,8 @@ public class ClaimActivity extends TabActivity {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
 				claim.setDelayAtstation(stations.get(position));
-				delayStation1.setSelection(0);
-				delayStation2.setSelection(0);
+//				delayStation1.setSelection(0);
+//				delayStation2.setSelection(0);
 
 			}
 		});
@@ -325,8 +341,8 @@ public class ClaimActivity extends TabActivity {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
 				claim.setDelayStation1(stations.get(position));
-				delayAtStation.setSelection(0);
-				delayStation2.setSelection(0);
+//				delayAtStation.setSelection(0);
+//				delayStation2.setSelection(0);
 			}
 		});
 
@@ -336,8 +352,8 @@ public class ClaimActivity extends TabActivity {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
 				claim.setDelayStation2(stations.get(position));
-				delayAtStation.setSelection(0);
-				delayStation1.setSelection(0);
+//				delayAtStation.setSelection(0);
+//				delayStation1.setSelection(0);
 			}
 		});
 
@@ -617,6 +633,8 @@ public class ClaimActivity extends TabActivity {
 		}
 	}
 
+	private Dialog wait_dialog;
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 
@@ -673,9 +691,59 @@ public class ClaimActivity extends TabActivity {
 					ticketRailValidUntil.setText(dateFormatSimple.format(claim.ticket_rail_expiry));
 				}
 			}, d.getYear() + 1900, d.getMonth(), d.getDate());
+		} else if (id==MESSAGE_WAIT) {
+			wait_dialog = ProgressDialog.show(this, "", "Submitting claim, Please wait...", true);
+			return wait_dialog;
 		}
-
-		return null;
+		else if (id==MESSAGE_NOTICE) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(notice_msg)
+			       .setTitle(notice_title)
+			       .setCancelable(false)
+			       .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			        	   dialog.cancel();
+			           }
+			       });
+			return builder.create();
+		}
+		else return null;
+	}
+	
+	@Override
+	protected void onPrepareDialog(final int id, final Dialog dialog) {
+	  if (id == MESSAGE_NOTICE) {
+	    //update to current time
+		AlertDialog d = (AlertDialog) dialog;
+		d.setTitle(notice_title);
+		d.setMessage(notice_msg);
+	  }
 	}
 
+	protected void sendClaim() {
+		try {
+			claim.isReady();
+			fetcher.update();
+			showDialog(MESSAGE_WAIT);
+		} catch (Exception e) {
+			showDialogMessage("Submission Failed", e.getMessage());
+		}
+
+	}
+
+	private String notice_title;
+	private String notice_msg;
+	private void showDialogMessage(String s, String ss) {
+		notice_title=s;
+		notice_msg=ss;
+		showDialog(MESSAGE_NOTICE);
+	}
+
+	@Override
+	public void update() {
+		wait_dialog.dismiss();
+		showDialogMessage("Success!", "Your claim was sent successfully");
+		finish();
+
+	}
 }
