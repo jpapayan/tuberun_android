@@ -36,6 +36,7 @@ public class PostRequestTask extends RequestTask {
 		String responseString = "";
 		try {
 			post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			post.setHeader("User-Agent", myUserAgent);
 			if (localContext==null)	response = httpclient.execute(post);
 			else response = httpclient.execute(post,localContext);
 			StatusLine statusLine = response.getStatusLine();

@@ -62,7 +62,17 @@ public class ClaimsActivity extends ListActivity implements OnClickListener  {
 		i = 0;
 		for (Claim c : claims) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
-			m.put("title", "One Claim");
+			String title;
+			if (c.isDelayAtStation()) {
+				if (c.getDelayAtStation()!=null && !c.getDelayAtStation().equals(""))
+					title="At "+ c.getDelayAtStation();
+				else title="New claim";
+			}
+			else {
+				title = "Between "+c.getDelayStation1()+" and "+c.getDelayStation2();
+			}
+			if (title.length()>30) title=title.substring(0, 29)+"...";
+			m.put("title", title);
 			m.put("index", i++);
 			m.put("submitted", c.getSubmitted());
 			claims_list.add(m);
@@ -87,6 +97,7 @@ public class ClaimsActivity extends ListActivity implements OnClickListener  {
 	public void onClick(View arg0) {
 		// lets create a new claim and add to our list
 		Claim c = new Claim();
+		prefillClaim(c, store);
 		Integer index = store.getAll(this).size();
 		store.add(c, this);
 		Intent i = new Intent(this, ClaimActivity.class);
@@ -111,4 +122,12 @@ public class ClaimsActivity extends ListActivity implements OnClickListener  {
 		store.removeIndex(delete_index, this);
 	}
 
+	protected void prefillClaim(Claim c, ClaimStore store) {
+		for (Claim p : store.getAll(this)) {
+			if (p.getPrefill()) {
+				c.prefill(p);
+				break;
+			}
+		}
+	}
 }

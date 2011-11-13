@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 public class TubeRun extends Activity implements OnClickListener{
-    /** Called when the activity is first created. */
+    public static final String VERSION = "1.0";
+
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

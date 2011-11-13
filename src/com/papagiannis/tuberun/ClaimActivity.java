@@ -3,6 +3,7 @@ package com.papagiannis.tuberun;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 
 import com.papagiannis.tuberun.claims.Claim;
@@ -50,9 +51,11 @@ public class ClaimActivity extends TabActivity implements Observer {
 	private static final String LIST3_TAB_TAG = "Delay";
 	private static final String LIST4_TAB_TAG = "Personal";
 	private static final String LIST5_TAB_TAG = "Ticket";
-	
-	private static final Integer MESSAGE_WAIT=-1;
-	private static final Integer MESSAGE_NOTICE=-2;
+
+	private static final Integer MESSAGE_WAIT = -1;
+	private static final Integer MESSAGE_NOTICE = -2;
+	private static final Integer MESSAGE_PREFILL= -3;
+	private static final Integer MESSAGE_SENDWARNING=-4;
 
 	private TabHost tabHost;
 
@@ -113,6 +116,9 @@ public class ClaimActivity extends TabActivity implements Observer {
 
 		setupViewReferences();
 		setupViewHandlers();
+
+		if (!claim.getEditable())
+			markNotEditable();
 	}
 
 	@Override
@@ -214,11 +220,53 @@ public class ClaimActivity extends TabActivity implements Observer {
 		ticketRailRetainedStation = (EditText) findViewById(R.id.claim_ticket_rail_retainedstation);
 	}
 
+	private void markNotEditable() {
+		ticketSpinner.setEnabled(false);
+		submitButton.setVisibility(View.GONE);
+		journeyStartDate.setEnabled(false);
+		journeyStartStation.setEnabled(false);
+		journeyLineUsed.setEnabled(false);
+		journeyEndStation.setEnabled(false);
+		delayAtStation.setEnabled(false);
+		delayStation1.setEnabled(false);
+		delayStation2.setEnabled(false);
+		delayAt.setEnabled(false);
+		delayBetween.setEnabled(false);
+		delayWhen.setEnabled(false);
+		delayDuration.setEnabled(false);
+		personalTitle.setEnabled(false);
+		personalSurname.setEnabled(false);
+		personalName.setEnabled(false);
+		personalLine1.setEnabled(false);
+		personalLine2.setEnabled(false);
+		personalCity.setEnabled(false);
+		personalPostcode.setEnabled(false);
+		personalPhone.setEnabled(false);
+		personalEmail.setEnabled(false);
+		personalPhotocard.setEnabled(false);
+		ticketOysterNumber.setEnabled(false);
+		ticketOysterCardType.setEnabled(false);
+		ticketOysterTicketType.setEnabled(false);
+		ticketTflExpiry.setEnabled(false);
+		ticketTflNumber.setEnabled(false);
+		ticketTflIssuingStation.setEnabled(false);
+		ticketTflRetainingStation.setEnabled(false);
+		ticketTflDuration.setEnabled(false);
+		ticketTflType.setEnabled(false);
+		ticketRailClass.setEnabled(false);
+		ticketRailValidUntil.setEnabled(false);
+		ticketRailNumber.setEnabled(false);
+		ticketRailCardType.setEnabled(false);
+		ticketRailDuration.setEnabled(false);
+		ticketRailPurschase.setEnabled(false);
+		ticketRailRetainedStation.setEnabled(false);
+	}
+
 	private void setupViewHandlers() {
 		submitButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				sendClaim();
+				showDialog(MESSAGE_SENDWARNING);
 			}
 		});
 
@@ -329,8 +377,8 @@ public class ClaimActivity extends TabActivity implements Observer {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
 				claim.setDelayAtstation(stations.get(position));
-//				delayStation1.setSelection(0);
-//				delayStation2.setSelection(0);
+				// delayStation1.setSelection(0);
+				// delayStation2.setSelection(0);
 
 			}
 		});
@@ -341,8 +389,8 @@ public class ClaimActivity extends TabActivity implements Observer {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
 				claim.setDelayStation1(stations.get(position));
-//				delayAtStation.setSelection(0);
-//				delayStation2.setSelection(0);
+				// delayAtStation.setSelection(0);
+				// delayStation2.setSelection(0);
 			}
 		});
 
@@ -352,8 +400,8 @@ public class ClaimActivity extends TabActivity implements Observer {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
 				claim.setDelayStation2(stations.get(position));
-//				delayAtStation.setSelection(0);
-//				delayStation1.setSelection(0);
+				// delayAtStation.setSelection(0);
+				// delayStation1.setSelection(0);
 			}
 		});
 
@@ -691,58 +739,115 @@ public class ClaimActivity extends TabActivity implements Observer {
 					ticketRailValidUntil.setText(dateFormatSimple.format(claim.ticket_rail_expiry));
 				}
 			}, d.getYear() + 1900, d.getMonth(), d.getDate());
-		} else if (id==MESSAGE_WAIT) {
-			wait_dialog = ProgressDialog.show(this, "", "Submitting claim, Please wait...", true);
+		} else if (id == MESSAGE_WAIT) {
+			wait_dialog = ProgressDialog.show(this, "", "Submitting claim, please wait...", true);
 			return wait_dialog;
-		}
-		else if (id==MESSAGE_NOTICE) {
+		} else if (id == MESSAGE_NOTICE) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(notice_msg)
-			       .setTitle(notice_title)
-			       .setCancelable(false)
-			       .setNegativeButton("OK", new DialogInterface.OnClickListener() {
-			           public void onClick(DialogInterface dialog, int id) {
-			        	   dialog.cancel();
-			        	   if (claim.getEditable()==false) finish();
-			           }
-			       });
+			builder.setMessage(notice_msg).setTitle(notice_title).setCancelable(false)
+					.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+							if (claim.getSubmitted()) showDialog(MESSAGE_PREFILL);
+						}
+					});
+			return builder.create();
+		} else if (id==MESSAGE_PREFILL) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Do you want to use the personal and ticket details from this claim to prefill " +
+					"future claims?")
+					.setTitle("Store as Prefill")
+					.setCancelable(false)
+					.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							storeAsPrefill();
+							finish();
+						}
+					})
+					.setNegativeButton("No", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							claim.setPrefill(false);
+							finish();
+						}
+					});
+			return builder.create();
+		} else if (id==MESSAGE_SENDWARNING) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("I confirm that the information I have given is correct to the best of my knowledge. " +
+					"I understand that if I give false information, future claims may be rejected and legal action " +
+					"may be taken against me. I consent to London Underground checking the information that I " +
+					"have given on this form.")
+					.setTitle("Notice")
+					.setCancelable(true)
+					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.dismiss();
+							sendClaim();
+						}
+					})
+					.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.dismiss();
+						}
+					});
 			return builder.create();
 		}
-		else return null;
-	}
-	
-	@Override
-	protected void onPrepareDialog(final int id, final Dialog dialog) {
-	  if (id == MESSAGE_NOTICE) {
-	    //update to current time
-		AlertDialog d = (AlertDialog) dialog;
-		d.setTitle(notice_title);
-		d.setMessage(notice_msg);
-	  }
+		
+		else
+			return null;
 	}
 
+	@Override
+	protected void onPrepareDialog(final int id, final Dialog dialog) {
+		if (id == MESSAGE_NOTICE) {
+			// update to current time
+			AlertDialog d = (AlertDialog) dialog;
+			d.setTitle(notice_title);
+			d.setMessage(notice_msg);
+		}
+	}
+
+	protected void storeAsPrefill() {
+		for (Claim c : store.getAll(this)) {
+			c.setPrefill(false); //to avoid having two prefill claims
+		}
+		claim.setPrefill(true);
+	}
+	
 	protected void sendClaim() {
 		try {
 			claim.isReady();
 			fetcher.update();
 			showDialog(MESSAGE_WAIT);
-		} catch (Exception e) {
-			showDialogMessage("Submission Failed", e.getMessage());
+		}
+		catch (InvalidPropertiesFormatException e) {
+			showDialogMessage("Failed", e.getMessage());
+		}
+		catch (Exception e) {
+			showDialogMessage("Failed", "Error 100: Claim preparation error");
 		}
 
 	}
 
 	private String notice_title;
 	private String notice_msg;
+
 	private void showDialogMessage(String s, String ss) {
-		notice_title=s;
-		notice_msg=ss;
+		notice_title = s;
+		notice_msg = ss;
 		showDialog(MESSAGE_NOTICE);
 	}
 
 	@Override
 	public void update() {
 		wait_dialog.dismiss();
-		showDialogMessage("Success!", "Your claim was sent successfully");
+		if (claim.getSubmitted()) {
+			showDialogMessage("Success!", "Your claim was sent successfully. " +
+					"Your reference number is "+claim.getReferenceNo()+". "+
+					"It normally takes 21 days to process a refund. If you haven’t heard from TfL after 21 days, " +
+					"contact Oyster Customer Service Centre");
+		} else {
+			showDialogMessage("Failed", "Error 101: " + fetcher.getErrors());
+		}
 	}
 }

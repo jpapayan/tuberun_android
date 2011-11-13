@@ -16,11 +16,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
+import com.google.android.maps.MyLocationOverlay;
+import com.papagiannis.tuberun.TubeRun;
+
 import android.os.AsyncTask;
 import android.util.Log;
 
 class RequestTask extends AsyncTask<String, String, String> {
 
+	protected String myUserAgent="Tuberun/"+TubeRun.VERSION+" Android";
 	private HttpCallback cb;
 
 	public RequestTask(HttpCallback cb) {
@@ -43,8 +47,10 @@ class RequestTask extends AsyncTask<String, String, String> {
 		HttpResponse response;
 		String responseString = "";
 		try {
-			if (localContext==null)	response = httpclient.execute(new HttpGet(uri[0]));
-			else response = httpclient.execute(new HttpGet(uri[0]),localContext);
+			HttpGet get=new HttpGet(uri[0]);
+			get.setHeader("User-Agent", myUserAgent);
+			if (localContext==null)	response = httpclient.execute(get);
+			else response = httpclient.execute(get,localContext);
 			StatusLine statusLine = response.getStatusLine();
 			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();

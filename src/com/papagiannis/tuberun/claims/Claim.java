@@ -1,8 +1,10 @@
 package com.papagiannis.tuberun.claims;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.InvalidPropertiesFormatException;
 
 import com.papagiannis.tuberun.LinePresentation;
 import com.papagiannis.tuberun.LineType;
@@ -32,9 +34,19 @@ public class Claim implements Serializable {
 			return "PREFILL CLAIM";
 	}
 
+	private boolean isPrefill=false;
+	public void setPrefill(boolean isPrefill) {
+		this.isPrefill=isPrefill;
+	}
+	
+	public boolean getPrefill() {
+		return isPrefill;
+	}
+	
 	private Boolean submitted;
 
 	public Boolean getSubmitted() {
+//		return false;
 		return submitted;
 	}
 
@@ -60,12 +72,18 @@ public class Claim implements Serializable {
 	}
 
 	public Integer refcode;
+	
+	public String getReferenceNo() {
+		return String.valueOf(refcode);
+	}
+	
 	public String user_notes;
 
 	public String getResult() {
 		if (submitted) {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy");
 			if (!isDLR())
-				return "Submitted on " + submit_date + ", reference number is " + refcode;
+				return "Submitted on " + dateFormat.format(submit_date) + ", your reference number is " + refcode;
 			else
 				return "Submitted on " + submit_date + ", reference number not available for DLR claims";
 		} else {
@@ -1368,10 +1386,19 @@ public class Claim implements Serializable {
 	}
 
 	// region submit helper functions
-	public boolean isReady() throws Exception {
+	public boolean isReady() throws InvalidPropertiesFormatException{
 		errors = "";
-		if (!isReadyTube()) throw new Exception(errors);
+		if (!isReadyTube()) throw new InvalidPropertiesFormatException(errors);
 		return true;
 	}
+	
+	public void markAsSent(int refcode) {
+		this.refcode=refcode;
+        setSubmit_date(new Date());
+        setSubmitted(true);
+	}
+
+	
+
 	
 }

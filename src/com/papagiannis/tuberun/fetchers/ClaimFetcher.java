@@ -24,9 +24,14 @@ public class ClaimFetcher extends Fetcher {
 
 	BasicCookieStore cookies;
 	StringBuilder postData;
+	private String errors;
+	public String getErrors() {
+		return errors;
+	}
 
 	@Override
 	public void update() {
+		errors="";
 		postData = new StringBuilder();
 		cookies = new BasicCookieStore();
 		String domain = "http://www.tfl.gov.uk/tfl/tickets/refunds/tuberefund/";
@@ -58,6 +63,8 @@ public class ClaimFetcher extends Fetcher {
 
 	private void getCallBack05(String response) {
 		try {
+			if (response==null || response.equals("")) 
+				throw new Exception("The server tfl.gov.uk did not respond to your request (0)");
 			String domains = "http://www.tfl.gov.uk/tfl/tickets/refunds/tuberefund/";
 			String q05 = domains + "default.aspx";
 			String hidden = getHidden(response);
@@ -80,18 +87,20 @@ public class ClaimFetcher extends Fetcher {
 			r.setCookies(cookies);
 			r.execute(q05);
 		} catch (Exception e) {
-
-		} finally {
-		}
+			errors+=e.getMessage();
+			notifyClients();
+		} 
 	}
 
 	String param = "";
 
 	private void getCallBack1(String response) {
 		try {
+			if (response==null || response.equals("")) 
+				throw new Exception("The server tfl.gov.uk did not respond to your request (1)");
 			String domains = "https://www.tfl.gov.uk/tfl/tickets/refunds/tuberefund/";
 			String q2 = domains + "refund.aspx";
-			String hidden = getHidden(response);
+//			String hidden = getHidden(response);
 
 			param = "";
 			if (claim.ticket_type.contains("Oyster"))
@@ -110,22 +119,22 @@ public class ClaimFetcher extends Fetcher {
 			});
 			r.setCookies(cookies);
 			r.execute(q2 + "?" + param);
-
 		} catch (Exception e) {
-
-		} finally {
-		}
+			errors+=e.getMessage();
+			notifyClients();
+		} 
 	}
 
 	private void getCallBack2(String response) {
-		String domains = "https://www.tfl.gov.uk/tfl/tickets/refunds/tuberefund/";
-		String q2 = domains + "refund.aspx";
 		try {
+			if (response==null || response.equals("")) 
+				throw new Exception("The server tfl.gov.uk did not respond to your request (2)");
+			String domains = "https://www.tfl.gov.uk/tfl/tickets/refunds/tuberefund/";
+			String q2 = domains + "refund.aspx";
 			String hidden2 = getHidden(response);
 			String q3 = q2 + "?" + param;
 			postData = new StringBuilder("__EVENTTARGET=&__EVENTARGUMENT=&__VIEWSTATE=" + hidden2);
 			postData.append(claim.data_to_send);
-			String sss=postData.toString();
 			PostRequestTask r = new PostRequestTask(new HttpCallback() {
 				public void onReturn(String s) {
 					getCallBack3(s);
@@ -136,29 +145,30 @@ public class ClaimFetcher extends Fetcher {
 			cook.setDomain("www.tfl.gov.uk/");
 			cookies.addCookie(cook);
 			r.setCookies(cookies);
+//			throw new Exception("Fucked up");
 			r.execute(q3);
 		} catch (Exception e) {
-
-		} finally {
-		}
+			errors+=e.getMessage();
+			notifyClients();
+		} 
 	}
 	
 	private void getCallBack3(String response) {
 		try {
+			if (response==null || response.equals("")) 
+				throw new Exception("The server tfl.gov.uk did not respond to your request (3)");
 			int i = response.indexOf("CharterID=");
             if (i > 0)
             {
                 response = response.substring(i + 10);
                 i = response.indexOf("\"");
                 response = response.substring(0, i);
-                claim.refcode=Integer.parseInt(response);
-                claim.setSubmit_date(new Date());
-                claim.setSubmitted(true);
+                claim.markAsSent(Integer.parseInt(response));
             }
             else throw new Exception("Could not locate reference number");
 			
 		} catch (Exception e) {
-
+			errors+=e.getMessage();
 		} finally {
 			notifyClients();
 		}
