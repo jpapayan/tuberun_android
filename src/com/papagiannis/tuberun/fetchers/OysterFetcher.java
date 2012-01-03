@@ -10,13 +10,15 @@ import com.papagiannis.tuberun.claims.Claim;
 
 public class OysterFetcher extends Fetcher {
 	private static final long serialVersionUID = 1L;
-	private String username;
-	private String password;
+	private String username="";
+	private String password="";
+	private String oyster_no="";
+	private String oyster_balance="";
 
 	public OysterFetcher(String username, String password) {
 		super();
-		this.username=username;
-		this.password=password;
+		this.username=(username==null)?"":username.trim();
+		this.password=(password==null)?"":password.trim();
 	}
 
 	@Override
@@ -33,59 +35,20 @@ public class OysterFetcher extends Fetcher {
 
 	@Override
 	public void update() {
-		notifyAll();
-		return;
-//		errors="";
-//		postData = new StringBuilder();
-//		cookies = new BasicCookieStore();
-//		String domain = "http://www.tfl.gov.uk/tfl/tickets/refunds/tuberefund/";
-//		String q1 = domain + "default.aspx";
-//		RequestTask r = new RequestTask(new HttpCallback() {
-//			public void onReturn(String s) {
-//				getCallBack05(s);
-//			}
-//		});
-//		r.setCookies(cookies);
-//		r.execute(q1);
-	}
+		errors="";
+		postData = new StringBuilder();
+		cookies = new BasicCookieStore();
+		String q1 = "https://oyster.tfl.gov.uk/oyster/security_check";
+		postData.append("j_username="+username+"&j_password="+password+"&Sign+in=Sign+in");
 
-	private String getHidden(String r) throws Exception {
-		String find = "<input type=\"hidden\" name=\"__VIEWSTATE\" id=\"__VIEWSTATE\" value=\"";
-		int i = r.indexOf(find);
-		if (i == -1)
-			throw new Exception("Hidden field not located");
-		i += find.length();
-		r=r.substring(i);
-		i=r.indexOf('"');
-		r=r.substring(0,i);
-		String s=URLEncoder.encode(r);
-		if (s.length() > 2)
-			return s;
-		else
-			throw new Exception("Hidden field too short");
-	}
-
-	private void getCallBack05(String response) {
-		try {
-			if (response==null || response.equals("")) 
-				throw new Exception("The server tfl.gov.uk did not respond to your request (0)");
-			String domains = "http://www.tfl.gov.uk/tfl/tickets/refunds/tuberefund/";
-			String q05 = domains + "default.aspx";
-			String hidden = getHidden(response);
-			postData.append("__VIEWSTATE=" + hidden);
-
-			PostRequestTask r = new PostRequestTask(new HttpCallback() {
-				public void onReturn(String s) {
-					getCallBack1(s);
-				}
-			});
-			r.setPostData(postData);
-			r.setCookies(cookies);
-			r.execute(q05);
-		} catch (Exception e) {
-			errors+=e.getMessage();
-			notifyClients();
-		} 
+		PostRequestTask r = new PostRequestTask(new HttpCallback() {
+			public void onReturn(String s) {
+				getCallBack1(s);
+			}
+		});
+		r.setPostData(postData);
+		r.setCookies(cookies);
+		r.execute(q1);
 	}
 
 	String param = "";
@@ -93,36 +56,60 @@ public class OysterFetcher extends Fetcher {
 	private void getCallBack1(String response) {
 		try {
 			if (response==null || response.equals("")) 
-				throw new Exception("The server tfl.gov.uk did not respond to your request (1)");
-			String domains = "https://www.tfl.gov.uk/tfl/tickets/refunds/tuberefund/";
-			String q2 = domains + "refund.aspx";
-//			String hidden = getHidden(response);
+				throw new Exception("The server oyster.tfl.gov.uk did not respond to your request (1)");
+			if (response.contains("Login failed")) {
+				throw new Exception("Login failed, please check your credentials.");
+			}
+			int i=response.indexOf("Select card number");
+			if (i>0) {
+				response=response.substring(i);
+				String mark="<option value=\"";
+				response=response.substring(response.indexOf(mark)+mark.length());
+				oyster_no=response.substring(0, response.indexOf("\""));
+				postData = new StringBuilder();
+				String q = "https://oyster.tfl.gov.uk/oyster/selectCard.do";
+				postData.append("method=input&cardId="+oyster_no);
 
-			param = "";
+				PostRequestTask r = new PostRequestTask(new HttpCallback() {
+					public void onReturn(String s) {
+						getCallBack2(s);
+					}
+				});
+				r.setPostData(postData);
+				r.setCookies(cookies);
+				r.execute(q);
+			}
+			else {
+				//TODO single card parsing
+				notifyClients();
+			}
+			return;
+
 		} catch (Exception e) {
 			errors+=e.getMessage();
 			notifyClients();
 		}
 	}
 	
-	private void getCallBack3(String response) {
+	private void getCallBack2(String response) {
 		try {
 			if (response==null || response.equals("")) 
 				throw new Exception("The server tfl.gov.uk did not respond to your request (3)");
-			int i = response.indexOf("CharterID=");
-            if (i > 0)
-            {
-                response = response.substring(i + 10);
-                i = response.indexOf("\"");
-                response = response.substring(0, i);
-            }
-            else throw new Exception("Could not locate reference number");
-			
+			String mark="Balance: &pound;";
+			int i=response.indexOf(mark);
+			if (i<0) throw new Exception("Cannot parse server response");
+			response=response.substring(i+mark.length());
+			oyster_balance="£"+response.substring(0,response.indexOf("</span>"));
 		} catch (Exception e) {
 			errors+=e.getMessage();
 		} finally {
 			notifyClients();
 		}
+	}
+
+	public CharSequence getResult() {
+		if (!errors.equals("")) return "ERROR";
+		else return oyster_balance;
 	}
 
 }

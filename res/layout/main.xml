@@ -8,14 +8,41 @@
 		android:layout_width="fill_parent" android:layout_height="fill_parent"
 		android:src="@drawable/background" android:scaleType="centerCrop" />
 
-	<LinearLayout  
-		android:layout_width="fill_parent" android:layout_height="wrap_content" 
-		android:gravity="right"
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:gravity="right"
 		android:orientation="horizontal">
-		<Button android:id="@+id/button_favorites" 
-			android:layout_width="45dip" android:layout_height="45dip" 
-			android:layout_gravity="right"
-			android:text=""	style="@style/FavoriteNormalButton" />
+
+
+		<LinearLayout  android:id="@+id/layout_balance"
+			android:visibility="gone"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:background="@drawable/bubble"
+			android:orientation="horizontal">
+
+			<ProgressBar android:id="@+id/progressbar_balance" android:visibility="gone"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_gravity="center" style="@android:style/Widget.ProgressBar.Small.Inverse"
+				android:layout_margin="5dp" />
+
+			<TextView android:id="@+id/view_balance" android:visibility="gone"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:paddingLeft="5dip"
+				android:paddingRight="5dip"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center"
+				android:gravity="center" android:textColor="#00a1f5" />
+
+		</LinearLayout>
+
+
+		<Button android:id="@+id/button_oyster" android:layout_width="45dip"
+			android:layout_height="45dip" android:layout_gravity="center_vertical|right"
+			android:text="" style="@style/OysterButton" />
+		<Button android:id="@+id/button_favorites"
+			android:layout_width="45dip" android:layout_height="45dip"
+			android:layout_gravity="center_vertical|right" android:text=""
+			style="@style/FavoriteNormalButton" />
 	</LinearLayout>
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -40,7 +67,7 @@
 					android:height="80dip" />
 			</TableRow>
 			<TableRow>
-				<Button android:id="@+id/button_oyster" android:text="@string/oyster_title"
+				<Button android:id="@+id/button_planner" android:text="@string/planner_title"
 					android:height="80dip" android:singleLine="false" />
 				<Button android:id="@+id/button_claims" android:text="@string/claims_title"
 					android:height="80dip" />

@@ -7,6 +7,10 @@
 		<item name="android:background">@layout/favorite_toggle_button</item>
 	</style>
 	
+	<style name="OysterButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/oyster_button_selector</item>
+	</style>
+	
 	<style name="FavoriteNormalButton" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/favorite_button_selector</item>
 	</style>

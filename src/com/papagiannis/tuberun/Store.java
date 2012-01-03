@@ -76,6 +76,12 @@ public class Store<T> {
 		}
 		storeToFile(a);
 	}
+	
+	public  void removeAll(Activity a) {
+		list.clear();
+		storeToFile(a);
+	}
+	
 
 	public  boolean contains(T f) {
 		return list.contains(f);

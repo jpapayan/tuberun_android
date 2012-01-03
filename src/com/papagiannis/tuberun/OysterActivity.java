@@ -80,7 +80,10 @@ public class OysterActivity extends Activity implements Observer{
 	@Override
 	public void update() {
 		wait_dialog.dismiss();
-		finish();
+		if (fetcher.getErrors().length()>0) {
+			showDialogMessage("Error", fetcher.getErrors());
+		}
+		else finish();
 	}
 	
 	private String notice_title;
