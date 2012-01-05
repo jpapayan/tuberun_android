@@ -39,6 +39,10 @@
 		<Button android:id="@+id/button_oyster" android:layout_width="45dip"
 			android:layout_height="45dip" android:layout_gravity="center_vertical|right"
 			android:text="" style="@style/OysterButton" />
+		<Button android:id="@+id/button_oyster_active" android:visibility="gone"
+			android:layout_width="45dip"
+			android:layout_height="45dip" android:layout_gravity="center_vertical|right"
+			android:text="" style="@style/OysterButtonActive" />
 		<Button android:id="@+id/button_favorites"
 			android:layout_width="45dip" android:layout_height="45dip"
 			android:layout_gravity="center_vertical|right" android:text=""

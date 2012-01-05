@@ -14,6 +14,7 @@ public class OysterFetcher extends Fetcher {
 	private String password="";
 	private String oyster_no="";
 	private String oyster_balance="";
+	private Date update_time=new Date(2000,1,1);
 
 	public OysterFetcher(String username, String password) {
 		super();
@@ -23,7 +24,7 @@ public class OysterFetcher extends Fetcher {
 
 	@Override
 	public Date getUpdateTime() {
-		return new Date();
+		return update_time;
 	}
 
 	BasicCookieStore cookies;
@@ -100,6 +101,7 @@ public class OysterFetcher extends Fetcher {
 			if (i<0) throw new Exception("Cannot parse server response");
 			response=response.substring(i+mark.length());
 			oyster_balance="£"+response.substring(0,response.indexOf("</span>"));
+			update_time=new Date();
 		} catch (Exception e) {
 			errors+=e.getMessage();
 		} finally {
@@ -110,6 +112,10 @@ public class OysterFetcher extends Fetcher {
 	public CharSequence getResult() {
 		if (!errors.equals("")) return "ERROR";
 		else return oyster_balance;
+	}
+	
+	public boolean isErrorResult() {
+		return !errors.equals("");
 	}
 
 }

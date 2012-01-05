@@ -11,6 +11,10 @@
 		<item name="android:background">@layout/oyster_button_selector</item>
 	</style>
 	
+	<style name="OysterButtonActive" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/oyster_active_button_selector</item>
+	</style>
+	
 	<style name="FavoriteNormalButton" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/favorite_button_selector</item>
 	</style>
