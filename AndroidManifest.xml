@@ -7,6 +7,7 @@
 
     <application android:icon="@drawable/icon" android:label="@string/app_name">
         <activity android:name=".TubeRun"
+                  android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -88,7 +89,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".OysterActivity"
-                  android:label="Oyster Balance"
+                  android:theme="@android:style/Theme.Black.NoTitleBar" 
+                  android:windowSoftInputMode="stateUnchanged">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".PlanActivity"  
+            	  android:theme="@android:style/Theme.Black.NoTitleBar"                
                   android:windowSoftInputMode="stateUnchanged">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

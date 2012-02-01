@@ -264,6 +264,7 @@ public class ClaimActivity extends TabActivity implements Observer {
 
 	private void setupViewHandlers() {
 		submitButton.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View arg0) {
 				showDialog(MESSAGE_SENDWARNING);

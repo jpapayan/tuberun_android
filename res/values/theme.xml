@@ -30,5 +30,16 @@
 	<style name="AddButton" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/add_button_selector</item>
 	</style>
+	
+	<style name="BackButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/back_button_selector</item>
+	</style>
+	
+	<style name="LogoButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/logo_button_selector</item>
+	</style>
+	<style name="HomeButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/home_button_selector</item>
+	</style>
 
 </resources>
