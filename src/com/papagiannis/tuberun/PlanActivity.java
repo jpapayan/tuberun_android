@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -20,7 +21,8 @@ import android.widget.TextView;
 
 public class PlanActivity extends Activity implements Observer, OnClickListener{
 	final PlanActivity self=this;
-	PlanFetcher fetcher=new PlanFetcher(null);
+	private static Plan plan=new Plan();
+	PlanFetcher fetcher=new PlanFetcher(plan);
 	ViewPager pager;
 	Button back_button;
 	Button logo_button;
@@ -62,7 +64,7 @@ public class PlanActivity extends Activity implements Observer, OnClickListener{
 	                resId = R.layout.simple_plan;
 	                break;
 	            case 1:
-	                resId = R.layout.detailed_plan;
+	                resId = R.layout.partial_plan;
 	                break;
 	            }
 	 
@@ -113,16 +115,35 @@ public class PlanActivity extends Activity implements Observer, OnClickListener{
 		if (v.getId()==go_button.getId()) {
 			showDialog(0);
 			fetcher.clearCallbacks();
-			fetcher=new PlanFetcher(new Plan());
+			plan=getUserSelections();
+			fetcher=new PlanFetcher(plan);
 			fetcher.registerCallback(this);
 			fetcher.update();
 		};
 		
 	}
 	
+	private Plan getUserSelections() {
+		return new Plan();
+	}
+
 	@Override
 	public void update() {
 		wait_dialog.dismiss();
+		if (!fetcher.isErrorResult())  {
+			plan=fetcher.getResult();
+			Intent i=new Intent(this, RouteResultsActivity.class);
+			startActivity(i);
+		}
+		else {
+			//TODO: show an errror message
+		}
+		
+	}
+	
+	
+	public static Plan getPlan() {
+		return plan;
 	}
 	
 }

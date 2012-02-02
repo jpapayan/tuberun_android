@@ -10,7 +10,7 @@ public class Route {
 	
 	ArrayList<PartialRoute> partials=new ArrayList<PartialRoute>();
 	
-	void addPartialRoute(PartialRoute r) {
+	public void addPartialRoute(PartialRoute r) {
 		partials.add(r);
 	}
 

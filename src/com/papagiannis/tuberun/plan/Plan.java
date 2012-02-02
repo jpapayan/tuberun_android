@@ -2,6 +2,7 @@ package com.papagiannis.tuberun.plan;
 
 import java.util.ArrayList;
 
+
 /*
  * This class contains the requirements for a given plan request. The UI must translate
  * user choices to one object of this class.
@@ -21,6 +22,16 @@ public class Plan {
 	}
 	public void addRoute(Route route) {
 		routes.add(route);
+	}
+
+	public Plan copyRoutesFrom(Plan from) {
+		routes.clear();
+		routes.addAll(from.routes);
+		return this;
+	}
+
+	public ArrayList<Route> getRoutes() {
+		return routes;
 	}
 
 }
