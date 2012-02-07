@@ -1,5 +1,10 @@
 package com.papagiannis.tuberun;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.PlanFetcher;
 import com.papagiannis.tuberun.plan.Plan;
@@ -9,6 +14,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -19,29 +30,29 @@ import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class PlanActivity extends Activity implements Observer, OnClickListener{
-	final PlanActivity self=this;
-	private static Plan plan=new Plan();
-	PlanFetcher fetcher=new PlanFetcher(plan);
-	ViewPager pager;
+public class PlanActivity extends Activity implements Observer,
+		LocationListener, OnClickListener {
+	final PlanActivity self = this;
+	private static Plan plan = new Plan();
+	PlanFetcher fetcher = new PlanFetcher(plan);
 	Button back_button;
 	Button logo_button;
 	TextView title_textview;
 	Button go_button;
-	
+	TextView location_textview;
+
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.plan);
 		create();
-    }
-	
+	}
+
 	private void create() {
-		pager=(ViewPager)findViewById(R.id.viewpager);
-		back_button=(Button)findViewById(R.id.back_button);
-		logo_button=(Button)findViewById(R.id.logo_button);
-		title_textview=(TextView)findViewById(R.id.title_textview);
-		OnClickListener back_listener=new OnClickListener() {
+		back_button = (Button) findViewById(R.id.back_button);
+		logo_button = (Button) findViewById(R.id.logo_button);
+		title_textview = (TextView) findViewById(R.id.title_textview);
+		OnClickListener back_listener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				self.finish();
@@ -50,79 +61,44 @@ public class PlanActivity extends Activity implements Observer, OnClickListener{
 		back_button.setOnClickListener(back_listener);
 		logo_button.setOnClickListener(back_listener);
 		title_textview.setOnClickListener(back_listener);
-		
-		PagerAdapter pageradapter = new PagerAdapter() {
-			
-			public Object instantiateItem(View collection, int position) {
-				 
-	            LayoutInflater inflater = (LayoutInflater) collection.getContext()
-	                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	 
-	            int resId = 0;
-	            switch (position) {
-	            case 0:
-	                resId = R.layout.simple_plan;
-	                break;
-	            case 1:
-	                resId = R.layout.partial_plan;
-	                break;
-	            }
-	 
-	            View view = inflater.inflate(resId,null);
-	 
-	            ((ViewPager) pager).addView(view, position);
-	            
-	            if (position==0) {
-	            	//tab 1 initialisation--the method is actually called async after the main activity has loaded
-	            	go_button=(Button)findViewById(R.id.go_button);
-	            	if (go_button!=null) go_button.setOnClickListener(self);
-	            }
-	 
-	            return view;
-	        }
-	 
-	        @Override
-	        public void destroyItem(View arg0, int arg1, Object arg2) {
-	            ((ViewPager) arg0).removeView((View) arg2);
-	 
-	        }
-			
-			@Override
-			public boolean isViewFromObject(View arg0, Object arg1) {
-				return arg0 == ((View) arg1);
-			}
-			
-			@Override
-			public int getCount() {
-				return 2;
-			}
-		};
-		pager.setAdapter(pageradapter);
-		pager.setCurrentItem(0);
-		
+
+		location_textview = (TextView) findViewById(R.id.location_textview);
+		locationManager = (LocationManager) this
+				.getSystemService(Context.LOCATION_SERVICE);
+		requestLocationUpdates();
+
+		lastKnownLocation = locationManager
+				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		if (lastKnownLocation == null)
+			lastKnownLocation = locationManager
+					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		if (lastKnownLocation != null) {
+		}
 	}
-	
+
 	private Dialog wait_dialog;
-    @Override
-    protected Dialog onCreateDialog(int id) {
-    	wait_dialog = ProgressDialog.show(this, "", 
-                "Fetching data. Please wait...", true);
-    	return wait_dialog;
-    }
-	
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		wait_dialog = ProgressDialog.show(this, "",
+				"Fetching data. Please wait...", true);
+		return wait_dialog;
+	}
+
 	@Override
 	public void onClick(View v) {
-		if (v.getId()==go_button.getId()) {
+		if (v.getId() == go_button.getId()) {
 			showDialog(0);
 			fetcher.clearCallbacks();
-			plan=getUserSelections();
-			fetcher=new PlanFetcher(plan);
+			plan = getUserSelections();
+			fetcher = new PlanFetcher(plan);
 			fetcher.registerCallback(this);
 			fetcher.update();
-		};
-		
+		}
+		;
+
 	}
-	
+
 	private Plan getUserSelections() {
 		return new Plan();
 	}
@@ -130,20 +106,98 @@ public class PlanActivity extends Activity implements Observer, OnClickListener{
 	@Override
 	public void update() {
 		wait_dialog.dismiss();
-		if (!fetcher.isErrorResult())  {
-			plan=fetcher.getResult();
-			Intent i=new Intent(this, RouteResultsActivity.class);
+		if (!fetcher.isErrorResult()) {
+			plan = fetcher.getResult();
+			Intent i = new Intent(this, RouteResultsActivity.class);
 			startActivity(i);
+		} else {
+			// TODO: show an errror message
 		}
-		else {
-			//TODO: show an errror message
-		}
-		
+
 	}
-	
-	
+
 	public static Plan getPlan() {
 		return plan;
 	}
-	
+
+	// LocationListener Methods
+	LocationManager locationManager;
+	Location lastKnownLocation;
+	Date started;
+
+	@Override
+	public void onLocationChanged(Location l) {
+		if (SelectBusStationActivity.isBetterLocation(l, lastKnownLocation)) {
+			lastKnownLocation = l;
+
+			List<Address> myList;
+			final Geocoder myLocation = new Geocoder(getApplicationContext(),
+					Locale.getDefault());
+			if (myLocation != null) {
+				AsyncTask<Double, Integer, List<Address>> reverse_geocode = new AsyncTask<Double, Integer, List<Address>>() {
+					@Override
+					protected List<Address> doInBackground(Double... params) {
+						List<Address> result=new ArrayList<Address>();
+						try {
+							result=myLocation.getFromLocation(params[0], params[1],1);
+						}
+						catch (Exception e) {
+						}
+						return result; 
+					}
+
+					protected void onPostExecute(List<Address> result) {
+						displayLocation(result);
+					}
+				};
+				reverse_geocode.execute(lastKnownLocation.getLatitude(),
+						lastKnownLocation.getLongitude());
+			}
+			;
+		}
+	}
+
+	@Override
+	public void onProviderDisabled(String arg0) {
+
+	}
+
+	@Override
+	public void onProviderEnabled(String arg0) {
+
+	}
+
+	@Override
+	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+
+	}
+
+	private void requestLocationUpdates() {
+		if (locationManager != null) {
+			locationManager.requestLocationUpdates(
+					LocationManager.NETWORK_PROVIDER, 2 * 1000, 5, this);
+			locationManager.requestLocationUpdates(
+					LocationManager.GPS_PROVIDER, 3 * 1000, 5, this);
+		}
+	}
+
+	private void displayLocation(List<Address> result) {
+		if (result != null && result.size() >= 1)
+			location_textview.setText(result.get(0).getAddressLine(0)+" (accuracy="+lastKnownLocation.getAccuracy()+"m)");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if (locationManager != null)
+			locationManager.removeUpdates(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (locationManager != null)
+			requestLocationUpdates();
+	}
+
 }
