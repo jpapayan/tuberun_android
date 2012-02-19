@@ -161,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dip"
                     android:background="#99000000"
-                    android:text="Previous journeys" />
+                    android:text="Past destinations" />
 
                 <LinearLayout
                     android:id="@+id/previous_layout"

@@ -58,7 +58,7 @@ public class PlanFetcher extends Fetcher {
 			}
 		});
 		r.setCookies(cookies);
-		r.execute(q+"?"+plan.getGETParams());
+		r.execute(q+"?"+plan.getRequestString());
 	}
 
 	String param = "";

@@ -356,25 +356,8 @@ public class PlanActivity extends Activity implements Observer,
 		go_home_full_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Destination d = store.getHome(self);
-				if (d == null || !d.isHome() || d.getDestination().equals(""))
-					return;
-				destination_edittext.setText(d.getDestination());
-				Point type = d.getType();
-				switch (type) {
-				case ADDRESS:
-					toaddress_radiobutton.setChecked(true);
-					break;
-				case POI:
-					topoi_radiobutton.setChecked(true);
-					break;
-				case POSTCODE:
-					topostcode_radiobutton.setChecked(true);
-					break;
-				case STATION:
-					tostation_radiobutton.setChecked(true);
-					break;
-				}
+				restoreDestination(store.getHome(self));
+				self.onClick(go_button);
 			}
 		});
 		go_home_empty_button.setOnClickListener(new OnClickListener() {
@@ -387,6 +370,33 @@ public class PlanActivity extends Activity implements Observer,
 	}
 
 	Destination dnew_home;
+	
+	private void restoreDestination(Destination d) {
+		final boolean restoreToUI=true;
+		if (d == null || d.getDestination().equals(""))
+			return;
+		if (restoreToUI) destination_edittext.setText(d.getDestination());
+		else plan.setDestination(d.getDestination());
+		Point type = d.getType();
+		switch (type) {
+		case ADDRESS:
+			if (restoreToUI) toaddress_radiobutton.setChecked(true);
+			else plan.setDestinationType(Point.ADDRESS);
+			break;
+		case POI:
+			if (restoreToUI) topoi_radiobutton.setChecked(true);
+			else plan.setDestinationType(Point.POI);
+			break;
+		case POSTCODE:
+			if (restoreToUI) topostcode_radiobutton.setChecked(true);
+			else plan.setDestinationType(Point.POSTCODE);
+			break;
+		case STATION:
+			if (restoreToUI) tostation_radiobutton.setChecked(true);
+			else plan.setDestinationType(Point.STATION);
+			break;
+		}
+	}
 
 	private void updateHistoryView() {
 		previous_layout.removeAllViews();
@@ -413,6 +423,14 @@ public class PlanActivity extends Activity implements Observer,
 								.getType());
 						dnew_home.setHome(true);
 						showDialog(SET_HOME_DIALOG);
+					}
+				});
+				ll.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Destination d = new Destination(dest.getDestination(), dest.getType());
+						restoreDestination(d);
+						self.onClick(go_button);
 					}
 				});
 			}
