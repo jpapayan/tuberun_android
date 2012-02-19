@@ -15,9 +15,9 @@ import com.papagiannis.tuberun.favorites.Favorite;
 public class Store<T> {
 	protected static String FILENAME=null;
 
-	transient private  ArrayList<T> list = null;
+	transient protected  ArrayList<T> list = null;
 
-	private  ArrayList<T> getFromFile(Activity activity) {
+	protected  ArrayList<T> getFromFile(Activity activity) {
 		ArrayList<T> result = new ArrayList<T>();
 		try {
 			FileInputStream fis = activity.openFileInput(FILENAME);
@@ -32,7 +32,7 @@ public class Store<T> {
 			}
 			oi.close();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 		return result;
 	}

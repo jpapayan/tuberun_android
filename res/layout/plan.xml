@@ -11,7 +11,7 @@
         android:src="@drawable/background_plan" />
 
     <LinearLayout
-        android:id="@+id/mainmenu"
+        android:id="@+id/mainmenu_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
@@ -34,6 +34,8 @@
                 style="@style/LogoButton"
                 android:layout_width="40dip"
                 android:layout_height="40dip"
+                android:layout_marginTop="3dip"
+                android:layout_marginBottom="3dip"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0"
                 android:text="" />
@@ -50,10 +52,19 @@
                 android:text="Journey Planner" />
 
             <Button
-                android:id="@+id/button_update"
+                android:id="@+id/go_home_empty_button"
                 style="@style/HomeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dip"
+                android:layout_height="45dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dip"
+                android:layout_weight="0"
+                android:text="" />
+            <Button
+                android:id="@+id/go_home_full_button"
+                style="@style/HomeButtonActive"
+                android:layout_width="45dip"
+                android:layout_height="45dip"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="5dip"
                 android:layout_weight="0"
@@ -377,8 +388,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dip"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="location" />
+                android:gravity="center" />
 
             <TextView
                 android:id="@+id/location_accuracy_textview"
@@ -387,8 +397,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dip"
-                android:layout_marginRight="5dip"
-                android:text="accuracy" />
+                android:layout_marginRight="5dip" />
         </LinearLayout>
     </LinearLayout>
 

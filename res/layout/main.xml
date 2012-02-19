@@ -164,6 +164,7 @@
                     android:minHeight="70dip"
                     android:maxHeight="80dip"
                     android:layout_height="fill_parent"
+                    android:singleLine="false"
                     android:text="@string/claims_title" />
             </TableRow>
         </TableLayout>

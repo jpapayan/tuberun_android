@@ -32,7 +32,6 @@ public class PlanFetcher extends Fetcher {
 	public PlanFetcher(Plan plan) {
 		super();
 		this.plan=plan;
-		this.plan=new Plan();
 	}
 
 	@Override
@@ -42,7 +41,7 @@ public class PlanFetcher extends Fetcher {
 
 	BasicCookieStore cookies;
 	StringBuilder postData;
-	private String errors;
+	private String errors="";
 	public String getErrors() {
 		return errors;
 	}

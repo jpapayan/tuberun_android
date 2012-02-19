@@ -65,9 +65,10 @@ public class Plan {
 	
 	private String error="";
 	public boolean isValid() {
+		error="";
 		if (destination==null || destination.equals("")) error+="The destination cannot be empty. ";
 		if (startingType==Point.LOCATION && startingLocation==null)
-			error+="Your location is not yet known. ";
+			error+="Your current location is not yet known. ";
 		if (startingType!=Point.LOCATION && startingString.equals("") )
 				error+="The starting point cannot be empty. ";
 		if (timeConstraint && !timeDepartureNow) {
@@ -80,7 +81,7 @@ public class Plan {
 			else if (timeArrivalLater.before(new Date())) 
 				error+="The time of arrival must be sometime in the future. ";
 		}
-		return !error.equals("");
+		return error.equals("");
 	}
 	
 	public String getError(){

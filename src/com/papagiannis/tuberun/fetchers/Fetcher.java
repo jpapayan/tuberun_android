@@ -31,4 +31,7 @@ public abstract class Fetcher implements Serializable
 		if (callbacks!=null) callbacks.clear();
 		else callbacks=new ArrayList<Observer>();
 	}
+	public void abort() {
+		
+	}
 }

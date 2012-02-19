@@ -21,6 +21,7 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.location.Address;
@@ -58,13 +59,27 @@ import android.widget.TimePicker;
 
 public class PlanActivity extends Activity implements Observer,
 		LocationListener, OnClickListener, OnCheckedChangeListener {
+	private final static int ADD_HOME_ERROR = -5;
+	private final static int SET_HOME_DIALOG = -4;
+	private final static int PLAN_ERROR_DIALOG = -3;
+	private final static int ERROR_DIALOG = -2;
+	private final static int LOCATION_DIALOG = -1;
+	private final static int WAIT_DIALOG = 0;
+
 	final PlanActivity self = this;
 	private static Plan plan = new Plan();
 	PlanFetcher fetcher = new PlanFetcher(plan);
+	DestinationStore<Destination> store = DestinationStore.getInstance();
+
+	final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+	LinearLayout mainmenu_layout;
 	Button back_button;
 	Button logo_button;
 	TextView title_textview;
 	Button go_button;
+	Button go_home_empty_button;
+	Button go_home_full_button;
 	TextView location_textview;
 	TextView location_accuracy_textview;
 	LinearLayout location_layout;
@@ -98,17 +113,19 @@ public class PlanActivity extends Activity implements Observer,
 	CheckBox use_rail_checkbox;
 	CheckBox use_boat_checkbox;
 
-	final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.plan);
 		create();
+		updateHomeButton();
 	}
 
 	private void createReferences() {
+		mainmenu_layout = (LinearLayout) findViewById(R.id.mainmenu_layout);
 		go_button = (Button) findViewById(R.id.go_button);
+		go_home_empty_button = (Button) findViewById(R.id.go_home_empty_button);
+		go_home_full_button = (Button) findViewById(R.id.go_home_full_button);
 		destination_edittext = (EditText) findViewById(R.id.destination_edittext);
 		back_button = (Button) findViewById(R.id.back_button);
 		logo_button = (Button) findViewById(R.id.logo_button);
@@ -295,9 +312,10 @@ public class PlanActivity extends Activity implements Observer,
 				self.finish();
 			}
 		};
+		mainmenu_layout.setOnClickListener(back_listener);
 		back_button.setOnClickListener(back_listener);
 		logo_button.setOnClickListener(back_listener);
-		title_textview.setOnClickListener(back_listener);
+		// title_textview.setOnClickListener(back_listener);
 
 		// Setup the location manager
 		locationManager = (LocationManager) this
@@ -309,6 +327,11 @@ public class PlanActivity extends Activity implements Observer,
 			lastKnownLocation = locationManager
 					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		if (lastKnownLocation != null) {
+			// remeber to reverse gocode the old address.
+			reverseGeocode(lastKnownLocation);
+			// never trust old accuracies
+			if (lastKnownLocation.getAccuracy() < 50)
+				lastKnownLocation.setAccuracy(100);
 		}
 
 		use_boat_checkbox.setOnCheckedChangeListener(this);
@@ -328,50 +351,201 @@ public class PlanActivity extends Activity implements Observer,
 		fromstation_radiobutton.setOnCheckedChangeListener(this);
 
 		// prepare the listview of previous journeys
-		String[] history = new String[] { "SW7", "SWAAAA", "20 Roland Gardens" };
-		// previous_listview.setAdapter(new ArrayAdapter<String>(this,
-		// R.layout.plan_history_item, R.id.plan_title, history));
-		for (String s : history) {
-			LayoutInflater li = LayoutInflater.from(this);
-			LinearLayout ll = (LinearLayout) li.inflate(
-					R.layout.plan_history_item, previous_layout, false);
-			TextView mTitle = (TextView) ll.findViewById(R.id.plan_title);
-			previous_layout.addView(ll);
-			mTitle.setText(s);
-		}
+
+		// updateHistoryView();
+		go_home_full_button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Destination d = store.getHome(self);
+				if (d == null || !d.isHome() || d.getDestination().equals(""))
+					return;
+				destination_edittext.setText(d.getDestination());
+				Point type = d.getType();
+				switch (type) {
+				case ADDRESS:
+					toaddress_radiobutton.setChecked(true);
+					break;
+				case POI:
+					topoi_radiobutton.setChecked(true);
+					break;
+				case POSTCODE:
+					topostcode_radiobutton.setChecked(true);
+					break;
+				case STATION:
+					tostation_radiobutton.setChecked(true);
+					break;
+				}
+			}
+		});
+		go_home_empty_button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showDialog(ADD_HOME_ERROR);
+			}
+		});
 
 	}
 
+	Destination dnew_home;
+
+	private void updateHistoryView() {
+		previous_layout.removeAllViews();
+		ArrayList<Destination> history = store.getAll(this);
+		if (history.size() == 0) {
+			previous_textview.setVisibility(View.GONE);
+			previous_layout.setVisibility(View.GONE);
+		} else {
+			previous_textview.setVisibility(View.VISIBLE);
+			previous_layout.setVisibility(View.VISIBLE);
+			for (Destination d : history) {
+				final Destination dest = d;
+				LayoutInflater li = LayoutInflater.from(this);
+				LinearLayout ll = (LinearLayout) li.inflate(
+						R.layout.plan_history_item, previous_layout, false);
+				TextView title = (TextView) ll.findViewById(R.id.plan_title);
+				Button addHome = (Button) ll.findViewById(R.id.add_home_button);
+				previous_layout.addView(ll, 0);
+				title.setText(dest.getDestination());
+				addHome.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dnew_home = new Destination(dest.getDestination(), dest
+								.getType());
+						dnew_home.setHome(true);
+						showDialog(SET_HOME_DIALOG);
+					}
+				});
+			}
+		}
+	}
+
+	private void updateHomeButton() {
+		Destination d = store.getHome(this);
+		boolean existsHome = d != null && !d.getDestination().equals("")
+				&& d.isHome();
+		if (existsHome) {
+			go_home_empty_button.setVisibility(View.GONE);
+			go_home_full_button.setVisibility(View.VISIBLE);
+		} else {
+			go_home_empty_button.setVisibility(View.VISIBLE);
+			go_home_full_button.setVisibility(View.GONE);
+		}
+	}
+
+	private void storeDestination() {
+		Destination d = new Destination(plan.getDestination(),
+				plan.getDestinationType());
+		store.add(d, self);
+	}
+
 	private Dialog wait_dialog;
+	private boolean is_location_dialog = false;
+	private boolean is_wait_dialog = false;
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		Dialog ret = null;
-		if (id == 1) {
-			ProgressDialog d=new ProgressDialog(this);
-			d.setTitle("Fetching location");
-			d.setMessage("Press OK when the accuracy is acceptable.");
+		if (id == LOCATION_DIALOG) {
+			ProgressDialog d = new ProgressDialog(this);
+			d.setTitle("Fetching your location");
 			d.setCancelable(true);
 			d.setIndeterminate(true);
-			wait_dialog=d;
-			d.setButton(DialogInterface.BUTTON_POSITIVE,"OK", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					wait_dialog.cancel();
-				}
-			});
-			d.setButton(DialogInterface.BUTTON_NEGATIVE,"Cancel", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					wait_dialog.cancel();
-				}
-			});
+			wait_dialog = d;
+			is_location_dialog = true;
+			updateLocationDialog(location_textview.getText(),
+					lastKnownLocation.getAccuracy());
+			d.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							is_location_dialog = false;
+							wait_dialog.cancel();
+							self.removeDialog(LOCATION_DIALOG); // prevent
+																// caching
+							if (!plan.isValid()) {
+								showDialog(PLAN_ERROR_DIALOG);
+								return;
+							}
+							stopLocationUpdates();
+							showDialog(WAIT_DIALOG);
+							storeDestination();
+							requestPlan();
+						}
+					});
+			d.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							is_location_dialog = false;
+							wait_dialog.cancel();
+							self.removeDialog(LOCATION_DIALOG); // prevent
+																// caching
+						}
+					});
 			d.show();
-			ret=wait_dialog;
-		} else if (id == 0) {
+			ret = wait_dialog;
+		} else if (id == WAIT_DIALOG) {
+			is_wait_dialog = true;
 			wait_dialog = ProgressDialog.show(this, "",
-					"Fetching data. Please wait...", true);
+					"Fetching data. Please wait...", true, true,
+					new OnCancelListener() {
+						@Override
+						public void onCancel(DialogInterface dialog) {
+							wait_dialog.cancel();
+							is_wait_dialog=false;
+							fetcher.clearCallbacks();
+							fetcher.abort();
+						}
+					});
 			return wait_dialog;
+		} else if (id == ERROR_DIALOG || id == PLAN_ERROR_DIALOG
+				|| id == ADD_HOME_ERROR) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Error")
+					.setMessage(
+							id == ADD_HOME_ERROR ? "The address of your house is not set. Use one of the house icons next to past destinations to set it."
+									: plan.getError() + fetcher.getErrors())
+					.setCancelable(false)
+					.setPositiveButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									wait_dialog.cancel();
+									self.removeDialog(id); // prevent caching
+								}
+							});
+			wait_dialog = builder.create();
+			ret = wait_dialog;
+		} else if (id == SET_HOME_DIALOG) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Set Home Location")
+					.setMessage(
+							"Do you want to set \""
+									+ dnew_home.getDestination()
+									+ "\" as your new home address?")
+					.setCancelable(false)
+					.setPositiveButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									store.addHome(dnew_home, self);
+									updateHomeButton();
+									wait_dialog.cancel();
+									self.removeDialog(SET_HOME_DIALOG); // prevent
+																		// caching
+								}
+							})
+					.setNegativeButton("Cancel",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									wait_dialog.cancel();
+									self.removeDialog(SET_HOME_DIALOG); // prevent
+																		// caching
+								}
+							});
+			wait_dialog = builder.create();
+			ret = wait_dialog;
 		} else if (departtimelater_button.getId() == id) {
 			Date d = plan.getTimeDepartureLater();
 			if (d == null)
@@ -404,20 +578,44 @@ public class PlanActivity extends Activity implements Observer,
 		return ret;
 	}
 
+	private void updateLocationDialog(CharSequence previous_location,
+			float accuracy) {
+		if (is_location_dialog) {
+			if (previous_location.equals(""))
+				previous_location = "(...)";
+			ProgressDialog pd = (ProgressDialog) wait_dialog;
+			pd.setMessage("Location=" + previous_location + "\n" + "Accuracy="
+					+ lastKnownLocation.getAccuracy() + "m\n"
+					+ "Press OK when the accuracy is acceptable.");
+		}
+	}
+
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == go_button.getId()) {
-			//if the accuracy is not great wait more in a dialogue
-			if (plan.getStartingType()==Point.LOCATION && (lastKnownLocation==null || 
-					lastKnownLocation.getAccuracy()>50)) 
-				showDialog(1);
-			else showDialog(0);
-			//restore these to lauch the new activity
-//			fetcher.clearCallbacks();
-//			fetcher = new PlanFetcher(plan);
-//			fetcher.registerCallback(this);
-//			fetcher.update();
+			// if the accuracy is not great wait more in a dialogue
+			if (plan.getStartingType() == Point.LOCATION
+					&& (lastKnownLocation == null || lastKnownLocation
+							.getAccuracy() > 50))
+				showDialog(LOCATION_DIALOG);
+			else {
+				if (!plan.isValid()) {
+					showDialog(PLAN_ERROR_DIALOG);
+					return;
+				}
+				stopLocationUpdates();
+				showDialog(WAIT_DIALOG);
+				storeDestination();
+				requestPlan();
+			}
 		}
+	}
+
+	private void requestPlan() {
+		fetcher.clearCallbacks();
+		fetcher = new PlanFetcher(plan);
+		fetcher.registerCallback(this);
+		fetcher.update();
 	}
 
 	private Plan getUserSelections() {
@@ -426,13 +624,15 @@ public class PlanActivity extends Activity implements Observer,
 
 	@Override
 	public void update() {
+		is_wait_dialog = false;
 		wait_dialog.dismiss();
+		self.removeDialog(WAIT_DIALOG); 
 		if (!fetcher.isErrorResult()) {
 			plan = fetcher.getResult();
 			Intent i = new Intent(this, RouteResultsActivity.class);
 			startActivity(i);
 		} else {
-			// TODO: show an errror message
+			showDialog(ERROR_DIALOG);
 		}
 
 	}
@@ -446,36 +646,37 @@ public class PlanActivity extends Activity implements Observer,
 	Location lastKnownLocation;
 	Date started;
 
+	private void reverseGeocode(Location l) {
+		final Geocoder myLocation = new Geocoder(getApplicationContext(),
+				Locale.getDefault());
+		if (myLocation != null) {
+			AsyncTask<Double, Integer, List<Address>> reverse_geocode = new AsyncTask<Double, Integer, List<Address>>() {
+				@Override
+				protected List<Address> doInBackground(Double... params) {
+					List<Address> result = new ArrayList<Address>();
+					try {
+						result = myLocation.getFromLocation(params[0],
+								params[1], 1);
+					} catch (Exception e) {
+					}
+					return result;
+				}
+
+				protected void onPostExecute(List<Address> result) {
+					displayLocation(result);
+				}
+			};
+			reverse_geocode.execute(l.getLatitude(), l.getLongitude());
+		}
+		;
+	}
+
 	@Override
 	public void onLocationChanged(Location l) {
 		if (SelectBusStationActivity.isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
 			plan.setStartingLocation(lastKnownLocation);
-
-			List<Address> myList;
-			final Geocoder myLocation = new Geocoder(getApplicationContext(),
-					Locale.getDefault());
-			if (myLocation != null) {
-				AsyncTask<Double, Integer, List<Address>> reverse_geocode = new AsyncTask<Double, Integer, List<Address>>() {
-					@Override
-					protected List<Address> doInBackground(Double... params) {
-						List<Address> result = new ArrayList<Address>();
-						try {
-							result = myLocation.getFromLocation(params[0],
-									params[1], 1);
-						} catch (Exception e) {
-						}
-						return result;
-					}
-
-					protected void onPostExecute(List<Address> result) {
-						displayLocation(result);
-					}
-				};
-				reverse_geocode.execute(lastKnownLocation.getLatitude(),
-						lastKnownLocation.getLongitude());
-			}
-			;
+			reverseGeocode(l);
 		}
 	}
 
@@ -508,15 +709,20 @@ public class PlanActivity extends Activity implements Observer,
 	}
 
 	private void displayLocation(List<Address> result) {
+		if (result.size() == 0)
+			return;
 		String previous_location = previous_location = result.get(0)
 				.getAddressLine(0);
 		if (result != null && result.size() >= 1) {
 			location_textview.setText(previous_location);
 			location_accuracy_textview.setText("accuracy="
 					+ lastKnownLocation.getAccuracy() + "m");
+			updateLocationDialog(previous_location,
+					lastKnownLocation.getAccuracy());
 		} else {
 			location_accuracy_textview.setText(("accuracy="
 					+ lastKnownLocation.getAccuracy() + "m)"));
+			updateLocationDialog("", lastKnownLocation.getAccuracy());
 		}
 	}
 
@@ -529,7 +735,8 @@ public class PlanActivity extends Activity implements Observer,
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (locationManager != null)
+		updateHistoryView();
+		if (locationManager != null && !is_wait_dialog)
 			requestLocationUpdates();
 	}
 
@@ -543,27 +750,38 @@ public class PlanActivity extends Activity implements Observer,
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if (buttonView.getId() == toaddress_radiobutton.getId()
-				|| buttonView.getId() == topoi_radiobutton.getId()
-				|| buttonView.getId() == topostcode_radiobutton.getId()
-				|| buttonView.getId() == tostation_radiobutton.getId()) {
-			updatePlanDestinationType();
-		} else if (buttonView.getId() == fromaddress_radiobutton.getId()
-				|| buttonView.getId() == frompoi_radiobutton.getId()
-				|| buttonView.getId() == frompostcode_radiobutton.getId()
-				|| buttonView.getId() == fromstation_radiobutton.getId()) {
-			updatePlanFromType();
-		} else if (buttonView.getId() == use_boat_checkbox.getId()) {
+		int bid = buttonView.getId();
+		if (isChecked) {
+			if (bid == toaddress_radiobutton.getId()) {
+				plan.setDestinationType(Point.ADDRESS);
+			} else if (bid == topoi_radiobutton.getId()) {
+				plan.setDestinationType(Point.POI);
+			} else if (bid == topostcode_radiobutton.getId()) {
+				plan.setDestinationType(Point.POSTCODE);
+			} else if (bid == tostation_radiobutton.getId()) {
+				plan.setDestinationType(Point.STATION);
+			} else if (bid == fromaddress_radiobutton.getId()) {
+				plan.setStartingType(Point.ADDRESS);
+			} else if (bid == frompoi_radiobutton.getId()) {
+				plan.setStartingType(Point.POI);
+			} else if (bid == frompostcode_radiobutton.getId()) {
+				plan.setStartingType(Point.POSTCODE);
+			} else if (bid == fromstation_radiobutton.getId()) {
+				plan.setStartingType(Point.STATION);
+			}
+		}
+
+		if (bid == use_boat_checkbox.getId()) {
 			plan.setUseBoat(isChecked);
-		} else if (buttonView.getId() == use_rail_checkbox.getId()) {
+		} else if (bid == use_rail_checkbox.getId()) {
 			plan.setUseBoat(isChecked);
-		} else if (buttonView.getId() == use_bus_checkbox.getId()) {
+		} else if (bid == use_bus_checkbox.getId()) {
 			plan.setUseBuses(isChecked);
-		} else if (buttonView.getId() == use_boat_checkbox.getId()) {
+		} else if (bid == use_boat_checkbox.getId()) {
 			plan.setUseBoat(isChecked);
-		} else if (buttonView.getId() == use_dlr_checkbox.getId()) {
+		} else if (bid == use_dlr_checkbox.getId()) {
 			plan.setUseDLR(isChecked);
-		} else if (buttonView.getId() == fromcurrent_checkbox.getId()) {
+		} else if (bid == fromcurrent_checkbox.getId()) {
 			if (isChecked) {
 				plan.setStartingType(Point.LOCATION);
 				requestLocationUpdates();
@@ -571,7 +789,6 @@ public class PlanActivity extends Activity implements Observer,
 				setFromViewsEnabled(false);
 			} else {
 				updatePlanFromType();
-
 				stopLocationUpdates();
 				location_layout.setVisibility(View.GONE);
 				setFromViewsEnabled(true);
@@ -594,7 +811,9 @@ public class PlanActivity extends Activity implements Observer,
 			plan.setStartingType(Point.NONE);
 	}
 
-	private void updatePlanDestinationType() {
+	private void updatePlanDestinationType(boolean isChecked) {
+		if (!isChecked)
+			return;
 		int selected = destination_radiogroup.getCheckedRadioButtonId();
 		if (selected == toaddress_radiobutton.getId())
 			plan.setDestinationType(Point.ADDRESS);

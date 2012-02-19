@@ -41,5 +41,8 @@
 	<style name="HomeButton" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/home_button_selector</item>
 	</style>
+	<style name="HomeButtonActive" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/home_active_button_selector</item>
+	</style>
 
 </resources>
