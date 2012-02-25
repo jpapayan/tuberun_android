@@ -10,6 +10,32 @@ public class Route {
 	
 	ArrayList<PartialRoute> partials=new ArrayList<PartialRoute>();
 	
+	public Date getDepartureTime() {
+		Date ret=new Date();
+		if (partials.size()>0) {
+			PartialRoute pr=partials.get(0);
+			ret=pr.getFromTime();
+		}
+		return ret;
+	}
+	
+	public Date getArrivalTime() {
+		Date ret=new Date();
+		if (partials.size()>0) {
+			PartialRoute pr=partials.get(partials.size()-1);
+			ret=pr.getToTime();
+		}
+		return ret;
+	}
+	
+	public ArrayList<Integer> getIcons() {
+		ArrayList<Integer> res=new ArrayList<Integer>();
+		for (PartialRoute pr:partials) {
+			res.add(pr.getIcon());
+		}
+		return res;
+	}
+	
 	public void addPartialRoute(PartialRoute r) {
 		partials.add(r);
 	}

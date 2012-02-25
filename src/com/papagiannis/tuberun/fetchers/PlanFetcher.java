@@ -2,6 +2,7 @@ package com.papagiannis.tuberun.fetchers;
 
 import java.io.StringReader;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -17,21 +18,24 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import android.location.Location;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.papagiannis.tuberun.claims.Claim;
 import com.papagiannis.tuberun.plan.PartialRoute;
+import com.papagiannis.tuberun.plan.PartialRouteType;
 import com.papagiannis.tuberun.plan.Plan;
 import com.papagiannis.tuberun.plan.Route;
 
 public class PlanFetcher extends Fetcher {
-	final String q="http://tuberun.dyndns.org:55559/getPlan.php";
+	final String q = "http://tuberun.dyndns.org:55559/getPlan.php";
 	private Plan plan;
 	private static final long serialVersionUID = 1L;
 
 	public PlanFetcher(Plan plan) {
 		super();
-		this.plan=plan;
+		this.plan = plan;
 	}
 
 	@Override
@@ -41,14 +45,15 @@ public class PlanFetcher extends Fetcher {
 
 	BasicCookieStore cookies;
 	StringBuilder postData;
-	private String errors="";
+	private String errors = "";
+
 	public String getErrors() {
 		return errors;
 	}
 
 	@Override
 	public void update() {
-		errors="";
+		errors = "";
 		postData = new StringBuilder();
 		cookies = new BasicCookieStore();
 
@@ -58,17 +63,18 @@ public class PlanFetcher extends Fetcher {
 			}
 		});
 		r.setCookies(cookies);
-		r.execute(q+"?"+plan.getRequestString());
+		r.execute(q + "?" + plan.getRequestString());
 	}
 
 	String param = "";
 
 	private void getCallBack1(String response) {
 		try {
-			if (response==null || response.equals("")) 
-				throw new Exception("The server oyster.tfl.gov.uk did not respond to your request (1)");
-			
-			AsyncTask<String, Integer, Plan> task=new AsyncTask<String, Integer, Plan>() {
+			if (response == null || response.equals(""))
+				throw new Exception(
+						"The server oyster.tfl.gov.uk did not respond to your request (1)");
+
+			AsyncTask<String, Integer, Plan> task = new AsyncTask<String, Integer, Plan>() {
 				@Override
 				protected Plan doInBackground(String... params) {
 					try {
@@ -77,15 +83,15 @@ public class PlanFetcher extends Fetcher {
 						return new Plan();
 					}
 				}
-				
+
 				protected void onPostExecute(Plan result) {
-			         plan.copyRoutesFrom(result);
-			         notifyClients();
-			     }
+					plan.copyRoutesFrom(result);
+					notifyClients();
+				}
 			}.execute(response);
-			
+
 		} catch (Exception e) {
-			errors+=e.getMessage();
+			errors += e.getMessage();
 			notifyClients();
 		}
 	}
@@ -93,111 +99,155 @@ public class PlanFetcher extends Fetcher {
 	public Plan getResult() {
 		return plan;
 	}
-	
+
 	public boolean isErrorResult() {
 		return !errors.equals("");
 	}
 
-	
 	private Plan parseXMLResponse(String response) throws Exception {
-		DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder=factory.newDocumentBuilder();
-		Document dom=builder.parse(new InputSource(new StringReader(response)));
-		Element root=dom.getDocumentElement();
-		NodeList routesList=dom.getElementsByTagName("itdRouteList");
-		
-		Plan plan=new Plan();
-		for(int i=0; i<routesList.getLength(); i++) {
-			Node routeList=routesList.item(i);
-			NodeList routes=routeList.getChildNodes();
-			for (int j=0; j<routes.getLength(); j++) {
-				Node route=routes.item(j);
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document dom = builder
+				.parse(new InputSource(new StringReader(response)));
+		Element root = dom.getDocumentElement();
+		NodeList routesList = dom.getElementsByTagName("itdRouteList");
+
+		Plan plan = new Plan();
+		for (int i = 0; i < routesList.getLength(); i++) {
+			Node routeList = routesList.item(i);
+			NodeList routes = routeList.getChildNodes();
+			for (int j = 0; j < routes.getLength(); j++) {
+				Node route = routes.item(j);
 				plan.addRoute(getRouteFromNode(route));
 			}
-			
+
 		}
 		return plan;
 	}
-	
+
 	private Route getRouteFromNode(Node route) {
-		Route result=new Route();
-		NamedNodeMap attributes=route.getAttributes();
-		
-		Node duration=attributes.getNamedItem("publicDuration");
-		String dur=duration.getNodeValue();
-		String[] tokens=dur.split(":");
-		Date ddur=new Date();
+		Route result = new Route();
+		NamedNodeMap attributes = route.getAttributes();
+
+		Node duration = attributes.getNamedItem("publicDuration");
+		String dur = duration.getNodeValue();
+		String[] tokens = dur.split(":");
+		Date ddur = new Date();
 		ddur.setHours(Integer.parseInt(tokens[0]));
 		ddur.setMinutes(Integer.parseInt(tokens[1]));
 		result.setDuration(ddur);
-		
-		Node name=attributes.getNamedItem("changes");
+
+		Node name = attributes.getNamedItem("changes");
 		result.setChanges(Integer.parseInt(name.getNodeValue()));
-		
-		Node distance=attributes.getNamedItem("distance");
+
+		Node distance = attributes.getNamedItem("distance");
 		result.setDistance(Integer.parseInt(distance.getNodeValue()));
-		
-		NodeList children=route.getChildNodes();
-		for (int i=0;i<children.getLength();i++) {
-			Node c=children.item(i);
-			if (!c.getNodeName().equals("itdPartialRouteList")) continue;
-			NodeList partials=c.getChildNodes();
-			for (int j=0; j<partials.getLength(); j++) {
+
+		NodeList children = route.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Node c = children.item(i);
+			if (!c.getNodeName().equals("itdPartialRouteList"))
+				continue;
+			NodeList partials = c.getChildNodes();
+			for (int j = 0; j < partials.getLength(); j++) {
 				result.addPartialRoute(getPartialRouteFromNode(partials.item(j)));
 			}
 			break;
 		}
-		
+
 		return result;
 	}
 
 	private PartialRoute getPartialRouteFromNode(Node node) {
-		PartialRoute result=new PartialRoute();
-		NamedNodeMap attributes=node.getAttributes();
-		
-		Node distance=attributes.getNamedItem("distance");
-		if (distance!=null)	result.setDistance(Integer.parseInt(distance.getNodeValue()));
-		
-		Node minutes=attributes.getNamedItem("minutes");
-		if (minutes!=null)	result.setMinutes(Integer.parseInt(distance.getNodeValue()));
-		
-		NodeList clist=node.getChildNodes();
-		for (int i=0;i<clist.getLength();i++) {
-			Node child=clist.item(i);
+		PartialRoute result = new PartialRoute();
+		NamedNodeMap attributes = node.getAttributes();
+
+		Node distance = attributes.getNamedItem("distance");
+		if (distance != null)
+			result.setDistance(Integer.parseInt(distance.getNodeValue()));
+
+		Node minutes = attributes.getNamedItem("minutes");
+		if (minutes != null)
+			result.setMinutes(Integer.parseInt(minutes.getNodeValue()));
+		else {
+			minutes = attributes.getNamedItem("timeMinute");
+			if (minutes != null)
+				result.setMinutes(Integer.parseInt(minutes.getNodeValue()));
+		}
+
+		NodeList clist = node.getChildNodes();
+		for (int i = 0; i < clist.getLength(); i++) {
+			Node child = clist.item(i);
 			if (child.getNodeName().equals("itdPoint")) {
-				NamedNodeMap pointAttributes=child.getAttributes();
-				Node type=pointAttributes.getNamedItem("usage");
+				NamedNodeMap pointAttributes = child.getAttributes();
+				Node id = pointAttributes.getNamedItem("stopID");
+				Node name = pointAttributes.getNamedItem("name");
+				Node type = pointAttributes.getNamedItem("usage");
+				Date time = getTimeFromPoint(child);
 				if (type.getNodeValue().equals("departure")) {
-					//from
-					Node id=pointAttributes.getNamedItem("stopID");
-					if (id!=null)	result.setFromId(id.getNodeValue());
-					
-					Node fromname=pointAttributes.getNamedItem("name");
-					if (fromname!=null)	result.setFromName(fromname.getNodeValue());
+					// from
+					if (id != null)
+						result.setFromId(id.getNodeValue());
+					if (name != null)
+						result.setFromName(name.getNodeValue());
+					result.setFromTime(time);
+				} else {
+					// to
+					if (id != null)
+						result.setToId(id.getNodeValue());
+					if (name != null)
+						result.setToName(name.getNodeValue());
+					result.setToTime(time);
 				}
-				else {
-					//to
-					Node id=pointAttributes.getNamedItem("stopID");
-					if (id!=null)	result.setToId(id.getNodeValue());
-					
-					Node toname=pointAttributes.getNamedItem("name");
-					if (toname!=null)	result.setToName(toname.getNodeValue());
-				}
-			}
-			else if (child.getNodeName().equals("itdMeansOfTransport")) {
-				NamedNodeMap pointAttributes=child.getAttributes();
-				Node type=pointAttributes.getNamedItem("type");
-				if (type!=null)	result.setMeansOfTransportType(type.getNodeValue());
-				
-				Node name=pointAttributes.getNamedItem("name");
-				if (name!=null)	result.setMeansOfTransportName(name.getNodeValue());
-				
-				Node shortname=pointAttributes.getNamedItem("shortname");
-				if (shortname!=null)	result.setMeansOfTransportShortName(shortname.getNodeValue());
+
+			} else if (child.getNodeName().equals("itdMeansOfTransport")) {
+				NamedNodeMap pointAttributes = child.getAttributes();
+
+				Node motType = pointAttributes.getNamedItem("motType");
+				if (motType != null)
+					result.setMeansOfTransportType(motType.getNodeValue());
+				else
+					result.setMeansOfTransportType(PartialRouteType.WALK);
+
+				Node name = pointAttributes.getNamedItem("name");
+				if (name != null)
+					result.setMeansOfTransportName(name.getNodeValue());
+
+				Node shortname = pointAttributes.getNamedItem("shortname");
+				if (shortname != null)
+					result.setMeansOfTransportShortName(shortname
+							.getNodeValue());
 			}
 		}
-		
+
 		return result;
 	}
-	
+
+	private Date getTimeFromPoint(Node point) {
+		Date result = new Date();
+		try {
+			NodeList clist = point.getChildNodes();
+			for (int i = 0; i < clist.getLength(); i++) {
+				Node child = clist.item(i);
+				if (child.getNodeName().equals("itdDateTime")) {
+					Node timeNode = child.getLastChild();
+					NamedNodeMap attributes = timeNode.getAttributes();
+					Node hour = attributes.getNamedItem("hour");
+					Node minute = attributes.getNamedItem("minute");
+					if (hour != null) {
+						result.setHours(Integer.parseInt(hour.getNodeValue()));
+					}
+					if (minute != null) {
+						result.setMinutes(Integer.parseInt(minute
+								.getNodeValue()));
+					}
+					break;
+				}
+			}
+		} catch (Exception e) {
+			Log.v("TubeRun", "Failed to get time from point");
+		}
+		return result;
+	}
+
 }

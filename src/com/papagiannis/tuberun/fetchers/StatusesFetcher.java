@@ -153,33 +153,7 @@ public class StatusesFetcher extends Fetcher {
 				last_update = now;
 				_all_statuses = new ArrayList<Status>();
 				for (String name : result.keySet()) {
-					LineType ln = LineType.BAKERLOO;
-					if (name.equals("bakerloo"))
-						ln = LineType.BAKERLOO;
-					else if (name.equals("central"))
-						ln = LineType.CENTRAL;
-					else if (name.equals("circle"))
-						ln = LineType.CIRCLE;
-					else if (name.equals("district"))
-						ln = LineType.DISTRICT;
-					else if (name.equals("hammersmithandcity"))
-						ln = LineType.HAMMERSMITH;
-					else if (name.equals("jubilee"))
-						ln = LineType.JUBILEE;
-					else if (name.equals("metropolitan"))
-						ln = LineType.METROPOLITAN;
-					else if (name.equals("northern"))
-						ln = LineType.NORTHERN;
-					else if (name.equals("piccadilly"))
-						ln = LineType.PICACIDILY;
-					else if (name.equals("victoria"))
-						ln = LineType.VICTORIA;
-					else if (name.equals("waterlooandcity"))
-						ln = LineType.WATERLOO;
-					else if (name.equals("dlr"))
-						ln = LineType.DLR;
-					else if (name.equals("overground"))
-						ln = LineType.OVERGROUND;
+					LineType ln=LineType.fromString(name);
 					String rstatus;
 					String rproblems;
 					if (result.containsKey(name))

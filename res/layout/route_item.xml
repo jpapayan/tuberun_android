@@ -16,29 +16,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="15dip"
             android:layout_marginBottom="15dip"
-            android:layout_marginLeft="15dip"
-            android:layout_marginRight="5dip"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="8dip"
+            android:layout_marginTop="15dip"
             android:src="@drawable/ic_menu_directions" />
 
-        <TextView
-            android:id="@+id/plan_number_textview"
-            style="@android:style/TextAppearance.Large"
+        <LinearLayout
+            android:id="@+id/departtime_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginRight="15dip"
-            android:text="Plan X" />
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/WhiteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Departure" />
+
+            <TextView
+                android:id="@+id/depart_textview"
+                style="@android:style/TextAppearance.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/duration_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_gravity="center"
             android:layout_marginRight="15dip"
-            android:layout_gravity="center" 
-            >
+            android:orientation="vertical" >
 
             <TextView
                 style="@style/WhiteText"
@@ -54,13 +67,38 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/arrivetime_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="15dip"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/WhiteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Arrivall" />
+
+            <TextView
+                android:id="@+id/arrive_textview"
+                style="@android:style/TextAppearance.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </LinearLayout>
     </LinearLayout>
 
+  
     <LinearLayout
-        android:id="@+id/means_layout"
+        android:id="@+id/changes_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" >
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
     </LinearLayout>
 
 </LinearLayout>

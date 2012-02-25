@@ -56,4 +56,35 @@ public enum LineType
     	res.addAll((ArrayList<LineType>)allTube());
 		return res;
 	}
+	
+	public static LineType fromString(String name) {
+		LineType ln = LineType.ALL;
+		if (name.equalsIgnoreCase("bakerloo"))
+			ln = LineType.BAKERLOO;
+		else if (name.equalsIgnoreCase("central"))
+			ln = LineType.CENTRAL;
+		else if (name.equalsIgnoreCase("circle"))
+			ln = LineType.CIRCLE;
+		else if (name.equalsIgnoreCase("district"))
+			ln = LineType.DISTRICT;
+		else if (name.equalsIgnoreCase("hammersmithandcity"))
+			ln = LineType.HAMMERSMITH;
+		else if (name.equalsIgnoreCase("jubilee"))
+			ln = LineType.JUBILEE;
+		else if (name.equalsIgnoreCase("metropolitan"))
+			ln = LineType.METROPOLITAN;
+		else if (name.equalsIgnoreCase("northern"))
+			ln = LineType.NORTHERN;
+		else if (name.equalsIgnoreCase("piccadilly"))
+			ln = LineType.PICACIDILY;
+		else if (name.equalsIgnoreCase("victoria"))
+			ln = LineType.VICTORIA;
+		else if (name.equalsIgnoreCase("waterlooandcity"))
+			ln = LineType.WATERLOO;
+		else if (name.equalsIgnoreCase("dlr"))
+			ln = LineType.DLR;
+		else if (name.equalsIgnoreCase("overground"))
+			ln = LineType.OVERGROUND;
+		return ln;
+	}
 }

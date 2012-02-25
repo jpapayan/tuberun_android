@@ -13,7 +13,7 @@ import android.location.Location;
  * The fetcher issues the request and then assigns to plan the resulting Routes. 
  */
 public class Plan {
-	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:MM");
+	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
 	private String destination = "";
 	private Point destinationType = Point.STATION;
@@ -110,7 +110,8 @@ public class Plan {
 		} catch (Exception e) {
 
 		}
-		return sb.toString();
+		String reply=sb.toString();
+		return reply;
 	}
 
 	private String error = "";

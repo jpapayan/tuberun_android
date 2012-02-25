@@ -117,6 +117,7 @@ public class PlanActivity extends Activity implements Observer,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.plan);
+		plan = new Plan();
 		create();
 		updateHomeButton();
 	}

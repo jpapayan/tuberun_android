@@ -1,17 +1,31 @@
 package com.papagiannis.tuberun.plan;
 
+import java.util.Date;
+
+import android.R;
+
 public class PartialRoute {
 	private int minutes;
 	private int distance;
 	
 	private String fromId;
 	private String fromName;
+	private Date fromTime;
 	private String toId;
 	private String toName;
+	private Date toTime;
 	
 	private String meansOfTransportName;
 	private String meansOfTransportShortName;
-	private String meansOfTransportType;
+	private PartialRouteType meansOfTransportType;
+	
+	public int getIcon() {
+		return PartialRouteType.getIcon(meansOfTransportType);
+	}
+	
+	public String getDirections() {
+		return meansOfTransportType.toDirectionsString(meansOfTransportShortName,toName);
+	}
 	
 	
 	public int getMinutes() {
@@ -63,10 +77,28 @@ public class PartialRoute {
 		this.meansOfTransportShortName = meansOfTransportShortName;
 	}
 	public String getMeansOfTransportType() {
+		return PartialRouteType.toString(meansOfTransportType);
+	}
+	public PartialRouteType getMeansOfTransportBareType() {
 		return meansOfTransportType;
 	}
 	public void setMeansOfTransportType(String meansOfTransportType) {
-		this.meansOfTransportType = meansOfTransportType;
+		this.meansOfTransportType = PartialRouteType.fromString(meansOfTransportType);
+	}
+	public void setMeansOfTransportType(PartialRouteType type) {
+		this.meansOfTransportType = type;
+	}
+	public Date getFromTime() {
+		return fromTime;
+	}
+	public void setFromTime(Date fromTime) {
+		this.fromTime = fromTime;
+	}
+	public Date getToTime() {
+		return toTime;
+	}
+	public void setToTime(Date toTime) {
+		this.toTime = toTime;
 	}
 	
 	
