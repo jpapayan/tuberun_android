@@ -52,9 +52,19 @@
                 android:gravity="left"
                 android:layout_gravity="center_vertical"
                 android:text="Travel Plan" />
+            
+            <Button
+                android:id="@+id/map_button"
+                style="@style/MapButton"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="5dip"
+                android:visibility="gone"
+                android:text="" />
 
         </LinearLayout>
-
+        
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="fill_parent"

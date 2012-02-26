@@ -1,8 +1,10 @@
 package com.papagiannis.tuberun.plan;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.R;
+import android.location.Location;
 
 public class PartialRoute {
 	private int minutes;
@@ -18,6 +20,7 @@ public class PartialRoute {
 	private String meansOfTransportName;
 	private String meansOfTransportShortName;
 	private PartialRouteType meansOfTransportType;
+	private ArrayList<Integer> coordinates=new ArrayList<Integer>();
 	
 	public int getIcon() {
 		return PartialRouteType.getIcon(meansOfTransportType);
@@ -100,7 +103,15 @@ public class PartialRoute {
 	public void setToTime(Date toTime) {
 		this.toTime = toTime;
 	}
-	
+	public void addCoordinate(Integer l) {
+		coordinates.add(l);
+	}
+	public ArrayList<Integer> getCoordinates() {
+		return coordinates;
+	}
+	public void clearCoordinates() {
+		coordinates.clear();
+	}
 	
 
 }

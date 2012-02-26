@@ -71,6 +71,10 @@ public class Route {
 	public void setPartials(ArrayList<PartialRoute> partials) {
 		this.partials = partials;
 	}
+
+	public PartialRoute getPartial(int position) {
+		return partials.get(position);
+	}
 	
 	
 	

@@ -44,5 +44,8 @@
 	<style name="HomeButtonActive" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/home_active_button_selector</item>
 	</style>
+	<style name="MapButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/map_button_selector</item>
+	</style>
 
 </resources>

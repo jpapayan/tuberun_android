@@ -1,8 +1,10 @@
 package com.papagiannis.tuberun.fetchers;
 
 import java.io.StringReader;
+import java.lang.reflect.Array;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -217,9 +219,51 @@ public class PlanFetcher extends Fetcher {
 				if (shortname != null)
 					result.setMeansOfTransportShortName(shortname
 							.getNodeValue());
+			} else if (child.getNodeName().equalsIgnoreCase("itdPathCoordinates")) {
+				ArrayList<Integer> coordinates=getCoordinatesFromPartialNode(child);
+				for (Integer j:coordinates) result.addCoordinate(j);
 			}
 		}
 
+		return result;
+	}
+
+	private ArrayList<Integer> getCoordinatesFromPartialNode(Node coordNode) {
+		ArrayList<Integer> result=new ArrayList<Integer>();
+		NodeList clist = coordNode.getChildNodes();
+		for (int i = 0; i < clist.getLength(); i++) {
+			Node child = clist.item(i);
+			if (child.getNodeName().equalsIgnoreCase("itdcoordinatebaseelemlist")) {
+				NodeList coordList = child.getChildNodes();
+				for (int j = 0; j < coordList.getLength(); j++) {
+					Node baseElem = coordList.item(j);
+					if (baseElem.getNodeName().equalsIgnoreCase("itdcoordinatebaseelem")) {
+						NodeList xyList = baseElem.getChildNodes();
+						if (xyList.getLength()!=2) break;
+						Node x=xyList.item(0);
+						Node y=xyList.item(1);
+						if (x==null || y==null) break;
+						if (x.getNodeName().equalsIgnoreCase("x") && y.getNodeName().equalsIgnoreCase("y")) {
+							try {
+								String s=x.getChildNodes().item(0).getNodeValue();
+								int f=s.indexOf(".");
+								int xi=Integer.parseInt(s.substring(0,f));
+								s=y.getChildNodes().item(0).getNodeValue();
+								f=s.indexOf(".");
+								int yi=Integer.parseInt(s.substring(0,f));
+								result.add(xi);
+								result.add(yi);
+							}
+							catch (Exception e) {
+								continue;
+							}
+						}
+						else break;
+					}
+					else break;
+				}
+			}
+		}
 		return result;
 	}
 

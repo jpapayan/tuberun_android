@@ -112,6 +112,13 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <activity android:name=".PartialRouteMapActivity"  
+            	  android:theme="@android:style/Theme.Black.NoTitleBar"                
+                  android:windowSoftInputMode="stateUnchanged">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
         
         <uses-library android:name="com.google.android.maps" />
     </application>
