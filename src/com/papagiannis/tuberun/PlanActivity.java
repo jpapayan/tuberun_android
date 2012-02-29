@@ -59,6 +59,7 @@ import android.widget.TimePicker;
 
 public class PlanActivity extends Activity implements Observer,
 		LocationListener, OnClickListener, OnCheckedChangeListener {
+	private final static int SELECT_ALTERNATIVE = -6;
 	private final static int ADD_HOME_ERROR = -5;
 	private final static int SET_HOME_DIALOG = -4;
 	private final static int PLAN_ERROR_DIALOG = -3;
@@ -313,7 +314,7 @@ public class PlanActivity extends Activity implements Observer,
 				self.finish();
 			}
 		};
-		mainmenu_layout.setOnClickListener(back_listener);
+		// mainmenu_layout.setOnClickListener(back_listener);
 		back_button.setOnClickListener(back_listener);
 		logo_button.setOnClickListener(back_listener);
 		// title_textview.setOnClickListener(back_listener);
@@ -371,30 +372,40 @@ public class PlanActivity extends Activity implements Observer,
 	}
 
 	Destination dnew_home;
-	
+
 	private void restoreDestination(Destination d) {
-		final boolean restoreToUI=true;
+		final boolean restoreToUI = true;
 		if (d == null || d.getDestination().equals(""))
 			return;
-		if (restoreToUI) destination_edittext.setText(d.getDestination());
-		else plan.setDestination(d.getDestination());
+		if (restoreToUI)
+			destination_edittext.setText(d.getDestination());
+		else
+			plan.setDestination(d.getDestination());
 		Point type = d.getType();
 		switch (type) {
 		case ADDRESS:
-			if (restoreToUI) toaddress_radiobutton.setChecked(true);
-			else plan.setDestinationType(Point.ADDRESS);
+			if (restoreToUI)
+				toaddress_radiobutton.setChecked(true);
+			else
+				plan.setDestinationType(Point.ADDRESS);
 			break;
 		case POI:
-			if (restoreToUI) topoi_radiobutton.setChecked(true);
-			else plan.setDestinationType(Point.POI);
+			if (restoreToUI)
+				topoi_radiobutton.setChecked(true);
+			else
+				plan.setDestinationType(Point.POI);
 			break;
 		case POSTCODE:
-			if (restoreToUI) topostcode_radiobutton.setChecked(true);
-			else plan.setDestinationType(Point.POSTCODE);
+			if (restoreToUI)
+				topostcode_radiobutton.setChecked(true);
+			else
+				plan.setDestinationType(Point.POSTCODE);
 			break;
 		case STATION:
-			if (restoreToUI) tostation_radiobutton.setChecked(true);
-			else plan.setDestinationType(Point.STATION);
+			if (restoreToUI)
+				tostation_radiobutton.setChecked(true);
+			else
+				plan.setDestinationType(Point.STATION);
 			break;
 		}
 	}
@@ -429,7 +440,8 @@ public class PlanActivity extends Activity implements Observer,
 				ll.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						Destination d = new Destination(dest.getDestination(), dest.getType());
+						Destination d = new Destination(dest.getDestination(),
+								dest.getType());
 						restoreDestination(d);
 						self.onClick(go_button);
 					}
@@ -501,7 +513,7 @@ public class PlanActivity extends Activity implements Observer,
 																// caching
 						}
 					});
-			d.show();
+			// d.show();
 			ret = wait_dialog;
 		} else if (id == WAIT_DIALOG) {
 			is_wait_dialog = true;
@@ -511,12 +523,85 @@ public class PlanActivity extends Activity implements Observer,
 						@Override
 						public void onCancel(DialogInterface dialog) {
 							wait_dialog.cancel();
-							is_wait_dialog=false;
+							is_wait_dialog = false;
 							fetcher.clearCallbacks();
 							fetcher.abort();
 						}
 					});
 			return wait_dialog;
+		} else if (id == SELECT_ALTERNATIVE) {
+			if (showAlternativeDestinations) {
+				String[] d = {};
+				final String[] items = plan.getAlternativeDestinations()
+						.toArray(d);
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("Pick an alternative destination");
+				builder.setItems(items, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
+						showAlternativeDestinations = false;
+						self.removeDialog(SELECT_ALTERNATIVE); // prevent
+																// caching
+						plan.setDestination(items[item]);
+						plan.clearAlternativeDestinations();
+						destination_edittext.setText(items[item]);
+						if (showAlternativeOrigins)
+							showDialog(SELECT_ALTERNATIVE);
+						else {
+							wait_dialog.cancel();
+							showDialog(WAIT_DIALOG);
+							storeDestination();
+							requestPlan();
+						}
+					}
+				});
+				builder.setOnCancelListener(new OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						self.removeDialog(SELECT_ALTERNATIVE); // prevent
+																// caching
+					}
+				});
+				AlertDialog alert = builder.create();
+				wait_dialog = alert;
+				ret = alert;
+				// alert.show();
+				showAlternativeDestinations = false;
+			} else if (showAlternativeOrigins) {
+				String[] d = {};
+				final String[] items = plan.getAlternativeOrigins().toArray(d);
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("Pick an alternative origin");
+				builder.setItems(items, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
+						showAlternativeOrigins = false;
+						self.removeDialog(SELECT_ALTERNATIVE); // prevent
+																// caching
+						plan.setStartingString(items[item]);
+						plan.clearAlternativeOrigins();
+						from_edittext.setText(items[item]);
+						if (showAlternativeDestinations)
+							showDialog(SELECT_ALTERNATIVE);
+						else {
+							wait_dialog.cancel();
+							showDialog(WAIT_DIALOG);
+							storeDestination();
+							requestPlan();
+						}
+					}
+				});
+				builder.setOnCancelListener(new OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						self.removeDialog(SELECT_ALTERNATIVE); // prevent
+																// caching
+					}
+				});
+				AlertDialog alert = builder.create();
+				wait_dialog = alert;
+				ret = alert;
+				// alert.show();
+				showAlternativeOrigins = false;
+			}
 		} else if (id == ERROR_DIALOG || id == PLAN_ERROR_DIALOG
 				|| id == ADD_HOME_ERROR) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -631,25 +716,36 @@ public class PlanActivity extends Activity implements Observer,
 	}
 
 	private void requestPlan() {
+		showAlternativeDestinations = false;
+		showAlternativeOrigins = false;
+		plan.clearAlternativeDestinations();
+		plan.clearAlternativeOrigins();
+
 		fetcher.clearCallbacks();
 		fetcher = new PlanFetcher(plan);
 		fetcher.registerCallback(this);
 		fetcher.update();
 	}
 
-	private Plan getUserSelections() {
-		return plan;
-	}
+	private boolean showAlternativeDestinations = false;
+	private boolean showAlternativeOrigins = false;
 
 	@Override
 	public void update() {
 		is_wait_dialog = false;
 		wait_dialog.dismiss();
-		self.removeDialog(WAIT_DIALOG); 
+		self.removeDialog(WAIT_DIALOG);
 		if (!fetcher.isErrorResult()) {
 			plan = fetcher.getResult();
-			Intent i = new Intent(this, RouteResultsActivity.class);
-			startActivity(i);
+			if (plan.hasAlternatives()) {
+				showAlternativeDestinations = plan.getAlternativeDestinations()
+						.size() > 0;
+				showAlternativeOrigins = plan.getAlternativeOrigins().size() > 0;
+				showDialog(SELECT_ALTERNATIVE);
+			} else {
+				Intent i = new Intent(this, RouteResultsActivity.class);
+				startActivity(i);
+			}
 		} else {
 			showDialog(ERROR_DIALOG);
 		}

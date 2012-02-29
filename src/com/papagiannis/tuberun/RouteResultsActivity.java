@@ -13,6 +13,7 @@ import com.papagiannis.tuberun.fetchers.PlanFetcher;
 import com.papagiannis.tuberun.plan.PartialRoute;
 import com.papagiannis.tuberun.plan.PartialRouteType;
 import com.papagiannis.tuberun.plan.Plan;
+import com.papagiannis.tuberun.plan.Point;
 import com.papagiannis.tuberun.plan.Route;
 
 import android.app.Activity;
@@ -43,7 +44,8 @@ import uk.me.jstott.jcoord.LatLng;
 import uk.me.jstott.jcoord.OSRef;
 
 public class RouteResultsActivity extends Activity {
-	public static ArrayList<Integer> coordinates;
+	public static ArrayList<Integer> coordinates = new ArrayList<Integer>();
+	public static HashMap<Integer, ArrayList<Integer>> coordinatesType = new HashMap<Integer, ArrayList<Integer>>();;
 	final RouteResultsActivity self = this;
 	final SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 	ViewPager pager;
@@ -51,6 +53,7 @@ public class RouteResultsActivity extends Activity {
 	Button logo_button;
 	Button map_button;
 	TextView title_textview;
+	TextView route_textview;
 	Plan plan;
 
 	ListView route_list;
@@ -72,7 +75,7 @@ public class RouteResultsActivity extends Activity {
 		OnClickListener back_listener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				self.finish();
+				onBackPressed();
 			}
 		};
 		back_button.setOnClickListener(back_listener);
@@ -100,6 +103,9 @@ public class RouteResultsActivity extends Activity {
 				if (position == 0) {
 					// tab 1 initialisation--the method is actually called async
 					// after the main activity has loaded
+					route_textview = (TextView) findViewById(R.id.route_textview);
+					if (route_textview != null)
+						initialiseRouteTextView();
 					route_list = (ListView) findViewById(R.id.route_listview);
 					if (route_list != null) {
 						initialiseRouteList(route_list);
@@ -157,6 +163,17 @@ public class RouteResultsActivity extends Activity {
 		plan = PlanActivity.getPlan();
 	}
 
+	private void initialiseRouteTextView() {
+		StringBuilder sb = new StringBuilder();
+		if (plan.getStartingType() == Point.LOCATION)
+			sb.append("Current GPS Location");
+		else
+			sb.append(plan.getStartingString());
+		sb.append(" to ");
+		sb.append(plan.getDestination());
+		route_textview.setText(sb);
+	}
+
 	private void initialiseRouteList(ListView listview) {
 		ArrayList<HashMap<String, Object>> adapter_list = new ArrayList<HashMap<String, Object>>();
 
@@ -188,12 +205,16 @@ public class RouteResultsActivity extends Activity {
 	}
 
 	public void showRouteDetails(int current_plan_number) {
-		ArrayList<HashMap<String, Object>> adapter_list = new ArrayList<HashMap<String, Object>>();
+		final ArrayList<HashMap<String, Object>> adapter_list = new ArrayList<HashMap<String, Object>>();
 
 		final Route route = plan.getRoutes().get(current_plan_number);
 		int i = 0;
 		for (PartialRoute proute : route.getPartials()) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
+			if (i == 0)
+				m.put("type", "first");
+			else
+				m.put("type", "intermediate");
 			m.put("fromName", proute.getFromName());
 			m.put("fromTime", format.format(proute.getFromTime()));
 			m.put("toName", proute.getToName());
@@ -202,25 +223,16 @@ public class RouteResultsActivity extends Activity {
 							+ " minutes");
 			m.put("directions", proute.getDirections());
 			m.put("icon", proute.getIcon());
-			if (i == 0)
-				m.put("type", "first");
-			else
-				m.put("type", "intermediate");
-			PartialRouteType type = proute.getMeansOfTransportBareType();
-			String stringType;
-			if (type != PartialRouteType.TUBE)
-				stringType = proute.getMeansOfTransportType();
-			else
-				stringType = proute.getMeansOfTransportShortName();
+			String stringType = serialiseMotType(proute);
 			m.put("motType", stringType);
 			adapter_list.add(m);
 
 			if (++i == route.getPartials().size()) {
 				m = new HashMap<String, Object>();
+				m.put("type", "last");
 				m.put("fromName", proute.getToName());
 				m.put("fromTime", format.format(proute.getToTime()));
 				m.put("directions", "");
-				m.put("type", "last");
 				m.put("icon", null);
 				m.put("motType", stringType);
 				adapter_list.add(m);
@@ -228,12 +240,12 @@ public class RouteResultsActivity extends Activity {
 		}
 
 		SimpleAdapter adapter = new SimpleAdapter(this, adapter_list,
-				R.layout.partial_route_item, new String[] { "fromName",
-						"fromTime", "directions", "duration", "type",
-						"motType", "motType", "motType", "icon" }, new int[] {
-						R.id.fromname_textview, R.id.fromtime_textview,
-						R.id.directions_textview, R.id.duration_textview,
-						R.id.images_layout, R.id.start_imageview,
+				R.layout.partial_route_item, new String[] { "type", "fromName",
+						"fromTime", "directions", "duration", "motType",
+						"motType", "motType", "icon" }, new int[] {
+						R.id.images_layout, R.id.fromname_textview,
+						R.id.fromtime_textview, R.id.directions_textview,
+						R.id.duration_textview, R.id.start_imageview,
 						R.id.intermediate_imageview,
 						R.id.destination_imageview, R.id.mot_imageview });
 		adapter.setViewBinder(new PartialRoutesBinder(this));
@@ -246,7 +258,17 @@ public class RouteResultsActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				PartialRoute pr = route.getPartial(position);
-				RouteResultsActivity.coordinates = pr.getCoordinates();
+
+				coordinates = pr.getCoordinates();
+				coordinatesType = new HashMap<Integer, ArrayList<Integer>>();
+				ArrayList<Integer> e = new ArrayList<Integer>(2);
+				String motType = (String) adapter_list.get(position).get(
+						"motType");
+				e.add(PartialRoutesBinder.getImageColor(motType));
+				Integer icon = (Integer) adapter_list.get(position).get("icon");
+				e.add(icon);
+				coordinatesType.put(0, e);
+
 				Intent i = new Intent(self, PartialRouteMapActivity.class);
 				startActivity(i);
 
@@ -258,23 +280,54 @@ public class RouteResultsActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				coordinatesType = new HashMap<Integer, ArrayList<Integer>>();
+
 				ArrayList<PartialRoute> partials = route.getPartials();
-				ArrayList<Integer> all=new ArrayList<Integer>();
-				for (PartialRoute pr:partials) {
-					 all.addAll(pr.getCoordinates());
+				ArrayList<Integer> all = new ArrayList<Integer>();
+				int i=0;
+				for (PartialRoute pr : partials) {
+					all.addAll(pr.getCoordinates());
+
+					ArrayList<Integer> e = new ArrayList<Integer>(2);
+					e.add(PartialRoutesBinder.getImageColor(serialiseMotType(pr)));
+					e.add(pr.getIcon());
+					coordinatesType.put(i, e);
+					i+=pr.getCoordinates().size()/2; //PartialRouteMapActivity will 
+													 //be converting to Locations.
 				}
-				RouteResultsActivity.coordinates=all;
-				Intent i = new Intent(self, PartialRouteMapActivity.class);
-				startActivity(i);
+				coordinates = all;
+
+				Intent intent = new Intent(self, PartialRouteMapActivity.class);
+				startActivity(intent);
 			}
 		});
 	}
+
+	private String serialiseMotType(PartialRoute proute) {
+		String stringType;
+		PartialRouteType type=proute.getMeansOfTransportBareType();
+		if (type != PartialRouteType.TUBE)
+			stringType = proute.getMeansOfTransportType();
+		else
+			stringType = proute.getMeansOfTransportShortName();
+		return stringType;
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (pager.getCurrentItem() == 0)
+			super.onBackPressed();
+		else {
+			pager.setCurrentItem(0);
+		}
+	};
 
 	/*
 	 * This function compares a long/lat address to the same address returned by
 	 * the JP API. It tries to locate a delta tha minimises the error in the
 	 * coordinates. Assuming that there is such a constant error of course...
 	 */
+	@SuppressWarnings("unused")
 	private int caclulcateCoordinateError(int x, int y, Location original) {
 		int start_delta = 630000;
 		int end_delta = 670000;

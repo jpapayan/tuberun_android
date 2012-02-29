@@ -42,7 +42,7 @@ public class PartialRoutesBinder implements ViewBinder {
 
 	
 	private boolean firstEntry=true;
-	private boolean lastEntry=false;
+	private boolean lastEntry=true;
 	
 	@Override
 	public boolean setViewValue(View view, Object o, String s) {
@@ -60,44 +60,45 @@ public class PartialRoutesBinder implements ViewBinder {
 			}
 			else return false;
 		case R.id.mot_imageview:
+			ImageView iv=(ImageView)view;
 			if (o!=null && !lastEntry) {
 				Integer i=(Integer) o;
-				ImageView iv=(ImageView)view;
+				
 				Bitmap bmp = BitmapFactory.decodeResource(activity.getResources(),i);
 				iv.setImageBitmap(bmp);
 			}
+			else iv.setImageBitmap(null);
 			return true;
 		case R.id.start_imageview:
+			iv=(ImageView)view;
 			if (firstEntry) {
 				view.setVisibility(View.VISIBLE);
-				setImageColor(view, s);
-				firstEntry=false;
+				iv.setBackgroundColor(getImageColor(s));
 			}
 			else view.setVisibility(View.GONE);
 			return true;
 		case R.id.intermediate_imageview:
-			setImageColor(view, s);
+			iv=(ImageView)view;
+			iv.setBackgroundColor(getImageColor(s));
 			return true;
 		case R.id.destination_imageview:
+			iv=(ImageView)view;
 			if (lastEntry) {
 				view.setVisibility(View.VISIBLE);
-				setImageColor(view, s);
-				lastEntry=false;
+				iv.setBackgroundColor(getImageColor(s));
 			}
 			else view.setVisibility(View.GONE);
 		    return true;
 		}
 		return false; // continue with the text
 	}
-	private boolean setImageColor(View view, String s) {
+	public static int getImageColor(String s) {
 		LineType lineType=LineType.fromString(s);
 		PartialRouteType type;
 		if (lineType==LineType.ALL) type=PartialRouteType.fromString(s);
 		else type=PartialRouteType.TUBE;
-		ImageView v=(ImageView) view;
-		if (type!=PartialRouteType.TUBE) v.setBackgroundColor(PartialRouteType.getColor(type));
-		else v.setBackgroundColor(LinePresentation.getBackgroundColor(LineType.fromString(s)));
-		return true;
+		if (type!=PartialRouteType.TUBE) return (PartialRouteType.getColor(type));
+		else return (LinePresentation.getBackgroundColor(LineType.fromString(s)));
 	}
 
 }

@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.webkit.GeolocationPermissions;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -31,6 +32,7 @@ public abstract class MeMapActivity extends MapActivity implements
 	protected static final int TWO_MINUTES = 1000 * 60 * 2;
 	protected Location lastKnownLocation;
     protected Date started;
+    protected List<Overlay> mapOverlays;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public abstract class MeMapActivity extends MapActivity implements
         
         mapView = (MapView) findViewById(R.id.bus_mapview);
         mapView.setBuiltInZoomControls(true);
+        mapOverlays=mapView.getOverlays();
         
         //location stuff
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -48,6 +51,14 @@ public abstract class MeMapActivity extends MapActivity implements
 		
 		lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		if (lastKnownLocation==null) lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		if (lastKnownLocation!=null) mapOverlays.add(generateMyLocationPushPin(lastKnownLocation));
+		else {
+			Location l_london=new Location("");
+			l_london.setLongitude(gp_london.getLongitudeE6()/(float)1000000);
+			l_london.setLatitude(gp_london.getLatitudeE6()/(float)1000000);
+			mapOverlays.add(generateMyLocationPushPin(l_london));
+		}
+		
     }
 	
 	/*
@@ -60,7 +71,7 @@ public abstract class MeMapActivity extends MapActivity implements
 			lastKnownLocation=l;
 			
 			//show a here marker on the map
-			List<Overlay> mapOverlays = mapView.getOverlays();
+			
 			Iterator<Overlay> it=mapOverlays.iterator();
 			while (it.hasNext()) {
 				Overlay o=it.next();
@@ -69,14 +80,18 @@ public abstract class MeMapActivity extends MapActivity implements
 					break;
 				}
 			}
-	        Drawable drawable = this.getResources().getDrawable(R.drawable.here);
-	        HereOverlay hereo = new HereOverlay(drawable, this);
-	        GeoPoint point = new GeoPoint((int)(l.getLatitude()*1000000),(int)(l.getLongitude()*1000000));
-	        OverlayItem overlayitem = new OverlayItem(point, "You are here", "Accuracy: "+(int)l.getAccuracy()+" meters");
-	        hereo.addOverlay(overlayitem);
-	        mapOverlays.add(hereo);
+	        mapOverlays.add(generateMyLocationPushPin(l));
 	        mapView.postInvalidate();
 		}
+	}
+
+	private HereOverlay generateMyLocationPushPin(Location l) {
+		Drawable drawable = this.getResources().getDrawable(R.drawable.here);
+		HereOverlay hereo = new HereOverlay(drawable, this);
+		GeoPoint point = new GeoPoint((int)(l.getLatitude()*1000000),(int)(l.getLongitude()*1000000));
+		OverlayItem overlayitem = new OverlayItem(point, "You are here", "Accuracy: "+(int)l.getAccuracy()+" meters");
+		hereo.addOverlay(overlayitem);
+		return hereo;
 	}
 	
 	/**

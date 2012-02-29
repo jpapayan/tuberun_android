@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -88,6 +89,8 @@ public class PlanFetcher extends Fetcher {
 
 				protected void onPostExecute(Plan result) {
 					plan.copyRoutesFrom(result);
+					plan.copyAlterativeDestinationsFrom(result);
+					plan.copyAlterativeOriginsFrom(result);
 					notifyClients();
 				}
 			}.execute(response);
@@ -107,24 +110,70 @@ public class PlanFetcher extends Fetcher {
 	}
 
 	private Plan parseXMLResponse(String response) throws Exception {
+		Plan plan = new Plan();
+		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document dom = builder
 				.parse(new InputSource(new StringReader(response)));
 		Element root = dom.getDocumentElement();
-		NodeList routesList = dom.getElementsByTagName("itdRouteList");
+		
+		NodeList ilist = dom.getElementsByTagName("itdItinerary");
+		Node itinerary= ilist.item(0);
+		if (itinerary!=null && itinerary.getChildNodes().getLength()>0) {
+			//A plan has been calculated
+			NodeList routesList = dom.getElementsByTagName("itdRouteList");
+			for (int i = 0; i < routesList.getLength(); i++) {
+				Node routeList = routesList.item(i);
+				NodeList routes = routeList.getChildNodes();
+				for (int j = 0; j < routes.getLength(); j++) {
+					Node route = routes.item(j);
+					plan.addRoute(getRouteFromNode(route));
+				}
 
-		Plan plan = new Plan();
-		for (int i = 0; i < routesList.getLength(); i++) {
-			Node routeList = routesList.item(i);
-			NodeList routes = routeList.getChildNodes();
-			for (int j = 0; j < routes.getLength(); j++) {
-				Node route = routes.item(j);
-				plan.addRoute(getRouteFromNode(route));
+			}
+		}
+		else {
+			//Need more details about options
+			
+			NodeList odvlist = dom.getElementsByTagName("itdOdv");
+			ArrayList<String> alternatives=getAlternatives(odvlist,"destination");
+			for (String s:alternatives) plan.addAlternativeDestination(s);
+			alternatives=getAlternatives(odvlist,"origin");
+			for (String s:alternatives) plan.addAlternativeOrigin(s);
+		}
+		
+		return plan;
+	}
+
+	private ArrayList<String> getAlternatives(NodeList odvList, String type) {
+		HashSet<String> result=new HashSet<String>();
+		for (int i = 0; i < odvList.getLength(); i++) {
+			Node odvNode = odvList.item(i);
+			Node odvNodeUsage=odvNode.getAttributes().getNamedItem("usage");
+			if (!type.equalsIgnoreCase(odvNodeUsage.getNodeValue())) continue;
+			
+			Boolean isIdentified=false;
+			NodeList  odvChildren= odvNode.getChildNodes();
+			for (int j = 0; j < odvChildren.getLength(); j++) {
+				Node child = odvChildren.item(j);
+				if (child.getNodeName().equalsIgnoreCase("itdOdvName")) {
+					Node state=child.getAttributes().getNamedItem("state");
+					isIdentified=state.getNodeValue().equalsIgnoreCase("identified");
+					if (isIdentified) break;
+					NodeList nameChildren=child.getChildNodes();
+					for (int k = 0; k < nameChildren.getLength(); k++) {
+						Node nameChild = nameChildren.item(k);
+						if (nameChild.getNodeName().equalsIgnoreCase("odvNameElem")) {
+							String s=nameChild.getChildNodes().item(0).getNodeValue();
+							if (s!=null && !result.contains(s)) result.add(s);
+						}
+					}
+				}
 			}
 
 		}
-		return plan;
+		return new ArrayList<String>(result);
 	}
 
 	private Route getRouteFromNode(Node route) {

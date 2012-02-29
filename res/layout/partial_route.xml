@@ -13,7 +13,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             style="@style/WhiteText"
-            android:background="#99000000"
+            android:background="#99801219"
             android:text="Tap the map above or select one of the items below for detailed directions."/>
     
     <ListView

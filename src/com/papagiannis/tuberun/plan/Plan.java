@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.location.Address;
 import android.location.Location;
+import android.text.AlteredCharSequence;
 
 /*
  * This class contains the requirements for a given plan request. The UI must translate
@@ -16,8 +18,10 @@ public class Plan {
 	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
 	private String destination = "";
+	private ArrayList<String> destinationAlternatives=new ArrayList<String>();
 	private Point destinationType = Point.STATION;
 	private String startingString = "";
+	private ArrayList<String> startingAlternatives=new ArrayList<String>();
 	private Point startingType = Point.LOCATION;
 	private Location startingLocation = null;
 
@@ -255,6 +259,39 @@ public class Plan {
 
 	public void setUseBoat(boolean useBoat) {
 		this.useBoat = useBoat;
+	}
+	public void addAlternativeDestination(String destination){
+		destinationAlternatives.add(destination);
+	}
+	public ArrayList<String> getAlternativeDestinations(){
+		return destinationAlternatives;
+	}
+	public void addAlternativeOrigin(String destination){
+		startingAlternatives.add(destination);
+	}
+	public ArrayList<String> getAlternativeOrigins(){
+		return startingAlternatives;
+	}
+
+	public void copyAlterativeDestinationsFrom(Plan result) {
+		for (String s:result.getAlternativeDestinations()) destinationAlternatives.add(s);
+		
+	}
+	public void copyAlterativeOriginsFrom(Plan result) {
+		for (String s:result.getAlternativeOrigins()) startingAlternatives.add(s);
+	}
+	public boolean hasAlternatives() {
+		return destinationAlternatives.size()>0 || startingAlternatives.size()>0;
+	}
+
+	public void clearAlternativeDestinations() {
+		destinationAlternatives.clear();
+		
+	}
+
+	public void clearAlternativeOrigins() {
+		startingAlternatives.clear();
+		
 	}
 
 }

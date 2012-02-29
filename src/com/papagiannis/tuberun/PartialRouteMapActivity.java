@@ -9,14 +9,17 @@ import uk.me.jstott.jcoord.OSRef;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 import com.papagiannis.tuberun.fetchers.RouteFetcher;
 
 public class PartialRouteMapActivity extends MeMapActivity  {
+	final PartialRouteMapActivity self=this;
 	RouteFetcher fetcher;
 
 	/** Called when the activity is first created. */
@@ -52,8 +55,24 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 
 			     protected void onPostExecute(ArrayList<GeoPoint> result) {
 			    	 List<Overlay> overlays = mapView.getOverlays();
+			    	 int color=Color.BLUE;
+			    	 int icon=0;
+			    	 int change=1;
 			    	 for (int i = 1; i < result.size(); i++) {
-			 			overlays.add(new RouteOverlay(result.get(i - 1), result.get(i),	Color.BLUE));
+			    		if (RouteResultsActivity.coordinatesType.containsKey(i-1)) {
+			    			if (i-1!=0) {
+			    				//add pushpin but not on the very start
+			    				icon=RouteResultsActivity.coordinatesType.get(i-1).get(1);
+			    				Drawable drawable = self.getResources().getDrawable(icon);
+			    				HereOverlay hereo = new HereOverlay(drawable, self);
+			    		        OverlayItem overlayitem = new OverlayItem(result.get(i - 1), "Change "+change++, "");
+			    		        hereo.addOverlay(overlayitem);
+			    		        overlays.add(hereo);
+			    			}
+			    			color=RouteResultsActivity.coordinatesType.get(i-1).get(0);
+			    			if (color==Color.WHITE) color=Color.BLACK;
+			    		}
+			 			overlays.add(new RouteOverlay(result.get(i - 1), result.get(i),	color));
 			 		}
 			    	wait_dialog.cancel();
 			    	mapController.setCenter(result.get(0));
