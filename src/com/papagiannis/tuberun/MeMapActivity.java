@@ -33,6 +33,7 @@ public abstract class MeMapActivity extends MapActivity implements
 	protected Location lastKnownLocation;
     protected Date started;
     protected List<Overlay> mapOverlays;
+    protected Overlay myPushpin;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,8 @@ public abstract class MeMapActivity extends MapActivity implements
 			Location l_london=new Location("");
 			l_london.setLongitude(gp_london.getLongitudeE6()/(float)1000000);
 			l_london.setLatitude(gp_london.getLatitudeE6()/(float)1000000);
-			mapOverlays.add(generateMyLocationPushPin(l_london));
+			myPushpin=generateMyLocationPushPin(l_london);
+			mapOverlays.add(myPushpin);
 		}
 		
     }
@@ -71,17 +73,10 @@ public abstract class MeMapActivity extends MapActivity implements
 			lastKnownLocation=l;
 			
 			//show a here marker on the map
-			
-			Iterator<Overlay> it=mapOverlays.iterator();
-			while (it.hasNext()) {
-				Overlay o=it.next();
-				if (o instanceof HereOverlay) {
-					it.remove();
-					break;
-				}
-			}
-	        mapOverlays.add(generateMyLocationPushPin(l));
-	        mapView.postInvalidate();
+			mapOverlays.remove(0);
+			myPushpin=generateMyLocationPushPin(l);
+	        mapOverlays.add(0,myPushpin);
+//	        mapView.postInvalidate();
 		}
 	}
 

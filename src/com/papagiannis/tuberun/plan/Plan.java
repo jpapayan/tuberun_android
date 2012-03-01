@@ -16,6 +16,7 @@ import android.text.AlteredCharSequence;
  */
 public class Plan {
 	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+	private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
 	private String destination = "";
 	private ArrayList<String> destinationAlternatives=new ArrayList<String>();
@@ -31,6 +32,8 @@ public class Plan {
 	private Date timeDepartureLater = null;
 	private Date timeArrivalLater = null;
 
+	private Date travelDate=null;
+	
 	private boolean useTube = true;
 	private boolean useBuses = true;
 	private boolean useDLR = true;
@@ -73,15 +76,25 @@ public class Plan {
 			sb.append("language=en");
 			sb.append("&sessionID=0");
 			if (timeConstraint && !timeDepartureNow) {
-				sb.append("itdTripDateTimeDepArr=dep");
+				sb.append("&itdTripDateTimeDepArr=dep");
+				if (travelDate!=null) {
+					sb.append("&itdDate=");
+					sb.append(dateFormat.format(travelDate));
+				}
 				sb.append("&itdTime=");
 				sb.append(timeFormat.format(timeDepartureLater));
 			}
 			if (!timeConstraint) {
-				sb.append("itdTripDateTimeDepArr=arr");
+				sb.append("&itdTripDateTimeDepArr=arr");
+				if (travelDate!=null) {
+					sb.append("&itdDate=");
+					sb.append(dateFormat.format(travelDate));
+				}
 				sb.append("&itdTime=");
 				sb.append(timeFormat.format(timeArrivalLater));
 			}
+			
+			
 			sb.append("&name_destination=");
 			sb.append(URLEncoder.encode(destination, "utf-8"));
 			sb.append("&place_destination=London");
@@ -110,7 +123,7 @@ public class Plan {
 				if (!useRail) sb.append("&exclMOT_0");
 				if (!useTube) sb.append("&exclMOT_2");
 			}
-
+			
 		} catch (Exception e) {
 
 		}
@@ -128,6 +141,18 @@ public class Plan {
 			error += "Your current location is not yet known. ";
 		if (startingType != Point.LOCATION && startingString.equals(""))
 			error += "The starting point cannot be empty. ";
+		if (travelDate!=null) {
+			if (timeArrivalLater!=null) {
+				timeArrivalLater.setDate(travelDate.getDate());
+				timeArrivalLater.setMonth(travelDate.getMonth());
+				timeArrivalLater.setYear(travelDate.getYear());
+			}
+			if (timeDepartureLater!=null) {
+				timeDepartureLater.setDate(travelDate.getDate());
+				timeDepartureLater.setMonth(travelDate.getMonth());
+				timeDepartureLater.setYear(travelDate.getYear());
+			}
+		}
 		if (timeConstraint && !timeDepartureNow) {
 			if (timeDepartureLater == null)
 				error += "Please select a time of departure. ";
@@ -293,5 +318,14 @@ public class Plan {
 		startingAlternatives.clear();
 		
 	}
+
+	public void setTravelDate(Date travelDate) {
+		this.travelDate=travelDate;
+	}
+
+	public Date getTravelDate() {
+		return travelDate;
+	}
+	
 
 }

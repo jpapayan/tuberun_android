@@ -57,22 +57,22 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 			    	 List<Overlay> overlays = mapView.getOverlays();
 			    	 int color=Color.BLUE;
 			    	 int icon=0;
-			    	 int change=1;
+			    	 String directions="";
 			    	 for (int i = 1; i < result.size(); i++) {
+			    		overlays.add(new RouteOverlay(result.get(i - 1), result.get(i),color));
 			    		if (RouteResultsActivity.coordinatesType.containsKey(i-1)) {
-			    			if (i-1!=0) {
-			    				//add pushpin but not on the very start
-			    				icon=RouteResultsActivity.coordinatesType.get(i-1).get(1);
-			    				Drawable drawable = self.getResources().getDrawable(icon);
-			    				HereOverlay hereo = new HereOverlay(drawable, self);
-			    		        OverlayItem overlayitem = new OverlayItem(result.get(i - 1), "Change "+change++, "");
-			    		        hereo.addOverlay(overlayitem);
-			    		        overlays.add(hereo);
-			    			}
-			    			color=RouteResultsActivity.coordinatesType.get(i-1).get(0);
+			    			ArrayList<Object> array=RouteResultsActivity.coordinatesType.get(i-1);
+			    			icon=(Integer) array.get(1);
+			    			if (icon==R.drawable.walk) icon=R.drawable.walk_black;
+			    			Drawable drawable = self.getResources().getDrawable(icon);
+			    			HereOverlay hereo = new HereOverlay(drawable, self);
+			    			directions=(String)array.get(2);
+			    		    OverlayItem overlayitem = new OverlayItem(result.get(i - 1), "Change", directions);
+			    		    hereo.addOverlay(overlayitem);
+			    		    overlays.add(hereo);
+			    			color=(Integer)array.get(0);
 			    			if (color==Color.WHITE) color=Color.BLACK;
 			    		}
-			 			overlays.add(new RouteOverlay(result.get(i - 1), result.get(i),	color));
 			 		}
 			    	wait_dialog.cancel();
 			    	mapController.setCenter(result.get(0));
@@ -96,7 +96,7 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 		return wait_dialog;
 	}
 
-	boolean displayRoute = false;
+	boolean displayRoute = true;
 	@Override
 	protected boolean isRouteDisplayed() {
 		return displayRoute;

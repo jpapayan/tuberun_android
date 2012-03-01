@@ -45,7 +45,7 @@ import uk.me.jstott.jcoord.OSRef;
 
 public class RouteResultsActivity extends Activity {
 	public static ArrayList<Integer> coordinates = new ArrayList<Integer>();
-	public static HashMap<Integer, ArrayList<Integer>> coordinatesType = new HashMap<Integer, ArrayList<Integer>>();;
+	public static HashMap<Integer, ArrayList<Object>> coordinatesType = new HashMap<Integer, ArrayList<Object>>();;
 	final RouteResultsActivity self = this;
 	final SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 	ViewPager pager;
@@ -257,16 +257,18 @@ public class RouteResultsActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				if (position==route.getPartials().size()) return;
 				PartialRoute pr = route.getPartial(position);
 
 				coordinates = pr.getCoordinates();
-				coordinatesType = new HashMap<Integer, ArrayList<Integer>>();
-				ArrayList<Integer> e = new ArrayList<Integer>(2);
+				coordinatesType = new HashMap<Integer, ArrayList<Object>>();
+				ArrayList<Object> e = new ArrayList<Object>(3);
 				String motType = (String) adapter_list.get(position).get(
 						"motType");
 				e.add(PartialRoutesBinder.getImageColor(motType));
 				Integer icon = (Integer) adapter_list.get(position).get("icon");
 				e.add(icon);
+				e.add(pr.getDirections());
 				coordinatesType.put(0, e);
 
 				Intent i = new Intent(self, PartialRouteMapActivity.class);
@@ -280,7 +282,7 @@ public class RouteResultsActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				coordinatesType = new HashMap<Integer, ArrayList<Integer>>();
+				coordinatesType = new HashMap<Integer, ArrayList<Object>>();
 
 				ArrayList<PartialRoute> partials = route.getPartials();
 				ArrayList<Integer> all = new ArrayList<Integer>();
@@ -288,9 +290,10 @@ public class RouteResultsActivity extends Activity {
 				for (PartialRoute pr : partials) {
 					all.addAll(pr.getCoordinates());
 
-					ArrayList<Integer> e = new ArrayList<Integer>(2);
+					ArrayList<Object> e = new ArrayList<Object>(3);
 					e.add(PartialRoutesBinder.getImageColor(serialiseMotType(pr)));
 					e.add(pr.getIcon());
+					e.add(pr.getDirections());
 					coordinatesType.put(i, e);
 					i+=pr.getCoordinates().size()/2; //PartialRouteMapActivity will 
 													 //be converting to Locations.

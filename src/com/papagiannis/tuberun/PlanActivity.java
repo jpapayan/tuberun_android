@@ -59,6 +59,7 @@ import android.widget.TimePicker;
 
 public class PlanActivity extends Activity implements Observer,
 		LocationListener, OnClickListener, OnCheckedChangeListener {
+	private final static int SELECT_TRAVEL_DATE = -7;
 	private final static int SELECT_ALTERNATIVE = -6;
 	private final static int ADD_HOME_ERROR = -5;
 	private final static int SET_HOME_DIALOG = -4;
@@ -72,7 +73,8 @@ public class PlanActivity extends Activity implements Observer,
 	PlanFetcher fetcher = new PlanFetcher(plan);
 	DestinationStore<Destination> store = DestinationStore.getInstance();
 
-	final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+	private final SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy");
 
 	LinearLayout mainmenu_layout;
 	Button back_button;
@@ -113,6 +115,8 @@ public class PlanActivity extends Activity implements Observer,
 	CheckBox use_dlr_checkbox;
 	CheckBox use_rail_checkbox;
 	CheckBox use_boat_checkbox;
+	CheckBox traveldate_checkbox;
+	Button traveldate_button;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -164,6 +168,8 @@ public class PlanActivity extends Activity implements Observer,
 		use_dlr_checkbox = (CheckBox) findViewById(R.id.usedlr_checkbox);
 		use_rail_checkbox = (CheckBox) findViewById(R.id.userail_checkbox);
 		use_tube_checkbox = (CheckBox) findViewById(R.id.usetube_checkbox);
+		traveldate_checkbox = (CheckBox) findViewById(R.id.traveldate_checkbox);
+		traveldate_button = (Button) findViewById(R.id.traveldate_button);
 	}
 
 	private void create() {
@@ -239,8 +245,9 @@ public class PlanActivity extends Activity implements Observer,
 					}
 					// render them enabled or disabled
 					if (buttonView.getId() == departtime_radiobutton.getId()) {
-						departtimenow_radiobutton.setEnabled(isChecked);
+						departtimenow_radiobutton.setEnabled(isChecked && !traveldate_checkbox.isChecked());
 						departtimelater_radiobutton.setEnabled(isChecked);
+						departtimelater_button.setEnabled(isChecked);
 					}
 					if (buttonView.getId() == arrivetime_radiobutton.getId()) {
 						arrivetime_button.setEnabled(isChecked);
@@ -366,6 +373,30 @@ public class PlanActivity extends Activity implements Observer,
 			@Override
 			public void onClick(View v) {
 				showDialog(ADD_HOME_ERROR);
+			}
+		});
+		
+		traveldate_checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					traveldate_button.setEnabled(true);
+					departtimenow_radiobutton.setEnabled(false);
+					if (departtimenow_radiobutton.isChecked()) departtimelater_radiobutton.setChecked(true);
+				}
+				else {
+					plan.setTravelDate(null);
+					departtimenow_radiobutton.setEnabled(true);
+					traveldate_button.setText("Select travel date");
+					traveldate_button.setEnabled(false);
+				}
+				
+			}
+		});
+		traveldate_button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showDialog(SELECT_TRAVEL_DATE);
 			}
 		});
 
@@ -678,6 +709,24 @@ public class PlanActivity extends Activity implements Observer,
 					arrivetime_button.setText(timeFormat.format(d));
 				}
 			}, d.getHours(), d.getMinutes(), true);
+		}
+		else if (id==SELECT_TRAVEL_DATE) {
+			Date d = plan.getTravelDate();
+			if (d == null)
+				d = new Date();
+			ret = new DatePickerDialog(this, new OnDateSetListener() {
+				@Override
+				public void onDateSet(DatePicker view, int year, int monthOfYear,
+						int dayOfMonth) {
+					Date now = new Date();
+					now.setYear(year-1900);
+					now.setMonth(monthOfYear);
+					now.setDate(dayOfMonth);
+					plan.setTravelDate(now);
+					traveldate_button.setText(dateFormat.format(now));
+				}
+			}, d.getYear()+1900, d.getMonth(), d.getDate());
+			wait_dialog=ret;
 		}
 		return ret;
 	}

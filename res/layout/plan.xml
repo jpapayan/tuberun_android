@@ -237,6 +237,21 @@
                         android:layout_marginTop="10dip"
                         android:background="#99000000"
                         android:text="Do you have any time constraints?" />
+                    
+                    <CheckBox
+                        android:id="@+id/traveldate_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:text="I want to travel at a future date" />
+
+                    <Button
+                        android:id="@+id/traveldate_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:enabled="false"
+                        android:text="Enter travel date" />
 
                     <RadioButton
                         android:id="@+id/departtime_radiobutton"
