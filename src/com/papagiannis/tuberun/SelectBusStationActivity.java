@@ -92,6 +92,19 @@ public class SelectBusStationActivity extends MeMapActivity implements OnClickLi
         }
     }
     
+    @Override
+	public void onLocationChanged(Location l) {
+		if (isBetterLocation(l,lastKnownLocation)) {
+			if (!has_moved) {
+				GeoPoint gp=new GeoPoint((int)(l.getLatitude()*1000000), (int)(l.getLongitude()*1000000));
+				mapController.animateTo(gp);
+				has_moved=true;
+			}
+			fetcher.setLocation(l);
+			fetcher.update();
+		}
+		super.onLocationChanged(l);
+	}
 
 	ArrayList<BusStation> prev_result=new ArrayList<BusStation>();
     /** Called when the background thread has finished the calculation of nearby stations **/
