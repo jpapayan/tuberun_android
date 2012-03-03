@@ -902,7 +902,8 @@ public class StationDetails {
     {
         HashMap<String, String> h = FetchStations(line);
         Set<String> s=h.keySet();
-        return s.contains(station_nice);
+        boolean res=s.contains(station_nice);
+        return res;
     }
     static public ArrayList<LineType> FetchLinesForStation(String station_nice)
     {
