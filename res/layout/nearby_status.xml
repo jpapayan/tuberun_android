@@ -1,93 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="wrap_content"
-	android:orientation="vertical">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dip"
+    android:layout_marginLeft="5dip"
+    android:layout_marginTop="10dip"
+    android:background="@drawable/road_sign"
+    android:orientation="vertical" >
 
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:orientation="vertical">
-		
-		<TextView android:id="@+id/nearby_distance"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:paddingTop="20dp" android:paddingLeft="10dp" android:gravity="left"
-			android:textSize="16sp" style="@style/WhiteText">
-		</TextView>
-		
-		<TextView android:id="@+id/nearby_name"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:paddingBottom="10dp" android:gravity="center_horizontal"
-			android:textSize="16sp" style="@style/WhiteText" >
-		</TextView>
-		
-	</LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
 
+        <TextView
+            android:id="@+id/nearby_name"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="5dip"
+            android:layout_weight="1"
+            android:text="Station"
+            android:textSize="20sp"
+            android:textStyle="bold" >
+        </TextView>
 
-	<TextView android:id="@+id/nearby_Piccadily" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>	
-	<TextView android:id="@+id/nearby_Metropolitan" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>
-	<TextView android:id="@+id/nearby_District" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>
-	<TextView android:id="@+id/nearby_Hammersmith" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>
-	<TextView android:id="@+id/nearby_Circle" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>
-	<TextView android:id="@+id/nearby_Northern" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>
-	<TextView android:id="@+id/nearby_DLR" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>
-	<TextView android:id="@+id/nearby_Overground" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>
-	<TextView android:id="@+id/nearby_Jubilee" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>
-	<TextView android:id="@+id/nearby_Victoria" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>
-	<TextView android:id="@+id/nearby_Bakerloo" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>
-	<TextView android:id="@+id/nearby_Waterloo" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>
-	<TextView android:id="@+id/nearby_Central" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:padding="10dp"
-		android:gravity="center_horizontal" android:textSize="16sp"
-		style="@style/WhiteText">
-	</TextView>
-		
+        <TextView
+            android:id="@+id/nearby_distance"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dip"
+            android:gravity="right"
+            android:text="300m"
+            android:textColor="#ffff00"
+            android:textSize="20sp"
+            android:textStyle="bold" >
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="100dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/nearby_Piccadily"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Picadilly"
+            android:textSize="16sp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nearby_Metropolitan"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Metropolitan"
+            android:textSize="16sp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nearby_District"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nearby_Hammersmith"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nearby_Circle"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nearby_Northern"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nearby_DLR"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nearby_Overground"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nearby_Jubilee"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nearby_Victoria"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nearby_Bakerloo"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nearby_Waterloo"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nearby_Central"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </TextView>
+    </LinearLayout>
+
 </LinearLayout>
-
-

@@ -1,36 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-	<ImageView android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:src="@drawable/background_nearby"
-		android:scaleType="centerCrop" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#99000000"
+            android:orientation="horizontal" >
 
-	<LinearLayout android:id="@+id/mainmenu"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:orientation="vertical" android:gravity="bottom"
-		android:layout_marginBottom="10dip">
+            <Button
+                android:id="@+id/back_button"
+                style="@style/BackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
 
-		<LinearLayout android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:orientation="horizontal">
+            <Button
+                android:id="@+id/logo_button"
+                style="@style/LogoButton"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="3dip"
+                android:layout_marginTop="3dip"
+                android:layout_weight="0"
+                android:text="" />
 
-			<TextView android:id="@+id/accuracy"
-				android:layout_height="wrap_content" android:text="Your Location Accuracy: Unknown"
-				android:layout_width="fill_parent" android:layout_weight="5" android:padding="10dp"
-				android:gravity="center_horizontal" android:textColor="#FFFFFF"/>
-<!-- 			<Button android:id="@+id/button_update" android:layout_width="wrap_content" -->
-<!-- 				android:layout_height="wrap_content" android:text="Update" -->
-<!-- 				android:layout_weight="0" /> -->
+            <TextView
+                android:id="@+id/title_textview"
+                style="@android:style/TextAppearance.Medium"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dip"
+                android:layout_weight="5"
+                android:gravity="left"
+                android:text="Nearby Stations" />
+        </LinearLayout>
 
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal" />
 
-		</LinearLayout>
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0" />
 
-		<ListView android:id="@+id/android:list"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:cacheColorHint="#00000000" />
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+        
+        <LinearLayout
+            android:id="@+id/location_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#99000000"
+            android:gravity="bottom"
+            android:orientation="horizontal" >
 
-	</LinearLayout>
+            <ProgressBar
+                android:id="@+id/location_progressbar"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dip" />
 
-</FrameLayout>
+            <TextView
+                android:id="@+id/location_textview"
+                style="@android:style/TextAppearance.Small"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dip"
+                android:layout_weight="1"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/location_accuracy_textview"
+                style="@android:style/TextAppearance.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip" />
+        </LinearLayout>
+        
+    </LinearLayout>
+
+</TabHost>

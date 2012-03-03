@@ -69,7 +69,8 @@ public class TubeRun extends Activity implements OnClickListener, Observer{
         	i.putExtra("type", "maps");
         	break;
     	case R.id.button_nearby:
-        	i=new Intent(this, NearbyStationsActivity.class);
+//        	i=new Intent(this, NearbyStationsActivity.class);
+    		i=new Intent(this, NearbyStationsActivity.class);
         	break;
     	case R.id.button_favorites:
     		i=new Intent(this, FavoritesActivity.class);

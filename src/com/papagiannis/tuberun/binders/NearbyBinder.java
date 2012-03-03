@@ -8,7 +8,9 @@ import com.papagiannis.tuberun.LineType;
 import com.papagiannis.tuberun.R;
 import com.papagiannis.tuberun.fetchers.DeparturesDLRFetcher;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.SimpleAdapter.ViewBinder;
@@ -16,18 +18,38 @@ import android.widget.TextView;
 
 public class NearbyBinder implements ViewBinder, OnClickListener {
 
+	Context context;
+	public NearbyBinder(Context c) {
+		context=c;
+	}
+	
 	@Override
 	public boolean setViewValue(View view, Object o, String s) {
 
 		TextView tv = (TextView) view;
 		if (view.getId()==R.id.nearby_name || view.getId()==R.id.nearby_distance) {
 			tv.setVisibility(View.VISIBLE);
+			Typeface mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/transport.ttf");
+		    tv.setTypeface(mTypeface);
+			if (view.getId()==R.id.nearby_distance) {
+				int i=(Integer) o;
+				if (i>10000) {
+					tv.setText("10km+");
+				}
+				else {
+					tv.setText(i+"m");
+				}
+				return true;
+			}
+			
 		}
 		else if (!s.equals("")) {
 			LineType lt=LinePresentation.getLineTypeRespresentation(s);
 			tv.setTextColor(LinePresentation.getForegroundColor(lt));
 			tv.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
 			tv.setVisibility(View.VISIBLE);
+			Typeface mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/tfl.ttf");
+		    tv.setTypeface(mTypeface);
 		} 
 		else {
 			tv.setVisibility(View.GONE);

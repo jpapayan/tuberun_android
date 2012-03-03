@@ -2,6 +2,7 @@ package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 
 
@@ -900,8 +901,8 @@ public class StationDetails {
     static private boolean containsStation(LineType line, String station_nice)
     {
         HashMap<String, String> h = FetchStations(line);
-        if (h.containsKey(station_nice)) return true;
-        else return false;
+        Set<String> s=h.keySet();
+        return s.contains(station_nice);
     }
     static public ArrayList<LineType> FetchLinesForStation(String station_nice)
     {
