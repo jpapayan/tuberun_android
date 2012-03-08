@@ -8,16 +8,16 @@ import com.papagiannis.tuberun.plan.Point;
 import android.app.Activity;
 
 public class DestinationStore<T> extends Store<T> {
-	private static DestinationStore<Destination> instance;
+	private static DestinationStore<Destination> instanceDestination;
 
 	public static DestinationStore<Destination> getInstance() {
-		if (instance == null) {
-			instance = new DestinationStore<Destination>();
+		if (instanceDestination == null) {
+			instanceDestination = new DestinationStore<Destination>();
 			//there must always be a home for serialisation reasons
-			instance.home=new Destination("", Point.ADDRESS);
-			instance.home.setHome(true);
+			instanceDestination.home=new Destination("", Point.ADDRESS);
+			instanceDestination.home.setHome(true);
 		}
-		return instance;
+		return instanceDestination;
 	}
 
 	private DestinationStore() {

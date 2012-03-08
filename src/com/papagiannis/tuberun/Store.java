@@ -13,7 +13,7 @@ import android.content.Context;
 import com.papagiannis.tuberun.favorites.Favorite;
 
 public class Store<T> {
-	protected static String FILENAME=null;
+	protected  String FILENAME=null;
 
 	transient protected  ArrayList<T> list = null;
 
