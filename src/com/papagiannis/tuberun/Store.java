@@ -78,17 +78,18 @@ public class Store<T> {
 	}
 	
 	public  void removeAll(Activity a) {
-		list.clear();
+		if (list!=null) list.clear();
 		storeToFile(a);
 	}
 	
 
 	public  boolean contains(T f) {
+		if (list==null) return false;
 		return list.contains(f);
 	}
 
 	public  void removeIndex(int i, Activity activity) {
-		list.remove(i);
+		if (list!=null && list.size()>i && i>=0) list.remove(i);
 		storeToFile(activity);
 	}
 }

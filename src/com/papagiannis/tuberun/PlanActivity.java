@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.PlanFetcher;
+import com.papagiannis.tuberun.fetchers.ReverseGeocodeFetcher;
 import com.papagiannis.tuberun.plan.Plan;
 import com.papagiannis.tuberun.plan.Point;
 
@@ -72,6 +73,13 @@ public class PlanActivity extends Activity implements Observer,
 	private static Plan plan = new Plan();
 	PlanFetcher fetcher = new PlanFetcher(plan);
 	DestinationStore<Destination> store = DestinationStore.getInstance();
+	ReverseGeocodeFetcher geocoder=new ReverseGeocodeFetcher(this, null);
+	Observer geolocationObserver=new Observer() {
+		@Override
+		public void update() {
+			displayLocation(geocoder.getResult());
+		}
+	};
 
 	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 	private final SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy");
@@ -336,11 +344,11 @@ public class PlanActivity extends Activity implements Observer,
 			lastKnownLocation = locationManager
 					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		if (lastKnownLocation != null) {
-			// remeber to reverse gocode the old address.
-			reverseGeocode(lastKnownLocation);
 			// never trust old accuracies
 			if (lastKnownLocation.getAccuracy() < 50)
 				lastKnownLocation.setAccuracy(100);
+			// remeber to reverse gocode the old address.
+			reverseGeocode(lastKnownLocation);
 		}
 
 		use_boat_checkbox.setOnCheckedChangeListener(this);
@@ -798,7 +806,6 @@ public class PlanActivity extends Activity implements Observer,
 		} else {
 			showDialog(ERROR_DIALOG);
 		}
-
 	}
 
 	public static Plan getPlan() {
@@ -810,29 +817,30 @@ public class PlanActivity extends Activity implements Observer,
 	Location lastKnownLocation;
 	Date started;
 
-	private void reverseGeocode(Location l) {
-		final Geocoder myLocation = new Geocoder(getApplicationContext(),
-				Locale.getDefault());
-		if (myLocation != null) {
-			AsyncTask<Double, Integer, List<Address>> reverse_geocode = new AsyncTask<Double, Integer, List<Address>>() {
-				@Override
-				protected List<Address> doInBackground(Double... params) {
-					List<Address> result = new ArrayList<Address>();
-					try {
-						result = myLocation.getFromLocation(params[0],
-								params[1], 1);
-					} catch (Exception e) {
-					}
-					return result;
-				}
-
-				protected void onPostExecute(List<Address> result) {
-					displayLocation(result);
-				}
-			};
-			reverse_geocode.execute(l.getLatitude(), l.getLongitude());
+	
+	
+	private void displayLocation(List<Address> result) {
+		if (result.size() == 0)
+			return;
+		String previous_location = previous_location = result.get(0)
+				.getAddressLine(0);
+		if (result != null && result.size() >= 1) {
+			location_textview.setText(previous_location);
+			location_accuracy_textview.setText("accuracy="
+					+ lastKnownLocation.getAccuracy() + "m");
+			updateLocationDialog(previous_location,
+					lastKnownLocation.getAccuracy());
+		} else {
+			location_accuracy_textview.setText(("accuracy="
+					+ lastKnownLocation.getAccuracy() + "m)"));
+			updateLocationDialog("", lastKnownLocation.getAccuracy());
 		}
-		;
+	}
+	
+	private void reverseGeocode(Location l) {
+		geocoder.abort();
+		geocoder=new ReverseGeocodeFetcher(this,l);
+		geocoder.registerCallback(geolocationObserver).update();
 	}
 
 	@Override
@@ -843,6 +851,7 @@ public class PlanActivity extends Activity implements Observer,
 			reverseGeocode(l);
 		}
 	}
+	
 
 	@Override
 	public void onProviderDisabled(String arg0) {
@@ -872,23 +881,6 @@ public class PlanActivity extends Activity implements Observer,
 		locationManager.removeUpdates(this);
 	}
 
-	private void displayLocation(List<Address> result) {
-		if (result.size() == 0)
-			return;
-		String previous_location = previous_location = result.get(0)
-				.getAddressLine(0);
-		if (result != null && result.size() >= 1) {
-			location_textview.setText(previous_location);
-			location_accuracy_textview.setText("accuracy="
-					+ lastKnownLocation.getAccuracy() + "m");
-			updateLocationDialog(previous_location,
-					lastKnownLocation.getAccuracy());
-		} else {
-			location_accuracy_textview.setText(("accuracy="
-					+ lastKnownLocation.getAccuracy() + "m)"));
-			updateLocationDialog("", lastKnownLocation.getAccuracy());
-		}
-	}
 
 	@Override
 	protected void onPause() {

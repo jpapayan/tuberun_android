@@ -75,7 +75,8 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:text="Total bike slots:"
-            android:textSize="16sp" >
+            android:textSize="16sp"
+            android:visibility="gone" >
         </TextView>
     </LinearLayout>
 

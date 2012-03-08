@@ -34,7 +34,8 @@ public class NearbyBinder implements ViewBinder, OnClickListener {
 			if (view.getId()==R.id.nearby_distance) {
 				int i=(Integer) o;
 				if (i>10000) {
-					tv.setText("10km+");
+					i=(i/1000);
+					tv.setText(i+"km");
 				}
 				else {
 					tv.setText(i+"m");

@@ -59,7 +59,6 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 			    	 int icon=0;
 			    	 String directions="";
 			    	 for (int i = 1; i < result.size(); i++) {
-			    		overlays.add(new RouteOverlay(result.get(i - 1), result.get(i),color));
 			    		if (RouteResultsActivity.coordinatesType.containsKey(i-1)) {
 			    			ArrayList<Object> array=RouteResultsActivity.coordinatesType.get(i-1);
 			    			icon=(Integer) array.get(1);
@@ -73,6 +72,7 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 			    			color=(Integer)array.get(0);
 			    			if (color==Color.WHITE) color=Color.BLACK;
 			    		}
+			    		overlays.add(new RouteOverlay(result.get(i - 1), result.get(i),color));
 			 		}
 			    	wait_dialog.cancel();
 			    	mapController.setCenter(result.get(0));

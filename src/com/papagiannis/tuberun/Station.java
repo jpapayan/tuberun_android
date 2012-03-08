@@ -6,6 +6,10 @@ import java.io.StringWriter;
 
 public class Station  {
 	
+	public Station() {
+		
+	}
+	
 	public Station(String name, Location location) {
 		this.name = name;
 	}
@@ -32,12 +36,24 @@ public class Station  {
 		return longtitude;
 	}
 
-	public void setLongtitude(int longtitude) {
+	public Station setLongtitude(int longtitude) {
 		this.longtitude = longtitude;
+		return this;
 	}
 
-	public void setLatitude(int latitude) {
+	public Station setLongtitude(double longtitude) {
+		this.longtitude = (int) (longtitude*1000000);
+		return this;
+	}
+	
+	public Station setLatitude(int latitude) {
 		this.latitude = latitude;
+		return this;
+	}
+	
+	public Station setLatitude(double latitude) {
+		this.latitude = (int) (latitude*1000000);
+		return this;
 	}
 	
 	public Location getLocation() {
@@ -49,11 +65,11 @@ public class Station  {
 
 	@Override
 	public String toString() {
-		return name + "," + longtitude+","+latitude;
+		return name + "#" + longtitude+"#"+latitude;
 	}
 	
 	public static Station fromString(String station) {
-		String[] tok=station.split(",");
+		String[] tok=station.split("#");
 		return new Station(tok[0], Integer.parseInt(tok[2]), Integer.parseInt(tok[1]));
 	}
 	

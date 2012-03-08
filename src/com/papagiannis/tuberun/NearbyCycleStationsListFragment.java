@@ -60,7 +60,7 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 	@Override
 	public void onPause() {
 		super.onPause();
-		fetcher.abort();
+		if (fetcher!=null) fetcher.abort();
 	}
 
 	@Override
@@ -120,6 +120,7 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 			Station s = stations_nearby.get(position);
 			Intent i = new Intent(getActivity(), DirectionsMapActivity.class);
 			i.putExtra("station", s.toString());
+			i.putExtra("type", "cyclehire");
 			i.putExtra("user_longtitude",
 					(int) (lastKnownLocation.getLongitude() * 1000000));
 			i.putExtra("user_latitude",
@@ -130,4 +131,5 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 		}
 	}
 
+		
 }

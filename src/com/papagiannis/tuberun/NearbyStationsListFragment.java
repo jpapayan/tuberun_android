@@ -40,25 +40,6 @@ public class NearbyStationsListFragment extends ListFragment implements
 		fetcher.registerCallback(this);
 	}
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		fetcher.abort();
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
-	// private Dialog wait_dialog;
-	// @Override
-	// protected Dialog onCreateDialog(int id) {
-	// wait_dialog = ProgressDialog.show(this, "",
-	// "Fetching location. Please wait...", true);
-	// return wait_dialog;
-	// }
-
 	Location lastKnownLocation;
 
 	public void locationChanged(Location l) {
@@ -150,6 +131,24 @@ public class NearbyStationsListFragment extends ListFragment implements
 		} catch (Exception e) {
 
 		}
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (fetcher!=null) fetcher.abort();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (fetcher!=null) fetcher.deregisterCallback(this);
+		
 	}
 
 }

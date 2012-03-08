@@ -75,7 +75,7 @@ public class PlanFetcher extends Fetcher {
 		try {
 			if (response == null || response.equals(""))
 				throw new Exception(
-						"The server oyster.tfl.gov.uk did not respond to your request (1)");
+						"The server did not respond to your request (2)");
 
 			AsyncTask<String, Integer, Plan> task = new AsyncTask<String, Integer, Plan>() {
 				@Override

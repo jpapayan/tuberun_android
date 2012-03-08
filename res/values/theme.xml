@@ -48,4 +48,5 @@
 		<item name="android:background">@layout/map_button_selector</item>
 	</style>
 
+	<drawable name="tuberun_red">#99801219</drawable>
 </resources>

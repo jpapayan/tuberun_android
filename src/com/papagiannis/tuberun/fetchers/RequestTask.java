@@ -22,8 +22,7 @@ import com.papagiannis.tuberun.TubeRun;
 import android.os.AsyncTask;
 import android.util.Log;
 
-class RequestTask extends AsyncTask<String, String, String> {
-
+public class RequestTask extends AsyncTask<String, String, String> {
 	protected String myUserAgent="Tuberun/"+TubeRun.VERSION+" Android";
 	private HttpCallback cb;
 
@@ -72,7 +71,12 @@ class RequestTask extends AsyncTask<String, String, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
-		cb.onReturn(result);
+		if (!isCancelled()) {
+			cb.onReturn(result);
+		}
+		
 	}
+	
+	
 
 }
