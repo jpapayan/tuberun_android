@@ -58,22 +58,29 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 			    	 int color=Color.BLUE;
 			    	 int icon=0;
 			    	 String directions="";
+			    	 //First the route
 			    	 for (int i = 1; i < result.size(); i++) {
 			    		if (RouteResultsActivity.coordinatesType.containsKey(i-1)) {
 			    			ArrayList<Object> array=RouteResultsActivity.coordinatesType.get(i-1);
-			    			icon=(Integer) array.get(1);
-			    			if (icon==R.drawable.walk) icon=R.drawable.walk_black;
-			    			Drawable drawable = self.getResources().getDrawable(icon);
-			    			HereOverlay hereo = new HereOverlay(drawable, self);
-			    			directions=(String)array.get(2);
-			    		    OverlayItem overlayitem = new OverlayItem(result.get(i - 1), "Change", directions);
-			    		    hereo.addOverlay(overlayitem);
-			    		    overlays.add(hereo);
 			    			color=(Integer)array.get(0);
 			    			if (color==Color.WHITE) color=Color.BLACK;
 			    		}
 			    		overlays.add(new RouteOverlay(result.get(i - 1), result.get(i),color));
 			 		}
+			    	 //And then the pushpins
+			    	for (int i = 1; i < result.size(); i++) {
+				    		if (RouteResultsActivity.coordinatesType.containsKey(i-1)) {
+				    			ArrayList<Object> array=RouteResultsActivity.coordinatesType.get(i-1);
+				    			icon=(Integer) array.get(1);
+				    			if (icon==R.drawable.walk) icon=R.drawable.walk_black;
+				    			Drawable drawable = self.getResources().getDrawable(icon);
+				    			HereOverlay hereo = new HereOverlay(drawable, self);
+				    			directions=(String)array.get(2);
+				    		    OverlayItem overlayitem = new OverlayItem(result.get(i - 1), "Change", directions);
+				    		    hereo.addOverlay(overlayitem);
+				    		    overlays.add(hereo);
+				    		}
+			    	}
 			    	wait_dialog.cancel();
 			    	mapController.setCenter(result.get(0));
 					mapController.animateTo(result.get(0));

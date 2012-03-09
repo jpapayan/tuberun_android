@@ -15,6 +15,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -24,46 +25,81 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.opengl.Visibility;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.papagiannis.tuberun.fetchers.*;
 
-public class SelectBusStationActivity extends MeMapActivity implements OnClickListener, LocationListener, Observer{
+public class SelectBusStationActivity extends MeMapActivity implements  LocationListener, Observer{
+	private static final String FETCHING_LOCATION="Fetching your location...";
+	private static final String FETCHING_STATIONS="Locating nearby stations...";
+	
 	StationsBusFetcher fetcher;
 	boolean has_moved=false;
 	boolean has_moved_accurate=false;
+	
+	LinearLayout codeLayout;
+	EditText codeEditText;
+	Button codeButton;
+	
+	LinearLayout statusLayout;
+	ProgressBar statusProgessBar;
+	TextView statusTextView;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-        
+    	codeLayout=(LinearLayout) findViewById(R.id.code_layout);
+    	codeEditText=(EditText) findViewById(R.id.code_edittext);
+    	codeButton=(Button) findViewById(R.id.code_button);
+    	statusLayout=(LinearLayout) findViewById(R.id.status_layout);
+    	statusProgessBar=(ProgressBar) findViewById(R.id.status_progrssbar);
+    	statusTextView=(TextView) findViewById(R.id.status_textview);
+    	
+    	codeLayout.setVisibility(View.VISIBLE);
+    	codeButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				try {
+					String code=codeEditText.getText().toString();
+					if (code==null || code.trim().equals("")) return;
+					Long.parseLong(code); //it has to be a number
+					showBusDepartures(code, "Stop "+code);
+				}
+				catch (Exception e) {
+					Log.w("SelectBusStationActivilty", e);
+				}
+			}
+		});
+    	
+    	statusLayout.setVisibility(View.VISIBLE);
+    	statusTextView.setText(FETCHING_LOCATION);
+    	
         fetcher=new StationsBusFetcher(this);
         fetcher.registerCallback(this);
         
-		showDialog(0);
-		
 		if (lastKnownLocation!=null) {
 			GeoPoint gp=new GeoPoint((int)(lastKnownLocation.getLatitude()*1000000), (int)(lastKnownLocation.getLongitude()*1000000));
 			mapController.setCenter(gp);
 			fetcher.setLocation(lastKnownLocation);
+			statusTextView.setText(FETCHING_STATIONS);
 			fetcher.update();
 		}
 		else {
 			mapController.setCenter(gp_london);
 		}
     }
-    
-    private Dialog wait_dialog;
-    @Override
-    protected Dialog onCreateDialog(int id) {
-    	wait_dialog = ProgressDialog.show(this, "", 
-                "Fetching location. Please wait...", true);
-    	return wait_dialog;
-    }
-    
     
     
     @Override
@@ -74,23 +110,9 @@ public class SelectBusStationActivity extends MeMapActivity implements OnClickLi
 
 	@Override
     protected boolean isRouteDisplayed() {
-        return true;
+        return false;
     }
     
-    public void onClick (View v) {
-    	Intent i=null;
-    	switch (v.getId()) {
-    	case R.id.button_status:
-    		i=new Intent(this, StatusActivity.class);
-    		startActivity(i);
-    		break;
-    	case R.id.button_departures:
-        	i=new Intent(this, SelectLineActivity.class);
-        	i.putExtra("type", "departures");
-        	startActivity(i);
-        	break;
-        }
-    }
     
     @Override
 	public void onLocationChanged(Location l) {
@@ -100,6 +122,7 @@ public class SelectBusStationActivity extends MeMapActivity implements OnClickLi
 				mapController.animateTo(gp);
 				has_moved=true;
 			}
+			statusTextView.setText(FETCHING_STATIONS);
 			fetcher.setLocation(l);
 			fetcher.update();
 		}
@@ -110,8 +133,9 @@ public class SelectBusStationActivity extends MeMapActivity implements OnClickLi
     /** Called when the background thread has finished the calculation of nearby stations **/
 	@Override
 	public void update() {
-		wait_dialog.dismiss();
+		statusTextView.setText(FETCHING_LOCATION);
 		ArrayList<BusStation> result=fetcher.getResult();
+		if (result.size()==0) return;
 		if (prev_result.size()!=result.size()) {
 			List<Overlay> mapOverlays = mapView.getOverlays();
 			//mapOverlays.clear();
@@ -129,5 +153,10 @@ public class SelectBusStationActivity extends MeMapActivity implements OnClickLi
 		
 	}
 
-	
+	public void showBusDepartures(String code, String snippet) {
+		Intent i=new Intent(this, BusDeparturesActivity.class);
+		i.putExtra("code", code);
+		i.putExtra("name", snippet);
+		startActivity(i);
+	}
 }

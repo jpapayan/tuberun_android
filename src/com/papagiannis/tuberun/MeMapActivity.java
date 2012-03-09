@@ -38,7 +38,7 @@ public abstract class MeMapActivity extends MapActivity implements
 	@Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-        setContentView(R.layout.select_bus_station);
+        setContentView(R.layout.full_screen_map);
         
         mapView = (MapView) findViewById(R.id.bus_mapview);
         mapView.setBuiltInZoomControls(true);

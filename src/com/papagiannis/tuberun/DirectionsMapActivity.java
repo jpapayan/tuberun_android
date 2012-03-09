@@ -29,7 +29,7 @@ public class DirectionsMapActivity extends MapActivity implements Observer {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.select_bus_station);
+		setContentView(R.layout.full_screen_map);
 		mapView = (MapView) findViewById(R.id.bus_mapview);
 		mapView.setBuiltInZoomControls(true);
 		mapController = mapView.getController();

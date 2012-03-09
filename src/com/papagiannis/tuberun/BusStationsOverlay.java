@@ -13,9 +13,9 @@ import com.google.android.maps.OverlayItem;
 public class BusStationsOverlay extends ItemizedOverlay {
 
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
-	private Context mContext;
+	private SelectBusStationActivity mContext;
 	
-	public BusStationsOverlay(Drawable defaultMarker, Context context) {
+	public BusStationsOverlay(Drawable defaultMarker, SelectBusStationActivity context) {
 		super(boundCenterBottom(defaultMarker));
 		mContext = context;
 		
@@ -39,14 +39,10 @@ public class BusStationsOverlay extends ItemizedOverlay {
 	@Override
 	protected boolean onTap(int index) {
 	  OverlayItem item = mOverlays.get(index);
-	  AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-	  
-	  Intent i=new Intent(mContext, BusDeparturesActivity.class);
-      i.putExtra("code", item.getTitle());
-      i.putExtra("name", item.getSnippet());
-      
-      mContext.startActivity(i);
+	  mContext.showBusDepartures(item.getTitle(), item.getSnippet());
       return true;
 	}
+
+	
 
 }
