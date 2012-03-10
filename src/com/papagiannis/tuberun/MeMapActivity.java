@@ -5,12 +5,20 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.webkit.GeolocationPermissions;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -19,76 +27,173 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.papagiannis.tuberun.fetchers.StationsBusFetcher;
+import com.papagiannis.tuberun.overlays.HereOverlay;
+import com.papagiannis.tuberun.overlays.LocationItemizedOverlay;
 
 /*
  * A MapActivity that always shows the user's location
  */
 public abstract class MeMapActivity extends MapActivity implements
 		LocationListener {
+	private MeMapActivity self = this;
 	protected MapView mapView;
 	protected MapController mapController;
 	protected LocationManager locationManager;
-	protected final GeoPoint gp_london=new GeoPoint(51501496,-124240);
+	protected final GeoPoint gp_london = new GeoPoint(51501496, -124240);
 	protected static final int TWO_MINUTES = 1000 * 60 * 2;
 	protected Location lastKnownLocation;
-    protected Date started;
-    protected List<Overlay> mapOverlays;
-    protected Overlay myPushpin;
+	protected Date started;
+	protected List<Overlay> mapOverlays;
+	protected Overlay myPushpin;
+	protected Button backButton;
+	protected Button logoButton;
+	protected TextView titleTextView;
+	protected LinearLayout titleLayout;
+	protected Button myLocationButton;
 
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
-        setContentView(R.layout.full_screen_map);
-        
-        mapView = (MapView) findViewById(R.id.bus_mapview);
-        mapView.setBuiltInZoomControls(true);
-        mapOverlays=mapView.getOverlays();
-        
-        //location stuff
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        requestLocationUpdates();
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.full_screen_map);
+		titleTextView = (TextView) findViewById(R.id.title_textview);
+		backButton = (Button) findViewById(R.id.back_button);
+		logoButton = (Button) findViewById(R.id.logo_button);
+		titleLayout = (LinearLayout) findViewById(R.id.title_layout);
+		myLocationButton = (Button) findViewById(R.id.mylocation_button);
+
+		OnClickListener back_listener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				self.finish();
+			}
+		};
+		backButton.setOnClickListener(back_listener);
+		logoButton.setOnClickListener(back_listener);
+
+		mapView = (MapView) findViewById(R.id.bus_mapview);
+		mapView.setBuiltInZoomControls(true);
+		mapOverlays = mapView.getOverlays();
+
+		// location stuff
+		locationManager = (LocationManager) this
+				.getSystemService(Context.LOCATION_SERVICE);
+		requestLocationUpdates();
 		mapController = mapView.getController();
 		mapController.setZoom(16);
-		
-		lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		if (lastKnownLocation==null) lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		if (lastKnownLocation!=null) mapOverlays.add(generateMyLocationPushPin(lastKnownLocation));
-		else {
-			Location l_london=new Location("");
-			l_london.setLongitude(gp_london.getLongitudeE6()/(float)1000000);
-			l_london.setLatitude(gp_london.getLatitudeE6()/(float)1000000);
-			myPushpin=generateMyLocationPushPin(l_london);
+		myLocationButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (lastKnownLocation != null) {
+					animateToHere(lastKnownLocation);
+				}
+			}
+		});
+
+		lastKnownLocation = locationManager
+				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		if (lastKnownLocation == null)
+			lastKnownLocation = locationManager
+					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		if (lastKnownLocation != null) {
+			myPushpin = generateMyLocationPushPin(lastKnownLocation);
 			mapOverlays.add(myPushpin);
-		}
-		
-    }
-	
-	/*
-	 * Update the Map my location marker
-	 * @see android.location.LocationListener#onLocationChanged(android.location.Location)
-	 */
-	@Override
-	public void onLocationChanged(Location l) {
-		if (isBetterLocation(l,lastKnownLocation)) {
-			lastKnownLocation=l;
-			
-			//show a here marker on the map
-			mapOverlays.remove(0);
-			myPushpin=generateMyLocationPushPin(l);
-	        mapOverlays.add(0,myPushpin);
-//	        mapView.postInvalidate();
+			animateToHere(lastKnownLocation);
+		} else {
+			Location l_london = new Location("");
+			l_london.setLongitude(gp_london.getLongitudeE6() / (float) 1000000);
+			l_london.setLatitude(gp_london.getLatitudeE6() / (float) 1000000);
+			l_london.setAccuracy(200);
+			lastKnownLocation = l_london;
+			myPushpin = generateMyLocationPushPin(l_london);
+			mapOverlays.add(myPushpin);
 		}
 	}
 
-	private HereOverlay generateMyLocationPushPin(Location l) {
+	public void onLocationChanged(Location l) {
+		if (isBetterLocation(l, lastKnownLocation)) {
+			lastKnownLocation = l;
+
+			// show a here marker on the map
+			mapOverlays.remove(0);
+			myPushpin = generateMyLocationPushPin(l);
+			mapOverlays.add(0, myPushpin);
+			// mapView.postInvalidate();
+		}
+	}
+
+	private HereOverlay<OverlayItem> generateMyLocationPushPin(Location l) {
 		Drawable drawable = this.getResources().getDrawable(R.drawable.here);
-		HereOverlay hereo = new HereOverlay(drawable, this);
-		GeoPoint point = new GeoPoint((int)(l.getLatitude()*1000000),(int)(l.getLongitude()*1000000));
-		OverlayItem overlayitem = new OverlayItem(point, "You are here", "Accuracy: "+(int)l.getAccuracy()+" meters");
+		HereOverlay<OverlayItem> hereo = new HereOverlay<OverlayItem>(drawable,
+				this);
+		hereo.setAccuracy((int) l.getAccuracy());
+		GeoPoint point = new GeoPoint((int) (l.getLatitude() * 1000000),
+				(int) (l.getLongitude() * 1000000));
+		OverlayItem overlayitem = new OverlayItem(point, "You are here",
+				"Accuracy: " + (int) l.getAccuracy() + " meters");
 		hereo.addOverlay(overlayitem);
 		return hereo;
 	}
-	
+
+	protected void animateToHere(Location animateTarget) {
+		if (animateTarget == null)
+			return;
+
+		GeoPoint gp = new GeoPoint(
+				(int) (animateTarget.getLatitude() * 1000000),
+				(int) (animateTarget.getLongitude() * 1000000));
+
+		if (animateTarget.getAccuracy() > 60) {
+			int delta = (int) animateTarget.getAccuracy() / 2;
+			delta *= 1000000;
+			int minLat = gp.getLatitudeE6() - delta / (1852 * 60);
+			int maxLat = gp.getLatitudeE6() + delta / (1852 * 60);
+			int minLon = gp.getLongitudeE6() - delta / (1852 * 60);
+			int maxLon = gp.getLongitudeE6() + delta / (1852 * 60);
+			double fitFactor = 1.1;
+			mapController.zoomToSpan(
+					(int) (Math.abs(maxLat - minLat) * fitFactor),
+					(int) (Math.abs(maxLon - minLon) * fitFactor));
+		} else {
+			mapController.setZoom(18);
+		}
+		mapController.animateTo(gp);
+	}
+
+
+	protected void animateToWithOverlays(GeoPoint animateTarget) {
+		int minLat = Integer.MAX_VALUE;
+		int maxLat = Integer.MIN_VALUE;
+		int minLon = Integer.MAX_VALUE;
+		int maxLon = Integer.MIN_VALUE;
+
+		for (Overlay overlay : mapOverlays) {
+			try {
+				@SuppressWarnings("unchecked")
+				LocationItemizedOverlay<OverlayItem> lo = (LocationItemizedOverlay<OverlayItem>) overlay;
+				for (GeoPoint gp : lo.getPoints()) {
+					int lat = gp.getLatitudeE6();
+					int lon = gp.getLongitudeE6();
+
+					maxLat = Math.max(lat, maxLat);
+					minLat = Math.min(lat, minLat);
+					maxLon = Math.max(lon, maxLon);
+					minLon = Math.min(lon, minLon);
+				}
+			} catch (ClassCastException e) {
+				Log.w("MeMapActivity", e);
+			}
+		}
+		double fitFactor = 1.1;
+		mapController.zoomToSpan((int) (Math.abs(maxLat - minLat) * fitFactor),
+				(int) (Math.abs(maxLon - minLon) * fitFactor));
+		// mapController.zoomToSpan(Math.abs(maxLat - minLat), Math.abs(maxLon -
+		// minLon));
+		if (animateTarget == null)
+			animateTarget = new GeoPoint((maxLat + minLat) / 2,
+					(maxLon + minLon) / 2);
+		mapController.animateTo(animateTarget);
+	}
+
 	/**
 	 * Determines whether one Location reading is better than the current
 	 * Location fix
@@ -177,22 +282,22 @@ public abstract class MeMapActivity extends MapActivity implements
 		if (locationManager != null)
 			requestLocationUpdates();
 	}
-	
+
 	@Override
 	public void onProviderDisabled(String provider) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

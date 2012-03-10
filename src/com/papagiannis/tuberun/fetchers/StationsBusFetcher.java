@@ -80,6 +80,7 @@ public class StationsBusFetcher extends Fetcher {
 				}
 				myDbHelper.openDataBase();
 				res = myDbHelper.getStationsNearby((long) (at[0].getLatitude()*1000000), (long) (at[0].getLongitude()*1000000));
+				myDbHelper.close();
 			} catch (Exception e) {
 				String eee=e.toString();
 				Log.d("MINE",eee);
@@ -90,7 +91,7 @@ public class StationsBusFetcher extends Fetcher {
 		@Override
 		protected void onPostExecute(ArrayList<BusStation> res) {
 			result = res;
-			notifyClients();
+			if (!isCancelled()) notifyClients();
 		}
 
 		public ArrayList<BusStation> getResult() {

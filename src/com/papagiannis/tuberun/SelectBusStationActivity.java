@@ -39,10 +39,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.papagiannis.tuberun.fetchers.*;
+import com.papagiannis.tuberun.overlays.BusStationsOverlay;
 
 public class SelectBusStationActivity extends MeMapActivity implements  LocationListener, Observer{
-	private static final String FETCHING_LOCATION="Fetching your location...";
-	private static final String FETCHING_STATIONS="Locating nearby stations...";
+	private static final String FETCHING_LOCATION="Fetching your location";
+	private static final String IMPROVING_LOCATION="Improving your location";
+	private static final String FETCHING_STATIONS="Locating nearby stations";
 	
 	StationsBusFetcher fetcher;
 	boolean has_moved=false;
@@ -64,8 +66,11 @@ public class SelectBusStationActivity extends MeMapActivity implements  Location
     	codeEditText=(EditText) findViewById(R.id.code_edittext);
     	codeButton=(Button) findViewById(R.id.code_button);
     	statusLayout=(LinearLayout) findViewById(R.id.status_layout);
-    	statusProgessBar=(ProgressBar) findViewById(R.id.status_progrssbar);
+    	statusProgessBar=(ProgressBar) findViewById(R.id.status_progressbar);
     	statusTextView=(TextView) findViewById(R.id.status_textview);
+    	
+    	titleLayout.setVisibility(View.VISIBLE);
+    	titleTextView.setText("Select Bus Stop");
     	
     	codeLayout.setVisibility(View.VISIBLE);
     	codeButton.setOnClickListener(new OnClickListener() {
@@ -116,27 +121,29 @@ public class SelectBusStationActivity extends MeMapActivity implements  Location
     
     @Override
 	public void onLocationChanged(Location l) {
-		if (isBetterLocation(l,lastKnownLocation)) {
+    	Location last=lastKnownLocation;
+    	super.onLocationChanged(l);
+		if (isBetterLocation(l,last)) {
 			if (!has_moved) {
-				GeoPoint gp=new GeoPoint((int)(l.getLatitude()*1000000), (int)(l.getLongitude()*1000000));
-				mapController.animateTo(gp);
-				has_moved=true;
+				animateToHere(l);
 			}
 			statusTextView.setText(FETCHING_STATIONS);
+			if (fetcher!=null) fetcher.abort();
+			fetcher=new StationsBusFetcher(this);
+	        fetcher.registerCallback(this);
 			fetcher.setLocation(l);
 			fetcher.update();
 		}
-		super.onLocationChanged(l);
 	}
 
 	ArrayList<BusStation> prev_result=new ArrayList<BusStation>();
     /** Called when the background thread has finished the calculation of nearby stations **/
 	@Override
 	public void update() {
-		statusTextView.setText(FETCHING_LOCATION);
+		statusTextView.setText(IMPROVING_LOCATION);
 		ArrayList<BusStation> result=fetcher.getResult();
 		if (result.size()==0) return;
-		if (prev_result.size()!=result.size()) {
+		if (prev_result.size()!=result.size()) { //a bit dangerous...
 			List<Overlay> mapOverlays = mapView.getOverlays();
 			//mapOverlays.clear();
 	        Drawable drawable = this.getResources().getDrawable(R.drawable.buses);
@@ -148,9 +155,19 @@ public class SelectBusStationActivity extends MeMapActivity implements  Location
 	             itemizedoverlay.addOverlay(overlayitem);
 	        }
 	        mapOverlays.add(itemizedoverlay);
+	        animateToResult();
 	        mapView.postInvalidate();
 		}
 		
+	}
+
+
+	private void animateToResult() {
+		if (!has_moved) {
+			GeoPoint gp=new GeoPoint((int)(lastKnownLocation.getLatitude()*1000000), (int)(lastKnownLocation.getLongitude()*1000000));
+			animateToWithOverlays(gp);
+			has_moved=true;
+		}
 	}
 
 	public void showBusDepartures(String code, String snippet) {

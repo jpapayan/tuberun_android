@@ -433,6 +433,7 @@ public class StationDetails {
         switch (line)
         {
             case DLR:
+            	res.put("Abbey Road" , "abr");
                 res.put("All Saints" , "als");
                 res.put("Bank","ban");
                 res.put("Beckton","bec");
@@ -468,8 +469,11 @@ public class StationDetails {
                 res.put("Shadwell","sha");
                 res.put("South Quay","soq");
                 res.put("Stratford","str");
+                res.put("Stratford High Street","shs");
+                res.put("Stratford International","sti");
                 res.put("Tower Gateway","tog");
                 res.put("Westferry","wes");
+                res.put("Westham","weh");
                 res.put("West India Quay","wiq");
                 res.put("West Silvertown","wst");
                 res.put("Woolwich Arsenal","woa");

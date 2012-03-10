@@ -13,18 +13,31 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
-public class SelectStationActivity extends ListActivity {
+public class SelectStationActivity extends ListActivity implements OnClickListener {
+	protected Button backButton;
+	protected Button logoButton;
+	protected TextView titleTextView;
 	private final ArrayList<HashMap<String,Object>> stations_list=new ArrayList<HashMap<String,Object>>();
 	LineType lt;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.select_station);
+		setContentView(R.layout.select_line);
+		
+		backButton = (Button) findViewById(R.id.back_button);
+		logoButton = (Button) findViewById(R.id.logo_button);
+		titleTextView = (TextView) findViewById(R.id.title_textview);
+		backButton.setOnClickListener(this);
+		logoButton.setOnClickListener(this);
+		titleTextView.setText("Select Station");
 		
 		Bundle extras = getIntent().getExtras();
 		String line = (String)extras.get("line");
@@ -85,5 +98,9 @@ public class SelectStationActivity extends ListActivity {
     	}
     }
 
+    @Override
+	public void onClick(View v) {
+		finish();
+	}
 
 }

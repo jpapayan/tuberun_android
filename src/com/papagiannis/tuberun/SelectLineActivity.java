@@ -10,17 +10,28 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class SelectLineActivity extends ListActivity {
-	private final ArrayList<HashMap<String, Object>> lines_list = new ArrayList<HashMap<String, Object>>();
+public class SelectLineActivity extends ListActivity implements OnClickListener {
+	protected Button backButton;
+	protected Button logoButton;
 
+	private final ArrayList<HashMap<String, Object>> lines_list = new ArrayList<HashMap<String, Object>>();
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.select_line);
+		
+		backButton = (Button) findViewById(R.id.back_button);
+		logoButton = (Button) findViewById(R.id.logo_button);
+		backButton.setOnClickListener(this);
+		logoButton.setOnClickListener(this);
 
 		Bundle extras = getIntent().getExtras();
 		String type = "";
@@ -84,6 +95,11 @@ public class SelectLineActivity extends ListActivity {
 
 		}
 
+	}
+
+	@Override
+	public void onClick(View v) {
+		finish();
 	}
 
 }

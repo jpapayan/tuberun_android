@@ -12,11 +12,14 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.papagiannis.tuberun.fetchers.RouteFetcher;
+import com.papagiannis.tuberun.overlays.HereOverlay;
+import com.papagiannis.tuberun.overlays.RouteOverlay;
 
 public class PartialRouteMapActivity extends MeMapActivity  {
 	final PartialRouteMapActivity self=this;
@@ -82,8 +85,7 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 				    		}
 			    	}
 			    	wait_dialog.cancel();
-			    	mapController.setCenter(result.get(0));
-					mapController.animateTo(result.get(0));
+			    	animateToWithOverlays(null);
 			     }
 				
 			};

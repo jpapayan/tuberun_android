@@ -31,25 +31,25 @@
             </intent-filter>
         </activity>
         <activity android:name=".SelectLineActivity"
-                  android:label="Select Line">
+                  android:theme="@android:style/Theme.Black.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity android:name=".SelectStationActivity"
-                  android:label="Select station">
+                  android:theme="@android:style/Theme.Black.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity android:name=".SelectBusStationActivity"
-                  android:label="Select bus station">
+                  android:theme="@android:style/Theme.Black.NoTitleBar"   >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity android:name=".DeparturesActivity"
-                  android:label="Departures">
+                  android:theme="@android:style/Theme.Black.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

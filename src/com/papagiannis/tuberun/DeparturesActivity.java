@@ -20,15 +20,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class DeparturesActivity extends ListActivity implements Observer {
+public class DeparturesActivity extends ListActivity implements Observer, OnClickListener {
+	protected Button backButton;
+	protected Button logoButton;
+	protected TextView stationTextView;
+	
 	private DeparturesFetcher fetcher;
 	private final ArrayList<HashMap<String,Object>> departures_list=new ArrayList<HashMap<String,Object>>();
 	private LineType lt;
 	private String stationcode;
 	private String stationnice;
+	
 	
     /** Called when the activity is first created. */
     @Override
@@ -39,6 +45,13 @@ public class DeparturesActivity extends ListActivity implements Observer {
     
     private void create() {
     	setContentView(R.layout.departures);
+    	backButton = (Button) findViewById(R.id.back_button);
+		logoButton = (Button) findViewById(R.id.logo_button);
+		stationTextView = (TextView) findViewById(R.id.station_textview);
+		
+		backButton.setOnClickListener(this);
+		logoButton.setOnClickListener(this);
+    	
     	departures_list.clear();
     	
     	Bundle extras = getIntent().getExtras();
@@ -47,7 +60,9 @@ public class DeparturesActivity extends ListActivity implements Observer {
 		stationnice = (String)extras.get("stationnice");
 		lt=LinePresentation.getLineTypeRespresentation(line);
 		
-		setTitle(stationnice+" "+getTitle());
+		stationTextView.setText(stationnice);
+		stationTextView.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
+		stationTextView.setTextColor(LinePresentation.getForegroundColor(lt));
     	
 		if (lt==LineType.DLR) fetcher=new DeparturesDLRFetcher(lt, stationcode, stationnice);
 		else fetcher=new DeparturesFetcher(lt, stationcode, stationnice);
@@ -70,10 +85,6 @@ public class DeparturesActivity extends ListActivity implements Observer {
 	public void update() {
 		wait_dialog.dismiss();
 		departures_list.clear();
-		
-		TextView dateView = (TextView) findViewById(R.id.lastupdate);
-		Date d=fetcher.getUpdateTime();
-		dateView.setText("Updated: "+d.getHours()+":"+d.getMinutes());
 		
 		HashMap<String, ArrayList<HashMap<String, String>>> reply=fetcher.getDepartures();
 		for (String platform : reply.keySet()) {
@@ -126,4 +137,9 @@ public class DeparturesActivity extends ListActivity implements Observer {
                 "Fetching data. Please wait...", true);
     	return wait_dialog;
     }
+    
+    @Override
+	public void onClick(View v) {
+		finish();
+	}
 }

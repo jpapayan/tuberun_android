@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -19,20 +20,19 @@ import com.google.android.maps.OverlayItem;
 import com.papagiannis.tuberun.fetchers.Fetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.RouteFetcher;
+import com.papagiannis.tuberun.overlays.HereOverlay;
+import com.papagiannis.tuberun.overlays.RouteOverlay;
 
-public class DirectionsMapActivity extends MapActivity implements Observer {
+public class DirectionsMapActivity extends MeMapActivity implements Observer {
 	MapView mapView;
 	MapController mapController;
 	RouteFetcher fetcher;
+	final DirectionsMapActivity self=this;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.full_screen_map);
-		mapView = (MapView) findViewById(R.id.bus_mapview);
-		mapView.setBuiltInZoomControls(true);
-		mapController = mapView.getController();
 
 		try {
 			Bundle extras = getIntent().getExtras();
@@ -56,14 +56,7 @@ public class DirectionsMapActivity extends MapActivity implements Observer {
 			fetcher.registerCallback(this);
 			fetcher.update();
 
-			Drawable drawable = this.getResources()
-					.getDrawable(R.drawable.here);
-			HereOverlay hereo = new HereOverlay(drawable, this);
-			OverlayItem overlayitem = new OverlayItem(me, "You are here", "");
-			hereo.addOverlay(overlayitem);
-			List<Overlay> overlays = mapView.getOverlays();
-			overlays.add(hereo);
-
+			Drawable drawable;
 			if (isCycleHire)
 				drawable = this.getResources().getDrawable(
 						R.drawable.cycle_hire_pushpin);
@@ -80,13 +73,9 @@ public class DirectionsMapActivity extends MapActivity implements Observer {
 					sb.append("\n");
 				}
 			}
-			overlayitem = new OverlayItem(to, st.getName(), sb.toString());
+			OverlayItem overlayitem = new OverlayItem(to, st.getName(), sb.toString());
 			tube.addOverlay(overlayitem);
-			overlays.add(tube);
-
-			GeoPoint center = calculateCenter(me, to);
-			mapController.setCenter(me);
-			mapController.animateTo(center);
+			mapOverlays.add(tube);
 
 			showDialog(0);
 			mapView.invalidate();
@@ -97,11 +86,6 @@ public class DirectionsMapActivity extends MapActivity implements Observer {
 		}
 	}
 
-	private GeoPoint calculateCenter(GeoPoint me, GeoPoint to) {
-		int lat_middle = (me.getLatitudeE6() + to.getLatitudeE6()) / 2;
-		int long_middle = (me.getLongitudeE6() + to.getLongitudeE6()) / 2;
-		return new GeoPoint(lat_middle, long_middle);
-	}
 
 	private Dialog wait_dialog;
 
@@ -109,6 +93,15 @@ public class DirectionsMapActivity extends MapActivity implements Observer {
 	protected Dialog onCreateDialog(int id) {
 		wait_dialog = ProgressDialog.show(this, "",
 				"Fetching walking directions. Please wait...", true);
+		wait_dialog.setCancelable(true);
+		wait_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				if (fetcher!=null) fetcher.abort();
+				self.finish();
+			}
+		});
 		return wait_dialog;
 	}
 
@@ -124,13 +117,12 @@ public class DirectionsMapActivity extends MapActivity implements Observer {
 		wait_dialog.dismiss();
 		displayRoute = true;
 
-		List<Overlay> overlays = mapView.getOverlays();
 		ArrayList<GeoPoint> points = fetcher.getPoints();
 		for (int i = 1; i < points.size(); i++) {
-			overlays.add(new RouteOverlay(points.get(i - 1), points.get(i),
+			mapOverlays.add(new RouteOverlay(points.get(i - 1), points.get(i),
 					Color.BLUE));
 		}
-
+		animateToWithOverlays(null);
 		mapView.invalidate();
 	}
 
