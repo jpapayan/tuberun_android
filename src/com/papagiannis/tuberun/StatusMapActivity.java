@@ -27,7 +27,7 @@ public class StatusMapActivity extends Activity {
 	    	if (type.equals("maps")) {
 	    		WebSettings settings=mWebView.getSettings();
 	    		settings.setBuiltInZoomControls(true);
-	    		settings.setDefaultZoom(ZoomDensity.FAR);
+	    		settings.setUseWideViewPort(true);
 	    		url="file:///android_asset/map_";
 	    		String last=extras.getString("line").toLowerCase()+".html";
 	    		url+=last;
@@ -38,6 +38,10 @@ public class StatusMapActivity extends Activity {
 	 	       	else url="http://www.tfl.gov.uk/tfl/common/maps/swf/map-wrapper.swf?offset=now&mode=track";
 	    	}
 	    	mWebView.loadUrl(url);
+	    	if (type.equals("maps")) {
+	    		WebSettings settings=mWebView.getSettings();
+	    		settings.setDefaultZoom(ZoomDensity.FAR);
+	    	}
 	    }
 	    
 	}
