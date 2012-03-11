@@ -8,115 +8,178 @@ import com.papagiannis.tuberun.binders.StatusesBinder;
 import com.papagiannis.tuberun.favorites.Favorite;
 import com.papagiannis.tuberun.fetchers.*;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.SimpleAdapter;
+import android.widget.TabHost;
 import android.widget.TextView;
 
-public class StatusActivity extends ListActivity implements Observer {
-	private StatusesFetcher fetcher;
-	private boolean isWeekend=false;
+public class StatusActivity extends FragmentActivity {
+	private static final int MAP_WARNING_DIALOG=-1;
+	private final StatusActivity self=this;
+	TabHost mTabHost;
+	ViewPager mViewPager;
+	TabsAdapter mTabsAdapter;
+	Button back_button;
+	Button logo_button;
+	TextView title_textview;
+	StatusesFragment nowFragment;
+	StatusesFragment weekendFragment;
+	Button updateButton;
+	Button mapButton;
+	
+	private StatusesFetcher nowFetcher;
+	private StatusesFetcher weekendFetcher;
+	
+	private SharedPreferences preferences;
+	private boolean mapWarningShown=false;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		create();
+		setContentView(R.layout.statuses);
+		setupReferences();
+		create(savedInstanceState);
     }
-    private void create() {
-    	setContentView(R.layout.statuses);
-    	status_list.clear();
+    
+    private void setupReferences() {
+    	back_button = (Button) findViewById(R.id.back_button);
+		logo_button = (Button) findViewById(R.id.logo_button);
+		title_textview = (TextView) findViewById(R.id.title_textview);
+		mTabHost = (TabHost) findViewById(android.R.id.tabhost);
+		mViewPager = (ViewPager) findViewById(R.id.pager);
+		updateButton = (Button) findViewById(R.id.update_button);
+		mapButton = (Button) findViewById(R.id.map_button);
+    }
+    
+    private void create(Bundle savedInstanceState) {
+    	preferences = getPreferences(MODE_PRIVATE);
+        mapWarningShown = preferences.getBoolean("mapWarningShown",false);
     	
-		fetcher=StatusesFetcher.getInstance(isWeekend);
-		fetcher.registerCallback(this);
-		showDialog(0);
-		fetcher.update();
+    	OnClickListener back_listener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				self.finish();
+			}
+		};
+		back_button.setOnClickListener(back_listener);
+		logo_button.setOnClickListener(back_listener);
+    	
+    	mTabHost.setup();
+    	mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
+    	mTabsAdapter.addTab(
+				mTabHost.newTabSpec("now").setIndicator("Now"),
+				StatusesFragment.class, null);
+		mTabsAdapter.addTab(
+				mTabHost.newTabSpec("weekend").setIndicator("This Weekend"),
+				StatusesFragment.class, null);
+		
+		nowFragment = (StatusesFragment) mTabsAdapter.getItem(0);
+		weekendFragment = (StatusesFragment) mTabsAdapter.getItem(1);
+		
+		if (savedInstanceState != null) {
+			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+		}
+    	
+		nowFetcher=StatusesFetcher.getInstance(false);
+		nowFragment.setFetcher(nowFetcher);
+		
+		weekendFetcher=StatusesFetcher.getInstance(true);
+		weekendFragment.setFetcher(weekendFetcher);
 		
 		Favorite.getFavorites(this);
 		
-		View updateButton = findViewById(R.id.button_update);
+		
         updateButton.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		showDialog(0);
-        		fetcher.update();
+        		nowFragment.onClick();
+        		weekendFragment.onClick();
         	}
         });
+        
+        mapButton.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v) {
+        		if (!mapWarningShown) showMapWarning();
+        		else showMap();
+        	}
+        });
+        
+        nowFetcher.update();
+        weekendFetcher.update();
     }
     
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.layout.statuses_menu, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.weekend_switch:
-        	isWeekend=!isWeekend;
-        	if (isWeekend) item.setTitle(R.string.show_now);
-        	else item.setTitle(R.string.show_weekend);
-        	create();
-            return true;
-        case R.id.show_map:
-        	Intent i=new Intent(this, StatusMapActivity.class);
-        	i.putExtra("type", "status");
-        	i.putExtra("isWeekend", Boolean.toString(isWeekend));
-    		startActivity(i);
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
-    private final ArrayList<HashMap<String,Object>> status_list=new ArrayList<HashMap<String,Object>>();
-	@Override
-	public void update() {
-		wait_dialog.dismiss();
-		status_list.clear();
-		
-		TextView dateView = (TextView) findViewById(R.id.lastupdate);
-		Date d=fetcher.getUpdateTime();
-		dateView.setText("Updated: "+d.getHours()+":"+d.getMinutes());
-		
-		for (LineType lt: LineType.allStatuses()) {
-			HashMap<String,Object> m=new HashMap<String,Object>();
-			m.put("line", LinePresentation.getStringRespresentation(lt));
-			Status s=fetcher.getStatus(lt);
-			if (s != null) {
-				m.put("status", s.short_status);
-				m.put("details", s.long_status);
-			} else {
-				m.put("status", "Failed");
-				m.put("details", "");
-			}
-			Favorite f=new Favorite(lt,null);
-			f.setIdentification(Boolean.toString(isWeekend));
-			Boolean isFavorite=Favorite.isFavorite(f);
-			m.put("favorite", Boolean.toString(isFavorite));
-			status_list.add(m);	
-		}
-		
-		SimpleAdapter adapter=new SimpleAdapter(this,
-				status_list, 
-				R.layout.line_status,
-				new String[]{"line","status","details", "favorite"},
-				new int[]{R.id.line_label, R.id.status_label ,R.id.details_label, R.id.add_favorite});
-		adapter.setViewBinder(new StatusesBinder(isWeekend, this));
-		setListAdapter(adapter);
-		
+    private void showMap() {
+		Intent i=new Intent(self, StatusMapActivity.class);
+    	i.putExtra("type", "status");
+    	i.putExtra("isWeekend", Boolean.toString(mTabHost.getCurrentTab()==1));
+		startActivity(i);
 	}
-
-	private Dialog wait_dialog;
-    @Override
-    protected Dialog onCreateDialog(int id) {
-    	wait_dialog = ProgressDialog.show(this, "", 
-                "Fetching data. Please wait...", true);
-    	return wait_dialog;
-    }
+    
+    private void showMapWarning() {
+		showDialog(MAP_WARNING_DIALOG);
+		mapWarningShown=true;
+		Editor editor=preferences.edit();
+		editor.putBoolean("mapWarningShown", mapWarningShown);
+		editor.commit();
+	}
+    
+    
+    private Dialog wait_dialog;
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Dialog result=null;
+		switch (id) {
+		case MAP_WARNING_DIALOG:
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Flash Required")
+					.setMessage("You must have Flash player installed to see the online tube status map.")
+					.setCancelable(true)
+					.setPositiveButton("I have it",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									wait_dialog.cancel();
+									showMap();
+								}
+							})
+					.setNeutralButton("Download", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							Intent intent = new Intent(Intent.ACTION_VIEW);
+							intent.setData(Uri.parse("market://details?id=com.adobe.flashplayer"));
+							startActivity(intent);
+						}
+					})
+					.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							wait_dialog.cancel();
+						}
+					});
+			wait_dialog = builder.create();
+			result = wait_dialog;
+			break;
+		}
+		return result;
+    
+	}
 }

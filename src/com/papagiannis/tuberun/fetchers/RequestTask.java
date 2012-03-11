@@ -2,7 +2,10 @@ package com.papagiannis.tuberun.fetchers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
@@ -31,6 +34,11 @@ public class RequestTask extends AsyncTask<String, String, String> {
 		this.cb = cb;
 	}
 	
+	public RequestTask setDesktopUserAgent() {
+		myUserAgent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.12 Safari/535.11";
+		return this;
+	}
+	
 	CookieStore cookieStore ;
     HttpContext localContext ;
 	
@@ -55,7 +63,20 @@ public class RequestTask extends AsyncTask<String, String, String> {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				response.getEntity().writeTo(out);
 				out.close();
-				responseString = out.toString();
+				String encoding="ISO-8859-1";
+				boolean isUTF=false;
+				Header[] headers=response.getAllHeaders();
+				for (Header header:headers) {
+					String s=header.toString();
+					if (header.getName().equals("Content-Type") && header.getValue().contains("utf-8")) {
+						isUTF=true;
+						break;
+					}
+				}
+				if (isUTF) {
+					encoding="UTF-8";
+				}
+				responseString = out.toString(encoding);
 			} else {
 				// Closes the connection.
 				response.getEntity().getContent().close();

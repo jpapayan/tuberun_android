@@ -10,8 +10,8 @@ import com.papagiannis.tuberun.Status;
 
 public class StatusesFetcher extends Fetcher {
 	// region private state
-	private ArrayList<Status> _all_statuses = new ArrayList<Status>();
-	private Date last_update;
+	protected ArrayList<Status> _all_statuses = new ArrayList<Status>();
+	protected Date last_update;
 
 	public Boolean forWeekend() {
 		return statusurl == WEEKENDURL;
@@ -22,7 +22,7 @@ public class StatusesFetcher extends Fetcher {
 	private final String NOWURL = "http://tuberun.dyndns.org:55559/getStatuses.php";
 	// private final String NOWURL = "http://localhost:55559/getStatuses.php";
 	private final String WEEKENDURL = "http://www.tfl.gov.uk/tfl/livetravelnews/realtime/track.aspx?offset=weekend";
-	private String statusurl;
+	protected String statusurl;
 
 	// region constructors
 	public StatusesFetcher() {
@@ -31,7 +31,11 @@ public class StatusesFetcher extends Fetcher {
 	public static StatusesFetcher fetcherNowSigleton;
 	public static StatusesFetcher fetcherWeekendSigleton;
 
-	public static StatusesFetcher getInstance(boolean forWeekend) {
+	public static StatusesFetcher getInstance() {
+		return getInstance(false);
+	}
+
+	public static StatusesFetcher getInstance(Boolean forWeekend) {
 		if (!forWeekend) {
 			if (fetcherNowSigleton == null) {
 				fetcherNowSigleton = new StatusesFetcher();
@@ -58,7 +62,8 @@ public class StatusesFetcher extends Fetcher {
 
 	@Override
 	public Date getUpdateTime() {
-		if (last_update==null) last_update=new Date();
+		if (last_update == null)
+			last_update = new Date();
 		return (Date) last_update.clone();
 	}
 
@@ -71,28 +76,31 @@ public class StatusesFetcher extends Fetcher {
 		return null;
 	}
 
-	private AtomicBoolean isFirst = new AtomicBoolean(true);
+	protected AtomicBoolean isFirst = new AtomicBoolean(true);
 
 	public void update() {
 		boolean first = isFirst.compareAndSet(true, false);
 		if (!first)
 			return; // only one at a time
-		new RequestTask(new HttpCallback() {
+		RequestTask task = new RequestTask(new HttpCallback() {
 			public void onReturn(String s) {
 				getStatusesCallBack(s);
 			}
-		}).execute(statusurl);
+		});
+		if (forWeekend()) task.setDesktopUserAgent();
+		task.execute(statusurl);
 	}
 
-	private String beautify(String problem)
-    {
-        problem = problem.replaceAll("<(.*?)>", " ");
-        problem = problem.replaceAll("(\\s)+", " ");
-        problem = problem.replaceAll("&nbsp;", " ");
-        return problem.trim();
-    }
-	private void getStatusesCallBack(String reply) {
+	protected String beautify(String problem) {
+		problem = problem.replaceAll("<(.*?)>", " ");
+		problem = problem.replaceAll("(\\s)+", " ");
+		problem = problem.replaceAll("&nbsp;", " ");
+		return problem.trim();
+	}
+
+	protected void getStatusesCallBack(String reply) {
 		try {
+			reply = unCapitalizeTags(reply);
 			HashMap<String, String> result = new HashMap<String, String>();
 			HashMap<String, String> problems = new HashMap<String, String>();
 			String[] lines = new String[] { "bakerloo", "central", "circle",
@@ -153,7 +161,7 @@ public class StatusesFetcher extends Fetcher {
 				last_update = now;
 				_all_statuses = new ArrayList<Status>();
 				for (String name : result.keySet()) {
-					LineType ln=LineType.fromString(name);
+					LineType ln = LineType.fromString(name);
 					String rstatus;
 					String rproblems;
 					if (result.containsKey(name))
@@ -164,17 +172,39 @@ public class StatusesFetcher extends Fetcher {
 						rproblems = problems.get(name);
 					else
 						rproblems = "";
-					_all_statuses.add(new Status(ln, rstatus, beautify(rproblems)));
+					_all_statuses.add(new Status(ln, rstatus,
+							beautify(rproblems)));
 				}
 				notifyClients();
 			} else
 				throw new Exception("Wrong number of lines returned.");
 		} catch (Exception e) {
-			_all_statuses=new ArrayList<Status>();
+			_all_statuses = new ArrayList<Status>();
 			notifyClients();
 		} finally {
 			isFirst.set(true);
 		}
 	}
 
+	private String unCapitalizeTags(String reply) {
+		StringBuilder res=new StringBuilder(reply.length());
+		boolean inTag=false;
+		for (int i=0;i<reply.length();i++) {
+			char c=reply.charAt(i);
+			switch (c) {
+			case '<':
+				inTag=true;
+				break;
+			case '>':
+			case ' ':
+				inTag=false;
+				break;
+			default:
+				if (inTag) c=Character.toLowerCase(c);
+				break;
+			}
+			res.append(c);
+		}
+		return res.toString();
+	}
 }

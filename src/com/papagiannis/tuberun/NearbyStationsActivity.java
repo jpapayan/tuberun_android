@@ -91,7 +91,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 		// mainmenu_layout.setOnClickListener(back_listener);
 		back_button.setOnClickListener(back_listener);
 		logo_button.setOnClickListener(back_listener);
-		title_textview.setOnClickListener(back_listener);
+//		title_textview.setOnClickListener(back_listener);
 		
 		locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);

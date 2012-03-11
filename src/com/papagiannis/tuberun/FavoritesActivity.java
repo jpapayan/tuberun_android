@@ -69,6 +69,7 @@ public class FavoritesActivity extends ListActivity implements Observer, OnClick
         			}
     			}
     			fc=StatusesFetcher.getInstance(forWeekend);
+    			
     			f.setFetcher(fc);
     		}
     		fc.clearCallbacks();

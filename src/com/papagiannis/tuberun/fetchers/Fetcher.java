@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.test.IsolatedContext;
 import android.util.Log;
 
 public abstract class Fetcher implements Serializable
