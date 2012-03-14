@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
+import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
@@ -30,15 +31,15 @@ import com.papagiannis.tuberun.fetchers.ReverseGeocodeFetcher;
 public class NearbyStationsActivity extends FragmentActivity implements
 		LocationListener {
 	FragmentActivity self = this;
-	
-	ReverseGeocodeFetcher geocoder=new ReverseGeocodeFetcher(this, null);
-	Observer geolocationObserver=new Observer() {
+
+	ReverseGeocodeFetcher geocoder = new ReverseGeocodeFetcher(this, null);
+	Observer geolocationObserver = new Observer() {
 		@Override
 		public void update() {
 			displayLocation(geocoder.getResult());
 		}
 	};
-	
+
 	TabHost mTabHost;
 	ViewPager mViewPager;
 	TabsAdapter mTabsAdapter;
@@ -70,9 +71,17 @@ public class NearbyStationsActivity extends FragmentActivity implements
 		mTabsAdapter.addTab(
 				mTabHost.newTabSpec("underground").setIndicator("Underground"),
 				NearbyStationsListFragment.class, null);
+		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
+		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
+		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.tube);
+
 		mTabsAdapter.addTab(
 				mTabHost.newTabSpec("cycle hire").setIndicator("Cycle Hire"),
 				NearbyCycleStationsListFragment.class, null);
+		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
+		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
+		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.cycle_hire);
+
 
 		if (savedInstanceState != null) {
 			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
@@ -91,18 +100,18 @@ public class NearbyStationsActivity extends FragmentActivity implements
 		// mainmenu_layout.setOnClickListener(back_listener);
 		back_button.setOnClickListener(back_listener);
 		logo_button.setOnClickListener(back_listener);
-//		title_textview.setOnClickListener(back_listener);
-		
+		// title_textview.setOnClickListener(back_listener);
+
 		locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
 		requestLocationUpdates();
-//		 lastKnownLocation =
-//		 locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//		 if (lastKnownLocation==null) lastKnownLocation =
-//		 locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//		 if (lastKnownLocation!=null) {
-//		 undergroundFragment.locationChanged(lastKnownLocation);
-//		 }
+		// lastKnownLocation =
+		// locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		// if (lastKnownLocation==null) lastKnownLocation =
+		// locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		// if (lastKnownLocation!=null) {
+		// undergroundFragment.locationChanged(lastKnownLocation);
+		// }
 	}
 
 	@Override
@@ -139,13 +148,13 @@ public class NearbyStationsActivity extends FragmentActivity implements
 			cycleFragment.locationChanged(lastKnownLocation);
 		}
 	}
-	
+
 	private void reverseGeocode(Location l) {
 		geocoder.abort();
-		geocoder=new ReverseGeocodeFetcher(this,l);
+		geocoder = new ReverseGeocodeFetcher(this, l);
 		geocoder.registerCallback(geolocationObserver).update();
 	}
-	
+
 	private void displayLocation(List<Address> result) {
 		if (result.size() == 0)
 			return;
@@ -155,7 +164,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 			location_textview.setText(previous_location);
 			location_accuracy_textview.setText("accuracy="
 					+ lastKnownLocation.getAccuracy() + "m");
-		} 
+		}
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
@@ -130,12 +131,26 @@ public class TabsAdapter extends FragmentPagerAdapter implements
 	public void onPageScrollStateChanged(int state) {
 	}
 
-	public static View createTabView(final Context context, final String text) {
+	private TextView tabsTextView;
+	private ImageView tabsImageView;
+	public  View createTabView(final Context context, final String text) {
 		View view = LayoutInflater.from(context)
 				.inflate(R.layout.tabs_background, null);
-		TextView tv = (TextView) view.findViewById(R.id.tabs_textview);
-		tv.setText(text.toUpperCase());
+		tabsTextView = (TextView) view.findViewById(R.id.tabs_textview);
+		tabsTextView.setText(text.toUpperCase());
+		tabsImageView = (ImageView) view.findViewById(R.id.tabs_imageview);
 		return view;
 	}
+
+	public TextView getTabsTextView() {
+		return tabsTextView;
+	}
+
+	public ImageView getTabsImageView() {
+		return tabsImageView;
+	}
+
+	
+	
 
 }

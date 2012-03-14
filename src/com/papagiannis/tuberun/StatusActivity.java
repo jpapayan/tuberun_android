@@ -82,7 +82,7 @@ public class StatusActivity extends FragmentActivity {
 		back_button.setOnClickListener(back_listener);
 		logo_button.setOnClickListener(back_listener);
     	
-    	mTabHost.setup();
+		mTabHost.setup();
     	mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
     	mTabsAdapter.addTab(
 				mTabHost.newTabSpec("now").setIndicator("Now"),
@@ -90,7 +90,6 @@ public class StatusActivity extends FragmentActivity {
 		mTabsAdapter.addTab(
 				mTabHost.newTabSpec("weekend").setIndicator("This Weekend"),
 				StatusesFragment.class, null);
-		
 		nowFragment = (StatusesFragment) mTabsAdapter.getItem(0);
 		weekendFragment = (StatusesFragment) mTabsAdapter.getItem(1);
 		

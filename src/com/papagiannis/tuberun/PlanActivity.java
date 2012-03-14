@@ -77,10 +77,10 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 		mTabHost.setup();
     	mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
     	mTabsAdapter.addTab(
-				mTabHost.newTabSpec("New Journey").setIndicator("new"),
+				mTabHost.newTabSpec("New").setIndicator("new"),
 				PlanFragment.class, null);
 		mTabsAdapter.addTab(
-				mTabHost.newTabSpec("Stored Journeys").setIndicator("old"),
+				mTabHost.newTabSpec("Saved").setIndicator("old"),
 				PlanStoredFragment.class, null);
 		
 		planFragment = (PlanFragment)  mTabsAdapter.getItem(0);
