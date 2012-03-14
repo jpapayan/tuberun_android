@@ -1,12 +1,14 @@
 package com.papagiannis.tuberun.plan;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 import android.R;
 import android.location.Location;
 
-public class PartialRoute {
+public class PartialRoute implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private int minutes;
 	private int distance;
 	

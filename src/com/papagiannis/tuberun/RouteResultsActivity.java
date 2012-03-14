@@ -15,11 +15,15 @@ import com.papagiannis.tuberun.plan.PartialRouteType;
 import com.papagiannis.tuberun.plan.Plan;
 import com.papagiannis.tuberun.plan.Point;
 import com.papagiannis.tuberun.plan.Route;
+import com.papagiannis.tuberun.stores.PlanStore;
+import com.papagiannis.tuberun.stores.Store;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -27,6 +31,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,16 +50,20 @@ import uk.me.jstott.jcoord.OSRef;
 
 public class RouteResultsActivity extends Activity {
 	public static ArrayList<Integer> coordinates = new ArrayList<Integer>();
-	public static HashMap<Integer, ArrayList<Object>> coordinatesType = new HashMap<Integer, ArrayList<Object>>();;
+	public static HashMap<Integer, ArrayList<Object>> coordinatesType = new HashMap<Integer, ArrayList<Object>>();
 	final RouteResultsActivity self = this;
 	final SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 	ViewPager pager;
 	Button back_button;
 	Button logo_button;
 	Button map_button;
+	Button current_save_button;
+	Button save_button;
+	Button save_active_button;
 	TextView title_textview;
 	TextView route_textview;
 	Plan plan;
+	PlanStore store;
 
 	ListView route_list;
 	ListView partial_route_list;
@@ -63,7 +72,25 @@ public class RouteResultsActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.route);
+		instantiatePlan();
 		create();
+	}
+
+	private void instantiatePlan() {
+		try {
+			store = PlanStore.getInstance();
+			Bundle extras = getIntent().getExtras();
+			if (extras!=null && extras.containsKey("planStoreIndex")) {
+				Integer planNo = (Integer) extras.get("planStoreIndex");
+				if (planNo != null && planNo >= 0 && planNo < store.size(this)) {
+					plan = store.get(planNo, this);
+				} else
+					plan = PlanActivity.getPlan();
+			} else
+				plan = PlanActivity.getPlan();
+		} catch (Exception e) {
+			Log.w("RouteResultsActivity", e);
+		}
 	}
 
 	private void create() {
@@ -71,6 +98,8 @@ public class RouteResultsActivity extends Activity {
 		back_button = (Button) findViewById(R.id.back_button);
 		logo_button = (Button) findViewById(R.id.logo_button);
 		map_button = (Button) findViewById(R.id.map_button);
+		save_active_button = (Button) findViewById(R.id.save_active_button);
+		save_button = (Button) findViewById(R.id.save_button);
 		title_textview = (TextView) findViewById(R.id.title_textview);
 		OnClickListener back_listener = new OnClickListener() {
 			@Override
@@ -81,6 +110,27 @@ public class RouteResultsActivity extends Activity {
 		back_button.setOnClickListener(back_listener);
 		logo_button.setOnClickListener(back_listener);
 		title_textview.setOnClickListener(back_listener);
+
+		if (plan.isStored())
+			current_save_button = save_active_button;
+		else
+			current_save_button = save_button;
+		current_save_button.setVisibility(View.VISIBLE);
+
+		save_button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (!plan.isStored()) {
+					plan.setStored(true);
+					store.add(plan, self);
+					current_save_button.setVisibility(View.GONE);
+					current_save_button = save_active_button;
+					current_save_button.setVisibility(View.VISIBLE);
+				}
+			}
+		});
+		
 
 		PagerAdapter pageradapter = new PagerAdapter() {
 
@@ -141,9 +191,11 @@ public class RouteResultsActivity extends Activity {
 				switch (i) {
 				case 0:
 					map_button.setVisibility(View.GONE);
+					current_save_button.setVisibility(View.VISIBLE);
 					break;
 				case 1:
 					map_button.setVisibility(View.VISIBLE);
+					current_save_button.setVisibility(View.GONE);
 					break;
 				}
 			}
@@ -160,18 +212,10 @@ public class RouteResultsActivity extends Activity {
 
 			}
 		});
-		plan = PlanActivity.getPlan();
 	}
 
 	private void initialiseRouteTextView() {
-		StringBuilder sb = new StringBuilder();
-		if (plan.getStartingType() == Point.LOCATION)
-			sb.append("Current GPS Location");
-		else
-			sb.append(plan.getStartingString());
-		sb.append(" to ");
-		sb.append(plan.getDestination());
-		route_textview.setText(sb);
+		route_textview.setText(plan.toString());
 	}
 
 	private void initialiseRouteList(ListView listview) {
@@ -257,7 +301,8 @@ public class RouteResultsActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if (position==route.getPartials().size()) return;
+				if (position == route.getPartials().size())
+					return;
 				PartialRoute pr = route.getPartial(position);
 
 				coordinates = pr.getCoordinates();
@@ -286,17 +331,20 @@ public class RouteResultsActivity extends Activity {
 
 				ArrayList<PartialRoute> partials = route.getPartials();
 				ArrayList<Integer> all = new ArrayList<Integer>();
-				int i=0;
+				int i = 0;
 				for (PartialRoute pr : partials) {
 					all.addAll(pr.getCoordinates());
 
 					ArrayList<Object> e = new ArrayList<Object>(3);
-					e.add(PartialRoutesBinder.getImageColor(serialiseMotType(pr)));
+					e.add(PartialRoutesBinder
+							.getImageColor(serialiseMotType(pr)));
 					e.add(pr.getIcon());
 					e.add(pr.getDirections());
 					coordinatesType.put(i, e);
-					i+=pr.getCoordinates().size()/2; //PartialRouteMapActivity will 
-													 //be converting to Locations.
+					i += pr.getCoordinates().size() / 2; // PartialRouteMapActivity
+															// will
+															// be converting to
+															// Locations.
 				}
 				coordinates = all;
 
@@ -308,7 +356,7 @@ public class RouteResultsActivity extends Activity {
 
 	private String serialiseMotType(PartialRoute proute) {
 		String stringType;
-		PartialRouteType type=proute.getMeansOfTransportBareType();
+		PartialRouteType type = proute.getMeansOfTransportBareType();
 		if (type != PartialRouteType.TUBE)
 			stringType = proute.getMeansOfTransportType();
 		else

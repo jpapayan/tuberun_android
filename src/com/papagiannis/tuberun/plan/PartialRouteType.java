@@ -1,10 +1,9 @@
 package com.papagiannis.tuberun.plan;
 
 import com.papagiannis.tuberun.R;
-
 import android.graphics.Color;
 
-public enum PartialRouteType {
+public enum PartialRouteType  {
 	BOAT, BUS, DLR, RAIL, TUBE, COACH, WALK;
 
 	public static String toString(PartialRouteType p) {

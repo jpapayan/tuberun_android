@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="8" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/WhiteText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:background="#99000000"
+                android:text="What is your destination?" />
+
+            <EditText
+                android:id="@+id/destination_edittext"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:inputType="text"
+                android:text=" " />
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:stretchColumns="*" >
+
+                <TableRow>
+
+                    <RadioGroup
+                        android:id="@+id/destination_radiogroup"
+                        android:orientation="vertical" >
+
+                        <RadioButton
+                            android:id="@+id/tostation_radiobutton"
+                            android:checked="true"
+                            android:text="Station or stop" />
+
+                        <RadioButton
+                            android:id="@+id/topostcode_radiobutton"
+                            android:text="Postcode" />
+
+                        <RadioButton
+                            android:id="@+id/toaddress_radiobutton"
+                            android:text="Address" />
+
+                        <RadioButton
+                            android:id="@+id/topoi_radiobutton"
+                            android:text="Place of interest" />
+                    </RadioGroup>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:gravity="center"
+                        android:orientation="vertical" >
+
+                        <Button
+                            android:id="@+id/go_button"
+                            android:layout_width="90dip"
+                            android:layout_height="80dip"
+                            android:text="Go" />
+
+                        <Button
+                            android:id="@+id/advanced_button"
+                            android:layout_width="90dip"
+                            android:layout_height="wrap_content"
+                            android:text="More>>" />
+                    </LinearLayout>
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/previous_textview"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:background="#99000000"
+            android:text="Past destinations" />
+
+        <LinearLayout
+            android:id="@+id/previous_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:id="@+id/advanced_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/WhiteText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:background="#99000000"
+                android:text="What is your starting point?" />
+
+            <CheckBox
+                android:id="@+id/fromcurrent_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:checked="true"
+                android:text="My current location" />
+
+            <EditText
+                android:id="@+id/from_edittext"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:enabled="false"
+                android:inputType="text"
+                android:text=" " />
+
+            <RadioGroup
+                android:id="@+id/from_radiogroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:orientation="vertical" >
+
+                <RadioButton
+                    android:id="@+id/fromstation_radiobutton"
+                    android:checked="true"
+                    android:enabled="false"
+                    android:text="Station or stop" />
+
+                <RadioButton
+                    android:id="@+id/frompostcode_radiobutton"
+                    android:enabled="false"
+                    android:text="Postcode" />
+
+                <RadioButton
+                    android:id="@+id/fromaddress_radiobutton"
+                    android:enabled="false"
+                    android:text="Address" />
+
+                <RadioButton
+                    android:id="@+id/frompoi_radiobutton"
+                    android:enabled="false"
+                    android:text="Place of interest" />
+            </RadioGroup>
+
+            <TextView
+                style="@style/WhiteText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:background="#99000000"
+                android:text="Do you have any time constraints?" />
+
+            <CheckBox
+                android:id="@+id/traveldate_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:text="I want to travel at a future date" />
+
+            <Button
+                android:id="@+id/traveldate_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:enabled="false"
+                android:text="Enter travel date" />
+
+            <RadioButton
+                android:id="@+id/departtime_radiobutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:checked="true"
+                android:text="I want to depart at a specific time" />
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="55dip"
+                android:stretchColumns="*" >
+
+                <TableRow>
+
+                    <RadioButton
+                        android:id="@+id/departtimenow_radiobutton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Now" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <RadioButton
+                            android:id="@+id/departtimelater_radiobutton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false" />
+
+                        <Button
+                            android:id="@+id/departtimelater_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:text="Enter time" />
+                    </LinearLayout>
+                </TableRow>
+            </TableLayout>
+
+            <RadioButton
+                android:id="@+id/arrivetime_radiobutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:checked="false"
+                android:text="I want to arrive at a specific time" />
+
+            <Button
+                android:id="@+id/arrivetime_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:enabled="false"
+                android:text="Enter time" />
+
+            <TextView
+                style="@style/WhiteText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:background="#99000000"
+                android:text="Any means of transport you prefer?" />
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*" >
+
+                <TableRow>
+
+                    <CheckBox
+                        android:id="@+id/usetube_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:checked="true"
+                        android:text="Tube" />
+
+                    <CheckBox
+                        android:id="@+id/usebus_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:checked="true"
+                        android:text="Buses" />
+                </TableRow>
+
+                <TableRow>
+
+                    <CheckBox
+                        android:id="@+id/usedlr_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:checked="true"
+                        android:text="DLR" />
+
+                    <CheckBox
+                        android:id="@+id/userail_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:checked="true"
+                        android:text="Rail" />
+                </TableRow>
+
+                <TableRow>
+
+                    <CheckBox
+                        android:id="@+id/useboat_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:checked="true"
+                        android:text="Boat" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

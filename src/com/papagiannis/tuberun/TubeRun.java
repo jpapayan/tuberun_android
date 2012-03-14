@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.OysterFetcher;
+import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	private final TubeRun self = this;

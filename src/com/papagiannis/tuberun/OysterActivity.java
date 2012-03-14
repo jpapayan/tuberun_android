@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.OysterFetcher;
+import com.papagiannis.tuberun.stores.CredentialsStore;
 
 import android.app.Activity;
 import android.app.AlertDialog;

@@ -1,4 +1,4 @@
-package com.papagiannis.tuberun;
+package com.papagiannis.tuberun.stores;
 
 import java.io.EOFException;
 import java.io.FileInputStream;
@@ -47,6 +47,17 @@ public class Store<T> {
 		}
 	}
 
+	public T get(int i, Activity activity) throws IndexOutOfBoundsException {
+		ArrayList<T> list=getAll(activity);
+		if (i<list.size()) return list.get(i);
+		else throw new IndexOutOfBoundsException();
+	}
+	
+	public int size(Activity activity) {
+		ArrayList<T> list=getAll(activity);
+		return list.size();
+	}
+	
 	public  void storeToFile(Activity activity) {
 
 		FileOutputStream fos;
@@ -66,7 +77,8 @@ public class Store<T> {
 	}
 	
 	public void add(T f, Activity a) {
-		if (list!=null) list.add(f);
+		if (list==null) list=new ArrayList<T>();
+		list.add(f);
 		storeToFile(a);
 	}
 	

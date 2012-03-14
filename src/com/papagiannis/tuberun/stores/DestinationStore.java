@@ -1,8 +1,9 @@
-package com.papagiannis.tuberun;
+package com.papagiannis.tuberun.stores;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.papagiannis.tuberun.Destination;
 import com.papagiannis.tuberun.plan.Point;
 
 import android.app.Activity;

@@ -1,6 +1,5 @@
-package com.papagiannis.tuberun;
+package com.papagiannis.tuberun.stores;
 
-import com.papagiannis.tuberun.Store;
 
 public class CredentialsStore extends Store<String> {
 	private static CredentialsStore instanceCredentials;

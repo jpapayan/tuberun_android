@@ -47,6 +47,14 @@
 	<style name="MapButton" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/map_button_selector</item>
 	</style>
+	<style name="SaveButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/save_button_selector</item>
+	</style>
+	<style name="SaveButtonActive" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/save_button_active_selector</item>
+	</style>
 
+	<drawable name="tuberun_semitransparent">#99000000</drawable>
 	<drawable name="tuberun_red">#99801219</drawable>
+	<drawable name="tuberun_red_bright">#99DA2B2C</drawable>
 </resources>

@@ -1,14 +1,15 @@
 package com.papagiannis.tuberun.plan;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Route {
+public class Route implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private int changes;
 	private int distance;
 	private Date duration;
-	
-	ArrayList<PartialRoute> partials=new ArrayList<PartialRoute>();
+	private ArrayList<PartialRoute> partials=new ArrayList<PartialRoute>();
 	
 	public Date getDepartureTime() {
 		Date ret=new Date();

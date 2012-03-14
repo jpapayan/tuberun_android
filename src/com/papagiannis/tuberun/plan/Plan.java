@@ -1,5 +1,6 @@
 package com.papagiannis.tuberun.plan;
 
+import java.io.Serializable;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,41 +15,39 @@ import android.text.AlteredCharSequence;
  * user choices to one object of this class.
  * The fetcher issues the request and then assigns to plan the resulting Routes. 
  */
-public class Plan {
-	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-	private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+public class Plan implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
+	
 	private String destination = "";
-	private ArrayList<String> destinationAlternatives=new ArrayList<String>();
+	private transient ArrayList<String> destinationAlternatives=new ArrayList<String>();
 	private Point destinationType = Point.STATION;
 	private String startingString = "";
-	private ArrayList<String> startingAlternatives=new ArrayList<String>();
+	private transient ArrayList<String> startingAlternatives=new ArrayList<String>();
 	private Point startingType = Point.LOCATION;
-	private Location startingLocation = null;
+	private transient Location startingLocation = null;
 
 	private boolean timeConstraint = true; // true for departure, false for
 											// arrival
 	private boolean timeDepartureNow = true;
 	private Date timeDepartureLater = null;
 	private Date timeArrivalLater = null;
-
 	private Date travelDate=null;
 	
-	private boolean useTube = true;
-	private boolean useBuses = true;
-	private boolean useDLR = true;
-	private boolean useRail = true;
-	private boolean useBoat = true;
+	private transient boolean useTube = true;
+	private transient boolean useBuses = true;
+	private transient boolean useDLR = true;
+	private transient boolean useRail = true;
+	private transient boolean useBoat = true;
 
 	private ArrayList<Route> routes = new ArrayList<Route>();
+	private transient String error = "";
+	
+	private Boolean isStored=false;
 
 	public Plan() {
-	}
-
-	public String getGETParams() {
-		return "language=en&sessionID=0&place_origin=London&type_origin=locator"
-				+ "&name_origin=SW1H%200BD&place_destination=London"
-				+ "&type_destination=locator&name_destination=AL2%201AE";
 	}
 
 	public void clearRoutes() {
@@ -130,8 +129,6 @@ public class Plan {
 		String reply=sb.toString();
 		return reply;
 	}
-
-	private String error = "";
 
 	public boolean isValid() {
 		error = "";
@@ -324,8 +321,35 @@ public class Plan {
 	}
 
 	public Date getTravelDate() {
-		return travelDate;
+		if (travelDate==null) return new Date();
+		else return travelDate;
 	}
+
+	public Boolean isStored() {
+		return isStored;
+	}
+
+	public Plan setStored(Boolean isStored) {
+		this.isStored = isStored;
+		return this;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		if (getStartingType() == Point.LOCATION)
+			sb.append("Current GPS Location");
+		else
+			sb.append(getStartingString());
+		sb.append(" to ");
+		sb.append(getDestination());
+		return sb.toString();
+	}
+	
+	public String toStringWithTotalRoutes() {
+		return toString()+" ("+routes.size()+" routes)";
+	}
+	
+	
 	
 
 }
