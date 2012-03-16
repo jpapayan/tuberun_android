@@ -1,12 +1,9 @@
 package com.papagiannis.tuberun.stores;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import com.papagiannis.tuberun.Destination;
 import com.papagiannis.tuberun.plan.Point;
-
-import android.app.Activity;
+import android.content.Context;
 
 public class DestinationStore<T> extends Store<T> {
 	private static DestinationStore<Destination> instanceDestination;
@@ -26,7 +23,7 @@ public class DestinationStore<T> extends Store<T> {
 	}
 	
 	@Override
-	public void add(T f, Activity a) {
+	public void add(T f, Context a) {
 		//no duplicates
 		if (list.contains(f)) {
 			return;
@@ -38,11 +35,11 @@ public class DestinationStore<T> extends Store<T> {
 	}
 	
 	private T home=null;
-	public void addHome(T home, Activity a) {
+	public void addHome(T home, Context a) {
 		this.home=home;
 		storeToFile(a);
 	}
-	public T getHome(Activity activity) {
+	public T getHome(Context activity) {
 		if (list==null) list=getFromFile(activity);
 		return home;
 	}
@@ -51,14 +48,14 @@ public class DestinationStore<T> extends Store<T> {
 	//Home is store inside the persistent list as the last element.
 	//It is removed from the list when the file is read
 	@Override
-	protected ArrayList<T> getFromFile(Activity activity) {
+	protected ArrayList<T> getFromFile(Context activity) {
 		ArrayList<T> result= super.getFromFile(activity);
 		if (result.size()>0) home=result.remove(result.size()-1);
 		return result;
 	}
 	
 	@Override
-	public void storeToFile(Activity activity) {
+	public void storeToFile(Context activity) {
 		if (home!=null) list.add(home);
 //		list.clear();
 		super.storeToFile(activity);

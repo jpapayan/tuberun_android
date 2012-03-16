@@ -7,17 +7,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 
-import com.papagiannis.tuberun.favorites.Favorite;
 
 public class Store<T> {
 	protected  String FILENAME=null;
 
 	transient protected  ArrayList<T> list = null;
 
-	protected  ArrayList<T> getFromFile(Activity activity) {
+	protected  ArrayList<T> getFromFile(Context activity) {
 		ArrayList<T> result = new ArrayList<T>();
 		try {
 			FileInputStream fis = activity.openFileInput(FILENAME);
@@ -37,7 +35,7 @@ public class Store<T> {
 		return result;
 	}
 
-	public ArrayList<T> getAll(Activity activity) {
+	public ArrayList<T> getAll(Context activity) {
 		//returns a reference to the internal object, useful to keep all such refs in sync
 		if (list != null)
 			return list;
@@ -47,23 +45,23 @@ public class Store<T> {
 		}
 	}
 
-	public T get(int i, Activity activity) throws IndexOutOfBoundsException {
+	public T get(int i, Context activity) throws IndexOutOfBoundsException {
 		ArrayList<T> list=getAll(activity);
 		if (i<list.size()) return list.get(i);
 		else throw new IndexOutOfBoundsException();
 	}
 	
-	public int size(Activity activity) {
+	public int size(Context activity) {
 		ArrayList<T> list=getAll(activity);
 		return list.size();
 	}
 	
-	public  void storeToFile(Activity activity) {
+	public  void storeToFile(Context context) {
 
 		FileOutputStream fos;
 		try {
-			activity.deleteFile(FILENAME);
-			fos = activity.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+			context.deleteFile(FILENAME);
+			fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 			ObjectOutputStream oo = new ObjectOutputStream(fos);
 			for (T f : list) {
 				oo.writeObject(f);
@@ -76,20 +74,20 @@ public class Store<T> {
 
 	}
 	
-	public void add(T f, Activity a) {
+	public void add(T f, Context a) {
 		if (list==null) list=new ArrayList<T>();
 		list.add(f);
 		storeToFile(a);
 	}
 	
-	public  void remove(T f, Activity a) {
+	public  void remove(T f, Context a) {
 		if (list!=null) {
 			list.remove(f);
 		}
 		storeToFile(a);
 	}
 	
-	public  void removeAll(Activity a) {
+	public  void removeAll(Context a) {
 		if (list!=null) list.clear();
 		storeToFile(a);
 	}
@@ -100,7 +98,7 @@ public class Store<T> {
 		return list.contains(f);
 	}
 
-	public  void removeIndex(int i, Activity activity) {
+	public  void removeIndex(int i, Context activity) {
 		if (list!=null && list.size()>i && i>=0) list.remove(i);
 		storeToFile(activity);
 	}

@@ -1,142 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.papagiannis.tuberun"
-      android:versionCode="1"
-      android:versionName="1.0"
-      android:installLocation="auto">
+    android:installLocation="auto"
+    package="com.papagiannis.tuberun"
+    android:versionCode="1"
+    android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="8" android:maxSdkVersion="15"/>
-        
+    <uses-sdk
+        android:maxSdkVersion="15"
+        android:minSdkVersion="8" />
 
-    <application android:icon="@drawable/icon" android:label="@string/app_name" >
-        <activity android:name=".TubeRun"
-                  android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
-                  android:label="@string/app_name">
+    <application
+        android:icon="@drawable/icon"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".TubeRun"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StatusActivity"
-                  android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity
+            android:name=".StatusActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".StatusMapActivity"
-                  android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
-                  android:screenOrientation="landscape">
+        <activity
+            android:name=".StatusMapActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".SelectLineActivity"
-                  android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity
+            android:name=".SelectLineActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".SelectStationActivity"
-                  android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity
+            android:name=".SelectStationActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".SelectBusStationActivity"
-                  android:theme="@android:style/Theme.Black.NoTitleBar"   >
+        <activity
+            android:name=".SelectBusStationActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".DeparturesActivity"
-                  android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity
+            android:name=".DeparturesActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".BusDeparturesActivity"
-                  android:label="Bus Departures">
+        <activity
+            android:name=".BusDeparturesActivity"
+            android:label="Bus Departures" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".NearbyStationsListFragment"
-                  android:label="Tube Stations Nearby">
+        <activity
+            android:name=".NearbyStationsListFragment"
+            android:label="Tube Stations Nearby" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".DirectionsMapActivity"
-                  android:label="Directions to ">
+        <activity
+            android:name=".DirectionsMapActivity"
+            android:label="Directions to " >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".FavoritesActivity"
-                  android:label="Favorites">
+        <activity
+            android:name=".FavoritesActivity"
+            android:label="Favorites" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".ClaimsActivity"
-                  android:label="Claims">
+        <activity
+            android:name=".ClaimsActivity"
+            android:label="Claims" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".ClaimActivity"
-                  android:label="Underground Claim"
-                  android:windowSoftInputMode="stateUnchanged">
+        <activity
+            android:name=".ClaimActivity"
+            android:label="Underground Claim"
+            android:windowSoftInputMode="stateUnchanged" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".OysterActivity"
-                  android:theme="@android:style/Theme.Black.NoTitleBar" 
-                  android:windowSoftInputMode="stateUnchanged">
+        <activity
+            android:name=".OysterActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:windowSoftInputMode="stateUnchanged" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".PlanActivity"  
-            	  android:theme="@android:style/Theme.Black.NoTitleBar"                
-                  android:windowSoftInputMode="stateUnchanged">
+        <activity
+            android:name=".PlanActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:windowSoftInputMode="stateUnchanged" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".RouteResultsActivity"  
-            	  android:theme="@android:style/Theme.Black.NoTitleBar"                
-                  android:windowSoftInputMode="stateUnchanged">
+        <activity
+            android:name=".RouteResultsActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:windowSoftInputMode="stateUnchanged" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".PartialRouteMapActivity"  
-            	  android:theme="@android:style/Theme.Black.NoTitleBar"                
-                  android:windowSoftInputMode="stateUnchanged">
+        <activity
+            android:name=".PartialRouteMapActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:windowSoftInputMode="stateUnchanged" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".NearbyStationsActivity"  
-            	  android:theme="@android:style/Theme.Black.NoTitleBar"                
-                  android:windowSoftInputMode="stateUnchanged">
+        <activity
+            android:name=".NearbyStationsActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:windowSoftInputMode="stateUnchanged" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        
+
+        <provider
+            android:name=".TubeMapContentProvider"
+            android:authorities="com.papagiannis.tuberun.mapprovider" >
+        </provider>
+
         <uses-library android:name="com.google.android.maps" />
     </application>
-    
+
     <supports-screens
-        android:smallScreens="true"
-        android:normalScreens="true"
+        android:anyDensity="true"
         android:largeScreens="true"
-        android:anyDensity="true" />
-    
+        android:normalScreens="true"
+        android:smallScreens="true" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 </manifest>

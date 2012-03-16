@@ -15,11 +15,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
 import android.graphics.YuvImage;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -60,8 +63,10 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+
 		preferences = getPreferences(MODE_PRIVATE);
-		tubeMapDownloaded = preferences.getBoolean("tubeMapDownloaded",false);
+		tubeMapDownloaded = preferences.getBoolean("tubeMapDownloaded", false);
+//		tubeMapDownloaded = false; //always
 
 		View statusButton = findViewById(R.id.button_status);
 		statusButton.setOnClickListener(this);
@@ -245,9 +250,9 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		case DOWNLOAD_IMAGE_FAILED_DIALOG:
 			builder.setTitle("Download failed")
 					.setMessage(
-							"Could not download the Tube Map. Please try again later. " +
-							"Make sure that you have Internet access (preferably WiFi) and " +
-							"your SD card is available.")
+							"Could not download the Tube Map. Please try again later. "
+									+ "Make sure that you have Internet access (preferably WiFi) and "
+									+ "your SD card is available.")
 					.setCancelable(true)
 					.setPositiveButton("OK",
 							new DialogInterface.OnClickListener() {
@@ -296,31 +301,55 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 				HttpURLConnection urlConnection = (HttpURLConnection) url
 						.openConnection();
 				urlConnection.setRequestMethod("GET");
-				urlConnection.setDoOutput(true);
 				urlConnection.connect();
 
-				File appdir = Environment.getExternalStorageDirectory();
-				File dir = new File(appdir.getAbsoluteFile() + "/tuberun/");
-				Boolean created = dir.mkdirs();
-				File file = new File(dir, params[1]);
+//				File appdir = Environment.getExternalStorageDirectory();
+//				File dir = new File(appdir.getAbsoluteFile() + "/tuberun/");
+//				Boolean created = dir.mkdirs();
+//				File file = new File(dir, params[1]);
+//				FileOutputStream fileOutput = new FileOutputStream(file);
 
-				FileOutputStream fileOutput = new FileOutputStream(file);
-				// openFileOutput(params[1],Context.MODE_PRIVATE);
-
+				//Let's read everything to RAM first
 				InputStream inputStream = urlConnection.getInputStream();
 				int totalSize = urlConnection.getContentLength();
 				int downloadedSize = 0;
 				byte[] buffer = new byte[1024];
+				byte[] fullFile = new byte[totalSize];
 				int bufferLength = 0; // used to store a temporary size of the
-										// buffer
+//										// buffer
+				int i=0;
 				while ((bufferLength = inputStream.read(buffer)) > 0) {
 					if (isCancelled()) return false;
-					fileOutput.write(buffer, 0, bufferLength);
+//					fileOutput.write(buffer, 0, bufferLength);
+					
+					int k=0;
+					for (int j=i;j<i+bufferLength;j++) {
+						fullFile[j]=buffer[k++];
+					}
+					i+=bufferLength;
+//					
+//					
 					downloadedSize += bufferLength;
 					publishProgress(downloadedSize, totalSize);
 				}
-				fileOutput.close();
+//				fileOutput.close();
 				inputStream.close();
+				
+				ContentValues v=new ContentValues();
+				v.put("map", fullFile);
+				ContentResolver r=getContentResolver();
+				r.insert(Uri.parse("content://"+TubeMapContentProvider.AUTHORITY+"/map"), v);
+				
+				//This is an attempt to read from the ContentProvider, it works!
+//				Cursor rrr=r.query(Uri.parse("content://"+TubeMapContentProvider.AUTHORITY+"/map"), new String[]{},"",new String[]{},"");
+//				Boolean suc=rrr.moveToFirst();
+//				if (suc) {
+//					byte[] res=rrr.getBlob(0);
+//					int iii=res.length;
+//					i=i+i;
+//				}
+				
+				
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 				return false;
