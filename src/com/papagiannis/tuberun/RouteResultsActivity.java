@@ -57,6 +57,7 @@ public class RouteResultsActivity extends Activity {
 	Button back_button;
 	Button logo_button;
 	Button map_button;
+	Button share_button;
 	Button current_save_button;
 	Button save_button;
 	Button save_active_button;
@@ -98,6 +99,7 @@ public class RouteResultsActivity extends Activity {
 		back_button = (Button) findViewById(R.id.back_button);
 		logo_button = (Button) findViewById(R.id.logo_button);
 		map_button = (Button) findViewById(R.id.map_button);
+		share_button = (Button) findViewById(R.id.share_button);
 		save_active_button = (Button) findViewById(R.id.save_active_button);
 		save_button = (Button) findViewById(R.id.save_button);
 		title_textview = (TextView) findViewById(R.id.title_textview);
@@ -191,10 +193,12 @@ public class RouteResultsActivity extends Activity {
 				switch (i) {
 				case 0:
 					map_button.setVisibility(View.GONE);
+					share_button.setVisibility(View.GONE);
 					current_save_button.setVisibility(View.VISIBLE);
 					break;
 				case 1:
 					map_button.setVisibility(View.VISIBLE);
+					share_button.setVisibility(View.VISIBLE);
 					current_save_button.setVisibility(View.GONE);
 					break;
 				}
@@ -350,6 +354,18 @@ public class RouteResultsActivity extends Activity {
 
 				Intent intent = new Intent(self, PartialRouteMapActivity.class);
 				startActivity(intent);
+			}
+		});
+		
+		share_button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+				sharingIntent.setType("text/plain");
+				String shareBody = route.toSharingString(plan.toString());
+				sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, plan.toString()+" directions");
+				sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+				startActivity(Intent.createChooser(sharingIntent, "Share via"));
 			}
 		});
 	}

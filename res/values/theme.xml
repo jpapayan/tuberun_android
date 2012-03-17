@@ -53,6 +53,9 @@
 	<style name="SaveButtonActive" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/save_button_active_selector</item>
 	</style>
+	<style name="ShareButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/share_button_selector</item>
+	</style>
 
 	<drawable name="tuberun_semitransparent">#99000000</drawable>
 	<drawable name="tuberun_transparent">#00000000</drawable>

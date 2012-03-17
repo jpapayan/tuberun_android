@@ -8,6 +8,7 @@ import uk.me.jstott.jcoord.OSRef;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -23,7 +24,7 @@ import com.papagiannis.tuberun.overlays.RouteOverlay;
 
 public class PartialRouteMapActivity extends MeMapActivity  {
 	final PartialRouteMapActivity self=this;
-	RouteFetcher fetcher;
+	AsyncTask<ArrayList<Integer>, Integer, ArrayList<GeoPoint>> task;
 
 	/** Called when the activity is first created. */
 	@SuppressWarnings("unchecked")
@@ -33,7 +34,7 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 		showDialog(0);
 		
 		try {
-			AsyncTask<ArrayList<Integer>, Integer, ArrayList<GeoPoint>> task =  new AsyncTask<ArrayList<Integer>, Integer, ArrayList<GeoPoint>>() {
+			task =  new AsyncTask<ArrayList<Integer>, Integer, ArrayList<GeoPoint>>() {
 
 				protected ArrayList<GeoPoint> doInBackground(ArrayList<Integer>... loc) {
 					ArrayList<GeoPoint> result=new ArrayList<GeoPoint>();
@@ -96,12 +97,22 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 	}
 
 
-	private Dialog wait_dialog;
+	private ProgressDialog wait_dialog;
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		wait_dialog = ProgressDialog.show(this, "",
-				"Drawing travel path. Please wait...", true);
+		wait_dialog = new ProgressDialog(this);
+		wait_dialog.setTitle("");
+		wait_dialog.setMessage("Drawing travel path. Please wait...");
+		wait_dialog.setIndeterminate(true);
+		wait_dialog.setCancelable(true);
+		wait_dialog.setOnCancelListener(new ProgressDialog.OnCancelListener() {
+			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				task.cancel(true);
+			}
+		});
 		return wait_dialog;
 	}
 

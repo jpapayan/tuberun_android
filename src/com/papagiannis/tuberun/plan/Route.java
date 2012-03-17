@@ -76,6 +76,23 @@ public class Route implements Serializable {
 	public PartialRoute getPartial(int position) {
 		return partials.get(position);
 	}
+
+	public String toSharingString(String title) {
+		StringBuilder sb=new StringBuilder(title);
+		sb.append(".\n\n");
+		int i=0;
+		for (PartialRoute proute : partials) {
+			sb.append(Integer.toString(++i));
+			sb.append(".");
+			sb.append(proute.getDirections());
+			sb.append(" (");
+			sb.append(proute.getMinutes());
+			sb.append("min) ");
+			sb.append("\n\n");
+		}
+		sb.append("You have reached your destination.");
+		return sb.toString();
+	}
 	
 	
 	

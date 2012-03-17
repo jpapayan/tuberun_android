@@ -74,6 +74,16 @@
                 android:visibility="gone"/>
             
             <Button
+                android:id="@+id/share_button"
+                style="@style/ShareButton"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="5dip"
+                android:visibility="gone"
+                android:text=""/>
+            
+            <Button
                 android:id="@+id/map_button"
                 style="@style/MapButton"
                 android:layout_width="40dip"

@@ -348,8 +348,6 @@ public class Plan implements Serializable {
 	public String toStringWithTotalRoutes() {
 		return toString()+" ("+routes.size()+" routes)";
 	}
-	
-	
-	
+
 
 }
