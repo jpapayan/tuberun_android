@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="48dip"
+            android:background="#99000000"
+            android:gravity="right"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/back_button"
+                style="@style/BackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:id="@+id/logo_button"
+                style="@style/LogoButton"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_gravity="center"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/title_textview"
+                style="@android:style/TextAppearance.Medium"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dip"
+                android:layout_weight="5"
+                android:gravity="left|center_vertical"
+                android:text="About" />
+
+            <Button
+                android:id="@+id/email_button"
+                style="@style/EmailButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="5dip"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/version_textview"
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/tuberun_red"
+            android:gravity="center_horizontal|bottom"
+            android:text="TubeRunn" />
+
+        <TextView
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tuberun_semitransparent"
+            android:gravity="center_horizontal"
+            android:text="by Ioannis Papagiannis" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tuberun_semitransparent"
+            android:gravity="center_horizontal"
+            android:text="I hope that you enjoy using the app as much I enjoyed writing it!"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tuberun_semitransparent"
+            android:gravity="center_horizontal"
+            android:text="Very special thanks to" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/tuberun_semitransparent"
+            android:gravity="center_horizontal"
+            android:text="Panagiota Dalamagka, Thomas Tziortziotis, Petr Hosek, Erikos Ouziel, Nikos Kantas"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
+
+        <com.papagiannis.tuberun.AspectRatioImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/about" />
+    </LinearLayout>
+
+</FrameLayout>

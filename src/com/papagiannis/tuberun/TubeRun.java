@@ -1,7 +1,5 @@
 package com.papagiannis.tuberun;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -9,7 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.prefs.Preferences;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,30 +14,29 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.database.Cursor;
-import android.graphics.YuvImage;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
+import com.papagiannis.tuberun.favorites.Favorite;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.OysterFetcher;
 import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	private final TubeRun self = this;
+	public static final String APPNAME = "TubeRun";
 	public static final String VERSION = "1.0";
 	private static final int DOWNLOAD_IMAGE_DIALOG = -1;
 	private static final int DOWNLOAD_IMAGE_PROGRESS_DIALOG = -2;
@@ -53,6 +49,8 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	LinearLayout oysterLayout;
 	Button oysterButton;
 	Button oysterButtonActive;
+	Button logoButton;
+	ToggleButton favoritesButton;
 
 	private SharedPreferences preferences;
 	private boolean tubeMapDownloaded = false;
@@ -76,7 +74,9 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		mapsButton.setOnClickListener(this);
 		View nearbyButton = findViewById(R.id.button_nearby);
 		nearbyButton.setOnClickListener(this);
-		View favoritesButton = findViewById(R.id.button_favorites);
+		logoButton = (Button) findViewById(R.id.button_logo);
+		logoButton.setOnClickListener(this);
+		favoritesButton = (ToggleButton) findViewById(R.id.button_favorites);
 		favoritesButton.setOnClickListener(this);
 		View claimsButton = findViewById(R.id.button_claims);
 		claimsButton.setOnClickListener(this);
@@ -115,6 +115,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			i = new Intent(this, NearbyStationsActivity.class);
 			break;
 		case R.id.button_favorites:
+			favoritesButton.setChecked(!favoritesButton.isChecked()); //no toggling
 			i = new Intent(this, FavoritesActivity.class);
 			break;
 		case R.id.button_claims:
@@ -127,6 +128,9 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		case R.id.button_oyster_active:
 			i = new Intent(this, OysterActivity.class);
 			break;
+		case R.id.button_logo:
+			i = new Intent(this, AboutActivity.class);
+			break;	
 		}
 		startActivity(i);
 	}
@@ -138,12 +142,6 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 				LinePresentation.getStringRespresentation(LineType.ALL));
 		i.putExtra("type", "maps");
 		return i;
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		fetchBalance();
 	}
 
 	private CredentialsStore store = CredentialsStore.getInstance();
@@ -290,6 +288,14 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 				dismissDialog(DOWNLOAD_IMAGE_PROGRESS_DIALOG);
 			task.cancel(true);
 		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		fetchBalance();
+		ArrayList<Favorite> favs=Favorite.getFavorites(this);
+		favoritesButton.setChecked(favs.size()>0);
 	}
 
 	private class ImageDownloadTask extends AsyncTask<String, Integer, Boolean> {
