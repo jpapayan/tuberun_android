@@ -13,6 +13,8 @@ import com.papagiannis.tuberun.fetchers.*;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -78,6 +80,7 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
         	}
         });
         
+        
         Favorite.getFavorites(this);
     }
     
@@ -125,16 +128,24 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 					R.id.departures_destination1, R.id.departures_position1, R.id.departures_time1,
 					R.id.departures_destination2, R.id.departures_position2, R.id.departures_time2,
 					R.id.departures_destination3, R.id.departures_position3, R.id.departures_time3});
-		adapter.setViewBinder(new DeparturesBinder(lt, stationcode , stationnice ,  this));
+		adapter.setViewBinder(new DeparturesBinder(lt, stationcode , stationnice ,  this, adapter));
 		setListAdapter(adapter);
 		
 	}
 
-	private Dialog wait_dialog;
+	private ProgressDialog wait_dialog;
     @Override
     protected Dialog onCreateDialog(int id) {
-    	wait_dialog = ProgressDialog.show(this, "", 
-                "Fetching data. Please wait...", true);
+    	wait_dialog=new ProgressDialog(this);
+    	wait_dialog.setTitle("");
+    	wait_dialog.setMessage("Fetching data. Please wait...");
+    	wait_dialog.setIndeterminate(true);
+    	wait_dialog.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				fetcher.abort();
+			}
+		});
     	return wait_dialog;
     }
     

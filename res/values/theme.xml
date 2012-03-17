@@ -62,9 +62,16 @@
 	<style name="EmailButton" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/email_button_selector</item>
 	</style>
+	<style name="LocatemeButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/locateme_button_selector</item>
+	</style>
+	<style name="SearchButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/search_button_selector</item>
+	</style>
 
 	<drawable name="tuberun_semitransparent">#99000000</drawable>
 	<drawable name="tuberun_transparent">#00000000</drawable>
 	<drawable name="tuberun_red">#99801219</drawable>
 	<drawable name="tuberun_red_bright">#99DA2B2C</drawable>
+	<drawable name="tuberun_boardorange">#FFB8C600</drawable>
 </resources>

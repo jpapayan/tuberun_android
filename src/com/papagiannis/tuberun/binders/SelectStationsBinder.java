@@ -6,6 +6,8 @@ import com.papagiannis.tuberun.LineType;
 import android.graphics.Color;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 
@@ -22,10 +24,12 @@ public class SelectStationsBinder implements ViewBinder, OnClickListener {
 	
 	@Override
 	public boolean setViewValue(View view, Object o, String s) {
-		TextView tv=(TextView) view;
-		tv.setTextColor(Color.WHITE);
 		if (++attempt%2==0) {
-			tv.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
+			view.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
+			if (lt==LineType.NORTHERN) {
+				LinearLayout.LayoutParams params= (LinearLayout.LayoutParams)view.getLayoutParams();
+				params.setMargins(1, 1, 1, 1);
+			}
 			return true;
 		}		
 //		

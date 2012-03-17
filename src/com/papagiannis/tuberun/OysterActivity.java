@@ -37,6 +37,17 @@ public class OysterActivity extends Activity implements Observer{
     }
 	
 	private void create() {
+		Button back_button = (Button) findViewById(R.id.back_button);
+		Button logo_button = (Button) findViewById(R.id.logo_button);
+		OnClickListener back_listener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		};
+		back_button.setOnClickListener(back_listener);
+		logo_button.setOnClickListener(back_listener);
+		
 		username = (EditText) findViewById(R.id.oyster_username);
 		password = (EditText) findViewById(R.id.oyster_password);
 		

@@ -15,7 +15,9 @@
         <activity
             android:name=".TubeRun"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar" >
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
+            android:screenOrientation="nosensor" 
+            android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +26,9 @@
         </activity>
         <activity
             android:name=".StatusActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:screenOrientation="nosensor" 
+            android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -60,7 +64,9 @@
         </activity>
         <activity
             android:name=".DeparturesActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:screenOrientation="nosensor" 
+            android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -111,7 +117,9 @@
         <activity
             android:name=".OysterActivity"
             android:theme="@android:style/Theme.Black.NoTitleBar"
-            android:windowSoftInputMode="stateUnchanged" >
+            android:windowSoftInputMode="stateUnchanged"
+            android:screenOrientation="nosensor" 
+            android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -151,7 +159,9 @@
         <activity
             android:name=".AboutActivity"
             android:theme="@android:style/Theme.Black.NoTitleBar"
-            android:windowSoftInputMode="stateUnchanged" >
+            android:windowSoftInputMode="stateUnchanged"
+            android:screenOrientation="nosensor" 
+            android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

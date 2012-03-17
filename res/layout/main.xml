@@ -19,7 +19,7 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="48dip"
-            android:background="#99000000"
+            android:background="@drawable/tuberun_semitransparent"
             android:gravity="right"
             android:orientation="horizontal" >
 
@@ -100,6 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|right"
+                android:layout_marginLeft="10dip"
                 android:layout_marginRight="5dip"
                 android:text=""
                 android:textOff=""

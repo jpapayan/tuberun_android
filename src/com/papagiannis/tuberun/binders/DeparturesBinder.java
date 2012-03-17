@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -26,13 +27,15 @@ public class DeparturesBinder implements ViewBinder, OnClickListener {
 	private String station_code;
 	private String station_nice;
 	private Activity activity;
+	private SimpleAdapter adapter;
 	
-	public DeparturesBinder (LineType lt, String station_code, String station_nice, Activity activity) {
+	public DeparturesBinder (LineType lt, String station_code, String station_nice, Activity activity, SimpleAdapter adapter) {
 		super();
 		this.lt=lt;
 		this.activity=activity;
 		this.station_code=station_code;
 		this.station_nice=station_nice;
+		this.adapter=adapter;
 	}
 	
 	String last_platform;
@@ -53,8 +56,8 @@ public class DeparturesBinder implements ViewBinder, OnClickListener {
 		if (view.getId()==R.id.departures_platform) {
 			last_platform=s;
 			tv.setVisibility(View.VISIBLE);
-			tv.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
-			tv.setTextColor(LinePresentation.getForegroundColor(lt));
+//			tv.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
+//			tv.setTextColor(LinePresentation.getForegroundColor(lt));
 		}
 		else if (s.equals("") || s.equals(DeparturesDLRFetcher.none_msg)) {
 			tv.setTextColor(Color.WHITE);
@@ -72,8 +75,10 @@ public class DeparturesBinder implements ViewBinder, OnClickListener {
 	HashMap<View, View> subjects = new HashMap<View, View>();
 	ArrayList<View> temp = new ArrayList<View>();
 
+	
 	@Override
 	public void onClick(View v) {
+		//TODO: Toggle button state is not maintained while scrolling
 		ToggleButton tb=(ToggleButton)v;
 		if (tb.isChecked()) {
 			String p=togglebutton_platforms.get(v);

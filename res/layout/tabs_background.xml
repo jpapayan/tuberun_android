@@ -17,7 +17,7 @@
         android:gravity="center"
         android:text="Title"
         android:textColor="@layout/tabs_background_text_selector"
-        android:textSize="13dip" />
+        android:textSize="12dip" />
 
     <ImageView
         android:id="@+id/tabs_imageview"

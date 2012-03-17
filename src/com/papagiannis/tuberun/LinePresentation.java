@@ -46,18 +46,18 @@ public class LinePresentation
     {
         int result = Color.WHITE;
         if (line.equals( LineType.PICACIDILY) ) result = Color.BLUE;
-        else if (line.equals( LineType.METROPOLITAN)) result = 0xFF800080;
-        else if (line.equals( LineType.DISTRICT) ) result = Color.GREEN;
-        else if (line.equals( LineType.HAMMERSMITH) ) result = Color.argb(255,232,153,168);
-        else if (line.equals( LineType.CIRCLE) ) result = Color.YELLOW;
+        else if (line.equals( LineType.METROPOLITAN)) result = 0xFF893267;
+        else if (line.equals( LineType.DISTRICT) ) result = 0xFF007229;
+        else if (line.equals( LineType.HAMMERSMITH) ) result = 0xFFE899A8;
+        else if (line.equals( LineType.CIRCLE) ) result = 0xFFF8D42D;
         else if (line.equals( LineType.NORTHERN) ) result = Color.BLACK;
-        else if (line.equals( LineType.DLR) ) result = Color.argb(255,0,187,180);
-        else if (line.equals( LineType.OVERGROUND) ) result = 0xFFFFA500;
-        else if (line.equals( LineType.JUBILEE) ) result = Color.argb(255,143,152,158);
-        else if (line.equals( LineType.VICTORIA) ) result = Color.argb(255,0,159,224);
-        else if (line.equals( LineType.BAKERLOO) ) result = 0xFFA52A2A;
-        else if (line.equals( LineType.WATERLOO) ) result = Color.argb(255,112,195,206);
-        else if (line.equals( LineType.CENTRAL) ) result = Color.RED;
+        else if (line.equals( LineType.DLR) ) result = 0xFF00BBB4;
+        else if (line.equals( LineType.OVERGROUND) ) result = 0xFFF86C00;
+        else if (line.equals( LineType.JUBILEE) ) result = 0xFF686E72;
+        else if (line.equals( LineType.VICTORIA) ) result = 0xFF009FE0;
+        else if (line.equals( LineType.BAKERLOO) ) result = 0xFFAE6118;
+        else if (line.equals( LineType.WATERLOO) ) result = 0xFF70C3CE;
+        else if (line.equals( LineType.CENTRAL) ) result = 0xFFE41F1F;
         else if (line.equals( LineType.BUSES) ) result = Color.RED;
         else if (line.equals( LineType.ALL) ) result=Color.WHITE;           
         return result;
@@ -68,15 +68,15 @@ public class LinePresentation
         if (line.equals( LineType.PICACIDILY) ) result = Color.WHITE;
         else if (line.equals( LineType.METROPOLITAN) ) result = Color.WHITE;
         else if (line.equals( LineType.DISTRICT) ) result = Color.WHITE;
-        else if (line.equals( LineType.HAMMERSMITH) ) result = Color.BLUE;
-        else if (line.equals( LineType.CIRCLE) ) result = Color.BLACK;
+        else if (line.equals( LineType.HAMMERSMITH) ) result = 0xFF113B96;
+        else if (line.equals( LineType.CIRCLE) ) result = 0xFF423B92;
         else if (line.equals( LineType.NORTHERN) ) result = Color.WHITE;
         else if (line.equals( LineType.DLR) ) result = Color.WHITE;
         else if (line.equals( LineType.OVERGROUND) ) result = Color.WHITE;
         else if (line.equals( LineType.JUBILEE) ) result = Color.WHITE;
         else if (line.equals( LineType.VICTORIA) ) result = Color.WHITE;
         else if (line.equals( LineType.BAKERLOO) ) result = Color.WHITE;
-        else if (line.equals( LineType.WATERLOO) ) result = Color.BLUE;
+        else if (line.equals( LineType.WATERLOO) ) result = 0xFF243B92;
         else if (line.equals( LineType.CENTRAL) ) result = Color.WHITE;
         else if (line.equals( LineType.BUSES) ) result = Color.WHITE;
         else if (line==LineType.ALL) result= Color.BLACK;
@@ -164,5 +164,19 @@ public class LinePresentation
             || line.equals( "Jubilee" ) || line.equals( "Victoria" ) || line.equals( "Bakerloo" ) || line.equals( "Waterloo" )
             || line.equals( "Central" ) || line.equals( "Buses" )  || line.equals( "All") ;
     }
+	public static int getIcon(LineType lt) {
+		int res=-1;
+		switch (lt){
+		case BUSES:
+			res=R.drawable.buses;
+			break;
+		case DLR:
+			res=R.drawable.dlr;
+			break;
+		default:
+			res=R.drawable.tube;
+		}
+		return res;
+	}
     
 }

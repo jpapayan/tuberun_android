@@ -63,7 +63,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="Search" />
+            android:gravity="center_vertical"
+            android:text="Search"
+             />
     </LinearLayout>
 
     <FrameLayout
@@ -83,7 +85,7 @@
             android:id="@+id/mylocation_button"
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"
-            android:text="Me"
+            style="@style/LocatemeButton"
             android:layout_gravity="right|top"
             android:layout_marginRight="15dip"
             android:layout_marginTop="15dip"/>

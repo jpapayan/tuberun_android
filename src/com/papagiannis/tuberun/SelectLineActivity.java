@@ -57,13 +57,14 @@ public class SelectLineActivity extends ListActivity implements OnClickListener 
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("line_name", LinePresentation.getStringRespresentation(lt));
 			m.put("line_color", LinePresentation.getStringRespresentation(lt));
+			m.put("line_image", lt);
 			lines_list.add(m);
 		}
 
 		SimpleAdapter adapter = new SimpleAdapter(this, lines_list,
-				R.layout.line, new String[] { "line_name", "line_color" },
-				new int[] { R.id.line_name, R.id.line_color });
-		adapter.setViewBinder(new SelectLinesBinder());
+				R.layout.line, new String[] { "line_name", "line_color", "line_image"},
+				new int[] { R.id.line_name, R.id.line_color, R.id.line_image});
+		adapter.setViewBinder(new SelectLinesBinder(this));
 		setListAdapter(adapter);
 	}
 

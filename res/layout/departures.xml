@@ -20,8 +20,8 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="#99000000"
+            android:layout_height="48dip"
+            android:background="@drawable/tuberun_semitransparent"
             android:orientation="horizontal" >
 
             <Button
@@ -39,7 +39,6 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginBottom="3dip"
                 android:layout_marginTop="3dip"
-                android:layout_weight="0"
                 android:text="" />
 
             <TextView
@@ -58,6 +57,8 @@
                 style="@style/RefreshButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dip"
                 android:layout_weight="0"
                 android:text="" />
         </LinearLayout>
@@ -72,23 +73,31 @@
             android:background="@drawable/tuberun_red"
             android:gravity="center_horizontal"
             android:text="Station" />
-        
+
+        <TextView
+            	android:id="@id/android:empty"
+                style="@style/WhiteText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dip"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dip"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Departures not available. Does TfL offer departure data for this station?" />
+
         <ListView
             android:id="@+id/android:list"
             android:layout_width="fill_parent"
             android:layout_height="0dip"
+            android:layout_marginTop="10dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
             android:layout_weight="1"
+            android:scrollbars="none"
+            android:divider="@android:color/transparent"
+  			android:dividerHeight="10dip"
             android:cacheColorHint="#00000000" />
-        
-        <TextView
-            style="@style/WhiteText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dip"
-            android:layout_marginTop="5dip"
-            android:background="@drawable/tuberun_red"
-            android:gravity="center_horizontal"
-            android:text="Train departures data is only provided by TfL for selected stations" />
     </LinearLayout>
 
 </FrameLayout>

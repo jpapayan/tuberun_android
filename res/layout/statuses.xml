@@ -17,7 +17,7 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dip"
             android:background="#99000000"
             android:orientation="horizontal" >
 
@@ -55,8 +55,8 @@
                 style="@style/MapButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:layout_marginRight="5dip"
+                android:layout_marginRight="10dip"
+                android:layout_gravity="center_vertical|right"
                 android:text="" />
             
             <Button
@@ -64,7 +64,9 @@
                 style="@style/RefreshButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="5dip"
+                android:layout_gravity="center_vertical|right"
                 android:text="" />
         </LinearLayout>
 
