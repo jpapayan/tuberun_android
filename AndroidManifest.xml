@@ -73,7 +73,10 @@
         </activity>
         <activity
             android:name=".BusDeparturesActivity"
-            android:label="Bus Departures" >
+            android:label="Bus Departures"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
+            android:screenOrientation="nosensor" 
+            android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

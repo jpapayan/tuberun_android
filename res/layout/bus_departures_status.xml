@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="wrap_content"
-	android:orientation="horizontal">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
 
-	<TextView android:id="@+id/bus_departures_route"
-		android:layout_width="50dp" android:layout_height="wrap_content"
-		android:padding="10dp" android:gravity="fill_horizontal" 
-		android:textSize="16sp" style="@style/WhiteText">
-	</TextView>
+    <TextView
+        android:id="@+id/bus_departures_route"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:gravity="fill_horizontal"
+        android:textColor="@android:color/white"
+        android:padding="10dp">
+    </TextView>
 
-	<TextView android:id="@+id/bus_departures_time"
-		android:layout_width="90dp" android:layout_height="wrap_content"
-		android:padding="10dp" android:gravity="fill_horizontal"
-		android:textSize="16sp" style="@style/WhiteText">
-	</TextView>
+    <TextView
+        android:id="@+id/bus_departures_time"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:gravity="fill_horizontal"
+        android:textColor="@android:color/white"
+        android:padding="10dp" >
+    </TextView>
 
-	<TextView android:id="@+id/bus_departures_destination"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:padding="10dp" android:gravity="left" android:layout_weight="1"
-		android:textSize="16sp" style="@style/WhiteText">
-	</TextView>
+    <TextView
+        android:id="@+id/bus_departures_destination"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:textColor="@android:color/white"
+        android:padding="10dp" >
+    </TextView>
 
 </LinearLayout>
-
-
