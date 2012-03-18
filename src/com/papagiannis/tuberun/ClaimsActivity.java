@@ -25,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -43,23 +44,26 @@ public class ClaimsActivity extends ListActivity implements OnClickListener  {
 
 	public void create() {
 		View addButton = findViewById(R.id.button_add);
+//		View addButton2 = findViewById(R.id.button_add2);
 		addButton.setOnClickListener(this);
+//		addButton2.setOnClickListener(this);
 		store = ClaimStore.getInstance();
-		titleView = (TextView) findViewById(R.id.text_title);
+		Button back_button = (Button) findViewById(R.id.back_button);
+		Button logo_button = (Button) findViewById(R.id.logo_button);
+		OnClickListener back_listener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		};
+		back_button.setOnClickListener(back_listener);
+		logo_button.setOnClickListener(back_listener);
 	}
 
 	public void refresh() {
 		ArrayList<Claim> claims = store.getAll(this);
-		int i = claims.size();
-		if (i == 0)
-			titleView.setText("No claims");
-		else if (i == 1)
-			titleView.setText(i + " claim in total");
-		else
-			titleView.setText(i + " claims in total");
-
 		ArrayList<HashMap<String, Object>> claims_list = new ArrayList<HashMap<String, Object>>();
-		i = 0;
+		int i = 0;
 		for (Claim c : claims) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			String title;
@@ -71,7 +75,6 @@ public class ClaimsActivity extends ListActivity implements OnClickListener  {
 			else {
 				title = "Between "+c.getDelayStation1()+" and "+c.getDelayStation2();
 			}
-			if (title.length()>30) title=title.substring(0, 29)+"...";
 			m.put("title", title);
 			m.put("index", i++);
 			m.put("submitted", c.getSubmitted());

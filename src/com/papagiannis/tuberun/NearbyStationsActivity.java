@@ -1,6 +1,8 @@
 package com.papagiannis.tuberun;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
@@ -73,6 +75,10 @@ public class NearbyStationsActivity extends FragmentActivity implements
 				NearbyStationsListFragment.class, null);
 		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
 		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
+//		Bitmap bmp = BitmapFactory.decodeResource(this.getResources(), R.drawable.tube);
+//		Bitmap resizedbitmap = Bitmap.createScaledBitmap(bmp,
+//				(int)(bmp.getWidth() / 1.5), (int) (bmp.getHeight() / 1.5), true);
+//		mTabsAdapter.getTabsImageView().setImageBitmap(resizedbitmap);
 		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.tube);
 
 		mTabsAdapter.addTab(
@@ -80,6 +86,10 @@ public class NearbyStationsActivity extends FragmentActivity implements
 				NearbyCycleStationsListFragment.class, null);
 		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
 		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
+//		bmp=BitmapFactory.decodeResource(this.getResources(), R.drawable.cycle_hire);
+//		resizedbitmap = Bitmap.createScaledBitmap(bmp,
+//				(int)(bmp.getWidth() / 1.5), (int) (bmp.getHeight() / 1.5), true);
+//		mTabsAdapter.getTabsImageView().setImageBitmap(resizedbitmap);
 		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.cycle_hire);
 
 
@@ -105,13 +115,6 @@ public class NearbyStationsActivity extends FragmentActivity implements
 		locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
 		requestLocationUpdates();
-		// lastKnownLocation =
-		// locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		// if (lastKnownLocation==null) lastKnownLocation =
-		// locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		// if (lastKnownLocation!=null) {
-		// undergroundFragment.locationChanged(lastKnownLocation);
-		// }
 	}
 
 	@Override

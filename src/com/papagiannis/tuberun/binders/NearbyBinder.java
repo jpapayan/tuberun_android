@@ -49,8 +49,8 @@ public class NearbyBinder implements ViewBinder, OnClickListener {
 			tv.setTextColor(LinePresentation.getForegroundColor(lt));
 			tv.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
 			tv.setVisibility(View.VISIBLE);
-			Typeface mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/tfl.ttf");
-		    tv.setTypeface(mTypeface);
+//			Typeface mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/tfl.ttf");
+//		    tv.setTypeface(mTypeface);
 		} 
 		else {
 			tv.setVisibility(View.GONE);
