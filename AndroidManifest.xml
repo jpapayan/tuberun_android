@@ -97,7 +97,10 @@
         </activity>
         <activity
             android:name=".FavoritesActivity"
-            android:label="Favorites" >
+            android:label="Favorites"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
+            android:screenOrientation="nosensor" 
+            android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

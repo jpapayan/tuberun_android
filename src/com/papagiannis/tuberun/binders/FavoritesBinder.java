@@ -16,9 +16,12 @@ import com.papagiannis.tuberun.fetchers.StatusesFetcher;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -36,11 +39,23 @@ public class FavoritesBinder implements ViewBinder, OnClickListener {
 	
 	@Override
 	public boolean setViewValue(View view, Object o, String s) {
-		if (view.getId()==R.id.favorites_line) {
+		int id=view.getId();
+		switch (id) {
+		case R.id.favorites_line:
 			last_lt=LinePresentation.getLineTypeRespresentation(s);
+			view.setBackgroundColor(LinePresentation.getBackgroundColor(last_lt));
 			return true;
-		}
-		if (view.getId()==R.id.remove_favorite) {
+		case R.id.favorites_icon:
+			ImageView iv=(ImageView) view;
+			int icon=(Integer) o;
+			if (icon==R.drawable.buses) icon=R.drawable.buses_inverted;
+			Bitmap bmp = BitmapFactory.decodeResource(
+					activity.getResources(), icon);
+			Bitmap resizedbitmap = Bitmap.createScaledBitmap(bmp,
+					bmp.getWidth() / 2, bmp.getHeight() / 2, true);
+			iv.setImageBitmap(resizedbitmap);
+			return true;
+		case R.id.remove_favorite:
 			view.setOnClickListener(this);
 			view_favorite_indexes.put(view, Integer.parseInt(s));
 			return true;
