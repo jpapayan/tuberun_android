@@ -2,13 +2,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@android:color/black"
     android:orientation="vertical" >
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background_claims" />
+    <!-- <ImageView -->
+    <!-- android:layout_width="fill_parent" -->
+    <!-- android:layout_height="fill_parent" -->
+    <!-- android:scaleType="centerCrop" -->
+    <!-- android:src="@drawable/background_claims" /> -->
 
     <TabHost
         android:id="@android:id/tabhost"
@@ -19,6 +20,53 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="48dip"
+                android:background="#99000000"
+                android:gravity="right"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/back_button"
+                    style="@style/BackButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+
+                <Button
+                    android:id="@+id/logo_button"
+                    style="@style/LogoButton"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip"
+                    android:layout_gravity="center"
+                    android:layout_weight="0"
+                    android:gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/title_textview"
+                    style="@android:style/TextAppearance.Medium"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dip"
+                    android:layout_weight="5"
+                    android:gravity="left|center_vertical"
+                    android:text="Underground Claim" />
+
+                <Button
+                    android:id="@+id/submit_button"
+                    style="@style/EmailButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="5dip"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn="" />
+            </LinearLayout>
 
             <TabWidget
                 android:id="@android:id/tabs"
@@ -38,114 +86,83 @@
                         android:id="@+id/overview_tab"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="16dip"
                         android:orientation="vertical"
                         android:visibility="gone" >
 
-                        <LinearLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:orientation="horizontal"
-                            android:paddingTop="10dip" >
-
-                            <Button
-                                android:id="@+id/submit_button"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="Submit Claim" >
-                            </Button>
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="5dip"
-                            android:paddingTop="5dip"
-                            android:text="Reason of Delay"
-                            android:textAppearance="?android:attr/textAppearanceLarge" >
-                        </TextView>
-
                         <TextView
                             style="@style/WhiteText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Reason of Delay" />
+
+                        <TextView
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="5dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip"
                             android:text="For a claim to be accepted, you must have been delayed for reasons within TfL&apos;s control (i.e. no security alerts, no third party action, no bad weather, no advertised service changes)"
-                            android:textAppearance="?android:attr/textAppearanceSmall" >
-                        </TextView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="5dip"
-                            android:paddingTop="10dip"
-                            android:text="Claim Date"
-                            android:textAppearance="?android:attr/textAppearanceLarge" >
-                        </TextView>
+                            android:textColor="#FFFFFFFF" />
 
                         <TextView
                             style="@style/WhiteText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="16dip"
+                            android:text="Claim Date" />
+
+                        <TextView
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="5dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip"
                             android:text="Submit within 14 days of the delay, or you will not get a refund"
-                            android:textAppearance="?android:attr/textAppearanceSmall" >
-                        </TextView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="5dip"
-                            android:paddingTop="10dip"
-                            android:text="User Notes"
-                            android:textAppearance="?android:attr/textAppearanceLarge" >
-                        </TextView>
+                            android:textColor="#FFFFFFFF" />
 
                         <TextView
                             style="@style/WhiteText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="16dip"
+                            android:text="User Notes" />
+
+                        <TextView
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="5dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip"
                             android:text="Enter information for your own reference (not sent to TfL)"
-                            android:textAppearance="?android:attr/textAppearanceSmall" >
-                        </TextView>
+                            android:textColor="#FFFFFFFF" />
 
                         <EditText
                             android:id="@+id/claim_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="10dip"
-                            android:paddingTop="5dip" >
-                        </EditText>
+                            android:layout_marginLeft="16dip"
+                            android:layout_marginRight="16dip"
+                            android:layout_marginTop="5dip"
+                            android:inputType="text" />
 
                         <TextView
+                            style="@style/WhiteText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="5dip"
-                            android:paddingTop="10dip"
-                            android:text="Result"
-                            android:textAppearance="?android:attr/textAppearanceLarge" >
-                        </TextView>
+                            android:paddingTop="16dip"
+                            android:text="Result" />
 
                         <TextView
                             android:id="@+id/claim_result"
-                            style="@style/WhiteText"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:paddingBottom="10dip"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="5dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip"
                             android:text="Not yet submitted"
-                            android:textAppearance="?android:attr/textAppearanceSmall" >
+                            android:textColor="#FFFFFFFF" >
                         </TextView>
                     </LinearLayout>
 
@@ -153,131 +170,80 @@
                         android:id="@+id/journey_tab"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
+                        android:layout_margin="16dip"
                         android:orientation="vertical"
                         android:visibility="gone" >
 
                         <TextView
+                            style="@style/WhiteText"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="When did your journey start?" />
+
+                        <Button
+                            android:id="@+id/claim_journey_startdate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="5dip"
-                            android:paddingTop="10dip"
-                            android:text="Start Date"
-                            android:textAppearance="?android:attr/textAppearanceLarge" >
-                        </TextView>
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dip"
+                            android:layout_marginLeft="16dip"
+                            android:layout_marginRight="16dip"
+                            android:inputType="time"/>
 
                         <TextView
                             style="@style/WhiteText"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="5dip"
-                            android:paddingTop="5dip"
-                            android:text="When did your journey start?"
-                            android:textAppearance="?android:attr/textAppearanceSmall" >
-                        </TextView>
-
-                        <LinearLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:orientation="horizontal"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="10dip" >
-
-                            <Button
-                                android:id="@+id/claim_journey_startdate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:inputType="time"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="10dip"
-                                android:paddingTop="5dip" >
-                            </Button>
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="5dip"
-                            android:paddingTop="10dip"
-                            android:text="From and To"
-                            android:textAppearance="?android:attr/textAppearanceLarge" >
-                        </TextView>
-
-                        <TextView
-                            style="@style/WhiteText"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="5dip"
-                            android:paddingTop="5dip"
+                            android:layout_marginTop="16dip"
                             android:text="At which station did you start your journey?"
-                            android:textAppearance="?android:attr/textAppearanceSmall" >
-                        </TextView>
+                        />
 
                         <Spinner
                             android:id="@+id/claim_journey_startstation"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="20dip"
-                            android:paddingRight="5dip"
-                            android:paddingTop="5dip" />
+                            android:layout_marginTop="5dip"
+                            android:layout_marginLeft="16dip"
+                            android:layout_marginRight="16dip" />
 
                         <TextView
                             style="@style/WhiteText"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="5dip"
-                            android:paddingTop="5dip"
-                            android:text="Which line did you use when delayed?"
-                            android:textAppearance="?android:attr/textAppearanceSmall" >
-                        </TextView>
+                            android:layout_marginTop="16dip"
+                            android:text="Which line did you use when delayed?" />
 
                         <Spinner
                             android:id="@+id/claim_journey_lineused"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="20dip"
-                            android:paddingRight="5dip"
-                            android:paddingTop="5dip" />
+                            android:layout_marginTop="5dip"
+                            android:layout_marginLeft="16dip"
+                            android:layout_marginRight="16dip" />
 
                         <TextView
                             style="@style/WhiteText"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="5dip"
-                            android:paddingTop="5dip"
-                            android:text="At which station did you plan to finish your journey?"
-                            android:textAppearance="?android:attr/textAppearanceSmall" >
-                        </TextView>
+                            android:layout_marginTop="16dip"
+                            android:text="At which station did you plan to finish your journey?" />
 
                         <Spinner
                             android:id="@+id/claim_journey_endstation"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="20dip"
-                            android:paddingRight="5dip"
-                            android:paddingTop="5dip" />
+                            android:layout_marginLeft="16dip"
+                            android:layout_marginRight="16dip"
+                            android:layout_marginTop="5dip" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/delay_tab"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
+                        android:layout_margin="16dip"
                         android:orientation="vertical"
                         android:visibility="gone" >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="5dip"
-                            android:paddingTop="10dip"
-                            android:text="Timing"
-                            android:textAppearance="?android:attr/textAppearanceLarge" >
-                        </TextView>
 
                         <LinearLayout
                             android:layout_width="fill_parent"
@@ -286,13 +252,13 @@
 
                             <TextView
                                 style="@style/WhiteText"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dip"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="15dip"
-                                android:paddingTop="5dip"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_vertical"
                                 android:text="When did the delay occur?"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                            />
 
                             <Button
                                 android:id="@+id/claim_delay_when"
@@ -300,50 +266,43 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:gravity="center"
-                                android:inputType="time"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="10dip"
-                                android:paddingTop="5dip" />
+                                android:inputType="time"/>
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal" >
+                            android:orientation="horizontal"
+                            android:layout_marginTop="16dip" >
 
                             <TextView
                                 style="@style/WhiteText"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dip"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip"
-                                android:text="How long did the delay last?"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_vertical"
+                                android:text="How long did the delay last?" />
 
                             <Button
                                 android:id="@+id/claim_delay_duration"
                                 android:layout_width="100dip"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:gravity="center"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="10dip"
-                                android:paddingTop="5dip" />
+                                android:gravity="center" />
                         </LinearLayout>
-
+                        
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="5dip"
-                            android:paddingTop="10dip"
-                            android:text="Location"
-                            android:textAppearance="?android:attr/textAppearanceLarge" >
-                        </TextView>
+                                style="@style/WhiteText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dip"
+                                android:text="Where were you delayed?" />
 
                         <TableLayout
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="5dip"
                             android:stretchColumns="1" >
 
                             <TableRow
@@ -426,33 +385,32 @@
                         android:id="@+id/personal_tab"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
+                        android:layout_margin="16dip"
                         android:orientation="vertical"
                         android:visibility="gone" >
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="5dip"
-                            android:paddingTop="10dip"
                             android:text="Personal data"
-                            android:textAppearance="?android:attr/textAppearanceLarge" >
+                            style="@style/WhiteText" >
                         </TextView>
 
                         <LinearLayout
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="15dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip" >
 
                             <TextView
-                                style="@style/WhiteText"
                                 android:layout_width="100dip"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
+                                android:gravity="center_vertical"
                                 android:text="Title"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                style="@style/WhiteText" />
 
                             <Spinner
                                 android:id="@+id/claim_personal_title"
@@ -466,17 +424,17 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="15dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip" >
 
                             <TextView
-                                style="@style/WhiteText"
                                 android:layout_width="100dip"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
+                                android:gravity="center_vertical"
                                 android:text="Surname"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                style="@style/WhiteText" />
 
                             <EditText
                                 android:id="@+id/claim_personal_surname"
@@ -489,8 +447,8 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="15dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip" >
 
                             <TextView
@@ -498,8 +456,8 @@
                                 android:layout_width="100dip"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:text="Name"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:gravity="center_vertical"
+                                android:text="Name" />
 
                             <EditText
                                 android:id="@+id/claim_personal_name"
@@ -511,18 +469,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="5dip"
-                            android:paddingTop="10dip"
+                            android:paddingTop="16dip"
                             android:text="Address"
-                            android:textAppearance="?android:attr/textAppearanceLarge" >
+                            style="@style/WhiteText" >
                         </TextView>
 
                         <LinearLayout
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="15dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip" >
 
                             <TextView
@@ -530,8 +487,8 @@
                                 android:layout_width="100dip"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:text="Line 1"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:gravity="center_vertical"
+                                android:text="Line 1" />
 
                             <EditText
                                 android:id="@+id/claim_personal_line1"
@@ -544,8 +501,8 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="15dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip" >
 
                             <TextView
@@ -553,8 +510,8 @@
                                 android:layout_width="100dip"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:text="Line 2"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:gravity="center_vertical"
+                                android:text="Line 2" />
 
                             <EditText
                                 android:id="@+id/claim_personal_line2"
@@ -567,8 +524,8 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="15dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip" >
 
                             <TextView
@@ -576,8 +533,8 @@
                                 android:layout_width="100dip"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:text="City/town"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:gravity="center_vertical"
+                                android:text="City/town" />
 
                             <EditText
                                 android:id="@+id/claim_personal_city"
@@ -590,8 +547,8 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="15dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip" >
 
                             <TextView
@@ -599,8 +556,8 @@
                                 android:layout_width="100dip"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:text="Postcode"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:gravity="center_vertical"
+                                android:text="Postcode" />
 
                             <EditText
                                 android:id="@+id/claim_personal_postcode"
@@ -610,20 +567,19 @@
                         </LinearLayout>
 
                         <TextView
+                            style="@style/WhiteText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="5dip"
-                            android:paddingTop="10dip"
-                            android:text="Contact data"
-                            android:textAppearance="?android:attr/textAppearanceLarge" >
+                            android:paddingTop="16dip"
+                            android:text="Contact data" >
                         </TextView>
 
                         <LinearLayout
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="15dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip" >
 
                             <TextView
@@ -631,8 +587,8 @@
                                 android:layout_width="100dip"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:text="Phone"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:gravity="center_vertical"
+                                android:text="Phone" />
 
                             <EditText
                                 android:id="@+id/claim_personal_phone"
@@ -646,8 +602,8 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="15dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip" >
 
                             <TextView
@@ -655,8 +611,7 @@
                                 android:layout_width="100dip"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:text="Email"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:text="Email" />
 
                             <EditText
                                 android:id="@+id/claim_personal_email"
@@ -670,8 +625,8 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="15dip"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
                             android:paddingTop="5dip" >
 
                             <TextView
@@ -679,8 +634,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:text="Photocard number (if applicable)"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:text="Photocard number (if applicable)" />
 
                             <EditText
                                 android:id="@+id/claim_personal_photocard"
@@ -695,16 +649,15 @@
                         android:id="@+id/ticket_tab"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
+                        android:layout_margin="16dip"
                         android:orientation="vertical"
                         android:visibility="gone" >
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="5dip"
-                            android:paddingTop="10dip"
                             android:text="Ticket Type"
-                            android:textAppearance="?android:attr/textAppearanceLarge" >
+                            style="@style/WhiteText" >
                         </TextView>
 
                         <Spinner
@@ -713,9 +666,9 @@
                             android:layout_height="wrap_content"
                             android:entries="@array/ticket_type_spinner"
                             android:orientation="horizontal"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="10dip"
-                            android:paddingTop="5dip" >
+                            android:layout_marginLeft="16dip"
+                            android:layout_marginRight="16dip"
+                            android:layout_marginTop="5dip" >
                         </Spinner>
 
                         <LinearLayout
@@ -723,17 +676,14 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:paddingLeft="5dip"
-                            android:paddingRight="5dip"
-                            android:paddingTop="10dip" >
+                            android:paddingTop="16dip" >
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="5dip"
-                                android:paddingTop="10dip"
+                                android:layout_marginTop="10dip"
                                 android:text="Oyster details"
-                                android:textAppearance="?android:attr/textAppearanceLarge" >
+                                style="@style/WhiteText" >
                             </TextView>
 
                             <FrameLayout
@@ -741,7 +691,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
                                 android:gravity="center"
-                                android:paddingLeft="10dip" >
+                                android:layout_marginLeft="16dip"
+                                android:layout_marginRight="16dip" >
 
                                 <ImageView
                                     android:layout_width="wrap_content"
@@ -761,58 +712,49 @@
                                 style="@style/WhiteText"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip"
-                                android:text="Oyster number"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:layout_marginTop="16dip"
+                                android:text="Oyster number"/>
 
                             <EditText
                                 android:id="@+id/claim_ticket_oyster_number"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="number"
-                                android:paddingLeft="20dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip" />
+                                android:layout_marginLeft="16dip"
+                                android:layout_marginRight="16dip"
+                                android:layout_marginTop="5dip" />
 
                             <TextView
                                 style="@style/WhiteText"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip"
-                                android:text="Oyster card type"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:paddingTop="16dip"
+                                android:text="Oyster card type" />
 
                             <Spinner
                                 android:id="@+id/claim_ticket_oyster_card_type"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:entries="@array/oyster_card_type_spinner"
-                                android:paddingLeft="20dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip" />
+                                android:layout_marginLeft="16dip"
+                                android:layout_marginRight="16dip"
+                                android:layout_marginTop="5dip" />
 
                             <TextView
                                 style="@style/WhiteText"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip"
-                                android:text="Oyster ticket type"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:layout_marginTop="16dip"
+                                android:text="Oyster ticket type" />
 
                             <Spinner
                                 android:id="@+id/claim_ticket_oyster_ticket_type"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:entries="@array/oyster_ticket_type_spinner"
-                                android:paddingLeft="20dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip" />
+                                android:layout_marginLeft="16dip"
+                                android:layout_marginRight="16dip"
+                                android:layout_marginTop="5dip" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -820,25 +762,23 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:paddingLeft="5dip"
-                            android:paddingRight="5dip"
-                            android:paddingTop="10dip"
+                            android:paddingTop="16dip"
                             android:visibility="gone" >
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="5dip"
-                                android:paddingTop="10dip"
                                 android:text="TfL travelcard details"
-                                android:textAppearance="?android:attr/textAppearanceLarge" >
+                                style="@style/WhiteText" >
                             </TextView>
 
                             <TableLayout
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
-                                android:paddingLeft="10dip"
+                                android:layout_marginLeft="16dip"
+                                android:layout_marginRight="16dip"
+                                android:layout_marginTop="5dip"
                                 android:stretchColumns="0,1" >
 
                                 <TableRow
@@ -887,111 +827,93 @@
                                 style="@style/WhiteText"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip"
-                                android:text="Expiry date"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:layout_marginTop="16dip"
+                                android:text="Expiry date" />
 
                             <Button
                                 android:id="@+id/claim_ticket_tfl_expiry"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="20dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip" />
+                                android:layout_marginLeft="16dip"
+                                android:layout_marginRight="16dip"
+                                android:layout_marginTop="5dip" />
 
                             <TextView
                                 style="@style/WhiteText"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip"
-                                android:text="Ticket number"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:paddingTop="16dip"
+                                android:text="Ticket number" />
 
                             <EditText
                                 android:id="@+id/claim_ticket_tfl_number"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="number"
-                                android:paddingLeft="20dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip" />
+                                android:layout_marginLeft="16dip"
+                                android:layout_marginRight="16dip"
+                                android:layout_marginTop="5dip" />
 
                             <TextView
                                 style="@style/WhiteText"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip"
-                                android:text="Issuing station"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:layout_marginTop="16dip"
+                                android:text="Issuing station" />
 
                             <EditText
                                 android:id="@+id/claim_ticket_tfl_issuingstn"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="20dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip" />
+                                android:layout_marginLeft="16dip"
+                                android:layout_marginRight="16dip"
+                                android:layout_marginTop="5dip" />
 
                             <TextView
                                 style="@style/WhiteText"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip"
-                                android:text="Station where the ticket was retained (if so)"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:layout_marginTop="16dip"
+                                android:text="Station where the ticket was retained (if so)"/>
 
                             <EditText
                                 android:id="@+id/claim_ticket_tfl_retainedstn"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="20dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip" />
+                                android:layout_marginLeft="16dip"
+                                android:layout_marginRight="16dip"
+                                android:layout_marginTop="5dip" />
 
                             <TextView
                                 style="@style/WhiteText"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip"
-                                android:text="Travelcard duration"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:layout_marginTop="5dip"
+                                android:text="Travelcard duration" />
 
                             <Spinner
                                 android:id="@+id/claim_ticket_tfl_duration"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:entries="@array/tfl_duration_spinner"
-                                android:paddingLeft="20dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip" />
+                                android:layout_marginLeft="16dip"
+                                android:layout_marginRight="16dip"
+                                android:layout_marginTop="5dip" />
 
                             <TextView
                                 style="@style/WhiteText"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip"
-                                android:text="Travelcard type"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:paddingTop="16dip"
+                                android:text="Travelcard type" />
 
                             <Spinner
                                 android:id="@+id/claim_ticket_tfl_type"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:entries="@array/oyster_card_type_spinner"
-                                android:paddingLeft="20dip"
-                                android:paddingRight="5dip"
+                                android:layout_marginLeft="16dip"
+                                android:layout_marginRight="16dip"
                                 android:paddingTop="5dip" />
                         </LinearLayout>
 
@@ -1000,25 +922,21 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:paddingLeft="5dip"
-                            android:paddingRight="5dip"
-                            android:paddingTop="10dip"
                             android:visibility="gone" >
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="5dip"
-                                android:paddingTop="10dip"
+                                android:layout_marginTop="16dip"
                                 android:text="National Rail Travelcard details"
-                                android:textAppearance="?android:attr/textAppearanceLarge" >
+                                style="@style/WhiteText" >
                             </TextView>
 
                             <TableLayout
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
-                                android:paddingLeft="10dip"
+                                android:layout_marginTop="5dip"
                                 android:stretchColumns="0,1" >
 
                                 <TableRow
@@ -1067,17 +985,14 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="15dip"
-                                android:paddingTop="5dip" >
+                                android:layout_marginTop="16dip" >
 
                                 <TextView
                                     style="@style/WhiteText"
                                     android:layout_width="150dip"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
-                                    android:text="Ticket Class"
-                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                                    android:text="Ticket Class" />
 
                                 <EditText
                                     android:id="@+id/claim_ticket_rail_class"
@@ -1090,17 +1005,14 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="15dip"
-                                android:paddingTop="5dip" >
+                                android:paddingTop="16dip" >
 
                                 <TextView
                                     style="@style/WhiteText"
                                     android:layout_width="150dip"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
-                                    android:text="Valid until"
-                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                                    android:text="Valid until"/>
 
                                 <Button
                                     android:id="@+id/claim_ticket_rail_validuntil"
@@ -1113,17 +1025,14 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="15dip"
-                                android:paddingTop="5dip" >
+                                android:paddingTop="16dip" >
 
                                 <TextView
                                     style="@style/WhiteText"
                                     android:layout_width="150dip"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
-                                    android:text="Ticket number"
-                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                                    android:text="Ticket number"/>
 
                                 <EditText
                                     android:id="@+id/claim_ticket_rail_number"
@@ -1137,17 +1046,14 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="15dip"
-                                android:paddingTop="5dip" >
+                                android:layout_marginTop="16dip" >
 
                                 <TextView
                                     style="@style/WhiteText"
                                     android:layout_width="150dip"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
-                                    android:text="Travelcard duration"
-                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                                    android:text="Travelcard duration" />
 
                                 <Spinner
                                     android:id="@+id/claim_ticket_rail_duration"
@@ -1161,17 +1067,14 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="15dip"
-                                android:paddingTop="5dip" >
+                                android:paddingTop="16dip" >
 
                                 <TextView
                                     style="@style/WhiteText"
                                     android:layout_width="150dip"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
-                                    android:text="Travelcard type"
-                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                                    android:text="Travelcard type"/>
 
                                 <Spinner
                                     android:id="@+id/claim_ticket_rail_type"
@@ -1185,37 +1088,27 @@
                                 style="@style/WhiteText"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip"
-                                android:text="Place of purchase"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:layout_marginTop="16dip"
+                                android:text="Place of purchase" />
 
                             <EditText
                                 android:id="@+id/claim_ticket_rail_purchase"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="20dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip" />
+                                android:layout_marginTop="5dip" />
 
                             <TextView
                                 style="@style/WhiteText"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="10dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip"
-                                android:text="Station where the ticket was retained (if so)"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:layout_marginTop="16dip"
+                                android:text="Station where the ticket was retained (if so)" />
 
                             <EditText
                                 android:id="@+id/claim_ticket_rail_retainedstation"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="20dip"
-                                android:paddingRight="5dip"
-                                android:paddingTop="5dip" />
+                                android:layout_marginTop="5dip" />
                         </LinearLayout>
                     </LinearLayout>
                 </FrameLayout>

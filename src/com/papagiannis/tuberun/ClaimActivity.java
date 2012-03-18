@@ -19,10 +19,12 @@ import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.app.Dialog;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.text.Editable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -33,6 +35,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -71,35 +74,51 @@ public class ClaimActivity extends TabActivity implements Observer {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.claim);
+		
+		Button back_button = (Button) findViewById(R.id.back_button);
+		Button logo_button = (Button) findViewById(R.id.logo_button);
+		OnClickListener back_listener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		};
+		back_button.setOnClickListener(back_listener);
+		logo_button.setOnClickListener(back_listener);
 
 		tabHost = getTabHost();
 
 		// add views to tab host
-		tabHost.addTab(tabHost.newTabSpec(LIST1_TAB_TAG).setIndicator(LIST1_TAB_TAG)
+		tabHost.addTab(tabHost.newTabSpec(LIST1_TAB_TAG).
+				setIndicator(createTabView(this, LIST1_TAB_TAG))
 				.setContent(new TabContentFactory() {
 					public View createTabContent(String arg0) {
 						return (LinearLayout) findViewById(R.id.overview_tab);
 					}
 				}));
-		tabHost.addTab(tabHost.newTabSpec(LIST2_TAB_TAG).setIndicator(LIST2_TAB_TAG)
+		tabHost.addTab(tabHost.newTabSpec(LIST2_TAB_TAG).
+				setIndicator(createTabView(this, LIST2_TAB_TAG))
 				.setContent(new TabContentFactory() {
 					public View createTabContent(String arg0) {
 						return (LinearLayout) findViewById(R.id.journey_tab);
 					}
 				}));
-		tabHost.addTab(tabHost.newTabSpec(LIST3_TAB_TAG).setIndicator(LIST3_TAB_TAG)
+		tabHost.addTab(tabHost.newTabSpec(LIST3_TAB_TAG).
+				setIndicator(createTabView(this, LIST3_TAB_TAG))
 				.setContent(new TabContentFactory() {
 					public View createTabContent(String arg0) {
 						return (LinearLayout) findViewById(R.id.delay_tab);
 					}
 				}));
-		tabHost.addTab(tabHost.newTabSpec(LIST4_TAB_TAG).setIndicator(LIST4_TAB_TAG)
+		tabHost.addTab(tabHost.newTabSpec(LIST4_TAB_TAG).
+				setIndicator(createTabView(this, LIST4_TAB_TAG))
 				.setContent(new TabContentFactory() {
 					public View createTabContent(String arg0) {
 						return (LinearLayout) findViewById(R.id.personal_tab);
 					}
 				}));
-		tabHost.addTab(tabHost.newTabSpec(LIST5_TAB_TAG).setIndicator(LIST5_TAB_TAG)
+		tabHost.addTab(tabHost.newTabSpec(LIST5_TAB_TAG)
+				.setIndicator(createTabView(this, LIST5_TAB_TAG))
 				.setContent(new TabContentFactory() {
 					public View createTabContent(String arg0) {
 						return (LinearLayout) findViewById(R.id.ticket_tab);
@@ -119,6 +138,15 @@ public class ClaimActivity extends TabActivity implements Observer {
 
 		if (!claim.getEditable())
 			markNotEditable();
+	}
+	
+	public  View createTabView(final Context context, final String text) {
+		View view = LayoutInflater.from(context)
+				.inflate(R.layout.tabs_background, null);
+		TextView tabsTextView = (TextView) view.findViewById(R.id.tabs_textview);
+		tabsTextView.setText(text.toUpperCase());
+//		tabsImageView = (ImageView) view.findViewById(R.id.tabs_imageview);
+		return view;
 	}
 
 	@Override

@@ -58,7 +58,7 @@
                 android:layout_marginLeft="5dip"
                 android:layout_weight="5"
                 android:gravity="left|center_vertical"
-                android:text="Claims" />
+                android:text="All Claims" />
 
             <Button
                 android:id="@+id/button_add"
