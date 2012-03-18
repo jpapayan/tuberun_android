@@ -136,7 +136,12 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 	private ProgressDialog wait_dialog;
     @Override
     protected Dialog onCreateDialog(int id) {
-    	wait_dialog=new ProgressDialog(this);
+    	if (Integer.parseInt(android.os.Build.VERSION.SDK) < 11) {
+    		wait_dialog=new ProgressDialog(this);
+    	}
+    	else {
+    		wait_dialog=new ProgressDialog(this,ProgressDialog.THEME_HOLO_DARK);
+    	}
     	wait_dialog.setTitle("");
     	wait_dialog.setMessage("Fetching data. Please wait...");
     	wait_dialog.setIndeterminate(true);

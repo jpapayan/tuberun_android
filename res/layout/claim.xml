@@ -25,14 +25,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="48dip"
                 android:background="#99000000"
-                android:gravity="right"
                 android:orientation="horizontal" >
-
+
                 <Button
                     android:id="@+id/back_button"
                     style="@style/BackButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:minHeight="0dip"
+                    android:minWidth="0dip"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -40,19 +42,18 @@
                     style="@style/LogoButton"
                     android:layout_width="40dip"
                     android:layout_height="40dip"
-                    android:layout_gravity="center"
-                    android:layout_weight="0"
+                    android:layout_gravity="center_vertical"
                     android:gravity="center"
                     android:text="" />
 
                 <TextView
                     android:id="@+id/title_textview"
                     style="@android:style/TextAppearance.Medium"
-                    android:layout_width="fill_parent"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dip"
-                    android:layout_weight="5"
+                    android:layout_weight="1"
                     android:gravity="left|center_vertical"
                     android:text="Underground Claim" />
 
@@ -61,8 +62,10 @@
                     style="@style/EmailButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dip"
+                    android:minHeight="0dip"
+                    android:minWidth="0dip"
                     android:text=""
                     android:textOff=""
                     android:textOn="" />

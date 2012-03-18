@@ -7,7 +7,9 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_marginTop="10dip"
+        android:layout_marginBottom="16dip" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -18,8 +20,9 @@
                 style="@style/WhiteText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
                 android:background="#99000000"
+                android:paddingLeft="16dip"
+                android:paddingRight="16dip"
                 android:text="What is your destination?" />
 
             <EditText
@@ -27,13 +30,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="16dip"
                 android:inputType="text"
                 android:text=" " />
 
             <TableLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dip"
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="16dip"
                 android:stretchColumns="*" >
 
                 <TableRow>
@@ -87,7 +93,9 @@
             style="@style/WhiteText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
+            android:layout_marginTop="16dip"
+            android:paddingLeft="16dip"
+            android:paddingRight="16dip"
             android:background="#99000000"
             android:text="Past destinations" />
 
@@ -95,7 +103,10 @@
             android:id="@+id/previous_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginLeft="16dip"
+            android:layout_marginRight="16dip"
+            android:layout_marginBottom="16dip"
             android:orientation="vertical" />
 
         <LinearLayout
@@ -108,15 +119,18 @@
                 style="@style/WhiteText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_marginTop="16dip"
                 android:background="#99000000"
+                android:paddingLeft="16dip"
+                android:paddingRight="16dip"
                 android:text="What is your starting point?" />
 
             <CheckBox
                 android:id="@+id/fromcurrent_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dip"
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="16dip"
                 android:checked="true"
                 android:text="My current location" />
 
@@ -125,6 +139,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="16dip"
                 android:enabled="false"
                 android:inputType="text"
                 android:text=" " />
@@ -133,7 +149,9 @@
                 android:id="@+id/from_radiogroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dip"
+                android:layout_marginTop="5dip"
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="16dip"
                 android:orientation="vertical" >
 
                 <RadioButton
@@ -162,15 +180,18 @@
                 style="@style/WhiteText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_marginTop="16dip"
                 android:background="#99000000"
-                android:text="Do you have any time constraints?" />
+                android:paddingLeft="16dip"
+                android:paddingRight="16dip"
+                android:text="When do you want to travel?" />
 
             <CheckBox
                 android:id="@+id/traveldate_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dip"
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="16dip"
                 android:text="I want to travel at a future date" />
 
             <Button
@@ -178,6 +199,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="5dip"
                 android:enabled="false"
                 android:text="Enter travel date" />
 
@@ -185,7 +207,9 @@
                 android:id="@+id/departtime_radiobutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dip"
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="16dip"
+                android:layout_marginTop="16dip"
                 android:checked="true"
                 android:text="I want to depart at a specific time" />
 
@@ -193,6 +217,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="55dip"
+                android:layout_marginRight="16dip"
+                android:layout_marginTop="5dip"
                 android:stretchColumns="*" >
 
                 <TableRow>
@@ -229,7 +255,9 @@
                 android:id="@+id/arrivetime_radiobutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dip"
+                android:layout_marginTop="5dip"
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="16dip"
                 android:checked="false"
                 android:text="I want to arrive at a specific time" />
 
@@ -239,19 +267,26 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:enabled="false"
+                android:layout_marginTop="5dip"
                 android:text="Enter time" />
 
             <TextView
                 style="@style/WhiteText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_marginTop="16dip"
                 android:background="#99000000"
-                android:text="Any means of transport you prefer?" />
+                android:paddingLeft="16dip"
+                android:paddingRight="16dip"
+                android:text="How do you want to travel?" />
 
             <TableLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="16dip"
+                android:layout_marginBottom="16dip"
                 android:stretchColumns="*" >
 
                 <TableRow>
