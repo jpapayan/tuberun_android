@@ -29,7 +29,9 @@
                 style="@style/BackButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:minWidth="0dip"
+                android:minHeight="0dip" />
 
             <Button
                 android:id="@+id/logo_button"
@@ -61,7 +63,9 @@
                 android:layout_gravity="center_vertical|right"
                 android:layout_marginRight="10dip"
                 android:visibility="gone"
-                android:text="" />
+                android:text=""
+                android:minWidth="0dip"
+                android:minHeight="0dip" />
             
             <Button
                 android:id="@+id/save_active_button"
@@ -72,7 +76,9 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:text="" 
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:minWidth="0dip"
+                android:minHeight="0dip"/>
             
             <Button
                 android:id="@+id/share_button"
@@ -83,7 +89,9 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:visibility="gone"
-                android:text=""/>
+                android:text=""
+                android:minWidth="0dip"
+                android:minHeight="0dip"/>
             
             <Button
                 android:id="@+id/map_button"
@@ -94,7 +102,9 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:visibility="gone"
-                android:text="" />
+                android:text="" 
+                android:minWidth="0dip"
+                android:minHeight="0dip"/>
 
         </LinearLayout>
         

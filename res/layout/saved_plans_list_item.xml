@@ -40,12 +40,14 @@
     <Button
         android:id="@+id/remove_button"
         style="@style/RemoveFavoriteButton"
-        android:layout_width="40dip"
-        android:layout_height="40dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:textOff=""
-        android:textOn="" />
+        android:textOn=""
+        android:minWidth="0dip"
+		android:minHeight="0dip" />
 
 </LinearLayout>

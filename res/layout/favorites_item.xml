@@ -37,7 +37,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textOff=""
-            android:textOn="" />
+            android:textOn=""
+            android:minWidth="0dip"
+            android:minHeight="0dip" />
     </LinearLayout>
 
     <LinearLayout

@@ -71,7 +71,10 @@
 
 	<drawable name="tuberun_semitransparent">#99000000</drawable>
 	<drawable name="tuberun_transparent">#00000000</drawable>
-	<drawable name="tuberun_red">#99801219</drawable>
-	<drawable name="tuberun_red_bright">#99DA2B2C</drawable>
+	<drawable name="tuberun_red">#FF801219</drawable>
+	<drawable name="tuberun_red_bright">#FFDA2B2C</drawable>
+	<drawable name="tuberun_red_bright_transparent">#99DA2B2C</drawable>
 	<drawable name="tuberun_boardorange">#FFB8C600</drawable>
+	<drawable name="tuberun_grey">#E5D5D4D4</drawable>
+	<drawable name="tuberun_grey_darker">#E5C1C1C1</drawable>
 </resources>

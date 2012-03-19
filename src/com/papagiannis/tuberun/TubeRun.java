@@ -37,7 +37,7 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	private final TubeRun self = this;
 	public static final String APPNAME = "TubeRun";
-	public static final String VERSION = "1.0.0";
+	public static final String VERSION = "1.0.0beta";
 	private static final int DOWNLOAD_IMAGE_DIALOG = -1;
 	private static final int DOWNLOAD_IMAGE_PROGRESS_DIALOG = -2;
 	private static final int DOWNLOAD_IMAGE_FAILED_DIALOG = -3;

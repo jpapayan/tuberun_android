@@ -82,6 +82,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|right"
                 android:layout_marginRight="10dip"
+                android:minHeight="0dip"
+                android:minWidth="0dip"
                 android:text="" />
 
             <Button
@@ -91,6 +93,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|right"
                 android:layout_marginRight="10dip"
+                android:minHeight="0dip"
+                android:minWidth="0dip"
                 android:text=""
                 android:visibility="gone" />
 
@@ -102,6 +106,8 @@
                 android:layout_gravity="center_vertical|right"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="5dip"
+                android:minHeight="0dip"
+                android:minWidth="0dip"
                 android:text=""
                 android:textOff=""
                 android:textOn="" />
@@ -128,6 +134,8 @@
 
                 <Button
                     android:id="@+id/button_status"
+                    android:background="@layout/custom_button"
+                    android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:maxHeight="80dip"
@@ -135,7 +143,11 @@
                     android:text="@string/status_title"
                     android:width="120dip" />
 
+                
+
                 <Button
+                    android:background="@layout/custom_button"
+                    android:textColor="@android:color/black"
                     android:id="@+id/button_departures"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -152,6 +164,8 @@
 
                 <Button
                     android:id="@+id/button_nearby"
+                    android:background="@layout/custom_button"
+                    android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:maxHeight="80dip"
@@ -161,6 +175,8 @@
 
                 <Button
                     android:id="@+id/button_maps"
+                    android:background="@layout/custom_button"
+                    android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:maxHeight="80dip"
@@ -175,6 +191,8 @@
 
                 <Button
                     android:id="@+id/button_planner"
+                    android:background="@layout/custom_button"
+                    android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:maxHeight="80dip"
@@ -184,6 +202,8 @@
 
                 <Button
                     android:id="@+id/button_claims"
+                    android:background="@layout/custom_button"
+                    android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:maxHeight="80dip"

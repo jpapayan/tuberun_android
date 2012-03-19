@@ -127,12 +127,12 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 	private ProgressDialog wait_dialog;
     @Override
     protected Dialog onCreateDialog(int id) {
-    	if (Integer.parseInt(android.os.Build.VERSION.SDK) < 11) {
+//    	if (Integer.parseInt(android.os.Build.VERSION.SDK) < 11) {
     		wait_dialog=new ProgressDialog(this);
-    	}
-    	else {
-    		wait_dialog=new ProgressDialog(this,ProgressDialog.THEME_HOLO_DARK);
-    	}
+//    	}
+//    	else {
+//    		wait_dialog=new ProgressDialog(this,ProgressDialog.THEME_HOLO_DARK);
+//    	}
     	
     	wait_dialog.setTitle("");
     	wait_dialog.setMessage("Fetching data. Please wait...");

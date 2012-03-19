@@ -37,7 +37,9 @@
                 style="@style/BackButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:minWidth="0dip"
+                android:minHeight="0dip" />
 
             <Button
                 android:id="@+id/logo_button"
@@ -69,7 +71,9 @@
                 android:layout_marginRight="5dip"
                 android:text=""
                 android:textOff=""
-                android:textOn="" />
+                android:textOn=""
+                android:minWidth="0dip"
+                android:minHeight="0dip" />
         </LinearLayout>
 
         <LinearLayout

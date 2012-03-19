@@ -21,7 +21,9 @@
                 style="@style/BackButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:minWidth="0dip"
+                android:minHeight="0dip" />
 
             <Button
                 android:id="@+id/logo_button"
@@ -42,7 +44,9 @@
                 android:layout_marginLeft="5dip"
                 android:layout_weight="5"
                 android:gravity="left|center_vertical"
-                android:text="About" />
+                android:text="About"
+                android:minWidth="0dip"
+                android:minHeight="0dip" />
 
             <Button
                 android:id="@+id/email_button"
@@ -53,7 +57,9 @@
                 android:layout_marginRight="5dip"
                 android:text=""
                 android:textOff=""
-                android:textOn="" />
+                android:textOn=""
+                android:minWidth="0dip"
+                android:minHeight="0dip" />
         </LinearLayout>
 
         <TextView
@@ -101,7 +107,7 @@
             android:layout_gravity="bottom"
             android:background="@drawable/tuberun_semitransparent"
             android:gravity="center_horizontal"
-            android:text="Panagiota Dalamagka, Thomas Tziortziotis, Petr Hosek, Erikos Ouziel, Nikos Kantas"
+            android:text="Panagiota Dalamagka, Thomas Tziortziotis, Petr Hosek, Erikos Ouziel, Nikos Kantas, Ioannis Demetriou"
             android:textColor="#FFFFFF" />
 
         <TextView

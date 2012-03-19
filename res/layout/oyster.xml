@@ -28,7 +28,9 @@
                 style="@style/BackButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:minWidth="0dip"
+                android:minHeight="0dip" />
 
             <Button
                 android:id="@+id/logo_button"
@@ -132,7 +134,7 @@
                     android:layout_marginLeft="10px"
                     android:layout_marginRight="15dip"
                     android:layout_marginTop="5dip"
-                    android:text="Save Credentials" />
+                    android:text="Save" />
 
                 <Button
                     android:id="@+id/button_erase"
@@ -140,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/button_store"
                     android:layout_toLeftOf="@id/button_store"
-                    android:text="Erase Credentials" />
+                    android:text="Erase" />
             </RelativeLayout>
         </LinearLayout>
         

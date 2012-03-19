@@ -28,6 +28,8 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:textOff=""
-        android:textOn="" />
+        android:textOn=""
+        android:minWidth="0dip"
+        android:minHeight="0dip" />
 
 </LinearLayout>

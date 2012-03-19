@@ -35,7 +35,9 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textOff=""
-                    android:textOn="" />
+                    android:textOn=""
+                    android:minWidth="0dip"
+                	android:minHeight="0dip" />
             </TableRow>
         </TableLayout>
     </LinearLayout>

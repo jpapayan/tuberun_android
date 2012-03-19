@@ -19,7 +19,6 @@
         <activity
             android:name=".TubeRun"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
@@ -30,7 +29,6 @@
         </activity>
         <activity
             android:name=".StatusActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
@@ -40,7 +38,7 @@
         <activity
             android:name=".StatusMapActivity"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar.Fullscreen"
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +46,6 @@
         </activity>
         <activity
             android:name=".SelectLineActivity"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
@@ -57,7 +54,6 @@
         </activity>
         <activity
             android:name=".SelectStationActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
@@ -66,7 +62,6 @@
         </activity>
         <activity
             android:name=".SelectBusStationActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
@@ -75,7 +70,6 @@
         </activity>
         <activity
             android:name=".DeparturesActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
@@ -85,7 +79,6 @@
         <activity
             android:name=".BusDeparturesActivity"
             android:label="Bus Departures"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
@@ -95,7 +88,6 @@
         <activity
             android:name=".NearbyStationsListFragment"
             android:label="Tube Stations Nearby" 
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation">
             <intent-filter>
@@ -105,7 +97,6 @@
         <activity
             android:name=".DirectionsMapActivity"
             android:label="Directions to "
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
@@ -115,7 +106,6 @@
         <activity
             android:name=".FavoritesActivity"
             android:label="Favorites"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
@@ -125,7 +115,6 @@
         <activity
             android:name=".ClaimsActivity"
             android:label="Claims"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
@@ -144,7 +133,6 @@
         </activity>
         <activity
             android:name=".OysterActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:windowSoftInputMode="stateUnchanged"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
@@ -154,7 +142,6 @@
         </activity>
         <activity
             android:name=".PlanActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:windowSoftInputMode="stateUnchanged"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
@@ -164,7 +151,6 @@
         </activity>
         <activity
             android:name=".RouteResultsActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:windowSoftInputMode="stateUnchanged"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
@@ -174,7 +160,6 @@
         </activity>
         <activity
             android:name=".PartialRouteMapActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:windowSoftInputMode="stateUnchanged" 
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation">
@@ -184,7 +169,6 @@
         </activity>
         <activity
             android:name=".NearbyStationsActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:windowSoftInputMode="stateUnchanged"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
@@ -194,7 +178,6 @@
         </activity>
         <activity
             android:name=".AboutActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:windowSoftInputMode="stateUnchanged"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
