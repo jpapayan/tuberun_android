@@ -77,12 +77,12 @@ public class StatusesFetcher extends Fetcher {
 	}
 
 	protected AtomicBoolean isFirst = new AtomicBoolean(true);
-
+	protected RequestTask task=null;
 	public void update() {
 		boolean first = isFirst.compareAndSet(true, false);
 		if (!first)
 			return; // only one at a time
-		RequestTask task = new RequestTask(new HttpCallback() {
+		task = new RequestTask(new HttpCallback() {
 			public void onReturn(String s) {
 				getStatusesCallBack(s);
 			}
@@ -207,4 +207,10 @@ public class StatusesFetcher extends Fetcher {
 		}
 		return res.toString();
 	}
+	
+	@Override
+    public void abort() {
+		isFirst.set(true);
+    	if (task!=null) task.cancel(true);
+    }
 }

@@ -101,11 +101,11 @@ public class StationsBusFetcher extends Fetcher {
 	}
 
 	public ArrayList<BusStation> getResult() {
-		return task.getResult();
+		return (task!=null)?task.getResult():new ArrayList<BusStation>();
 	}
 
 	public void abort() {
-		task.cancel(true);
+		if (task!=null) task.cancel(true);
 	}
 
 }

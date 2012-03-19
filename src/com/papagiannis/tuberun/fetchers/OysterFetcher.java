@@ -15,6 +15,7 @@ public class OysterFetcher extends Fetcher {
 	private String oyster_no="";
 	private String oyster_balance="";
 	private Date update_time=new Date(2000,1,1);
+	RequestTask task=null;
 
 	public OysterFetcher(String username, String password) {
 		super();
@@ -49,6 +50,7 @@ public class OysterFetcher extends Fetcher {
 		});
 		r.setPostData(postData);
 		r.setCookies(cookies);
+		task=r;
 		r.execute(q1);
 	}
 
@@ -78,6 +80,7 @@ public class OysterFetcher extends Fetcher {
 				});
 				r.setPostData(postData);
 				r.setCookies(cookies);
+				task=r;
 				r.execute(q);
 			}
 			else {
@@ -118,4 +121,8 @@ public class OysterFetcher extends Fetcher {
 		return !errors.equals("");
 	}
 
+	@Override
+    public void abort() {
+    	if (task!=null) task.cancel(true);
+    }
 }

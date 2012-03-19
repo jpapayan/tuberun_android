@@ -91,8 +91,8 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		wait_dialog = ProgressDialog.show(this, "",
-				"Fetching walking directions. Please wait...", true);
+		wait_dialog = ProgressDialog.show(this, "Fetching walking directions",
+				"Please wait...", true);
 		wait_dialog.setCancelable(true);
 		wait_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
 			

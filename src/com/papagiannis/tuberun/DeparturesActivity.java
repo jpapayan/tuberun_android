@@ -142,8 +142,8 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
     	else {
     		wait_dialog=new ProgressDialog(this,ProgressDialog.THEME_HOLO_DARK);
     	}
-    	wait_dialog.setTitle("");
-    	wait_dialog.setMessage("Fetching data. Please wait...");
+    	wait_dialog.setTitle("Fetching departures");
+    	wait_dialog.setMessage("Please wait...");
     	wait_dialog.setIndeterminate(true);
     	wait_dialog.setOnCancelListener(new OnCancelListener() {
 			@Override

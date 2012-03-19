@@ -11,17 +11,20 @@ import org.json.*;
 public class BusDeparturesFetcher extends Fetcher {
 	private static final long serialVersionUID = 1L;
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
+	RequestTask task=null;
+	
 	@Override
 	public void update() {
 		boolean first = isFirst.compareAndSet(true, false);
 		if (!first)
 			return; // only one at a time
 		String request_query = "http://countdown.tfl.gov.uk/stopBoard/"+stop_code;
-		new RequestTask(new HttpCallback() {
+		task=new RequestTask(new HttpCallback() {
 			public void onReturn(String s) {
 				getDeparturesCallBack(s);
 			}
-		}).execute(request_query);
+		});
+		task.execute(request_query);
 	}
 
 	private Date last_update=new Date();
@@ -88,6 +91,12 @@ public class BusDeparturesFetcher extends Fetcher {
         }
         return categorised;
 
+    }
+    
+    @Override
+    public void abort() {
+    	isFirst.set(true);
+    	if (task!=null) task.cancel(true);
     }
 
 }

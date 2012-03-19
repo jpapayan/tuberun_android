@@ -450,8 +450,8 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 		} else if (id == WAIT_DIALOG) {
 			is_wait_dialog = true;
 			ProgressDialog p=new ProgressDialog(getActivity());
-			p.setMessage("Fetching travel plans");
-			p.setTitle("Please wait");
+			p.setMessage("Please wait...");
+			p.setTitle("Fetching travel plans");
 			p.setOnCancelListener(new OnCancelListener() {
 				@Override
 				public void onCancel(DialogInterface dialog) {
@@ -534,9 +534,9 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 		} else if (id == ERROR_DIALOG || id == PLAN_ERROR_DIALOG
 				|| id == ADD_HOME_ERROR) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle("Error")
+			builder.setTitle("House address not set")
 					.setMessage(
-							id == ADD_HOME_ERROR ? "The address of your house is not set. Use one of the house icons next to past destinations to set it."
+							id == ADD_HOME_ERROR ? "Use one of the house icons next to past destinations to set it."
 									: PlanActivity.getPlan().getError() + fetcher.getErrors())
 					.setCancelable(false)
 					.setPositiveButton("OK",
@@ -550,7 +550,7 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 			ret = builder.create();
 		} else if (id == SET_HOME_DIALOG) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle("Set Home Location")
+			builder.setTitle("Home Address")
 					.setMessage(
 							"Do you want to set \""
 									+ dnew_home.getDestination()
@@ -635,8 +635,9 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 		if (pd!=null) {
 			if (previous_location.equals(""))
 				previous_location = "(...)";
-			pd.setMessage("Location=" + previous_location + "\n" + "Accuracy="
-					+ accuracy + "m\n"
+			pd.setMessage("Your current location is required to plan a journey.\n\n"+
+					"Location=" + previous_location + "\n" + "Accuracy="
+					+ accuracy + "m\n\n"
 					+ "Press OK when the accuracy is acceptable.");
 		}
 	}

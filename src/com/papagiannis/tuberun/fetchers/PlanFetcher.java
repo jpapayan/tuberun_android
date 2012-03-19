@@ -34,6 +34,7 @@ import com.papagiannis.tuberun.plan.Route;
 public class PlanFetcher extends Fetcher {
 	final String q = "http://tuberun.dyndns.org:55559/getPlan.php";
 	private Plan plan;
+	private RequestTask task=null;
 	private static final long serialVersionUID = 1L;
 
 	public PlanFetcher(Plan plan) {
@@ -66,10 +67,12 @@ public class PlanFetcher extends Fetcher {
 			}
 		});
 		r.setCookies(cookies);
+		task=r;
 		r.execute(q + "?" + plan.getRequestString());
 	}
 
 	String param = "";
+	AsyncTask<String, Integer, Plan> aTask=null;
 
 	private void getCallBack1(String response) {
 		try {
@@ -77,7 +80,7 @@ public class PlanFetcher extends Fetcher {
 				throw new Exception(
 						"The server did not respond to your request (2)");
 
-			AsyncTask<String, Integer, Plan> task = new AsyncTask<String, Integer, Plan>() {
+			aTask = new AsyncTask<String, Integer, Plan>() {
 				@Override
 				protected Plan doInBackground(String... params) {
 					try {
@@ -93,7 +96,8 @@ public class PlanFetcher extends Fetcher {
 					plan.copyAlterativeOriginsFrom(result);
 					notifyClients();
 				}
-			}.execute(response);
+			};
+			aTask.execute(response);
 
 		} catch (Exception e) {
 			errors += e.getMessage();
@@ -341,6 +345,12 @@ public class PlanFetcher extends Fetcher {
 			Log.v("TubeRun", "Failed to get time from point");
 		}
 		return result;
+	}
+	
+	@Override
+	public void abort() {
+		if (task!=null) task.cancel(true);
+		if (aTask!=null) task.cancel(true);
 	}
 
 }

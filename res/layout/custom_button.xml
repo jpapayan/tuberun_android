@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true" >
+        <shape>
+            <gradient
+                android:startColor="@drawable/tuberun_red_bright"
+                android:endColor="@drawable/tuberun_red_bright"
+                android:angle="270" />
+            <stroke
+                android:width="3dp"
+                android:color="@drawable/tuberun_red_bright_transparent" />
+            <corners
+                android:radius="3dp" />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp" />
+        </shape>
+    </item>
+
+    <item android:state_focused="true" >
+        <shape>
+            <gradient
+                android:startColor="@drawable/tuberun_red_bright"
+                android:endColor="@drawable/tuberun_red_bright"
+                android:angle="270" />
+            <stroke
+                android:width="3dp"
+                android:color="@drawable/tuberun_red_bright_transparent" />
+            <corners
+                android:radius="1dp" />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp" />
+        </shape>
+    </item>
+
+    <item>        
+        <shape>
+            <gradient
+                android:endColor="@drawable/tuberun_grey"
+                android:startColor="@drawable/tuberun_grey_darker"
+                android:angle="270" />
+            <stroke
+                android:width="5dp"
+                android:color="@android:color/transparent" />
+            <corners
+                android:radius="1dp" />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp" />
+        </shape>
+    </item>
+</selector>

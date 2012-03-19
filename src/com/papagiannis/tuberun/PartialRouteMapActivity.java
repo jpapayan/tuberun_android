@@ -102,8 +102,8 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		wait_dialog = new ProgressDialog(this);
-		wait_dialog.setTitle("");
-		wait_dialog.setMessage("Drawing travel path. Please wait...");
+		wait_dialog.setTitle("Drawing travel path");
+		wait_dialog.setMessage("Please wait...");
 		wait_dialog.setIndeterminate(true);
 		wait_dialog.setCancelable(true);
 		wait_dialog.setOnCancelListener(new ProgressDialog.OnCancelListener() {

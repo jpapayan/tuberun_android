@@ -12,6 +12,7 @@ public class DeparturesFetcher extends Fetcher {
 
 	private static final long serialVersionUID = 1L;
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
+	private RequestTask task=null;
 	@Override
 	public void update() {
 		boolean first = isFirst.compareAndSet(true, false);
@@ -19,12 +20,12 @@ public class DeparturesFetcher extends Fetcher {
 			return; // only one at a time
 		String request_query = "http://www.tfl.gov.uk/tfl/livetravelnews/departureboards/tube/default.asp?LineCode=" + line +
                 "&StationCode=" + station_code + "&switch=off";
-		RequestTask r=new RequestTask(new HttpCallback() {
+		task=new RequestTask(new HttpCallback() {
 			public void onReturn(String s) {
 				getDeparturesCallBack(s);
 			}
 		});
-		r.execute(request_query);
+		task.execute(request_query);
 	}
 
 	private Date last_update=new Date();
@@ -164,6 +165,12 @@ public class DeparturesFetcher extends Fetcher {
             }
         }
         return result;
+    }
+    
+    @Override
+    public void abort() {
+    	isFirst.set(true);
+    	if (task!=null) task.cancel(true);
     }
 
 }

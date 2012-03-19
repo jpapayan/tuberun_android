@@ -7,6 +7,7 @@ import android.location.Location;
 import com.papagiannis.tuberun.Station;
 
 public abstract class NearbyStationsFetcher extends Fetcher{
+	private static final long serialVersionUID = 1L;
 
 	/*
 	 * Ridiculously bad method, I am embarrassed.

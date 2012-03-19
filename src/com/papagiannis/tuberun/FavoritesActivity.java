@@ -201,8 +201,8 @@ public class FavoritesActivity extends ListActivity implements Observer, OnClick
     @Override
     protected Dialog onCreateDialog(int id) {
     	wait_dialog=new ProgressDialog(this);
-    	wait_dialog.setTitle("");
-    	wait_dialog.setMessage("Fetching data. Please wait...");
+    	wait_dialog.setTitle("Fetching data");
+    	wait_dialog.setMessage("Please wait...");
     	wait_dialog.setIndeterminate(true);
     	wait_dialog.setOnCancelListener(new OnCancelListener() {
 			@Override

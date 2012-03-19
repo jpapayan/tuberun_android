@@ -31,6 +31,7 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 	private Date last_update = new Date();
 	protected int update_counter = 0;
 	protected String line, station_code, station_nice;
+	protected RequestTask task;
 	protected XMLDeserialiserTask deserialiserTask;
 	private String error = "";
 
@@ -53,11 +54,12 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 		error = "";
 		String request_query = "http://www.dlrlondon.co.uk/xml/mobile/"
 				+ station_code + ".xml";
-		new RequestTask(new HttpCallback() {
+		task=new RequestTask(new HttpCallback() {
 			public void onReturn(String s) {
 				httpCallback(s);
 			}
-		}).execute(request_query);
+		});
+		task.execute(request_query);
 	}
 
 	private void httpCallback(String response) {
@@ -332,5 +334,12 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 		}
 		return result;
 	}
+	
+	@Override
+    public void abort() {
+		isFirst.set(true);
+    	if (task!=null) task.cancel(true);
+    	if (deserialiserTask!=null) deserialiserTask.cancel(true);
+    }
 
 }

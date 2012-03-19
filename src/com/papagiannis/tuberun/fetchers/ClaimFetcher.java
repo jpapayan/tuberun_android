@@ -11,6 +11,7 @@ import com.papagiannis.tuberun.claims.Claim;
 public class ClaimFetcher extends Fetcher {
 	private static final long serialVersionUID = 1L;
 	Claim claim;
+	RequestTask task=null;
 
 	public ClaimFetcher(Claim claim) {
 		super();
@@ -36,13 +37,13 @@ public class ClaimFetcher extends Fetcher {
 		cookies = new BasicCookieStore();
 		String domain = "http://www.tfl.gov.uk/tfl/tickets/refunds/tuberefund/";
 		String q1 = domain + "default.aspx";
-		RequestTask r = new RequestTask(new HttpCallback() {
+		task = new RequestTask(new HttpCallback() {
 			public void onReturn(String s) {
 				getCallBack05(s);
 			}
 		});
-		r.setCookies(cookies);
-		r.execute(q1);
+		task.setCookies(cookies);
+		task.execute(q1);
 	}
 
 	private String getHidden(String r) throws Exception {
@@ -85,7 +86,8 @@ public class ClaimFetcher extends Fetcher {
 			});
 			r.setPostData(postData);
 			r.setCookies(cookies);
-			r.execute(q05);
+			task=r;
+			task.execute(q05);
 		} catch (Exception e) {
 			errors+=e.getMessage();
 			notifyClients();
@@ -118,7 +120,8 @@ public class ClaimFetcher extends Fetcher {
 				}
 			});
 			r.setCookies(cookies);
-			r.execute(q2 + "?" + param);
+			task=r;
+			task.execute(q2 + "?" + param);
 		} catch (Exception e) {
 			errors+=e.getMessage();
 			notifyClients();
@@ -145,8 +148,9 @@ public class ClaimFetcher extends Fetcher {
 			cook.setDomain("www.tfl.gov.uk/");
 			cookies.addCookie(cook);
 			r.setCookies(cookies);
+			task=r;
 //			throw new Exception("Fucked up");
-			r.execute(q3);
+			task.execute(q3);
 		} catch (Exception e) {
 			errors+=e.getMessage();
 			notifyClients();
@@ -173,5 +177,10 @@ public class ClaimFetcher extends Fetcher {
 			notifyClients();
 		}
 	}
+	
+	@Override
+    public void abort() {
+    	if (task!=null) task.cancel(true);
+    }
 
 }

@@ -23,10 +23,11 @@ public class ReverseGeocodeFetcher extends Fetcher {
 		this.location=l;
 	}
 	
+	private AsyncTask<Double, Integer, List<Address>> task=null;
 	private void reverseGeocode(Location l) {
 		final Geocoder myLocation = new Geocoder(context, Locale.getDefault());
 		if (myLocation != null) {
-			AsyncTask<Double, Integer, List<Address>> reverse_geocode = new AsyncTask<Double, Integer, List<Address>>() {
+			 task = new AsyncTask<Double, Integer, List<Address>>() {
 				@Override
 				protected List<Address> doInBackground(Double... params) {
 					List<Address> result = new ArrayList<Address>();
@@ -43,7 +44,7 @@ public class ReverseGeocodeFetcher extends Fetcher {
 					notifyClients();
 				}
 			};
-			reverse_geocode.execute(l.getLatitude(), l.getLongitude());
+			task.execute(l.getLatitude(), l.getLongitude());
 		}
 	}
 	
@@ -66,5 +67,9 @@ public class ReverseGeocodeFetcher extends Fetcher {
 		return result;
 	}
 	
+	@Override
+    public void abort() {
+    	if (task!=null) task.cancel(true);
+    }
 
 }

@@ -1,12 +1,5 @@
 package com.papagiannis.tuberun.fetchers;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -14,15 +7,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.xmlpull.v1.XmlPullParser;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
-import android.database.SQLException;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.papagiannis.tuberun.*;
+import com.papagiannis.tuberun.R;
+import com.papagiannis.tuberun.Station;
 
 public class StationsTubeFetcher extends NearbyStationsFetcher {
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
@@ -140,11 +131,12 @@ public class StationsTubeFetcher extends NearbyStationsFetcher {
 	}
 
 	public ArrayList<Station> getResult() {
-		return task.getResult();
+		return (task!=null)?task.getResult():new ArrayList<Station>();
 	}
 
 	public synchronized void abort() {
-		task.cancel(true);
+		isFirst.set(true);
+		if ( task!=null ) task.cancel(true);
 	}
 
 	

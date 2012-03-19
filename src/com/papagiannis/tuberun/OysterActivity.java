@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -123,9 +124,18 @@ public class OysterActivity extends Activity implements Observer{
 			dialog=builder.create();
 	        break;
 	    case DIALOG_WAIT:
-	    	wait_dialog = ProgressDialog.show(this, "", 
-	                "Verifying credentials. Please wait...", true);
-	    	dialog= wait_dialog;
+	    	ProgressDialog pd=new ProgressDialog(this);
+	    	wait_dialog=pd;
+	    	pd.setTitle("Verifying credentials");
+	    	pd.setMessage("Please wait...");
+	    	pd.setIndeterminate(true);
+	    	pd.setOnCancelListener(new OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					fetcher.abort();
+				}
+			});
+	    	dialog=pd;
 	    default:
 	        dialog = null;
 	    }

@@ -18,6 +18,7 @@ public class RouteFetcher extends Fetcher {
 		from=me;
 		this.to=to;
 	}
+    RequestTask task=null;
 	
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
 	@Override
@@ -26,11 +27,12 @@ public class RouteFetcher extends Fetcher {
 		if (!first)
 			return; // only one at a time
 		String request_query = getUrl(from,to);
-		new RequestTask(new HttpCallback() {
+		task=new RequestTask(new HttpCallback() {
 			public void onReturn(String s) {
 				getRouteCallBack(s);
 			}
-		}).execute(request_query);
+		});
+		task.execute(request_query);
 	}
 
 	private Date last_update=new Date();
@@ -109,6 +111,10 @@ public class RouteFetcher extends Fetcher {
 		return urlString.toString();
 	}
     
-    
+    @Override
+    public void abort() {
+    	isFirst.set(true);
+    	if (task!=null) task.cancel(true);
+    }
 
 }
