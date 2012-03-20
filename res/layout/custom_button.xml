@@ -9,10 +9,10 @@
                 android:endColor="@drawable/tuberun_red_bright"
                 android:angle="270" />
             <stroke
-                android:width="3dp"
+                android:width="8dp"
                 android:color="@drawable/tuberun_red_bright_transparent" />
             <corners
-                android:radius="3dp" />
+                android:radius="1dp" />
             <padding
                 android:left="10dp"
                 android:top="10dp"
@@ -28,7 +28,7 @@
                 android:endColor="@drawable/tuberun_red_bright"
                 android:angle="270" />
             <stroke
-                android:width="3dp"
+                android:width="5dp"
                 android:color="@drawable/tuberun_red_bright_transparent" />
             <corners
                 android:radius="1dp" />
@@ -47,7 +47,7 @@
                 android:startColor="@drawable/tuberun_grey_darker"
                 android:angle="270" />
             <stroke
-                android:width="5dp"
+                android:width="8dp"
                 android:color="@android:color/transparent" />
             <corners
                 android:radius="1dp" />

@@ -534,8 +534,20 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 		} else if (id == ERROR_DIALOG || id == PLAN_ERROR_DIALOG
 				|| id == ADD_HOME_ERROR) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle("House address not set")
-					.setMessage(
+			String title="";
+			switch (id) {
+			case ERROR_DIALOG:
+				title="Error";
+				break;
+			case PLAN_ERROR_DIALOG:
+				title="Planning error";
+				break;
+			case ADD_HOME_ERROR:
+				title="Home address not set";
+				break;
+			}
+			builder.setTitle(title)
+				    .setMessage(
 							id == ADD_HOME_ERROR ? "Use one of the house icons next to past destinations to set it."
 									: PlanActivity.getPlan().getError() + fetcher.getErrors())
 					.setCancelable(false)

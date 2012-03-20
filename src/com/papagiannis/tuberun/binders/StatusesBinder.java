@@ -65,7 +65,7 @@ public class StatusesBinder implements ViewBinder, OnClickListener {
 		} else {
 			beforeStatus = true;
 			tv.setTextColor(Color.WHITE);
-			tv.setBackgroundColor(Color.TRANSPARENT);
+			tv.setBackgroundColor(R.drawable.tuberun_semitransparent);
 			tv.setVisibility(View.GONE);
 		}
 		tv.setOnClickListener(this);

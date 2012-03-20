@@ -68,13 +68,17 @@
 	<style name="SearchButton" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/search_button_selector</item>
 	</style>
+	<style name="RedListView" parent="@android:style/Widget.ListView">
+		<item name="android:listSelector">@layout/hue_list_selector</item>
+	</style>
 
 	<drawable name="tuberun_semitransparent">#99000000</drawable>
 	<drawable name="tuberun_transparent">#00000000</drawable>
 	<drawable name="tuberun_red">#FF801219</drawable>
+	<drawable name="tuberun_red_semitransparent">#99801219</drawable>
 	<drawable name="tuberun_red_bright">#FFDA2B2C</drawable>
 	<drawable name="tuberun_red_bright_transparent">#99DA2B2C</drawable>
 	<drawable name="tuberun_boardorange">#FFB8C600</drawable>
-	<drawable name="tuberun_grey">#E5D5D4D4</drawable>
-	<drawable name="tuberun_grey_darker">#E5C1C1C1</drawable>
+	<drawable name="tuberun_grey">#F0D5D4D4</drawable>
+	<drawable name="tuberun_grey_darker">#F0C1C1C1</drawable>
 </resources>

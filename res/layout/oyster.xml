@@ -142,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/button_store"
                     android:layout_toLeftOf="@id/button_store"
-                    android:text="Erase" />
+                    android:text="Clear" />
             </RelativeLayout>
         </LinearLayout>
         

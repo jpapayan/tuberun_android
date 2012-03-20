@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
             android:layout_marginTop="5dip"
-            android:background="@drawable/tuberun_red"
+            android:background="@drawable/tuberun_red_semitransparent"
             android:gravity="center_horizontal"
             android:visibility="gone"
             android:text="Train departures data is only provided by TfL for selected stations" />

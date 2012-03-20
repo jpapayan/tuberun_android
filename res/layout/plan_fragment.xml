@@ -76,12 +76,16 @@
                             android:id="@+id/go_button"
                             android:layout_width="90dip"
                             android:layout_height="80dip"
+                            android:background="@layout/custom_button"
+                    		android:textColor="@android:color/black"
                             android:text="Go" />
 
                         <Button
                             android:id="@+id/advanced_button"
                             android:layout_width="90dip"
                             android:layout_height="wrap_content"
+                            android:background="@layout/custom_button"
+                    		android:textColor="@android:color/black"
                             android:text="More>>" />
                     </LinearLayout>
                 </TableRow>
