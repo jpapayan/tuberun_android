@@ -172,8 +172,9 @@
                     <LinearLayout
                         android:id="@+id/journey_tab"
                         android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="16dip"
+                        android:layout_gravity="center_horizontal"
                         android:orientation="vertical"
                         android:visibility="gone" >
 
@@ -243,7 +244,8 @@
                     <LinearLayout
                         android:id="@+id/delay_tab"
                         android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:layout_margin="16dip"
                         android:orientation="vertical"
                         android:visibility="gone" >
@@ -388,6 +390,7 @@
                         android:id="@+id/personal_tab"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
+                        android:layout_gravity="center_horizontal"
                         android:layout_margin="16dip"
                         android:orientation="vertical"
                         android:visibility="gone" >
@@ -651,7 +654,8 @@
                     <LinearLayout
                         android:id="@+id/ticket_tab"
                         android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:layout_margin="16dip"
                         android:orientation="vertical"
                         android:visibility="gone" >

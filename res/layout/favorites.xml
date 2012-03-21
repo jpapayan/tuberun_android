@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@android:color/black"
     android:orientation="vertical" >
 
     <ImageView
@@ -80,14 +81,12 @@
                 android:layout_marginBottom="5dip"
                 android:layout_marginTop="5dip"
                 android:gravity="center"
-                android:background="@drawable/tuberun_transparent"
                 android:text="You can store tube lines, platforms and bus stops by pressing the favorite button" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/tuberun_transparent"
                 android:src="@drawable/rating_not_important" />
         </LinearLayout>
 

@@ -49,7 +49,7 @@
         android:gravity="fill_horizontal"
         android:padding="10dp"
         android:textSize="16sp"
-        android:background="@drawable/tuberun_transparent" >
+        android:background="@android:color/transparent" >
     </TextView>
 
 </LinearLayout>

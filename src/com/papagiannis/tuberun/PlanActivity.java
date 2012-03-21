@@ -139,7 +139,8 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 			//Make sure that lastKnowLocaton is never null
 			lastKnownLocation=new Location("FAKE");
 		}
-		lastKnownLocation=new Location("FAKE");
+		if (lastKnownLocation==null) lastKnownLocation=new Location("FAKE");
+		if (lastKnownLocation!=null) plan.setStartingLocation(lastKnownLocation);
 
 		// updateHistoryView();
 		go_home_full_button.setOnClickListener(new OnClickListener() {
@@ -200,7 +201,7 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 		if ( result==null || result.size() <1) {
 			location_textview.setText("");
 			location_accuracy_textview.setText(("accuracy="
-					+ lastKnownLocation.getAccuracy() + "m)"));
+					+ lastKnownLocation.getAccuracy() + "m"));
 			planFragment.updateLocationDialog(null,"", ""+lastKnownLocation.getAccuracy());
 		}
 		else {

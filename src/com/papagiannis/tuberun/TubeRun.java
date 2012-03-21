@@ -141,6 +141,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		i.putExtra("line",
 				LinePresentation.getStringRespresentation(LineType.ALL));
 		i.putExtra("type", "maps");
+		String s="";
 		return i;
 	}
 

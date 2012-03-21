@@ -116,7 +116,6 @@
             android:layout_weight="1" />
 
         <com.papagiannis.tuberun.AspectRatioImageView
-            android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
