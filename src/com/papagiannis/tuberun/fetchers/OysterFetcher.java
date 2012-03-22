@@ -78,7 +78,9 @@ public class OysterFetcher extends Fetcher {
 				throw new Exception("Login failed, please check your credentials.");
 			}
 			int i=response.indexOf("Select card number");
+			int j=response.indexOf("Balance: &pound;");
 			if (i>0) {
+				//multiple cards parsing
 				response=response.substring(i);
 				String mark="<option value=\"";
 				response=response.substring(response.indexOf(mark)+mark.length());
@@ -97,8 +99,11 @@ public class OysterFetcher extends Fetcher {
 				task=r;
 				r.execute(q);
 			}
+			else if (j>0) {
+				//single card parsing
+				getCallBack2(response);
+			}
 			else {
-				//TODO single card parsing
 				errors+="Failed to locate card number";
 				isFirst.set(true);
 				notifyClients();
