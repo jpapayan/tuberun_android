@@ -2,6 +2,8 @@ package com.papagiannis.tuberun.fetchers;
 
 import java.net.URLEncoder;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
@@ -17,7 +19,15 @@ public class OysterFetcher extends Fetcher {
 	private Date update_time=new Date(2000,1,1);
 	RequestTask task=null;
 
-	public OysterFetcher(String username, String password) {
+	private static  HashMap<String,OysterFetcher> instances =new HashMap<String, OysterFetcher>();
+	public static synchronized OysterFetcher getInstance(String username, String password) {
+		if (!instances.containsKey(username+password)) {
+			instances.put(username+password,new OysterFetcher(username, password));
+		}
+		return instances.get(username+password);
+	}
+	
+	private OysterFetcher(String username, String password) {
 		super();
 		this.username=(username==null)?"":username.trim();
 		this.password=(password==null)?"":password.trim();
@@ -35,8 +45,12 @@ public class OysterFetcher extends Fetcher {
 		return errors;
 	}
 
+	protected AtomicBoolean isFirst = new AtomicBoolean(true);
+	
 	@Override
 	public void update() {
+		boolean first = isFirst.compareAndSet(true, false);
+		if (!first)	return; // only one at a time
 		errors="";
 		postData = new StringBuilder();
 		cookies = new BasicCookieStore();
@@ -85,12 +99,15 @@ public class OysterFetcher extends Fetcher {
 			}
 			else {
 				//TODO single card parsing
+				errors+="Failed to locate card number";
+				isFirst.set(true);
 				notifyClients();
 			}
 			return;
 
 		} catch (Exception e) {
 			errors+=e.getMessage();
+			isFirst.set(true);
 			notifyClients();
 		}
 	}
@@ -108,6 +125,7 @@ public class OysterFetcher extends Fetcher {
 		} catch (Exception e) {
 			errors+=e.getMessage();
 		} finally {
+			isFirst.set(true);
 			notifyClients();
 		}
 	}
@@ -123,6 +141,7 @@ public class OysterFetcher extends Fetcher {
 
 	@Override
     public void abort() {
+		isFirst.set(true);
     	if (task!=null) task.cancel(true);
     }
 }

@@ -64,7 +64,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 
 		preferences = getPreferences(MODE_PRIVATE);
 		tubeMapDownloaded = preferences.getBoolean("tubeMapDownloaded", false);
-//		tubeMapDownloaded = false; //always
+		// tubeMapDownloaded = false; //always
 
 		View statusButton = findViewById(R.id.button_status);
 		statusButton.setOnClickListener(this);
@@ -115,7 +115,8 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			i = new Intent(this, NearbyStationsActivity.class);
 			break;
 		case R.id.button_favorites:
-			favoritesButton.setChecked(!favoritesButton.isChecked()); //no toggling
+			favoritesButton.setChecked(!favoritesButton.isChecked()); // no
+																		// toggling
 			i = new Intent(this, FavoritesActivity.class);
 			break;
 		case R.id.button_claims:
@@ -130,7 +131,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			break;
 		case R.id.button_logo:
 			i = new Intent(this, AboutActivity.class);
-			break;	
+			break;
 		}
 		startActivity(i);
 	}
@@ -141,7 +142,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		i.putExtra("line",
 				LinePresentation.getStringRespresentation(LineType.ALL));
 		i.putExtra("type", "maps");
-		String s="";
+		String s = "";
 		return i;
 	}
 
@@ -150,6 +151,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	private String username = "";
 
 	private void fetchBalance() {
+
 		oysterButtonActive.setVisibility(View.GONE);
 		oysterButton.setVisibility(View.VISIBLE);
 		oysterBalance.setVisibility(View.GONE);
@@ -160,37 +162,40 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			return;
 		Date now = new Date();
 		// skip fetching oyster balance if it has been fetched before (in the
-		// last 3 min).
+		// last 5 min).
 		if (!username.equals("")
 				&& username.equals(credentials.get(0))
 				&& !fetcher.isErrorResult()
-				&& (now.getTime() - fetcher.getUpdateTime().getTime()) / 1000 < 3 * 60) {
+				&& !fetcher.getResult().equals("")
+				&& (now.getTime() - fetcher.getUpdateTime().getTime()) / 1000 < 5 * 60) {
+			//there is a result i can reuse
 			update();
-			return;
 		}
-		if (credentials.size() == 2) {
-			fetcher = new OysterFetcher(credentials.get(0), credentials.get(1));
-			fetcher.registerCallback(this);
+		else if (credentials.size() == 2) {
+			OysterFetcher newFetcher=OysterFetcher.getInstance(credentials.get(0), credentials.get(1));
+			if (fetcher!=newFetcher) {
+				fetcher=newFetcher;
+				fetcher.registerCallback(this);
+			}
 			oysterButtonActive.setVisibility(View.VISIBLE);
 			oysterButton.setVisibility(View.GONE);
 			oysterLayout.setVisibility(View.VISIBLE);
 			oysterProgress.setVisibility(View.VISIBLE);
 			username = credentials.get(0);
-			oysterLayout.invalidate();
+			// oysterLayout.invalidate();
 			fetcher.update();
 		}
 	}
 
 	@Override
 	public void update() {
+		CharSequence balance = fetcher.getResult();
+		oysterBalance.setText(balance);
 		oysterButtonActive.setVisibility(View.VISIBLE);
 		oysterButton.setVisibility(View.GONE);
 		oysterLayout.setVisibility(View.VISIBLE);
 		oysterProgress.setVisibility(View.GONE);
-		oysterBalance.setText(fetcher.getResult());
 		oysterBalance.setVisibility(View.VISIBLE);
-		oysterLayout.invalidate();
-
 	}
 
 	private Dialog wait_dialog;
@@ -284,19 +289,22 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		if (fetcher != null) {
+			fetcher.abort();
+		}
 		if (task != null) {
 			if (progressDialog != null)
 				dismissDialog(DOWNLOAD_IMAGE_PROGRESS_DIALOG);
 			task.cancel(true);
 		}
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		fetchBalance();
-		ArrayList<Favorite> favs=Favorite.getFavorites(this);
-		favoritesButton.setChecked(favs.size()>0);
+		ArrayList<Favorite> favs = Favorite.getFavorites(this);
+		favoritesButton.setChecked(favs.size() > 0);
 	}
 
 	private class ImageDownloadTask extends AsyncTask<String, Integer, Boolean> {
@@ -310,53 +318,58 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 				urlConnection.setRequestMethod("GET");
 				urlConnection.connect();
 
-//				File appdir = Environment.getExternalStorageDirectory();
-//				File dir = new File(appdir.getAbsoluteFile() + "/tuberun/");
-//				Boolean created = dir.mkdirs();
-//				File file = new File(dir, params[1]);
-//				FileOutputStream fileOutput = new FileOutputStream(file);
+				// File appdir = Environment.getExternalStorageDirectory();
+				// File dir = new File(appdir.getAbsoluteFile() + "/tuberun/");
+				// Boolean created = dir.mkdirs();
+				// File file = new File(dir, params[1]);
+				// FileOutputStream fileOutput = new FileOutputStream(file);
 
-				//Let's read everything to RAM first
+				// Let's read everything to RAM first
 				InputStream inputStream = urlConnection.getInputStream();
 				int totalSize = urlConnection.getContentLength();
 				int downloadedSize = 0;
 				byte[] buffer = new byte[1024];
 				byte[] fullFile = new byte[totalSize];
 				int bufferLength = 0; // used to store a temporary size of the
-//										// buffer
-				int i=0;
+				// // buffer
+				int i = 0;
 				while ((bufferLength = inputStream.read(buffer)) > 0) {
-					if (isCancelled()) return false;
-//					fileOutput.write(buffer, 0, bufferLength);
-					
-					int k=0;
-					for (int j=i;j<i+bufferLength;j++) {
-						fullFile[j]=buffer[k++];
+					if (isCancelled())
+						return false;
+					// fileOutput.write(buffer, 0, bufferLength);
+
+					int k = 0;
+					for (int j = i; j < i + bufferLength; j++) {
+						fullFile[j] = buffer[k++];
 					}
-					i+=bufferLength;
-//					
-//					
+					i += bufferLength;
+					//
+					//
 					downloadedSize += bufferLength;
 					publishProgress(downloadedSize, totalSize);
 				}
-//				fileOutput.close();
+				// fileOutput.close();
 				inputStream.close();
-				
-				ContentValues v=new ContentValues();
+
+				ContentValues v = new ContentValues();
 				v.put("map", fullFile);
-				ContentResolver r=getContentResolver();
-				r.insert(Uri.parse("content://"+TubeMapContentProvider.AUTHORITY+"/map"), v);
-				
-				//This is an attempt to read from the ContentProvider, it works!
-//				Cursor rrr=r.query(Uri.parse("content://"+TubeMapContentProvider.AUTHORITY+"/map"), new String[]{},"",new String[]{},"");
-//				Boolean suc=rrr.moveToFirst();
-//				if (suc) {
-//					byte[] res=rrr.getBlob(0);
-//					int iii=res.length;
-//					i=i+i;
-//				}
-				
-				
+				ContentResolver r = getContentResolver();
+				r.insert(
+						Uri.parse("content://"
+								+ TubeMapContentProvider.AUTHORITY + "/map"), v);
+
+				// This is an attempt to read from the ContentProvider, it
+				// works!
+				// Cursor
+				// rrr=r.query(Uri.parse("content://"+TubeMapContentProvider.AUTHORITY+"/map"),
+				// new String[]{},"",new String[]{},"");
+				// Boolean suc=rrr.moveToFirst();
+				// if (suc) {
+				// byte[] res=rrr.getBlob(0);
+				// int iii=res.length;
+				// i=i+i;
+				// }
+
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 				return false;

@@ -68,7 +68,7 @@ public class OysterActivity extends Activity implements Observer{
         			showDialog(DIALOG_WAIT);
         			store.add(un, me);
         			store.add(pw, me);
-        			fetcher=new OysterFetcher(un, pw);
+        			fetcher=OysterFetcher.getInstance(un, pw);
         			fetcher.registerCallback(me);
         			fetcher.update();
         		}
@@ -94,6 +94,7 @@ public class OysterActivity extends Activity implements Observer{
 	public void update() {
 		wait_dialog.dismiss();
 		if (fetcher.getErrors().length()>0) {
+			store.removeAll(this);
 			showDialogMessage("Error", fetcher.getErrors());
 		}
 		else finish();
@@ -136,10 +137,17 @@ public class OysterActivity extends Activity implements Observer{
 				}
 			});
 	    	dialog=pd;
+	    	break;
 	    default:
 	        dialog = null;
 	    }
 	    return dialog;
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if (fetcher!=null) fetcher.deregisterCallback(this);
+		super.onStop();
 	}
 
 }

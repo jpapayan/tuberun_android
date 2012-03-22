@@ -15,7 +15,7 @@ public abstract class Fetcher implements Serializable
     public synchronized Fetcher registerCallback(Observer cb)
     {
     	if (callbacks==null) callbacks=new ArrayList<Observer>();
-        callbacks.add(cb);
+        if (!callbacks.contains(cb)) callbacks.add(cb);
         return this;
     }
     public synchronized void deregisterCallback(Observer cb)
