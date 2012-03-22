@@ -17,7 +17,7 @@ public class OysterFetcher extends Fetcher {
 	private String oyster_no="";
 	private String oyster_balance="";
 	private Date update_time=new Date(2000,1,1);
-	RequestTask task=null;
+	private transient RequestTask task=null;
 
 	private static  HashMap<String,OysterFetcher> instances =new HashMap<String, OysterFetcher>();
 	public static synchronized OysterFetcher getInstance(String username, String password) {

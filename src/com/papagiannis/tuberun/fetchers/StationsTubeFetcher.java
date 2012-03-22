@@ -16,9 +16,10 @@ import com.papagiannis.tuberun.R;
 import com.papagiannis.tuberun.Station;
 
 public class StationsTubeFetcher extends NearbyStationsFetcher {
+	private static final long serialVersionUID = 1L;
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
-	Context context;
-	GetNearbyStationsTask task = new GetNearbyStationsTask(context);
+	private Context context;
+	private transient GetNearbyStationsTask task = new GetNearbyStationsTask(context);
 	Location userLocation;
 	Location lastLocation;
 	ArrayList<Station> all_stations = new ArrayList<Station>();

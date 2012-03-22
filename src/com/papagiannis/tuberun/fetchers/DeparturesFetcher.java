@@ -12,7 +12,7 @@ public class DeparturesFetcher extends Fetcher {
 
 	private static final long serialVersionUID = 1L;
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
-	private RequestTask task=null;
+	private transient RequestTask task=null;
 	@Override
 	public void update() {
 		boolean first = isFirst.compareAndSet(true, false);

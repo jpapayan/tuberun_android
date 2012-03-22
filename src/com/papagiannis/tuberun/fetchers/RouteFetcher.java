@@ -18,7 +18,7 @@ public class RouteFetcher extends Fetcher {
 		from=me;
 		this.to=to;
 	}
-    RequestTask task=null;
+    private transient RequestTask task=null;
 	
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
 	@Override

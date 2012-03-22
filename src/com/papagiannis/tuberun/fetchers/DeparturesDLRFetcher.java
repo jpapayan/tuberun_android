@@ -31,7 +31,7 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 	private Date last_update = new Date();
 	protected int update_counter = 0;
 	protected String line, station_code, station_nice;
-	protected RequestTask task;
+	protected transient RequestTask task;
 	protected XMLDeserialiserTask deserialiserTask;
 	private String error = "";
 

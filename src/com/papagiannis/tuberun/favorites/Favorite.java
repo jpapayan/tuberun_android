@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import com.papagiannis.tuberun.LineType;
 import com.papagiannis.tuberun.fetchers.Fetcher;
@@ -98,6 +99,7 @@ public class Favorite implements Serializable {
 			}
 			oi.close();
 		} catch (Exception e) {
+			Log.w("Favorites",e);
 
 		}
 		return result;

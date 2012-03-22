@@ -11,7 +11,7 @@ import com.papagiannis.tuberun.claims.Claim;
 public class ClaimFetcher extends Fetcher {
 	private static final long serialVersionUID = 1L;
 	Claim claim;
-	RequestTask task=null;
+	transient RequestTask task=null;
 
 	public ClaimFetcher(Claim claim) {
 		super();

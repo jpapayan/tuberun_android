@@ -11,7 +11,7 @@ import org.json.*;
 public class BusDeparturesFetcher extends Fetcher {
 	private static final long serialVersionUID = 1L;
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
-	RequestTask task=null;
+	private transient RequestTask task=null;
 	
 	@Override
 	public void update() {

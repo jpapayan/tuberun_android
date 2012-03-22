@@ -12,9 +12,6 @@ import java.util.Date;
 
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.Resources;
-import android.database.SQLException;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -23,8 +20,9 @@ import com.papagiannis.tuberun.*;
 
 public class StationsBusFetcher extends Fetcher {
 
-	Context context;
-	GetNearbyStationsTask task = new GetNearbyStationsTask(context);
+	private static final long serialVersionUID = 1L;
+	private Context context;
+	private transient GetNearbyStationsTask task = new GetNearbyStationsTask(context);
 	Location userLocation;
 	Location lastLocation;
 	ArrayList<BusStation> result;

@@ -77,7 +77,7 @@ public class StatusesFetcher extends Fetcher {
 	}
 
 	protected AtomicBoolean isFirst = new AtomicBoolean(true);
-	protected RequestTask task=null;
+	protected transient RequestTask task=null;
 	public void update() {
 		boolean first = isFirst.compareAndSet(true, false);
 		if (!first)

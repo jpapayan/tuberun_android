@@ -23,7 +23,7 @@ public class ReverseGeocodeFetcher extends Fetcher {
 		this.location=l;
 	}
 	
-	private AsyncTask<Double, Integer, List<Address>> task=null;
+	private transient AsyncTask<Double, Integer, List<Address>> task=null;
 	private void reverseGeocode(Location l) {
 		final Geocoder myLocation = new Geocoder(context, Locale.getDefault());
 		if (myLocation != null) {

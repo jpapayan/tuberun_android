@@ -34,7 +34,7 @@ import com.papagiannis.tuberun.plan.Route;
 public class PlanFetcher extends Fetcher {
 	final String q = "http://tuberun.dyndns.org:55559/getPlan.php";
 	private Plan plan;
-	private RequestTask task=null;
+	private transient RequestTask task=null;
 	private static final long serialVersionUID = 1L;
 
 	public PlanFetcher(Plan plan) {
@@ -72,7 +72,7 @@ public class PlanFetcher extends Fetcher {
 	}
 
 	String param = "";
-	AsyncTask<String, Integer, Plan> aTask=null;
+	private transient AsyncTask<String, Integer, Plan> aTask=null;
 
 	private void getCallBack1(String response) {
 		try {
