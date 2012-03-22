@@ -6,9 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import android.location.Address;
 import android.location.Location;
-import android.text.AlteredCharSequence;
 
 /*
  * This class contains the requirements for a given plan request. The UI must translate

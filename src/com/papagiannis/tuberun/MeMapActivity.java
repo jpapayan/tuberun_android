@@ -1,12 +1,9 @@
 package com.papagiannis.tuberun;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,7 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.GeolocationPermissions;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +22,6 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
-import com.papagiannis.tuberun.fetchers.StationsBusFetcher;
 import com.papagiannis.tuberun.overlays.HereOverlay;
 import com.papagiannis.tuberun.overlays.LocationItemizedOverlay;
 

@@ -1,22 +1,16 @@
 package com.papagiannis.tuberun.fetchers;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-
 
 import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.papagiannis.tuberun.*;
+import com.papagiannis.tuberun.BusStation;
+import com.papagiannis.tuberun.DatabaseHelper;
 
 public class StationsBusFetcher extends Fetcher {
 

@@ -1,8 +1,6 @@
 package com.papagiannis.tuberun;
 
 import android.location.Location;
-import java.io.Serializable;
-import java.io.StringWriter;
 
 public class BusStation extends Station  {
 	

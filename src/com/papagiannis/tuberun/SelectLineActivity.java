@@ -3,7 +3,6 @@ package com.papagiannis.tuberun;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.papagiannis.tuberun.binders.SelectLinesBinder;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,9 +12,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+
+import com.papagiannis.tuberun.binders.SelectLinesBinder;
 
 public class SelectLineActivity extends ListActivity implements OnClickListener {
 	protected Button backButton;

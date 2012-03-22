@@ -1,14 +1,10 @@
 package com.papagiannis.tuberun.fetchers;
 
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.cookie.BasicClientCookie;
-
-import com.papagiannis.tuberun.claims.Claim;
 
 public class OysterFetcher extends Fetcher {
 	private static final long serialVersionUID = 1L;
@@ -16,6 +12,7 @@ public class OysterFetcher extends Fetcher {
 	private String password="";
 	private String oyster_no="";
 	private String oyster_balance="";
+	@SuppressWarnings("deprecation")
 	private Date update_time=new Date(2000,1,1);
 	private transient RequestTask task=null;
 

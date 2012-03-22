@@ -2,11 +2,7 @@ package com.papagiannis.tuberun.fetchers;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.json.*;
 
 import com.google.android.maps.GeoPoint;
 

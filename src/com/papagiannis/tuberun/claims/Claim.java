@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
 
-import com.papagiannis.tuberun.LinePresentation;
-import com.papagiannis.tuberun.LineType;
-
 import android.net.Uri;
 import android.view.View;
+
+import com.papagiannis.tuberun.LinePresentation;
+import com.papagiannis.tuberun.LineType;
 
 public class Claim implements Serializable {
 
@@ -342,6 +342,7 @@ public class Claim implements Serializable {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	void InitDates() {
 		Date d = new Date();
 		ticket_tfl_expiry = d;

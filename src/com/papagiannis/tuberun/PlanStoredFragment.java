@@ -4,11 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.papagiannis.tuberun.binders.ClaimsBinder;
-import com.papagiannis.tuberun.plan.Plan;
-import com.papagiannis.tuberun.stores.DestinationStore;
-import com.papagiannis.tuberun.stores.PlanStore;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -19,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+
+import com.papagiannis.tuberun.plan.Plan;
+import com.papagiannis.tuberun.stores.PlanStore;
 
 public class PlanStoredFragment extends ListFragment {
 	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");

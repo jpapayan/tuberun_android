@@ -2,51 +2,36 @@ package com.papagiannis.tuberun;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
-import com.papagiannis.tuberun.binders.FavoritesBinder;
-import com.papagiannis.tuberun.binders.PartialRoutesBinder;
-import com.papagiannis.tuberun.binders.RoutesBinder;
-import com.papagiannis.tuberun.fetchers.Observer;
-import com.papagiannis.tuberun.fetchers.PlanFetcher;
-import com.papagiannis.tuberun.plan.PartialRoute;
-import com.papagiannis.tuberun.plan.PartialRouteType;
-import com.papagiannis.tuberun.plan.Plan;
-import com.papagiannis.tuberun.plan.Point;
-import com.papagiannis.tuberun.plan.Route;
-import com.papagiannis.tuberun.stores.PlanStore;
-import com.papagiannis.tuberun.stores.Store;
-
+import uk.me.jstott.jcoord.LatLng;
+import uk.me.jstott.jcoord.OSRef;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import uk.me.jstott.jcoord.LatLng;
-import uk.me.jstott.jcoord.OSRef;
+import com.papagiannis.tuberun.binders.PartialRoutesBinder;
+import com.papagiannis.tuberun.binders.RoutesBinder;
+import com.papagiannis.tuberun.plan.PartialRoute;
+import com.papagiannis.tuberun.plan.PartialRouteType;
+import com.papagiannis.tuberun.plan.Plan;
+import com.papagiannis.tuberun.plan.Route;
+import com.papagiannis.tuberun.stores.PlanStore;
 
 public class RouteResultsActivity extends Activity {
 	public static ArrayList<Integer> coordinates = new ArrayList<Integer>();

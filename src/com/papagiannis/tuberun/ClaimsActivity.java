@@ -1,34 +1,21 @@
 package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import com.papagiannis.tuberun.binders.ClaimsBinder;
-import com.papagiannis.tuberun.binders.DeparturesBinder;
-import com.papagiannis.tuberun.binders.FavoritesBinder;
-import com.papagiannis.tuberun.binders.StatusesBinder;
-import com.papagiannis.tuberun.claims.Claim;
-import com.papagiannis.tuberun.claims.ClaimStore;
-import com.papagiannis.tuberun.favorites.DeparturesFavorite;
-import com.papagiannis.tuberun.favorites.Favorite;
-import com.papagiannis.tuberun.fetchers.*;
-
-import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import com.papagiannis.tuberun.binders.ClaimsBinder;
+import com.papagiannis.tuberun.claims.Claim;
+import com.papagiannis.tuberun.claims.ClaimStore;
 
 public class ClaimsActivity extends ListActivity implements OnClickListener  {
 	ClaimStore store;

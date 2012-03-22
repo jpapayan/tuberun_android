@@ -2,8 +2,6 @@ package com.papagiannis.tuberun.fetchers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -14,16 +12,14 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
-import com.google.android.maps.MyLocationOverlay;
-import com.papagiannis.tuberun.TubeRun;
-
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.papagiannis.tuberun.TubeRun;
 
 public class RequestTask extends AsyncTask<String, String, String> {
 	protected String myUserAgent="Tuberun/"+TubeRun.VERSION+" Android";

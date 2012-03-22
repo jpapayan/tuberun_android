@@ -1,17 +1,7 @@
 package com.papagiannis.tuberun;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-
-import com.papagiannis.tuberun.binders.StatusesBinder;
-import com.papagiannis.tuberun.favorites.Favorite;
-import com.papagiannis.tuberun.fetchers.*;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,15 +10,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.SimpleAdapter;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import com.papagiannis.tuberun.favorites.Favorite;
+import com.papagiannis.tuberun.fetchers.StatusesFetcher;
 
 public class StatusActivity extends FragmentActivity {
 	private static final int MAP_WARNING_DIALOG=-1;

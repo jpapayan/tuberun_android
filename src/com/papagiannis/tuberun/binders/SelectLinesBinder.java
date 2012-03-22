@@ -1,20 +1,17 @@
 package com.papagiannis.tuberun.binders;
 
-import com.papagiannis.tuberun.LinePresentation;
-import com.papagiannis.tuberun.LineType;
-import com.papagiannis.tuberun.R;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.SimpleAdapter.ViewBinder;
+
+import com.papagiannis.tuberun.LinePresentation;
+import com.papagiannis.tuberun.LineType;
+import com.papagiannis.tuberun.R;
 
 public class SelectLinesBinder implements ViewBinder, OnClickListener {
 	final Context context;

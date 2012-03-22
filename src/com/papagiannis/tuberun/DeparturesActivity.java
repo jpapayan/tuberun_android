@@ -1,30 +1,26 @@
 package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-
-import com.papagiannis.tuberun.binders.DeparturesBinder;
-import com.papagiannis.tuberun.binders.StatusesBinder;
-import com.papagiannis.tuberun.favorites.DeparturesFavorite;
-import com.papagiannis.tuberun.favorites.Favorite;
-import com.papagiannis.tuberun.fetchers.*;
 
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import com.papagiannis.tuberun.binders.DeparturesBinder;
+import com.papagiannis.tuberun.favorites.DeparturesFavorite;
+import com.papagiannis.tuberun.favorites.Favorite;
+import com.papagiannis.tuberun.fetchers.DeparturesDLRFetcher;
+import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
+import com.papagiannis.tuberun.fetchers.Observer;
 
 public class DeparturesActivity extends ListActivity implements Observer, OnClickListener {
 	protected Button backButton;
@@ -136,12 +132,7 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 	private ProgressDialog wait_dialog;
     @Override
     protected Dialog onCreateDialog(int id) {
-    	if (Integer.parseInt(android.os.Build.VERSION.SDK) < 11) {
-    		wait_dialog=new ProgressDialog(this);
-    	}
-    	else {
-    		wait_dialog=new ProgressDialog(this,ProgressDialog.THEME_HOLO_DARK);
-    	}
+    	wait_dialog=new ProgressDialog(this);
     	wait_dialog.setTitle("Fetching departures");
     	wait_dialog.setMessage("Please wait...");
     	wait_dialog.setIndeterminate(true);

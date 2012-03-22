@@ -1,32 +1,17 @@
 package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Set;
 
-import android.app.Dialog;
-import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import com.papagiannis.tuberun.binders.StatusesBinder;
 import com.papagiannis.tuberun.favorites.Favorite;
-import com.papagiannis.tuberun.fetchers.Fetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
-import com.papagiannis.tuberun.fetchers.StationsTubeFetcher;
 import com.papagiannis.tuberun.fetchers.StatusesFetcher;
 
 public class StatusesFragment extends ListFragment implements Observer {

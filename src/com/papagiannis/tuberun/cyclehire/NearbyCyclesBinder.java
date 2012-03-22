@@ -3,18 +3,14 @@ package com.papagiannis.tuberun.cyclehire;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.papagiannis.tuberun.LinePresentation;
-import com.papagiannis.tuberun.LineType;
-import com.papagiannis.tuberun.R;
-import com.papagiannis.tuberun.fetchers.DeparturesDLRFetcher;
-
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
+
+import com.papagiannis.tuberun.R;
 
 public class NearbyCyclesBinder implements ViewBinder, OnClickListener {
 	Context context;

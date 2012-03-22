@@ -1,13 +1,6 @@
 package com.papagiannis.tuberun.cyclehire;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -15,29 +8,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.http.impl.client.BasicCookieStore;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xmlpull.v1.XmlPullParser;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
-import android.database.SQLException;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.papagiannis.tuberun.*;
-import com.papagiannis.tuberun.fetchers.Fetcher;
+import com.papagiannis.tuberun.Station;
 import com.papagiannis.tuberun.fetchers.HttpCallback;
 import com.papagiannis.tuberun.fetchers.NearbyStationsFetcher;
 import com.papagiannis.tuberun.fetchers.RequestTask;
-import com.papagiannis.tuberun.plan.Plan;
 
 public class StationsCycleHireFetcher extends NearbyStationsFetcher {
 	private static final long serialVersionUID = 1L;

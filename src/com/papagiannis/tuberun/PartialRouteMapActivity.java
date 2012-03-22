@@ -5,7 +5,6 @@ import java.util.List;
 
 import uk.me.jstott.jcoord.LatLng;
 import uk.me.jstott.jcoord.OSRef;
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -13,12 +12,10 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
-import com.papagiannis.tuberun.fetchers.RouteFetcher;
 import com.papagiannis.tuberun.overlays.HereOverlay;
 import com.papagiannis.tuberun.overlays.RouteOverlay;
 
@@ -78,7 +75,7 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 				    			icon=(Integer) array.get(1);
 				    			if (icon==R.drawable.walk) icon=R.drawable.walk_black;
 				    			Drawable drawable = self.getResources().getDrawable(icon);
-				    			HereOverlay hereo = new HereOverlay(drawable, self);
+				    			HereOverlay<OverlayItem> hereo = new HereOverlay<OverlayItem>(drawable, self);
 				    			directions=(String)array.get(2);
 				    		    OverlayItem overlayitem = new OverlayItem(result.get(i - 1), "Change", directions);
 				    		    hereo.addOverlay(overlayitem);

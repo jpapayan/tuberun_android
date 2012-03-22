@@ -1,19 +1,14 @@
 package com.papagiannis.tuberun.fetchers;
 
 import java.io.StringReader;
-import java.lang.reflect.Array;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.cookie.BasicClientCookie;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -21,11 +16,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.papagiannis.tuberun.claims.Claim;
 import com.papagiannis.tuberun.plan.PartialRoute;
 import com.papagiannis.tuberun.plan.PartialRouteType;
 import com.papagiannis.tuberun.plan.Plan;

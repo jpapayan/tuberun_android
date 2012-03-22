@@ -1,31 +1,21 @@
 package com.papagiannis.tuberun;
 
+import java.util.Date;
+import java.util.List;
+
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TabHost;
-import android.widget.TabHost.TabContentFactory;
-import android.widget.TabHost.TabSpec;
-import android.widget.TabWidget;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.ReverseGeocodeFetcher;
@@ -161,8 +151,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 	private void displayLocation(List<Address> result) {
 		if (result.size() == 0)
 			return;
-		String previous_location = previous_location = result.get(0)
-				.getAddressLine(0);
+		String previous_location = result.get(0).getAddressLine(0);
 		if (result != null && result.size() >= 1) {
 			location_textview.setText(previous_location);
 			location_accuracy_textview.setText("accuracy="

@@ -31,14 +31,13 @@
                 android:layout_width="40dip"
                 android:layout_height="40dip"
                 android:layout_gravity="center"
-                android:layout_weight="0"
                 android:gravity="center"
                 android:text="" />
 
             <TextView
                 android:id="@+id/title_textview"
                 style="@android:style/TextAppearance.Medium"
-                android:layout_width="fill_parent"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dip"

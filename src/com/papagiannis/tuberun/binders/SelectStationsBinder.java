@@ -1,15 +1,12 @@
 package com.papagiannis.tuberun.binders;
 
-import com.papagiannis.tuberun.LinePresentation;
-import com.papagiannis.tuberun.LineType;
-
-import android.graphics.Color;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.SimpleAdapter.ViewBinder;
-import android.widget.TextView;
+
+import com.papagiannis.tuberun.LinePresentation;
+import com.papagiannis.tuberun.LineType;
 
 public class SelectStationsBinder implements ViewBinder, OnClickListener {
 

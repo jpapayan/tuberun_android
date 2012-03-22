@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import com.papagiannis.tuberun.binders.SelectLinesBinder;
-import com.papagiannis.tuberun.binders.SelectStationsBinder;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import com.papagiannis.tuberun.binders.SelectStationsBinder;
 
 public class SelectStationActivity extends ListActivity implements OnClickListener {
 	protected Button backButton;

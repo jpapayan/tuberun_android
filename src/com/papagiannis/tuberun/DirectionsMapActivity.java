@@ -1,7 +1,6 @@
 package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -12,12 +11,9 @@ import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
-import com.papagiannis.tuberun.fetchers.Fetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.RouteFetcher;
 import com.papagiannis.tuberun.overlays.HereOverlay;
@@ -62,7 +58,7 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 						R.drawable.cycle_hire_pushpin);
 			else
 				drawable = this.getResources().getDrawable(R.drawable.tube);
-			HereOverlay tube = new HereOverlay(drawable, this);
+			HereOverlay<OverlayItem> tube = new HereOverlay<OverlayItem>(drawable, this);
 
 			StringBuffer sb = new StringBuffer();
 			if (!isCycleHire) {

@@ -215,6 +215,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 					.setCancelable(true)
 					.setPositiveButton("Download",
 							new DialogInterface.OnClickListener() {
+								@SuppressWarnings("deprecation")
 								public void onClick(DialogInterface dialog,
 										int id) {
 									dismissDialog(DOWNLOAD_IMAGE_DIALOG);
@@ -225,6 +226,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 					.setNegativeButton("Cancel",
 							new DialogInterface.OnClickListener() {
 
+								@SuppressWarnings("deprecation")
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
@@ -242,6 +244,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			progressDialog
 					.setOnCancelListener(new DialogInterface.OnCancelListener() {
 
+						@SuppressWarnings("deprecation")
 						@Override
 						public void onCancel(DialogInterface dialog) {
 							task.cancel(true);
@@ -260,6 +263,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 					.setCancelable(true)
 					.setPositiveButton("OK",
 							new DialogInterface.OnClickListener() {
+								@SuppressWarnings("deprecation")
 								public void onClick(DialogInterface dialog,
 										int id) {
 									dismissDialog(DOWNLOAD_IMAGE_FAILED_DIALOG);
@@ -286,6 +290,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		task.execute(TUBE_MAP_URL, LOCAL_PATH);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onPause() {
 		super.onPause();
