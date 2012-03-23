@@ -41,6 +41,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class PlanFragment extends Fragment implements Observer, OnClickListener, OnCheckedChangeListener{
 	private final PlanFragment self=this;
+	static final int LOCATION_SERVICE_FAILED = -8;
 	private final static int SELECT_TRAVEL_DATE = -7;
 	private final static int SELECT_ALTERNATIVE = -6;
 	private final static int SET_HOME_DIALOG = -4;
@@ -411,9 +412,19 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 	private boolean is_location_dialog = false;
 	boolean is_wait_dialog = false;
 
+	@SuppressWarnings("deprecation")
 	protected Dialog showDialog(int id) {
 		Dialog ret = null;
-		if (id == LOCATION_DIALOG) {
+		if (id==LOCATION_SERVICE_FAILED) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(planActivity);
+			builder.setTitle("Location Service Failed")
+						.setMessage(
+								"Does you device support location services? Turn them on in the settings.")
+						.setCancelable(true)
+						.setPositiveButton("OK", null);
+			ret = builder.create();
+		}
+		else if (id == LOCATION_DIALOG) {
 			ProgressDialog d = new ProgressDialog(getActivity());
 			d.setTitle("Fetching your location");
 			d.setCancelable(true);
@@ -634,7 +645,6 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 					traveldate_button.setText(dateFormat.format(now));
 				}
 			}, d.getYear()+1900, d.getMonth(), d.getDate());
-			
 		}
 		wait_dialog=ret;
 		ret.show();

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,14 +26,14 @@ import com.papagiannis.tuberun.fetchers.ReverseGeocodeFetcher;
 import com.papagiannis.tuberun.plan.Plan;
 import com.papagiannis.tuberun.stores.DestinationStore;
 
-public class PlanActivity extends FragmentActivity implements LocationListener  {
+public class PlanActivity extends FragmentActivity implements LocationListener {
 	private final static int ADD_HOME_ERROR = -5;
 	final PlanActivity self = this;
 	private static Plan plan = new Plan();
 	DestinationStore<Destination> store = DestinationStore.getInstance();
-	
-	ReverseGeocodeFetcher geocoder=new ReverseGeocodeFetcher(this, null);
-	Observer geolocationObserver=new Observer() {
+
+	ReverseGeocodeFetcher geocoder = new ReverseGeocodeFetcher(this, null);
+	Observer geolocationObserver = new Observer() {
 		@Override
 		public void update() {
 			displayLocation(geocoder.getResult());
@@ -49,15 +50,13 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 	TextView location_accuracy_textview;
 	LinearLayout location_layout;
 	ProgressBar location_progressbar;
-	
 
 	TabHost mTabHost;
 	ViewPager mViewPager;
 	TabsAdapter mTabsAdapter;
 	PlanFragment planFragment;
 	ListFragment savedFragment;
-	
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,32 +65,28 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 		plan = new Plan();
 		create();
 		updateHomeButton();
-		
+
 	}
-	
-	
+
 	private void setupTabHost(Bundle savedInstanceState) {
 		mTabHost = (TabHost) findViewById(android.R.id.tabhost);
 		mViewPager = (ViewPager) findViewById(R.id.pager);
-		
+
 		mTabHost.setup();
-    	mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
-    	mTabsAdapter.addTab(
-				mTabHost.newTabSpec("New").setIndicator("new"),
+		mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
+		mTabsAdapter.addTab(mTabHost.newTabSpec("New").setIndicator("new"),
 				PlanFragment.class, null);
-		mTabsAdapter.addTab(
-				mTabHost.newTabSpec("Saved").setIndicator("old"),
+		mTabsAdapter.addTab(mTabHost.newTabSpec("Saved").setIndicator("old"),
 				PlanStoredFragment.class, null);
-		
-		planFragment = (PlanFragment)  mTabsAdapter.getItem(0);
+
+		planFragment = (PlanFragment) mTabsAdapter.getItem(0);
 		savedFragment = (PlanStoredFragment) mTabsAdapter.getItem(1);
-		
+
 		if (savedInstanceState != null) {
 			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
 		}
 	}
-	
-	
+
 	private void createReferences() {
 		mainmenu_layout = (LinearLayout) findViewById(R.id.mainmenu_layout);
 		back_button = (Button) findViewById(R.id.back_button);
@@ -119,29 +114,6 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 		back_button.setOnClickListener(back_listener);
 		logo_button.setOnClickListener(back_listener);
 
-		// Setup the location manager
-		locationManager = (LocationManager) this
-				.getSystemService(Context.LOCATION_SERVICE);
-		requestLocationUpdates();
-		lastKnownLocation = locationManager
-				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		if (lastKnownLocation == null)
-			lastKnownLocation = locationManager
-					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		if (lastKnownLocation != null) {
-			// never trust old accuracies
-			if (lastKnownLocation.getAccuracy() < 50)
-				lastKnownLocation.setAccuracy(100);
-			// remeber to reverse gocode the old address.
-			reverseGeocode(lastKnownLocation);
-		}
-		else {
-			//Make sure that lastKnowLocaton is never null
-			lastKnownLocation=new Location("FAKE");
-		}
-		if (lastKnownLocation==null) lastKnownLocation=new Location("FAKE");
-		if (lastKnownLocation!=null) plan.setStartingLocation(lastKnownLocation);
-
 		// updateHistoryView();
 		go_home_full_button.setOnClickListener(new OnClickListener() {
 			@Override
@@ -156,11 +128,32 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 				planFragment.showDialog(ADD_HOME_ERROR);
 			}
 		});
-		
-		planFragment.planActivity=this;
-	}
 
-	
+		planFragment.planActivity = this;
+
+		// Setup the location manager
+		locationManager = (LocationManager) this
+				.getSystemService(Context.LOCATION_SERVICE);
+		lastKnownLocation = locationManager
+				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		if (lastKnownLocation == null)
+			lastKnownLocation = locationManager
+					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		if (lastKnownLocation != null) {
+			// never trust old accuracies
+			if (lastKnownLocation.getAccuracy() < 50)
+				lastKnownLocation.setAccuracy(100);
+			// remeber to reverse gocode the old address.
+			reverseGeocode(lastKnownLocation);
+		} else {
+			// Make sure that lastKnowLocaton is never null
+			lastKnownLocation = new Location("FAKE");
+		}
+		if (lastKnownLocation == null)
+			lastKnownLocation = new Location("FAKE");
+		if (lastKnownLocation != null)
+			plan.setStartingLocation(lastKnownLocation);
+	}
 
 	void updateHomeButton() {
 		Destination d = store.getHome(this);
@@ -181,12 +174,12 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 		store.add(d, self);
 	}
 
-	
 	public static Plan getPlan() {
 		return plan;
 	}
+
 	public static Plan setPlan(Plan p) {
-		plan=p;
+		plan = p;
 		return plan;
 	}
 
@@ -195,27 +188,26 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 	Location lastKnownLocation;
 	Date started;
 
-	
-	
 	private void displayLocation(List<Address> result) {
-		if ( result==null || result.size() <1) {
+		if (result == null || result.size() < 1) {
 			location_textview.setText("");
 			location_accuracy_textview.setText(("accuracy="
 					+ lastKnownLocation.getAccuracy() + "m"));
-			planFragment.updateLocationDialog(null,"", ""+lastKnownLocation.getAccuracy());
-		}
-		else {
-			String geoc_result=result.get(0).getAddressLine(0);
+			planFragment.updateLocationDialog(null, "",
+					"" + lastKnownLocation.getAccuracy());
+		} else {
+			String geoc_result = result.get(0).getAddressLine(0);
 			location_textview.setText(geoc_result);
 			location_accuracy_textview.setText("accuracy="
 					+ lastKnownLocation.getAccuracy() + "m");
-			planFragment.updateLocationDialog(null,geoc_result,	""+lastKnownLocation.getAccuracy());
-		} 
+			planFragment.updateLocationDialog(null, geoc_result, ""
+					+ lastKnownLocation.getAccuracy());
+		}
 	}
-	
+
 	private void reverseGeocode(Location l) {
 		geocoder.abort();
-		geocoder=new ReverseGeocodeFetcher(this,l);
+		geocoder = new ReverseGeocodeFetcher(this, l);
 		geocoder.registerCallback(geolocationObserver).update();
 	}
 
@@ -227,11 +219,10 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 			reverseGeocode(l);
 		}
 	}
-	
-	public Location getCurrentLocation(){
+
+	public Location getCurrentLocation() {
 		return lastKnownLocation;
 	}
-	
 
 	@Override
 	public void onProviderDisabled(String arg0) {
@@ -246,12 +237,17 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 	}
 
 	void requestLocationUpdates() {
-		if (locationManager != null) {
-			location_progressbar.setVisibility(View.VISIBLE);
-			locationManager.requestLocationUpdates(
-					LocationManager.NETWORK_PROVIDER, 2 * 1000, 5, this);
-			locationManager.requestLocationUpdates(
-					LocationManager.GPS_PROVIDER, 3 * 1000, 5, this);
+		try {
+			if (locationManager != null) {
+				locationManager.requestLocationUpdates(
+						LocationManager.NETWORK_PROVIDER, 2 * 1000, 5, this);
+				locationManager.requestLocationUpdates(
+						LocationManager.GPS_PROVIDER, 3 * 1000, 5, this);
+			}
+		} catch (Exception e) {
+			Log.w("LocationService", e);
+			planFragment.showDialog(PlanFragment.LOCATION_SERVICE_FAILED);
+
 		}
 	}
 
@@ -260,7 +256,6 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 			location_progressbar.setVisibility(View.GONE);
 		locationManager.removeUpdates(this);
 	}
-
 
 	@Override
 	protected void onPause() {
@@ -274,6 +269,5 @@ public class PlanActivity extends FragmentActivity implements LocationListener  
 		if (locationManager != null && !planFragment.is_wait_dialog)
 			requestLocationUpdates();
 	}
-
 
 }

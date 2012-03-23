@@ -42,6 +42,7 @@ import com.papagiannis.tuberun.claims.ClaimStore;
 import com.papagiannis.tuberun.fetchers.ClaimFetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
 
+@SuppressWarnings("deprecation")
 public class ClaimActivity extends TabActivity implements Observer {
 
 	private static final String LIST1_TAB_TAG = "Overview";
@@ -707,13 +708,13 @@ public class ClaimActivity extends TabActivity implements Observer {
 
 	private Dialog wait_dialog;
 
+	
 	@Override
 	protected Dialog onCreateDialog(int id) {
 
 		if (journeyStartDate.getId() == id) {
 			Date d = claim.journey_started;
 			return new DatePickerDialog(this, new OnDateSetListener() {
-				@SuppressWarnings("deprecation")
 				@Override
 				public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 					claim.journey_started = new Date(year - 1900, monthOfYear, dayOfMonth);
@@ -724,7 +725,6 @@ public class ClaimActivity extends TabActivity implements Observer {
 			Date d = claim.delay_when;
 			return new TimePickerDialog(this, new OnTimeSetListener() {
 				@Override
-				@SuppressWarnings("deprecation")
 				public void onTimeSet(TimePicker view, int h, int m) {
 					claim.delay_when = new Date();
 					claim.delay_when.setHours(h);
@@ -738,7 +738,6 @@ public class ClaimActivity extends TabActivity implements Observer {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Delay duration (minutes)");
 			builder.setItems(items, new DialogInterface.OnClickListener() {
-				@SuppressWarnings("deprecation")
 				public void onClick(DialogInterface dialog, int item) {
 					claim.delay_duration = new Date();
 					claim.delay_duration.setHours(0);
@@ -751,7 +750,6 @@ public class ClaimActivity extends TabActivity implements Observer {
 		} else if (ticketTflExpiry.getId() == id) {
 			Date d = claim.ticket_tfl_expiry;
 			return new DatePickerDialog(this, new OnDateSetListener() {
-				@SuppressWarnings("deprecation")
 				@Override
 				public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 					claim.ticket_tfl_expiry = new Date(year - 1900, monthOfYear, dayOfMonth);
@@ -761,7 +759,6 @@ public class ClaimActivity extends TabActivity implements Observer {
 		} else if (ticketRailValidUntil.getId() == id) {
 			Date d = claim.ticket_rail_expiry;
 			return new DatePickerDialog(this, new OnDateSetListener() {
-				@SuppressWarnings("deprecation")
 				@Override
 				public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 					claim.ticket_rail_expiry = new Date(year - 1900, monthOfYear, dayOfMonth);
@@ -786,7 +783,6 @@ public class ClaimActivity extends TabActivity implements Observer {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage(notice_msg).setTitle(notice_title).setCancelable(false)
 					.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-						@SuppressWarnings("deprecation")
 						public void onClick(DialogInterface dialog, int id) {
 							dialog.cancel();
 							if (claim.getSubmitted()) showDialog(MESSAGE_PREFILL);

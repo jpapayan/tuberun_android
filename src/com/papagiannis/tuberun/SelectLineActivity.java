@@ -45,12 +45,13 @@ public class SelectLineActivity extends ListActivity implements OnClickListener 
 						R.drawable.background_depart);
 				back.setImageBitmap(bmp);
 				lines = LineType.allDepartures();
-			} else if (type.equals("maps")) {
-				Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-						R.drawable.background_maps);
-				back.setImageBitmap(bmp);
-				lines = LineType.allMaps();
-			}
+			} 
+//			else if (type.equals("maps")) {
+//				Bitmap bmp = BitmapFactory.decodeResource(getResources(),
+//						R.drawable.background_maps);
+//				back.setImageBitmap(bmp);
+//				lines = LineType.allMaps();
+//			}
 		}
 
 		for (LineType lt : lines) {

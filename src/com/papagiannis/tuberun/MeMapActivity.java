@@ -3,6 +3,8 @@ package com.papagiannis.tuberun;
 import java.util.Date;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -36,6 +38,7 @@ public abstract class MeMapActivity extends MapActivity implements
 	protected LocationManager locationManager;
 	protected final GeoPoint gp_london = new GeoPoint(51501496, -124240);
 	protected static final int TWO_MINUTES = 1000 * 60 * 2;
+	private static final int LOCATION_SERVICE_FAILED = 0;
 	protected Location lastKnownLocation;
 	protected Date started;
 	protected List<Overlay> mapOverlays;
@@ -247,13 +250,36 @@ public abstract class MeMapActivity extends MapActivity implements
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	private void requestLocationUpdates() {
-		if (locationManager != null) {
-			locationManager.requestLocationUpdates(
-					LocationManager.NETWORK_PROVIDER, 2 * 1000, 5, this);
-			locationManager.requestLocationUpdates(
-					LocationManager.GPS_PROVIDER, 3 * 1000, 5, this);
+		try {
+			if (locationManager != null) {
+				locationManager.requestLocationUpdates(
+						LocationManager.NETWORK_PROVIDER, 2 * 1000, 5, this);
+				locationManager.requestLocationUpdates(
+						LocationManager.GPS_PROVIDER, 3 * 1000, 5, this);
+			}
+		} catch (Exception e) {
+			Log.w("LocationService",e);
+			showDialog(LOCATION_SERVICE_FAILED);
 		}
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Dialog result = null;
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		switch (id) {
+		case LOCATION_SERVICE_FAILED:
+			builder.setTitle("Location Service Failed")
+					.setMessage(
+							"Does you device support location services? Turn them on in the settings.")
+					.setCancelable(true)
+					.setPositiveButton("OK", null);
+			result = builder.create();
+			break;
+		}
+		return result;
 	}
 
 	/** Checks whether two providers are the same */

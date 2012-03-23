@@ -136,9 +136,9 @@
                     android:id="@+id/button_status"
                     android:background="@layout/custom_button"
                     android:textColor="@android:color/black"
-                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:maxHeight="80dip"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="120dip"
                     android:minHeight="70dip"
                     android:text="@string/status_title"
                     android:width="120dip" />
@@ -151,7 +151,7 @@
                     android:id="@+id/button_departures"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:maxHeight="80dip"
+                    android:maxHeight="120dip"
                     android:minHeight="70dip"
                     android:text="@string/departures_title"
                     android:width="120dip" />
@@ -168,7 +168,7 @@
                     android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:maxHeight="80dip"
+                    android:maxHeight="120dip"
                     android:minHeight="70dip"
                     android:singleLine="false"
                     android:text="@string/nearby_title" />
@@ -179,7 +179,7 @@
                     android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:maxHeight="80dip"
+                    android:maxHeight="120dip"
                     android:minHeight="70dip"
                     android:text="@string/maps_title" />
             </TableRow>
@@ -195,7 +195,7 @@
                     android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:maxHeight="80dip"
+                    android:maxHeight="120dip"
                     android:minHeight="70dip"
                     android:singleLine="false"
                     android:text="@string/planner_title" />
@@ -206,7 +206,7 @@
                     android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:maxHeight="80dip"
+                    android:maxHeight="120dip"
                     android:minHeight="70dip"
                     android:singleLine="false"
                     android:text="@string/claims_title" />

@@ -355,7 +355,9 @@ public class Claim implements Serializable {
 
 	public String data_to_send = null;
 	private String data_to_send_overground_common = null;
+	@SuppressWarnings("unused")
 	private String data_to_send_overground_1 = null;
+	@SuppressWarnings("unused")
 	private String data_to_send_overground_2 = null;
 	private String errors = null;
 
@@ -407,6 +409,7 @@ public class Claim implements Serializable {
 		return res.substring(1);
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean isReadyTube() {
 		data_to_send = "";
 		errors = "";
@@ -740,6 +743,7 @@ public class Claim implements Serializable {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean isReadyDLR() {
 		data_to_send = "";
 		errors = "";
@@ -1111,6 +1115,7 @@ public class Claim implements Serializable {
 			return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean isReadyOverground2() {
 		String postData = data_to_send_overground_common;
 		if (ticket_type != null) {

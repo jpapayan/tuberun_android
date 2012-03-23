@@ -3,6 +3,8 @@ package com.papagiannis.tuberun;
 import java.util.Date;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.location.Address;
 import android.location.Location;
@@ -11,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -22,6 +25,8 @@ import com.papagiannis.tuberun.fetchers.ReverseGeocodeFetcher;
 
 public class NearbyStationsActivity extends FragmentActivity implements
 		LocationListener {
+	private static final int LOCATION_SERVICE_FAILED = 0;
+
 	FragmentActivity self = this;
 
 	ReverseGeocodeFetcher geocoder = new ReverseGeocodeFetcher(this, null);
@@ -65,10 +70,11 @@ public class NearbyStationsActivity extends FragmentActivity implements
 				NearbyStationsListFragment.class, null);
 		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
 		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
-//		Bitmap bmp = BitmapFactory.decodeResource(this.getResources(), R.drawable.tube);
-//		Bitmap resizedbitmap = Bitmap.createScaledBitmap(bmp,
-//				(int)(bmp.getWidth() / 1.5), (int) (bmp.getHeight() / 1.5), true);
-//		mTabsAdapter.getTabsImageView().setImageBitmap(resizedbitmap);
+		// Bitmap bmp = BitmapFactory.decodeResource(this.getResources(),
+		// R.drawable.tube);
+		// Bitmap resizedbitmap = Bitmap.createScaledBitmap(bmp,
+		// (int)(bmp.getWidth() / 1.5), (int) (bmp.getHeight() / 1.5), true);
+		// mTabsAdapter.getTabsImageView().setImageBitmap(resizedbitmap);
 		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.tube);
 
 		mTabsAdapter.addTab(
@@ -76,12 +82,12 @@ public class NearbyStationsActivity extends FragmentActivity implements
 				NearbyCycleStationsListFragment.class, null);
 		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
 		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
-//		bmp=BitmapFactory.decodeResource(this.getResources(), R.drawable.cycle_hire);
-//		resizedbitmap = Bitmap.createScaledBitmap(bmp,
-//				(int)(bmp.getWidth() / 1.5), (int) (bmp.getHeight() / 1.5), true);
-//		mTabsAdapter.getTabsImageView().setImageBitmap(resizedbitmap);
+		// bmp=BitmapFactory.decodeResource(this.getResources(),
+		// R.drawable.cycle_hire);
+		// resizedbitmap = Bitmap.createScaledBitmap(bmp,
+		// (int)(bmp.getWidth() / 1.5), (int) (bmp.getHeight() / 1.5), true);
+		// mTabsAdapter.getTabsImageView().setImageBitmap(resizedbitmap);
 		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.cycle_hire);
-
 
 		if (savedInstanceState != null) {
 			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
@@ -104,7 +110,6 @@ public class NearbyStationsActivity extends FragmentActivity implements
 
 		locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
-		requestLocationUpdates();
 	}
 
 	@Override
@@ -174,13 +179,37 @@ public class NearbyStationsActivity extends FragmentActivity implements
 
 	}
 
+	@SuppressWarnings("deprecation")
 	private void requestLocationUpdates() {
-		if (locationManager != null) {
-			locationManager.requestLocationUpdates(
-					LocationManager.NETWORK_PROVIDER, 2 * 1000, 5, this);
-			locationManager.requestLocationUpdates(
-					LocationManager.GPS_PROVIDER, 3 * 1000, 5, this);
+		try {
+			if (locationManager != null) {
+				locationManager.requestLocationUpdates(
+						LocationManager.NETWORK_PROVIDER, 2 * 1000, 5, this);
+				locationManager.requestLocationUpdates(
+						LocationManager.GPS_PROVIDER, 3 * 1000, 5, this);
+			}
+		} catch (Exception e) {
+			Log.w("LocationService",e);
+			showDialog(LOCATION_SERVICE_FAILED);
+
 		}
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Dialog result = null;
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		switch (id) {
+		case LOCATION_SERVICE_FAILED:
+			builder.setTitle("Location Service Failed")
+					.setMessage(
+							"Does you device support location services? Turn them on in the settings.")
+					.setCancelable(true)
+					.setPositiveButton("OK", null);
+			result = builder.create();
+			break;
+		}
+		return result;
 	}
 
 }

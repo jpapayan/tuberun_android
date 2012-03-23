@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
@@ -26,6 +27,7 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 	final DirectionsMapActivity self=this;
 
 	/** Called when the activity is first created. */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,8 +79,7 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 			mapView.invalidate();
 
 		} catch (Exception e) {
-			String s = e.toString();
-			// s += s;
+			Log.w("Directions",e);
 		}
 	}
 
