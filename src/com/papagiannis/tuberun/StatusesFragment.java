@@ -6,8 +6,13 @@ import java.util.HashMap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.papagiannis.tuberun.binders.StatusesBinder;
 import com.papagiannis.tuberun.favorites.Favorite;
@@ -18,12 +23,28 @@ public class StatusesFragment extends ListFragment implements Observer {
 	private StatusesFetcher fetcher;
 	private final ArrayList<HashMap<String,Object>> status_list=new ArrayList<HashMap<String,Object>>();
 	private boolean isWeekend=false;
+	private LinearLayout emptyLayout;
 	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
+	
+	@Override
+	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v=null;
+		try {
+			v=inflater.inflate(R.layout.statuses_list, null);
+			emptyLayout=(LinearLayout)v.findViewById(R.id.empty_layout);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			String s=e.toString();
+			s=s+s;
+		}
+		return v;
+	}	
 
 	public StatusesFragment setFetcher(StatusesFetcher f) {
 		fetcher = f;
@@ -31,6 +52,12 @@ public class StatusesFragment extends ListFragment implements Observer {
 		return this;
 	}
 	
+	public void onClick() {
+		emptyLayout.setVisibility(View.GONE);
+//		setListShown(false);
+		setListAdapter(null);
+		fetcher.update();
+	}
 	
 	@Override
 	public void update() {
@@ -40,8 +67,9 @@ public class StatusesFragment extends ListFragment implements Observer {
 		
 		for (LineType lt: LineType.allStatuses()) {
 			HashMap<String,Object> m=new HashMap<String,Object>();
-			m.put("line", LinePresentation.getStringRespresentation(lt));
 			Status s=fetcher.getStatus(lt);
+			if (s==null || s.short_status==null || s.short_status.equalsIgnoreCase("Failed")) break;
+			m.put("line", LinePresentation.getStringRespresentation(lt));
 			if (s != null) {
 				m.put("status", s.short_status);
 				String long_status=s.long_status;
@@ -58,6 +86,13 @@ public class StatusesFragment extends ListFragment implements Observer {
 			status_list.add(m);	
 		}
 		
+		if (status_list.size()==0) {
+			emptyLayout.setVisibility(View.VISIBLE);
+		}
+		else {
+			emptyLayout.setVisibility(View.GONE);
+		}
+		
 		SimpleAdapter adapter=new SimpleAdapter(getActivity(),
 				status_list, 
 				R.layout.line_status,
@@ -65,14 +100,9 @@ public class StatusesFragment extends ListFragment implements Observer {
 				new int[]{R.id.line_label, R.id.status_label ,R.id.details_label, R.id.add_favorite});
 		adapter.setViewBinder(new StatusesBinder(isWeekend, getActivity(),this));
 		setListAdapter(adapter);
-		setListShown(true);
+//		setListShown(true);
 	}
 	
-	public void onClick() {
-		setListShown(false);
-		setListAdapter(null);
-		fetcher.update();
-	}
 	
     @Override
     public void onPause() {
