@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 
 import com.papagiannis.tuberun.binders.FavoritesBinder;
@@ -30,6 +31,8 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	private int fetchers_count = 0;
 	private boolean uses_status_weekend = false;
 	private boolean uses_status_now = false;
+	
+	LinearLayout emptyLayout;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -54,6 +57,8 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		};
 		back_button.setOnClickListener(back_listener);
 		logo_button.setOnClickListener(back_listener);
+		
+		emptyLayout= (LinearLayout) findViewById(R.id.empty_layout);
 
 		favorites = Favorite.getFavorites(this);
 		fetchers_count = 0;
@@ -85,7 +90,23 @@ public class FavoritesActivity extends ListActivity implements Observer,
 			fc.clearCallbacks();
 			fc.registerCallback(this);
 		}
+		
 		onClick(null);
+	}
+	
+	@Override
+	public void onClick(View arg0) {
+		if (favorites.size() > 0) {
+			emptyLayout.setVisibility(View.GONE);
+			setListAdapter(null);
+//			showDialog(0);
+			for (Favorite f : favorites) {
+				f.getFetcher().update();
+			}
+		}
+		else {
+			emptyLayout.setVisibility(View.VISIBLE);
+		}
 	}
 
 	private AtomicInteger replies = new AtomicInteger(0);
@@ -102,7 +123,6 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		if (!repliesReceived())
 			return;
 		updateList(false);
-		wait_dialog.dismiss();
 	}
 
 	private void updateList(Boolean asEmpty) {
@@ -207,37 +227,6 @@ public class FavoritesActivity extends ListActivity implements Observer,
 						R.id.favorites_time3 });
 		adapter.setViewBinder(new FavoritesBinder(this));
 		setListAdapter(adapter);
-	}
-
-	private ProgressDialog wait_dialog;
-
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		wait_dialog = new ProgressDialog(this);
-		wait_dialog.setTitle("Fetching data");
-		wait_dialog.setMessage("Please wait...");
-		wait_dialog.setIndeterminate(true);
-		wait_dialog.setOnCancelListener(new OnCancelListener() {
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				for (Favorite f : favorites) {
-					f.getFetcher().abort();
-					updateList(true);
-				}
-			}
-		});
-		return wait_dialog;
-	}
-
-	@Override
-	public void onClick(View arg0) {
-		if (favorites.size() > 0) {
-			setListAdapter(null);
-			showDialog(0);
-			for (Favorite f : favorites) {
-				f.getFetcher().update();
-			}
-		}
 	}
 
 }

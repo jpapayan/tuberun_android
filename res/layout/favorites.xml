@@ -28,8 +28,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:minWidth="0dip"
-                android:minHeight="0dip" />
+                android:minHeight="0dip"
+                android:minWidth="0dip" />
 
             <Button
                 android:id="@+id/logo_button"
@@ -58,13 +58,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dip"
-                android:text=""
+                android:minHeight="0dip"
                 android:minWidth="0dip"
-                android:minHeight="0dip" />
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@id/android:empty"
+            android:id="@+id/empty_layout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center"
@@ -89,6 +89,24 @@
                 android:src="@drawable/rating_not_important" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@id/android:empty"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dip"
+            android:layout_marginTop="5dip"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true" />
+        </LinearLayout>
+
         <ListView
             android:id="@+id/android:list"
             android:layout_width="fill_parent"
@@ -96,9 +114,9 @@
             android:layout_gravity="center"
             android:layout_margin="10dip"
             android:cacheColorHint="#00000000"
-            android:scrollbars="none"
             android:divider="@android:color/transparent"
-            android:dividerHeight="10dip" />
+            android:dividerHeight="10dip"
+            android:scrollbars="none" />
     </LinearLayout>
 
 </FrameLayout>
