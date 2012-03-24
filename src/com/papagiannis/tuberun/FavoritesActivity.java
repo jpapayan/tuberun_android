@@ -32,7 +32,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	private boolean uses_status_weekend = false;
 	private boolean uses_status_now = false;
 	
-	LinearLayout emptyLayout;
+	private LinearLayout emptyLayout;
 
 	/** Called when the activity is first created. */
 	@Override

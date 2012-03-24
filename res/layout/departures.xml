@@ -15,7 +15,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginBottom="10dip"
-        android:gravity="bottom"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -75,21 +74,39 @@
             android:layout_marginBottom="5dip"
             android:layout_marginTop="5dip"
             android:background="@drawable/tuberun_red"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:text="Station" />
 
         <TextView
-            	android:id="@id/android:empty"
+            	android:id="@+id/empty_textview"
                 style="@style/WhiteText"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_marginBottom="5dip"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dip"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:text="Departures not available. Does TfL offer departure data for this station?" />
 
+        <LinearLayout
+            android:id="@id/android:empty"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dip"
+            android:layout_marginTop="5dip"
+            android:gravity="center"
+            android:orientation="vertical" >
+            
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true" />
+            
+        </LinearLayout>
+        
         <ListView
             android:id="@+id/android:list"
             android:layout_width="fill_parent"

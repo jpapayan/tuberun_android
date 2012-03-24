@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -26,12 +27,14 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 	protected Button backButton;
 	protected Button logoButton;
 	protected TextView stationTextView;
+	protected TextView emptyTextView;
 	
 	private DeparturesFetcher fetcher;
 	private final ArrayList<HashMap<String,Object>> departures_list=new ArrayList<HashMap<String,Object>>();
 	private LineType lt;
 	private String stationcode;
 	private String stationnice;
+	
 	
 	
     /** Called when the activity is first created. */
@@ -46,6 +49,7 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
     	backButton = (Button) findViewById(R.id.back_button);
 		logoButton = (Button) findViewById(R.id.logo_button);
 		stationTextView = (TextView) findViewById(R.id.station_textview);
+		emptyTextView= (TextView) findViewById(R.id.empty_textview);
 		
 		backButton.setOnClickListener(this);
 		logoButton.setOnClickListener(this);
@@ -65,13 +69,14 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 		if (lt==LineType.DLR) fetcher=new DeparturesDLRFetcher(lt, stationcode, stationnice);
 		else fetcher=new DeparturesFetcher(lt, stationcode, stationnice);
 		fetcher.registerCallback(this);
-		showDialog(0);
+		emptyTextView.setVisibility(View.GONE);
 		fetcher.update();
 		
 		View updateButton = findViewById(R.id.button_update);
         updateButton.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		showDialog(0);
+        		emptyTextView.setVisibility(View.GONE);
+        		setListAdapter(null);
         		fetcher.update();
         	}
         });
@@ -82,7 +87,6 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
     
 	@Override
 	public void update() {
-		wait_dialog.dismiss();
 		departures_list.clear();
 		
 		HashMap<String, ArrayList<HashMap<String, String>>> reply=fetcher.getDepartures();
@@ -113,6 +117,13 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 			departures_list.add(m);	
 		}
 		
+		if (departures_list.isEmpty()) {
+			emptyTextView.setVisibility(View.VISIBLE);
+		}
+		else {
+			emptyTextView.setVisibility(View.GONE);
+		}
+		
 		SimpleAdapter adapter=new SimpleAdapter(this,
 				departures_list, 
 				R.layout.departures_status,
@@ -129,22 +140,6 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 		
 	}
 
-	private ProgressDialog wait_dialog;
-    @Override
-    protected Dialog onCreateDialog(int id) {
-    	wait_dialog=new ProgressDialog(this);
-    	wait_dialog.setTitle("Fetching departures");
-    	wait_dialog.setMessage("Please wait...");
-    	wait_dialog.setIndeterminate(true);
-    	wait_dialog.setOnCancelListener(new OnCancelListener() {
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				fetcher.abort();
-			}
-		});
-    	return wait_dialog;
-    }
-    
     @Override
 	public void onClick(View v) {
 		finish();
