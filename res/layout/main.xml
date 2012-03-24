@@ -126,7 +126,7 @@
 
             <TableRow
                 android:layout_height="fill_parent"
-                android:layout_weight="25.0" />
+                android:layout_weight="20.0" />
 
             <TableRow
                 android:layout_height="fill_parent"
@@ -211,6 +211,10 @@
                     android:singleLine="false"
                     android:text="@string/claims_title" />
             </TableRow>
+            
+            <TableRow
+                android:layout_height="fill_parent"
+                android:layout_weight="1" />
         </TableLayout>
     </LinearLayout>
 
