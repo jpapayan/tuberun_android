@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+@SuppressWarnings("deprecation")
 public class OysterActivity extends Activity implements Observer{
 	static final int DIALOG_MESSAGE_NOTICE = 0;
 	static final int DIALOG_WAIT = 1;
@@ -60,7 +61,7 @@ public class OysterActivity extends Activity implements Observer{
 		
 		storeButton = (Button) findViewById(R.id.button_store);
         storeButton.setOnClickListener(new OnClickListener() {
-        	public void onClick(View v) {
+			public void onClick(View v) {
         		store.removeAll(me);
         		String un=(username.getText()!=null)?username.getText().toString():"";
         		String pw=(password.getText()!=null)?password.getText().toString():"";

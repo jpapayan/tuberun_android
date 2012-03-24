@@ -44,7 +44,9 @@ public class StatusesFragment extends ListFragment implements Observer {
 			Status s=fetcher.getStatus(lt);
 			if (s != null) {
 				m.put("status", s.short_status);
-				m.put("details", s.long_status);
+				String long_status=s.long_status;
+				if (long_status.equals("")) long_status="No further information availabe";
+				m.put("details", long_status);
 			} else {
 				m.put("status", "Failed");
 				m.put("details", "");
@@ -61,7 +63,7 @@ public class StatusesFragment extends ListFragment implements Observer {
 				R.layout.line_status,
 				new String[]{"line","status","details", "favorite"},
 				new int[]{R.id.line_label, R.id.status_label ,R.id.details_label, R.id.add_favorite});
-		adapter.setViewBinder(new StatusesBinder(isWeekend, getActivity()));
+		adapter.setViewBinder(new StatusesBinder(isWeekend, getActivity(),this));
 		setListAdapter(adapter);
 		setListShown(true);
 	}
@@ -82,5 +84,15 @@ public class StatusesFragment extends ListFragment implements Observer {
     public void onResume() {
     	super.onResume();
     	if (fetcher!=null) fetcher.registerCallback(this);
+    }
+    
+    public void scrollMyListViewToBottom() {
+        getListView().post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                getListView().setSelection(getListAdapter().getCount() - 1);
+            }
+        });
     }
 }

@@ -3,12 +3,6 @@ package com.papagiannis.tuberun.binders;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.papagiannis.tuberun.LinePresentation;
-import com.papagiannis.tuberun.LineType;
-import com.papagiannis.tuberun.R;
-import com.papagiannis.tuberun.favorites.Favorite;
-import com.papagiannis.tuberun.fetchers.StatusesFetcher;
-
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
@@ -16,6 +10,13 @@ import android.view.View.OnClickListener;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.papagiannis.tuberun.LinePresentation;
+import com.papagiannis.tuberun.LineType;
+import com.papagiannis.tuberun.R;
+import com.papagiannis.tuberun.StatusesFragment;
+import com.papagiannis.tuberun.favorites.Favorite;
+import com.papagiannis.tuberun.fetchers.StatusesFetcher;
 
 public class StatusesBinder implements ViewBinder, OnClickListener {
 
@@ -28,10 +29,19 @@ public class StatusesBinder implements ViewBinder, OnClickListener {
 	
 	Boolean isWeekend;
 	Activity activity;
+	StatusesFragment fragment=null;
+	
 	public StatusesBinder(Boolean isWeekend, Activity activity) {
 		super();
 		this.isWeekend=isWeekend;
 		this.activity=activity;
+	}
+	
+	public StatusesBinder(Boolean isWeekend, Activity activity, StatusesFragment fragment) {
+		super();
+		this.isWeekend=isWeekend;
+		this.activity=activity;
+		this.fragment=fragment;
 	}
 
 	@Override
@@ -65,7 +75,7 @@ public class StatusesBinder implements ViewBinder, OnClickListener {
 		} else {
 			beforeStatus = true;
 			tv.setTextColor(Color.WHITE);
-			tv.setBackgroundColor(R.drawable.tuberun_semitransparent);
+//			tv.setBackgroundColor(R.drawable.tuberun_semitransparent);
 			tv.setVisibility(View.GONE);
 		}
 		tv.setOnClickListener(this);
@@ -73,6 +83,7 @@ public class StatusesBinder implements ViewBinder, OnClickListener {
 			subjects.put(temp.get(0), tv);
 			subjects.put(temp.get(1), tv);
 			subjects.put(tv, tv);
+			if (last_lt==LineType.DLR) lastView=temp.get(1);
 			temp.clear();
 		} else
 			temp.add(tv);
@@ -82,6 +93,7 @@ public class StatusesBinder implements ViewBinder, OnClickListener {
 
 	HashMap<View, View> subjects = new HashMap<View, View>();
 	ArrayList<View> temp = new ArrayList<View>();
+	View lastView=null; //this one must scroll
 
 	@Override
 	public void onClick(View v) {
@@ -104,10 +116,16 @@ public class StatusesBinder implements ViewBinder, OnClickListener {
 			TextView msgView = (TextView) subjects.get(v);
 			if (msgView.getText().equals(""))
 				return;
-			if (msgView.getVisibility() == View.GONE)
+			if (msgView.getVisibility() == View.GONE) {
+				if (isLastElement(v) && fragment!=null) fragment.scrollMyListViewToBottom();
 				msgView.setVisibility(View.VISIBLE);
+			}
 			else
 				msgView.setVisibility(View.GONE);
 		}
+	}
+
+	private boolean isLastElement(View v) {
+		return lastView!=null && v==lastView;
 	}
 }
