@@ -28,8 +28,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:minWidth="0dip"
-                android:minHeight="0dip" />
+                android:minHeight="0dip"
+                android:minWidth="0dip" />
 
             <Button
                 android:id="@+id/logo_button"
@@ -59,10 +59,10 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
-                android:textOff=""
-                android:textOn=""
+                android:minHeight="0dip"
                 android:minWidth="0dip"
-                android:minHeight="0dip" />
+                android:textOff=""
+                android:textOn="" />
 
             <Button
                 android:id="@+id/button_update"
@@ -72,9 +72,9 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="5dip"
-                android:text=""
+                android:minHeight="0dip"
                 android:minWidth="0dip"
-                android:minHeight="0dip" />
+                android:text="" />
         </LinearLayout>
 
         <TextView
@@ -83,22 +83,50 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
+            android:background="#FFFF0000"
             android:gravity="center"
             android:singleLine="false"
-            android:background="#FFFF0000"
             android:text="" />
-        
-        <TextView
-            android:id="@id/android:empty"
-            style="@style/WhiteText"
+
+        <LinearLayout
+            android:id="@+id/empty_layout"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:layout_marginBottom="5dip"
             android:layout_marginTop="5dip"
-            android:layout_weight="1"
             android:gravity="center"
-            android:text="Departures not available. This is a beta TfL service so be patient." />
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/WhiteText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dip"
+                android:layout_marginTop="5dip"
+                android:background="@drawable/tuberun_semitransparent"
+                android:gravity="center"
+                android:text="Departures not available. This is a beta TfL service so be patient." />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/android:empty"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dip"
+            android:layout_marginTop="5dip"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true" />
+        </LinearLayout>
 
         <ListView
             android:id="@+id/android:list"

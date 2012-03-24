@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 	private String name;
 	private ListView listView;
 	private TextView lineTextView;
+	private LinearLayout emptyLayout;
 	
     /** Called when the activity is first created. */
     @Override
@@ -54,6 +56,9 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 		back_button.setOnClickListener(back_listener);
 		logo_button.setOnClickListener(back_listener);
 		
+		emptyLayout=(LinearLayout)findViewById(R.id.empty_layout);
+		emptyLayout.setVisibility(View.GONE);
+		
 		listView=getListView();
 		lineTextView=(TextView)findViewById(R.id.line_textview);
 		
@@ -65,16 +70,14 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 		fetcher=new BusDeparturesFetcher(code,name);
 		fetcher.registerCallback(this);
 		fetcher.update();
-		showDialog(0);
 		
 		Favorite.getFavorites(this);
 		
 		View updateButton = findViewById(R.id.button_update);
         updateButton.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
+        		emptyLayout.setVisibility(View.GONE);
         		setListAdapter(null);
-        		listView.setVisibility(View.GONE);
-        		showDialog(0);
         		fetcher.update();
         	}
         });
@@ -88,7 +91,6 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
     
 	@Override
 	public void update() {
-		wait_dialog.dismiss();
 		departures_list.clear();
 		
 		Date d=fetcher.getUpdateTime();
@@ -107,6 +109,13 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 			}
 		}
 		
+		if (reply.isEmpty()) {
+			emptyLayout.setVisibility(View.VISIBLE);
+		}
+		else {
+			emptyLayout.setVisibility(View.GONE);
+		}
+		
 		SimpleAdapter adapter=new SimpleAdapter(this,
 				departures_list, 
 				R.layout.bus_departures_status,
@@ -117,22 +126,6 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 		setListAdapter(adapter);
 		listView.setVisibility(View.VISIBLE);
 	}
-
-	private ProgressDialog wait_dialog;
-    @Override
-    protected Dialog onCreateDialog(int id) {
-    	wait_dialog=new ProgressDialog(this);
-    	wait_dialog.setTitle("Fetching departures");
-    	wait_dialog.setMessage("Please wait...");
-    	wait_dialog.setIndeterminate(true);
-    	wait_dialog.setOnCancelListener(new OnCancelListener() {
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				fetcher.abort();
-			}
-		});
-    	return wait_dialog;
-    }
     
     @Override
 	public void onClick(View v) {
