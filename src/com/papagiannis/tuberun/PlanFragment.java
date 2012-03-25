@@ -5,18 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.papagiannis.tuberun.fetchers.Observer;
-import com.papagiannis.tuberun.fetchers.PlanFetcher;
-import com.papagiannis.tuberun.plan.Point;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,11 +21,12 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -37,28 +34,36 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class PlanFragment extends Fragment implements Observer, OnClickListener, OnCheckedChangeListener{
-	private final PlanFragment self=this;
+import com.papagiannis.tuberun.fetchers.Observer;
+import com.papagiannis.tuberun.fetchers.PlanFetcher;
+import com.papagiannis.tuberun.plan.Point;
+
+public class PlanFragment extends Fragment implements Observer,
+		OnClickListener, OnCheckedChangeListener {
+	private final PlanFragment self = this;
+	static final int SELECT_PAST_DESTINATION_DIALOG = -9;
 	static final int LOCATION_SERVICE_FAILED = -8;
 	private final static int SELECT_TRAVEL_DATE = -7;
 	private final static int SELECT_ALTERNATIVE = -6;
-	private final static int SET_HOME_DIALOG = -4;
+	public final static int SET_HOME_DIALOG = -4;
 	private final static int ADD_HOME_ERROR = -5;
 	private final static int PLAN_ERROR_DIALOG = -3;
 	private final static int ERROR_DIALOG = -2;
 	private final static int LOCATION_DIALOG = -1;
 	private final static int WAIT_DIALOG = 0;
-	
+
 	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-	private final SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy");
-	
+	private final SimpleDateFormat dateFormat = new SimpleDateFormat(
+			"EEEE, dd/MM/yyyy");
+
 	PlanActivity planActivity;
-	
+
 	PlanFetcher fetcher = new PlanFetcher(PlanActivity.getPlan());
-	
+
 	Button go_button;
+	Button go_button2;
+	Button history_button;
 	LinearLayout advanced_layout;
 	Button advanced_button;
 	LinearLayout previous_layout;
@@ -89,64 +94,95 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 	CheckBox use_boat_checkbox;
 	CheckBox traveldate_checkbox;
 	Button traveldate_button;
-	
+	LinearLayout from_layout;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
-	
+
 	@Override
-	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v=null;
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = null;
 		try {
-			v=inflater.inflate(R.layout.plan_fragment, null);
+			v = inflater.inflate(R.layout.plan_fragment, null);
 			createReferences(v);
 			create();
-		}
-		catch (Exception e) {
-			Log.w("PlanFragment",e);
+		} catch (Exception e) {
+			Log.w("PlanFragment", e);
 		}
 		return v;
-	}	
-	
+	}
+
 	private void createReferences(View v) {
-		go_button = (Button) v.findViewById(R.id.go_button);
-		destination_edittext = (EditText) v.findViewById(R.id.destination_edittext);
-		destination_radiogroup = (RadioGroup) v.findViewById(R.id.destination_radiogroup);
-		topoi_radiobutton = (RadioButton) v.findViewById(R.id.topoi_radiobutton);
-		tostation_radiobutton = (RadioButton) v.findViewById(R.id.tostation_radiobutton);
-		toaddress_radiobutton = (RadioButton) v.findViewById(R.id.toaddress_radiobutton);
-		topostcode_radiobutton = (RadioButton) v.findViewById(R.id.topostcode_radiobutton);
+		go_button = planActivity.go_button;
+		destination_edittext = (EditText) v
+				.findViewById(R.id.destination_edittext);
+		destination_radiogroup = (RadioGroup) v
+				.findViewById(R.id.destination_radiogroup);
+		topoi_radiobutton = (RadioButton) v
+				.findViewById(R.id.topoi_radiobutton);
+		tostation_radiobutton = (RadioButton) v
+				.findViewById(R.id.tostation_radiobutton);
+		toaddress_radiobutton = (RadioButton) v
+				.findViewById(R.id.toaddress_radiobutton);
+		topostcode_radiobutton = (RadioButton) v
+				.findViewById(R.id.topostcode_radiobutton);
 		advanced_button = (Button) v.findViewById(R.id.advanced_button);
-		advanced_layout = (LinearLayout) v.findViewById(R.id.advanced_layout);
-		previous_layout = (LinearLayout) v.findViewById(R.id.previous_layout);
-		previous_textview = (TextView) v.findViewById(R.id.previous_textview);
-		fromcurrent_checkbox = (CheckBox) v.findViewById(R.id.fromcurrent_checkbox);
+		advanced_layout = (LinearLayout) v.findViewById(R.id.adv2anced_layout);
+		// previous_layout = (LinearLayout)
+		// v.findViewById(R.id.previous_layout);
+		// previous_textview = (TextView)
+		// v.findViewById(R.id.previous_textview);
+		fromcurrent_checkbox = (CheckBox) v
+				.findViewById(R.id.fromcurrent_checkbox);
 		from_radiogroup = (RadioGroup) v.findViewById(R.id.from_radiogroup);
 		from_edittext = (EditText) v.findViewById(R.id.from_edittext);
-		frompoi_radiobutton = (RadioButton) v.findViewById(R.id.frompoi_radiobutton);
-		fromstation_radiobutton = (RadioButton) v.findViewById(R.id.fromstation_radiobutton);
-		fromaddress_radiobutton = (RadioButton) v.findViewById(R.id.fromaddress_radiobutton);
-		frompostcode_radiobutton = (RadioButton) v.findViewById(R.id.frompostcode_radiobutton);
-		departtime_radiobutton = (RadioButton) v.findViewById(R.id.departtime_radiobutton);
-		arrivetime_radiobutton = (RadioButton) v.findViewById(R.id.arrivetime_radiobutton);
-		departtimenow_radiobutton = (RadioButton) v.findViewById(R.id.departtimenow_radiobutton);
-		departtimelater_radiobutton = (RadioButton) v.findViewById(R.id.departtimelater_radiobutton);
-		departtimelater_button = (Button) v.findViewById(R.id.departtimelater_button);
+		frompoi_radiobutton = (RadioButton) v
+				.findViewById(R.id.frompoi_radiobutton);
+		fromstation_radiobutton = (RadioButton) v
+				.findViewById(R.id.fromstation_radiobutton);
+		fromaddress_radiobutton = (RadioButton) v
+				.findViewById(R.id.fromaddress_radiobutton);
+		frompostcode_radiobutton = (RadioButton) v
+				.findViewById(R.id.frompostcode_radiobutton);
+		departtime_radiobutton = (RadioButton) v
+				.findViewById(R.id.departtime_radiobutton);
+		arrivetime_radiobutton = (RadioButton) v
+				.findViewById(R.id.arrivetime_radiobutton);
+		departtimenow_radiobutton = (RadioButton) v
+				.findViewById(R.id.departtimenow_radiobutton);
+		departtimelater_radiobutton = (RadioButton) v
+				.findViewById(R.id.departtimelater_radiobutton);
+		departtimelater_button = (Button) v
+				.findViewById(R.id.departtimelater_button);
 		arrivetime_button = (Button) v.findViewById(R.id.arrivetime_button);
 		use_boat_checkbox = (CheckBox) v.findViewById(R.id.useboat_checkbox);
 		use_bus_checkbox = (CheckBox) v.findViewById(R.id.usebus_checkbox);
 		use_dlr_checkbox = (CheckBox) v.findViewById(R.id.usedlr_checkbox);
 		use_rail_checkbox = (CheckBox) v.findViewById(R.id.userail_checkbox);
 		use_tube_checkbox = (CheckBox) v.findViewById(R.id.usetube_checkbox);
-		traveldate_checkbox = (CheckBox) v.findViewById(R.id.traveldate_checkbox);
+		traveldate_checkbox = (CheckBox) v
+				.findViewById(R.id.traveldate_checkbox);
 		traveldate_button = (Button) v.findViewById(R.id.traveldate_button);
-		
+		from_layout = (LinearLayout) v.findViewById(R.id.from_layout);
+		go_button2 = (Button) v.findViewById(R.id.go_button2);
+		history_button = (Button) v.findViewById(R.id.history_button);
 	}
-	
-	
+
 	private void create() {
 		go_button.setOnClickListener(this);
+		go_button2.setOnClickListener(this);
+
+		history_button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				showDialog(SELECT_PAST_DESTINATION_DIALOG);
+
+			}
+		});
 
 		// Listeners to store the values of the editboxes
 		from_edittext.addTextChangedListener(new TextWatcher() {
@@ -204,8 +240,9 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 						boolean isChecked) {
 					// store the value in the plan
 					if (isChecked)
-						PlanActivity.getPlan().setTimeConstraint(buttonView.getId() == departtime_radiobutton
-								.getId());
+						PlanActivity.getPlan().setTimeConstraint(
+								buttonView.getId() == departtime_radiobutton
+										.getId());
 
 					// fix the other buttons in the group
 					if (isChecked) {
@@ -216,7 +253,8 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 					}
 					// render them enabled or disabled
 					if (buttonView.getId() == departtime_radiobutton.getId()) {
-						departtimenow_radiobutton.setEnabled(isChecked && !traveldate_checkbox.isChecked());
+						departtimenow_radiobutton.setEnabled(isChecked
+								&& !traveldate_checkbox.isChecked());
 						departtimelater_radiobutton.setEnabled(isChecked);
 						departtimelater_button.setEnabled(isChecked);
 					}
@@ -244,8 +282,9 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 						boolean isChecked) {
 					// store the value in the plan
 					if (isChecked)
-						PlanActivity.getPlan().setTimeDepartureNow(buttonView.getId() == departtimenow_radiobutton
-								.getId());
+						PlanActivity.getPlan().setTimeDepartureNow(
+								buttonView.getId() == departtimenow_radiobutton
+										.getId());
 
 					// fix the other buttons in the group
 					if (isChecked) {
@@ -267,8 +306,6 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 
 		// Setup handlers for the more/less button
 		advanced_layout.setVisibility(View.GONE);
-		previous_layout.setVisibility(View.VISIBLE);
-		previous_textview.setVisibility(View.VISIBLE);
 		advanced_button.setOnClickListener(new OnClickListener() {
 			private boolean isAdvanced = false;
 
@@ -277,11 +314,9 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 				isAdvanced = !isAdvanced;
 				int advanced_visibility = (isAdvanced) ? View.VISIBLE
 						: View.GONE;
-				int list_visibility = (!isAdvanced) ? View.VISIBLE : View.GONE;
 				advanced_layout.setVisibility(advanced_visibility);
-				previous_layout.setVisibility(list_visibility);
-				previous_textview.setVisibility(list_visibility);
 				advanced_button.setText(!isAdvanced ? "More>>" : "<<Less");
+				advanced_button.setVisibility(View.GONE);
 			}
 		});
 
@@ -301,33 +336,34 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 		frompostcode_radiobutton.setOnCheckedChangeListener(this);
 		fromstation_radiobutton.setOnCheckedChangeListener(this);
 
+		traveldate_checkbox
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if (isChecked) {
+							traveldate_button.setEnabled(true);
+							departtimenow_radiobutton.setEnabled(false);
+							if (departtimenow_radiobutton.isChecked())
+								departtimelater_radiobutton.setChecked(true);
+						} else {
+							PlanActivity.getPlan().setTravelDate(null);
+							departtimenow_radiobutton.setEnabled(true);
+							traveldate_button.setText("Select travel date");
+							traveldate_button.setEnabled(false);
+						}
 
-		traveldate_checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (isChecked) {
-					traveldate_button.setEnabled(true);
-					departtimenow_radiobutton.setEnabled(false);
-					if (departtimenow_radiobutton.isChecked()) departtimelater_radiobutton.setChecked(true);
-				}
-				else {
-					PlanActivity.getPlan().setTravelDate(null);
-					departtimenow_radiobutton.setEnabled(true);
-					traveldate_button.setText("Select travel date");
-					traveldate_button.setEnabled(false);
-				}
-				
-			}
-		});
+					}
+				});
 		traveldate_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				showDialog(SELECT_TRAVEL_DATE);
 			}
 		});
-		
+
 	}
-	
+
 	Destination dnew_home;
 
 	void restoreDestination(Destination d) {
@@ -366,48 +402,111 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 			break;
 		}
 	}
-	
-	
-	private void updateHistoryView() {
-		previous_layout.removeAllViews();
-		ArrayList<Destination> history = planActivity.store.getAll(getActivity());
-		if (history.size() == 0) {
-			previous_textview.setVisibility(View.GONE);
-			previous_layout.setVisibility(View.GONE);
-		} else {
-			previous_textview.setVisibility(View.VISIBLE);
-			previous_layout.setVisibility(View.VISIBLE);
-			for (Destination d : history) {
-				final Destination dest = d;
-				LayoutInflater li = LayoutInflater.from(getActivity());
-				LinearLayout ll = (LinearLayout) li.inflate(
-						R.layout.plan_history_item, previous_layout, false);
-				TextView title = (TextView) ll.findViewById(R.id.plan_title);
-				Button addHome = (Button) ll.findViewById(R.id.add_home_button);
-				previous_layout.addView(ll, 0);
-				title.setText(dest.getDestination());
-				addHome.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						dnew_home = new Destination(dest.getDestination(), dest
-								.getType());
-						dnew_home.setHome(true);
-						showDialog(SET_HOME_DIALOG);
-					}
-				});
-				ll.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Destination d = new Destination(dest.getDestination(),
-								dest.getType());
-						restoreDestination(d);
-						self.onClick(go_button);
-					}
-				});
+
+	private Dialog getAddHomeDialog() {
+		ArrayList<Destination> h = planActivity.store.getAll(getActivity());
+		if (h.size() > 0) {
+			final String[] items = new String[h.size()];
+			int j=0;
+			for (int i = h.size()-1; i >= 0; i--) {
+				items[j++] = h.get(i).getDestination();
 			}
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setTitle("Set Your Home Address");
+			builder.setItems(items, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int item) {
+					Destination dest = planActivity.store.get(item,
+							getActivity());
+					Destination d = new Destination(dest.getDestination(), dest
+							.getType());
+					d.setHome(true);
+					planActivity.store.setHome(d, getActivity());
+					planActivity.updateHomeButton();
+				}
+			});
+			return builder.create();
+		}
+		else {
+			AlertDialog.Builder builder = new AlertDialog.Builder(planActivity);
+			builder.setTitle("Home Address Not Set")
+					.setMessage(
+							"You may only set your home address after having attempted to plan a journey.")
+					.setCancelable(true).setPositiveButton("OK", null);
+			return builder.create();
 		}
 	}
-	
+
+	private Dialog getHistoryDialog() {
+		ArrayList<Destination> h = planActivity.store.getAll(getActivity());
+		final String[] items = new String[h.size()];
+		int j=0;
+		for (int i = h.size()-1; i >= 0; i--) {
+			items[j++] = h.get(i).getDestination();
+		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle("Past destinations");
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int item) {
+				Destination dest = planActivity.store.get(item, getActivity());
+				Destination d = new Destination(dest.getDestination(), dest
+						.getType());
+				restoreDestination(d);
+			}
+		});
+		Destination d = planActivity.store.getHome(getActivity());
+		boolean existsHome = d != null && !d.getDestination().equals("")
+				&& d.isHome();
+		if (existsHome) {
+			builder.setNeutralButton("Erase Home Address", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					planActivity.store.eraseHome(getActivity());
+					planActivity.updateHomeButton();
+				}
+			});
+		} 
+		return builder.create();
+
+		// previous_layout.removeAllViews();
+		// ArrayList<Destination> history =
+		// planActivity.store.getAll(getActivity());
+		// if (history.size() == 0) {
+		// previous_textview.setVisibility(View.GONE);
+		// previous_layout.setVisibility(View.GONE);
+		// } else {
+		// previous_textview.setVisibility(View.VISIBLE);
+		// previous_layout.setVisibility(View.VISIBLE);
+		// for (Destination d : history) {
+		// final Destination dest = d;
+		// LayoutInflater li = LayoutInflater.from(getActivity());
+		// LinearLayout ll = (LinearLayout) li.inflate(
+		// R.layout.plan_history_item, previous_layout, false);
+		// TextView title = (TextView) ll.findViewById(R.id.plan_title);
+		// Button addHome = (Button) ll.findViewById(R.id.add_home_button);
+		// previous_layout.addView(ll, 0);
+		// title.setText(dest.getDestination());
+		// addHome.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// dnew_home = new Destination(dest.getDestination(), dest
+		// .getType());
+		// dnew_home.setHome(true);
+		// showDialog(SET_HOME_DIALOG);
+		// }
+		// });
+		// ll.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// Destination d = new Destination(dest.getDestination(),
+		// dest.getType());
+		// restoreDestination(d);
+		// self.onClick(go_button);
+		// }
+		// });
+		// }
+		// }
+	}
+
 	private Dialog wait_dialog;
 	private boolean is_location_dialog = false;
 	boolean is_wait_dialog = false;
@@ -415,24 +514,21 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 	@SuppressWarnings("deprecation")
 	protected Dialog showDialog(int id) {
 		Dialog ret = null;
-		if (id==LOCATION_SERVICE_FAILED) {
+		if (id == LOCATION_SERVICE_FAILED) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(planActivity);
 			builder.setTitle("Location Service Failed")
-						.setMessage(
-								"Does you device support location services? Turn them on in the settings.")
-						.setCancelable(true)
-						.setPositiveButton("OK", null);
+					.setMessage(
+							"Does you device support location services? Turn them on in the settings.")
+					.setCancelable(true).setPositiveButton("OK", null);
 			ret = builder.create();
-		}
-		else if (id == LOCATION_DIALOG) {
+		} else if (id == LOCATION_DIALOG) {
 			ProgressDialog d = new ProgressDialog(getActivity());
 			d.setTitle("Fetching your location");
 			d.setCancelable(true);
 			d.setIndeterminate(true);
 			is_location_dialog = true;
-			updateLocationDialog(d, 
-					planActivity.location_textview.getText(), 
-					planActivity.getCurrentLocation().getAccuracy()+"");
+			updateLocationDialog(d, planActivity.location_textview.getText(),
+					planActivity.getCurrentLocation().getAccuracy() + "");
 			d.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
 					new DialogInterface.OnClickListener() {
 						@Override
@@ -460,7 +556,7 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 			ret = d;
 		} else if (id == WAIT_DIALOG) {
 			is_wait_dialog = true;
-			ProgressDialog p=new ProgressDialog(getActivity());
+			ProgressDialog p = new ProgressDialog(getActivity());
 			p.setMessage("Please wait...");
 			p.setTitle("Fetching travel plans");
 			p.setOnCancelListener(new OnCancelListener() {
@@ -474,13 +570,14 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 			});
 			p.setCancelable(true);
 			p.setIndeterminate(true);
-			ret=p;
+			ret = p;
 		} else if (id == SELECT_ALTERNATIVE) {
 			if (showAlternativeDestinations) {
 				String[] d = {};
-				final String[] items = PlanActivity.getPlan().getAlternativeDestinations()
-						.toArray(d);
-				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				final String[] items = PlanActivity.getPlan()
+						.getAlternativeDestinations().toArray(d);
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						getActivity());
 				builder.setTitle("Pick an alternative destination");
 				builder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
@@ -501,8 +598,8 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 				builder.setOnCancelListener(new OnCancelListener() {
 					@Override
 					public void onCancel(DialogInterface dialog) {
-//						self.removeDialog(SELECT_ALTERNATIVE); // prevent
-																// caching
+						// self.removeDialog(SELECT_ALTERNATIVE); // prevent
+						// caching
 					}
 				});
 				AlertDialog alert = builder.create();
@@ -510,14 +607,16 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 				showAlternativeDestinations = false;
 			} else if (showAlternativeOrigins) {
 				String[] d = {};
-				final String[] items = PlanActivity.getPlan().getAlternativeOrigins().toArray(d);
-				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				final String[] items = PlanActivity.getPlan()
+						.getAlternativeOrigins().toArray(d);
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						getActivity());
 				builder.setTitle("Pick an alternative origin");
 				builder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
 						showAlternativeOrigins = false;
-//						self.removeDialog(SELECT_ALTERNATIVE); // prevent
-																// caching
+						// self.removeDialog(SELECT_ALTERNATIVE); // prevent
+						// caching
 						PlanActivity.getPlan().setStartingString(items[item]);
 						PlanActivity.getPlan().clearAlternativeOrigins();
 						from_edittext.setText(items[item]);
@@ -534,8 +633,8 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 				builder.setOnCancelListener(new OnCancelListener() {
 					@Override
 					public void onCancel(DialogInterface dialog) {
-//						self.removeDialog(SELECT_ALTERNATIVE); // prevent
-																// caching
+						// self.removeDialog(SELECT_ALTERNATIVE); // prevent
+						// caching
 					}
 				});
 				AlertDialog alert = builder.create();
@@ -545,131 +644,114 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 		} else if (id == ERROR_DIALOG || id == PLAN_ERROR_DIALOG
 				|| id == ADD_HOME_ERROR) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			String title="";
+			String title = "";
 			switch (id) {
 			case ERROR_DIALOG:
-				title="Error";
+				title = "Error";
 				break;
 			case PLAN_ERROR_DIALOG:
-				title="Planning error";
+				title = "Planning error";
 				break;
 			case ADD_HOME_ERROR:
-				title="Home address not set";
+				title = "Home address not set";
 				break;
 			}
 			builder.setTitle(title)
-				    .setMessage(
+					.setMessage(
 							id == ADD_HOME_ERROR ? "Use one of the house icons next to past destinations to set it."
-									: PlanActivity.getPlan().getError() + fetcher.getErrors())
+									: PlanActivity.getPlan().getError()
+											+ fetcher.getErrors())
 					.setCancelable(false)
 					.setPositiveButton("OK",
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
 									wait_dialog.cancel();
-//									self.removeDialog(id); // prevent caching
+									// self.removeDialog(id); // prevent caching
 								}
 							});
 			ret = builder.create();
 		} else if (id == SET_HOME_DIALOG) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle("Home Address")
-					.setMessage(
-							"Do you want to set \""
-									+ dnew_home.getDestination()
-									+ "\" as your new home address?")
-					.setCancelable(false)
-					.setPositiveButton("OK",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									planActivity.store.addHome(dnew_home, getActivity());
-									planActivity.updateHomeButton();
-									wait_dialog.cancel();
-//									self.removeDialog(SET_HOME_DIALOG); // prevent
-																		// caching
-								}
-							})
-					.setNegativeButton("Cancel",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									wait_dialog.cancel();
-//									self.removeDialog(SET_HOME_DIALOG); // prevent
-																		// caching
-								}
-							});
-			ret = builder.create();
+			ret = getAddHomeDialog();
 		} else if (departtimelater_button.getId() == id) {
 			Date d = PlanActivity.getPlan().getTimeDepartureLater();
 			if (d == null)
 				d = new Date();
-			ret = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-				@Override
-				public void onTimeSet(TimePicker view, int h, int m) {
-					Date d = new Date();
-					d.setHours(h);
-					d.setMinutes(m);
-					PlanActivity.getPlan().setTimeDepartureLater(d);
-					departtimelater_button.setText(timeFormat.format(d));
-				}
-			}, d.getHours(), d.getMinutes(), true);
+			ret = new TimePickerDialog(getActivity(),
+					new TimePickerDialog.OnTimeSetListener() {
+						@Override
+						public void onTimeSet(TimePicker view, int h, int m) {
+							Date d = new Date();
+							d.setHours(h);
+							d.setMinutes(m);
+							PlanActivity.getPlan().setTimeDepartureLater(d);
+							departtimelater_button.setText(timeFormat.format(d));
+						}
+					}, d.getHours(), d.getMinutes(), true);
 		} else if (arrivetime_button.getId() == id) {
 			Date d = PlanActivity.getPlan().getTimeArrivalLater();
 			if (d == null)
 				d = new Date();
-			ret = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-				@Override
-				public void onTimeSet(TimePicker view, int h, int m) {
-					Date d = new Date();
-					d.setHours(h);
-					d.setMinutes(m);
-					PlanActivity.getPlan().setTimeArrivalLater(d);
-					arrivetime_button.setText(timeFormat.format(d));
-				}
-			}, d.getHours(), d.getMinutes(), true);
-		}
-		else if (id==SELECT_TRAVEL_DATE) {
+			ret = new TimePickerDialog(getActivity(),
+					new TimePickerDialog.OnTimeSetListener() {
+						@Override
+						public void onTimeSet(TimePicker view, int h, int m) {
+							Date d = new Date();
+							d.setHours(h);
+							d.setMinutes(m);
+							PlanActivity.getPlan().setTimeArrivalLater(d);
+							arrivetime_button.setText(timeFormat.format(d));
+						}
+					}, d.getHours(), d.getMinutes(), true);
+		} else if (id == SELECT_TRAVEL_DATE) {
 			Date d = PlanActivity.getPlan().getTravelDate();
 			if (d == null)
 				d = new Date();
-			ret = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-				@Override
-				public void onDateSet(DatePicker view, int year, int monthOfYear,
-						int dayOfMonth) {
-					Date now = new Date();
-					now.setYear(year-1900);
-					now.setMonth(monthOfYear);
-					now.setDate(dayOfMonth);
-					PlanActivity.getPlan().setTravelDate(now);
-					traveldate_button.setText(dateFormat.format(now));
-				}
-			}, d.getYear()+1900, d.getMonth(), d.getDate());
+			ret = new DatePickerDialog(getActivity(),
+					new DatePickerDialog.OnDateSetListener() {
+						@Override
+						public void onDateSet(DatePicker view, int year,
+								int monthOfYear, int dayOfMonth) {
+							Date now = new Date();
+							now.setYear(year - 1900);
+							now.setMonth(monthOfYear);
+							now.setDate(dayOfMonth);
+							PlanActivity.getPlan().setTravelDate(now);
+							traveldate_button.setText(dateFormat.format(now));
+						}
+					}, d.getYear() + 1900, d.getMonth(), d.getDate());
+		} else if (id == SELECT_PAST_DESTINATION_DIALOG) {
+			ret = getHistoryDialog();
 		}
-		wait_dialog=ret;
+		wait_dialog = ret;
 		ret.show();
 		return ret;
 	}
-	
-	
-	void updateLocationDialog(ProgressDialog pd, CharSequence previous_location,	CharSequence accuracy) {
-		if (pd==null && is_location_dialog && wait_dialog!=null) pd = (ProgressDialog) wait_dialog;
-		if (pd!=null) {
+
+	void updateLocationDialog(ProgressDialog pd,
+			CharSequence previous_location, CharSequence accuracy) {
+		if (pd == null && is_location_dialog && wait_dialog != null)
+			pd = (ProgressDialog) wait_dialog;
+		if (pd != null) {
 			if (previous_location.equals(""))
 				previous_location = "(...)";
-			pd.setMessage("Your current location is required to plan a journey.\n\n"+
-					"Location=" + previous_location + "\n" + "Accuracy="
-					+ accuracy + "m\n\n"
+			pd.setMessage("Your current location is required to plan a journey.\n\n"
+					+ "Location="
+					+ previous_location
+					+ "\n"
+					+ "Accuracy="
+					+ accuracy
+					+ "m\n\n"
 					+ "Press OK when the accuracy is acceptable.");
 		}
 	}
-	
+
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == go_button.getId()) {
+		if (v.getId() == go_button.getId() || v.getId() == go_button2.getId()) {
 			// if the accuracy is not great wait more in a dialogue
-			Point type=PlanActivity.getPlan().getStartingType();
-			Location location=PlanActivity.getPlan().getStartingLocation();
+			Point type = PlanActivity.getPlan().getStartingType();
+			Location location = PlanActivity.getPlan().getStartingLocation();
 			if (type == Point.LOCATION
 					&& (location == null || location.getAccuracy() > 50))
 				showDialog(LOCATION_DIALOG);
@@ -685,10 +767,10 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 			}
 		}
 	}
-	
+
 	private boolean showAlternativeDestinations = false;
 	private boolean showAlternativeOrigins = false;
-	
+
 	private void requestPlan() {
 		showAlternativeDestinations = false;
 		showAlternativeOrigins = false;
@@ -700,7 +782,7 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 		fetcher.registerCallback(this);
 		fetcher.update();
 	}
-	
+
 	@Override
 	public void update() {
 		is_wait_dialog = false;
@@ -709,9 +791,10 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 		if (!fetcher.isErrorResult()) {
 			PlanActivity.setPlan(fetcher.getResult());
 			if (PlanActivity.getPlan().hasAlternatives()) {
-				showAlternativeDestinations = PlanActivity.getPlan().getAlternativeDestinations()
-						.size() > 0;
-				showAlternativeOrigins = PlanActivity.getPlan().getAlternativeOrigins().size() > 0;
+				showAlternativeDestinations = PlanActivity.getPlan()
+						.getAlternativeDestinations().size() > 0;
+				showAlternativeOrigins = PlanActivity.getPlan()
+						.getAlternativeOrigins().size() > 0;
 				showDialog(SELECT_ALTERNATIVE);
 			} else {
 				Intent i = new Intent(getActivity(), RouteResultsActivity.class);
@@ -722,20 +805,18 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 		}
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		updateHistoryView();
-	}
-	
 	private void setFromViewsEnabled(boolean isEnabled) {
 		from_edittext.setEnabled(isEnabled);
 		fromstation_radiobutton.setEnabled(isEnabled);
 		frompoi_radiobutton.setEnabled(isEnabled);
 		fromaddress_radiobutton.setEnabled(isEnabled);
 		frompostcode_radiobutton.setEnabled(isEnabled);
+		if (isEnabled)
+			from_layout.setVisibility(View.VISIBLE);
+		else
+			from_layout.setVisibility(View.GONE);
 	}
-	
+
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		int bid = buttonView.getId();
@@ -784,7 +865,7 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 		}
 
 	}
-	
+
 	private void updatePlanFromType() {
 		int selected = from_radiogroup.getCheckedRadioButtonId();
 		if (selected == fromaddress_radiobutton.getId())
@@ -814,6 +895,5 @@ public class PlanFragment extends Fragment implements Observer, OnClickListener,
 		else
 			PlanActivity.getPlan().setStartingType(Point.NONE);
 	}
-	
 
 }

@@ -35,14 +35,23 @@ public class DestinationStore<T> extends Store<T> {
 	}
 	
 	private T home=null;
-	public void addHome(T home, Context a) {
+	public void setHome(T home, Context a) {
 		this.home=home;
 		storeToFile(a);
 	}
+	
+	public void eraseHome(Context a) {
+		instanceDestination.home=new Destination("", Point.ADDRESS);
+		instanceDestination.home.setHome(true);
+		storeToFile(a);
+	}
+	
 	public T getHome(Context activity) {
 		if (list==null) list=getFromFile(activity);
 		return home;
 	}
+	
+	
 	
 	
 	//Home is store inside the persistent list as the last element.

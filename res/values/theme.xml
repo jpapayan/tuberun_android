@@ -68,9 +68,14 @@
 	<style name="SearchButton" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/search_button_selector</item>
 	</style>
+	<style name="DirectionsButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/directions_button_selector</item>
+	</style>
+	
 	<style name="RedListView" parent="@android:style/Widget.ListView">
 		<item name="android:listSelector">@layout/hue_list_selector</item>
 	</style>
+	
 
 	<drawable name="tuberun_semitransparent">#99000000</drawable>
 	<drawable name="tuberun_red">#FF801219</drawable>
