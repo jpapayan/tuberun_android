@@ -809,11 +809,11 @@ public class PlanFragment extends Fragment implements Observer,
 		if (bid == use_boat_checkbox.getId()) {
 			PlanActivity.getPlan().setUseBoat(isChecked);
 		} else if (bid == use_rail_checkbox.getId()) {
-			PlanActivity.getPlan().setUseBoat(isChecked);
+			PlanActivity.getPlan().setUseRail(isChecked);
 		} else if (bid == use_bus_checkbox.getId()) {
 			PlanActivity.getPlan().setUseBuses(isChecked);
-		} else if (bid == use_boat_checkbox.getId()) {
-			PlanActivity.getPlan().setUseBoat(isChecked);
+		} else if (bid == use_tube_checkbox.getId()) {
+			PlanActivity.getPlan().setUseTube(isChecked);
 		} else if (bid == use_dlr_checkbox.getId()) {
 			PlanActivity.getPlan().setUseDLR(isChecked);
 		} else if (bid == fromcurrent_checkbox.getId()) {
