@@ -41,7 +41,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	private static final int DOWNLOAD_IMAGE_DIALOG = -1;
 	private static final int DOWNLOAD_IMAGE_PROGRESS_DIALOG = -2;
 	private static final int DOWNLOAD_IMAGE_FAILED_DIALOG = -3;
-	private static final String TUBE_MAP_URL = "http://www.tfl.gov.uk/assets/downloads/standard-tube-map.gif";
+	private static final String TUBE_MAP_URL = "https://www.tfl.gov.uk/assets/downloads/standard-tube-map.gif";
 	private static final String LOCAL_PATH = "standard-tube-map.gif";
 
 	TextView oysterBalance;
@@ -211,7 +211,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 					.setMessage(
 							"The official Tube Map is property of TfL and is not included in this app. "
 									+ "However, TubeRun can fetch it from TfL and cache it for future use.\n\n"
-									+ "Use WiFi because mobile operators reduce image quality.")
+									+ "File size: ~550KB")
 					.setCancelable(true)
 					.setPositiveButton("Download",
 							new DialogInterface.OnClickListener() {
@@ -258,8 +258,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			builder.setTitle("Download failed")
 					.setMessage(
 							"Could not download the Tube Map. Please try again later. "
-									+ "Make sure that you have Internet access (preferably WiFi) and "
-									+ "your SD card is available.")
+									+ "Make sure that you have Internet access.")
 					.setCancelable(true)
 					.setPositiveButton("OK",
 							new DialogInterface.OnClickListener() {

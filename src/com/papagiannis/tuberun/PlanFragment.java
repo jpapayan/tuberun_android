@@ -61,8 +61,7 @@ public class PlanFragment extends Fragment implements Observer,
 
 	PlanFetcher fetcher = new PlanFetcher(PlanActivity.getPlan());
 
-	Button go_button;
-	Button go_button2;
+	LinearLayout go_layout;
 	Button history_button;
 	LinearLayout advanced_layout;
 	Button advanced_button;
@@ -116,7 +115,7 @@ public class PlanFragment extends Fragment implements Observer,
 	}
 
 	private void createReferences(View v) {
-		go_button = planActivity.go_button;
+		go_layout = (LinearLayout) v.findViewById(R.id.go_layout);
 		destination_edittext = (EditText) v
 				.findViewById(R.id.destination_edittext);
 		destination_radiogroup = (RadioGroup) v
@@ -167,13 +166,12 @@ public class PlanFragment extends Fragment implements Observer,
 				.findViewById(R.id.traveldate_checkbox);
 		traveldate_button = (Button) v.findViewById(R.id.traveldate_button);
 		from_layout = (LinearLayout) v.findViewById(R.id.from_layout);
-		go_button2 = (Button) v.findViewById(R.id.go_button2);
 		history_button = (Button) v.findViewById(R.id.history_button);
 	}
 
 	private void create() {
-		go_button.setOnClickListener(this);
-		go_button2.setOnClickListener(this);
+		go_layout.setOnClickListener(this);
+		go_layout.setVisibility(View.GONE);
 
 		history_button.setOnClickListener(new OnClickListener() {
 
@@ -206,6 +204,12 @@ public class PlanFragment extends Fragment implements Observer,
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 				PlanActivity.getPlan().setDestination(s.toString());
+				if (s!=null && !s.toString().trim().equals("")) {
+					go_layout.setVisibility(View.VISIBLE);
+				}
+				else {
+					go_layout.setVisibility(View.GONE);
+				}
 			}
 
 			@Override
@@ -406,16 +410,17 @@ public class PlanFragment extends Fragment implements Observer,
 	private Dialog getAddHomeDialog() {
 		ArrayList<Destination> h = planActivity.store.getAll(getActivity());
 		if (h.size() > 0) {
-			final String[] items = new String[h.size()];
-			int j=0;
-			for (int i = h.size()-1; i >= 0; i--) {
-				items[j++] = h.get(i).getDestination();
+			final String[] items = new String[h.size()+1];
+			items[0]="Past destinations:";
+			for (int i = 0; i < h.size(); i++) {
+				items[i+1] = h.get(i).getDestination();
 			}
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle("Set Your Home Address");
 			builder.setItems(items, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int item) {
-					Destination dest = planActivity.store.get(item,
+					if (item==0) return;
+					Destination dest = planActivity.store.get(item-1,
 							getActivity());
 					Destination d = new Destination(dest.getDestination(), dest
 							.getType());
@@ -424,6 +429,7 @@ public class PlanFragment extends Fragment implements Observer,
 					planActivity.updateHomeButton();
 				}
 			});
+			
 			return builder.create();
 		}
 		else {
@@ -439,9 +445,8 @@ public class PlanFragment extends Fragment implements Observer,
 	private Dialog getHistoryDialog() {
 		ArrayList<Destination> h = planActivity.store.getAll(getActivity());
 		final String[] items = new String[h.size()];
-		int j=0;
-		for (int i = h.size()-1; i >= 0; i--) {
-			items[j++] = h.get(i).getDestination();
+		for (int i = 0; i < h.size(); i++) {
+			items[i] = h.get(i).getDestination();
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Past destinations");
@@ -466,45 +471,6 @@ public class PlanFragment extends Fragment implements Observer,
 			});
 		} 
 		return builder.create();
-
-		// previous_layout.removeAllViews();
-		// ArrayList<Destination> history =
-		// planActivity.store.getAll(getActivity());
-		// if (history.size() == 0) {
-		// previous_textview.setVisibility(View.GONE);
-		// previous_layout.setVisibility(View.GONE);
-		// } else {
-		// previous_textview.setVisibility(View.VISIBLE);
-		// previous_layout.setVisibility(View.VISIBLE);
-		// for (Destination d : history) {
-		// final Destination dest = d;
-		// LayoutInflater li = LayoutInflater.from(getActivity());
-		// LinearLayout ll = (LinearLayout) li.inflate(
-		// R.layout.plan_history_item, previous_layout, false);
-		// TextView title = (TextView) ll.findViewById(R.id.plan_title);
-		// Button addHome = (Button) ll.findViewById(R.id.add_home_button);
-		// previous_layout.addView(ll, 0);
-		// title.setText(dest.getDestination());
-		// addHome.setOnClickListener(new OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// dnew_home = new Destination(dest.getDestination(), dest
-		// .getType());
-		// dnew_home.setHome(true);
-		// showDialog(SET_HOME_DIALOG);
-		// }
-		// });
-		// ll.setOnClickListener(new OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// Destination d = new Destination(dest.getDestination(),
-		// dest.getType());
-		// restoreDestination(d);
-		// self.onClick(go_button);
-		// }
-		// });
-		// }
-		// }
 	}
 
 	private Dialog wait_dialog;
@@ -748,7 +714,7 @@ public class PlanFragment extends Fragment implements Observer,
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == go_button.getId() || v.getId() == go_button2.getId()) {
+		if (v.getId() == go_layout.getId()) {
 			// if the accuracy is not great wait more in a dialogue
 			Point type = PlanActivity.getPlan().getStartingType();
 			Location location = PlanActivity.getPlan().getStartingLocation();

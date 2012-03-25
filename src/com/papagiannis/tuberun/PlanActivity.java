@@ -45,7 +45,6 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 	TextView title_textview;
 	Button go_home_empty_button;
 	Button go_home_full_button;
-	Button go_button;
 	TextView location_textview;
 	TextView location_accuracy_textview;
 	LinearLayout location_layout;
@@ -95,7 +94,6 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 		title_textview = (TextView) findViewById(R.id.title_textview);
 		go_home_empty_button = (Button) findViewById(R.id.go_home_empty_button);
 		go_home_full_button = (Button) findViewById(R.id.go_home_full_button);
-		go_button = (Button) findViewById(R.id.go_button);
 		location_textview = (TextView) findViewById(R.id.location_textview);
 		location_accuracy_textview = (TextView) findViewById(R.id.location_accuracy_textview);
 		location_progressbar = (ProgressBar) findViewById(R.id.location_progressbar);
@@ -120,7 +118,7 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 			@Override
 			public void onClick(View v) {
 				planFragment.restoreDestination(store.getHome(self));
-				planFragment.onClick(planFragment.go_button);
+				planFragment.onClick(planFragment.go_layout);
 			}
 		});
 		go_home_empty_button.setOnClickListener(new OnClickListener() {

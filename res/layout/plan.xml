@@ -4,11 +4,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background_plan" />
+<!--     <ImageView -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="fill_parent" -->
+<!--         android:scaleType="centerCrop" -->
+<!--         android:src="@drawable/background_plan" /> -->
 
     <LinearLayout
         android:id="@+id/mainmenu_layout"
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="10dip"
+                android:layout_marginRight="5dip"
                 android:text=""
                 android:minWidth="0dip"
                 android:minHeight="0dip" />
@@ -70,22 +70,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="10dip"
-                android:text=""
-                android:minWidth="0dip"
-                android:minHeight="0dip" />
-            
-            <Button
-                android:id="@+id/go_button"
-                style="@style/DirectionsButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dip"
                 android:layout_marginRight="5dip"
                 android:text=""
                 android:minWidth="0dip"
                 android:minHeight="0dip" />
+            
         </LinearLayout>
 
         <TabHost
