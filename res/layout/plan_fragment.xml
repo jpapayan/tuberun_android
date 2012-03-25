@@ -286,6 +286,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dip"
                     android:state_enabled="false"
+                    android:focusable="true"
                     android:text="Enter travel date" />
 
                 <RadioButton
@@ -331,6 +332,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:state_enabled="false"
+                                android:focusable="true"
                                 android:text="Enter time" />
                         </LinearLayout>
                     </TableRow>
@@ -354,6 +356,7 @@
                     android:layout_marginTop="5dip"
                     android:layout_marginBottom="16dip"
                     android:state_enabled="false"
+                    android:focusable="true"
                     android:text="Enter time" />
             </LinearLayout>
         </LinearLayout>

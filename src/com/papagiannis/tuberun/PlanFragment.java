@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -226,6 +227,9 @@ public class PlanFragment extends Fragment implements Observer,
 		OnClickListener l = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				departtimelater_button.requestFocus();
+				destination_edittext.clearFocus();
+				from_edittext.clearFocus();
 				showDialog(v.getId());
 			}
 		};
@@ -315,6 +319,7 @@ public class PlanFragment extends Fragment implements Observer,
 
 			@Override
 			public void onClick(View v) {
+				
 				isAdvanced = !isAdvanced;
 				int advanced_visibility = (isAdvanced) ? View.VISIBLE
 						: View.GONE;
@@ -362,6 +367,9 @@ public class PlanFragment extends Fragment implements Observer,
 		traveldate_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				traveldate_button.requestFocus();
+				destination_edittext.clearFocus();
+				from_edittext.clearFocus();
 				showDialog(SELECT_TRAVEL_DATE);
 			}
 		});
