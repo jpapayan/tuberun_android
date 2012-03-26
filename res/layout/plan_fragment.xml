@@ -24,7 +24,7 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/tuberun_red"
+                    android:background="@drawable/tuberun_semitransparent"
                     android:paddingLeft="16dip"
                     android:paddingRight="16dip"
                     android:text="Starting point" />
@@ -92,8 +92,8 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dip"
-                    android:background="@drawable/tuberun_red"
+                    android:layout_marginTop="5dip"
+                    android:background="@drawable/tuberun_semitransparent"
                     android:paddingLeft="16dip"
                     android:paddingRight="16dip"
                     android:text="Destination" />
@@ -118,9 +118,9 @@
                 <TableLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dip"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
-                    android:layout_marginBottom="16dip"
                     android:stretchColumns="*" >
 
                     <TableRow>
@@ -147,12 +147,27 @@
                                 android:text="Place of interest" />
                         </RadioGroup>
 
-                        <Button
-                            android:id="@+id/history_button"
+                        <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|right"
-                            android:text="History" />
+                            android:layout_height="fill_parent"
+                            android:gravity="center"
+                            android:orientation="vertical" >
+
+                            <Button
+                                android:id="@+id/history_button"
+                                android:layout_width="90dip"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="History" />
+
+                            <Button
+                                android:id="@+id/advanced_button"
+                                android:layout_width="90dip"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="5dip"
+                                android:text="More>>" />
+                        </LinearLayout>
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
@@ -179,14 +194,6 @@
             <!-- android:layout_marginTop="5dip" -->
             <!-- android:orientation="vertical" /> -->
 
-            <Button
-                android:id="@+id/advanced_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="16dip"
-                android:text="More>>" />
-
             <LinearLayout
                 android:id="@+id/adv2anced_layout"
                 android:layout_width="fill_parent"
@@ -197,166 +204,106 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/tuberun_red"
+                    android:background="@drawable/tuberun_semitransparent"
                     android:paddingLeft="16dip"
                     android:paddingRight="16dip"
                     android:text="Means of transport" />
 
-                <TableLayout
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dip"
-                    android:layout_marginRight="16dip"
-                    android:layout_marginTop="5dip"
-                    android:stretchColumns="*" >
+                    android:layout_gravity="center" >
 
-                    <TableRow>
+                    <ToggleButton
+                        android:id="@+id/usetube_toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/tube_toggle_selector"
+                        android:checked="true"
+                        android:textOff=""
+                        android:textOn="" />
 
-                        <CheckBox
-                            android:id="@+id/usetube_checkbox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dip"
-                            android:checked="true"
-                            android:text="Tube" />
+                    <ToggleButton
+                        android:id="@+id/userail_toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/rail_toggle_selector"
+                        android:checked="true"
+                        android:textOff=""
+                        android:textOn="" />
 
-                        <CheckBox
-                            android:id="@+id/usebus_checkbox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dip"
-                            android:checked="true"
-                            android:text="Buses" />
-                    </TableRow>
+                    <ToggleButton
+                        android:id="@+id/usebus_toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/bus_toggle_selector"
+                        android:checked="true"
+                        android:textOff=""
+                        android:textOn="" />
 
-                    <TableRow>
+                    <ToggleButton
+                        android:id="@+id/usedlr_toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/dlr_toggle_selector"
+                        android:checked="true"
+                        android:textOff=""
+                        android:textOn="" />
 
-                        <CheckBox
-                            android:id="@+id/usedlr_checkbox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dip"
-                            android:checked="true"
-                            android:text="DLR" />
-
-                        <CheckBox
-                            android:id="@+id/userail_checkbox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dip"
-                            android:checked="true"
-                            android:text="Rail" />
-                    </TableRow>
-
-                    <TableRow>
-
-                        <CheckBox
-                            android:id="@+id/useboat_checkbox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dip"
-                            android:checked="true"
-                            android:text="Boat" />
-                    </TableRow>
-                </TableLayout>
+                    <ToggleButton
+                        android:id="@+id/useboat_toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/river_toggle_selector"
+                        android:checked="true"
+                        android:textOff=""
+                        android:textOn="" />
+                </LinearLayout>
 
                 <TextView
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dip"
-                    android:background="@drawable/tuberun_red"
+                    android:background="@drawable/tuberun_semitransparent"
                     android:paddingLeft="16dip"
                     android:paddingRight="16dip"
-                    android:text="Travel date" />
-
-                <CheckBox
-                    android:id="@+id/traveldate_checkbox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dip"
-                    android:layout_marginRight="16dip"
-                    android:text="I want to travel at a future date" />
+                    android:text="Travel date and time" />
 
                 <Button
                     android:id="@+id/traveldate_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="5dip"
-                    android:state_enabled="false"
-                    android:focusable="true"
-                    android:text="Enter travel date" />
-
-                <RadioButton
-                    android:id="@+id/departtime_radiobutton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dip"
-                    android:layout_marginRight="16dip"
-                    android:layout_marginTop="16dip"
-                    android:checked="true"
-                    android:text="I want to depart at a specific time" />
-
-                <TableLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="55dip"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
                     android:layout_marginTop="5dip"
-                    android:stretchColumns="*" >
+                    android:focusable="true"
+                    android:state_enabled="false"
+                    android:text="Travel date" />
 
-                    <TableRow>
-
-                        <RadioButton
-                            android:id="@+id/departtimenow_radiobutton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            android:text="Now" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal" >
-
-                            <RadioButton
-                                android:id="@+id/departtimelater_radiobutton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:checked="false" />
-
-                            <Button
-                                android:id="@+id/departtimelater_button"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:state_enabled="false"
-                                android:focusable="true"
-                                android:text="Enter time" />
-                        </LinearLayout>
-                    </TableRow>
-                </TableLayout>
-
-                <RadioButton
-                    android:id="@+id/arrivetime_radiobutton"
-                    android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/departtimelater_button"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
                     android:layout_marginTop="5dip"
-                    android:checked="false"
-                    android:text="I want to arrive at a specific time" />
+                    android:focusable="true"
+                    android:state_enabled="false"
+                    android:text="@string/departtimelater_button" />
 
                 <Button
                     android:id="@+id/arrivetime_button"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="16dip"
+                    android:layout_marginRight="16dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginBottom="16dip"
-                    android:state_enabled="false"
                     android:focusable="true"
-                    android:text="Enter time" />
+                    android:state_enabled="false"
+                    android:text="@string/arrivetime_button" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -381,8 +328,8 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="GET DIRECTIONS"
-            android:textSize="12dip"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textSize="12dip" />
     </LinearLayout>
 
 </LinearLayout>

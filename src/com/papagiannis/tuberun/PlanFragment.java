@@ -3,7 +3,6 @@ package com.papagiannis.tuberun;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -23,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -35,6 +33,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.ToggleButton;
 
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.PlanFetcher;
@@ -42,7 +41,6 @@ import com.papagiannis.tuberun.plan.Point;
 
 public class PlanFragment extends Fragment implements Observer,
 		OnClickListener, OnCheckedChangeListener {
-	private final PlanFragment self = this;
 	static final int PLANNING_FATAL_ERROR = -10;
 	static final int SELECT_PAST_DESTINATION_DIALOG = -9;
 	static final int LOCATION_SERVICE_FAILED = -8;
@@ -82,19 +80,14 @@ public class PlanFragment extends Fragment implements Observer,
 	RadioButton frompoi_radiobutton;
 	RadioButton frompostcode_radiobutton;
 	RadioButton fromaddress_radiobutton;
-	RadioButton departtime_radiobutton;
-	RadioButton arrivetime_radiobutton;
-	RadioButton departtimenow_radiobutton;
-	RadioButton departtimelater_radiobutton;
+	Button traveldate_button;
 	Button departtimelater_button;
 	Button arrivetime_button;
-	CheckBox use_tube_checkbox;
-	CheckBox use_bus_checkbox;
-	CheckBox use_dlr_checkbox;
-	CheckBox use_rail_checkbox;
-	CheckBox use_boat_checkbox;
-	CheckBox traveldate_checkbox;
-	Button traveldate_button;
+	ToggleButton use_tube_toggle;
+	ToggleButton use_bus_toggle;
+	ToggleButton use_dlr_toggle;
+	ToggleButton use_rail_toggle;
+	ToggleButton use_boat_toggle;
 	LinearLayout from_layout;
 
 	@Override
@@ -148,24 +141,14 @@ public class PlanFragment extends Fragment implements Observer,
 				.findViewById(R.id.fromaddress_radiobutton);
 		frompostcode_radiobutton = (RadioButton) v
 				.findViewById(R.id.frompostcode_radiobutton);
-		departtime_radiobutton = (RadioButton) v
-				.findViewById(R.id.departtime_radiobutton);
-		arrivetime_radiobutton = (RadioButton) v
-				.findViewById(R.id.arrivetime_radiobutton);
-		departtimenow_radiobutton = (RadioButton) v
-				.findViewById(R.id.departtimenow_radiobutton);
-		departtimelater_radiobutton = (RadioButton) v
-				.findViewById(R.id.departtimelater_radiobutton);
 		departtimelater_button = (Button) v
 				.findViewById(R.id.departtimelater_button);
 		arrivetime_button = (Button) v.findViewById(R.id.arrivetime_button);
-		use_boat_checkbox = (CheckBox) v.findViewById(R.id.useboat_checkbox);
-		use_bus_checkbox = (CheckBox) v.findViewById(R.id.usebus_checkbox);
-		use_dlr_checkbox = (CheckBox) v.findViewById(R.id.usedlr_checkbox);
-		use_rail_checkbox = (CheckBox) v.findViewById(R.id.userail_checkbox);
-		use_tube_checkbox = (CheckBox) v.findViewById(R.id.usetube_checkbox);
-		traveldate_checkbox = (CheckBox) v
-				.findViewById(R.id.traveldate_checkbox);
+		use_boat_toggle = (ToggleButton) v.findViewById(R.id.useboat_toggle);
+		use_bus_toggle = (ToggleButton) v.findViewById(R.id.usebus_toggle);
+		use_dlr_toggle = (ToggleButton) v.findViewById(R.id.usedlr_toggle);
+		use_rail_toggle = (ToggleButton) v.findViewById(R.id.userail_toggle);
+		use_tube_toggle = (ToggleButton) v.findViewById(R.id.usetube_toggle);
 		traveldate_button = (Button) v.findViewById(R.id.traveldate_button);
 		from_layout = (LinearLayout) v.findViewById(R.id.from_layout);
 		history_button = (Button) v.findViewById(R.id.history_button);
@@ -237,79 +220,6 @@ public class PlanFragment extends Fragment implements Observer,
 		departtimelater_button.setOnClickListener(l);
 		arrivetime_button.setOnClickListener(l);
 
-		// I don't use a buttongroup, instead I create and manage the group
-		// manually
-		final List<RadioButton> constraintRadioButtons = new ArrayList<RadioButton>();
-		constraintRadioButtons.add(departtime_radiobutton);
-		constraintRadioButtons.add(arrivetime_radiobutton);
-		for (RadioButton button : constraintRadioButtons) {
-			button.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView,
-						boolean isChecked) {
-					// store the value in the plan
-					if (isChecked)
-						PlanActivity.getPlan().setTimeConstraint(
-								buttonView.getId() == departtime_radiobutton
-										.getId());
-
-					// fix the other buttons in the group
-					if (isChecked) {
-						for (RadioButton b : constraintRadioButtons) {
-							if (buttonView.getId() != b.getId())
-								b.setChecked(false);
-						}
-					}
-					// render them enabled or disabled
-					if (buttonView.getId() == departtime_radiobutton.getId()) {
-						departtimenow_radiobutton.setEnabled(isChecked
-								&& !traveldate_checkbox.isChecked());
-						departtimelater_radiobutton.setEnabled(isChecked);
-						departtimelater_button.setEnabled(isChecked);
-					}
-					if (buttonView.getId() == arrivetime_radiobutton.getId()) {
-						arrivetime_button.setEnabled(isChecked);
-						departtimelater_button
-								.setEnabled(departtimelater_radiobutton
-										.isChecked()
-										&& departtimelater_radiobutton
-												.isEnabled());
-					}
-				}
-			});
-		}
-
-		// I don't use a buttongroup, instead I create and manage the group
-		// manually
-		final List<RadioButton> departAtRadioButtons = new ArrayList<RadioButton>();
-		departAtRadioButtons.add(departtimenow_radiobutton);
-		departAtRadioButtons.add(departtimelater_radiobutton);
-		for (RadioButton button : departAtRadioButtons) {
-			button.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView,
-						boolean isChecked) {
-					// store the value in the plan
-					if (isChecked)
-						PlanActivity.getPlan().setTimeDepartureNow(
-								buttonView.getId() == departtimenow_radiobutton
-										.getId());
-
-					// fix the other buttons in the group
-					if (isChecked) {
-						for (RadioButton b : departAtRadioButtons) {
-							if (buttonView.getId() != b.getId())
-								b.setChecked(false);
-						}
-					}
-					if (buttonView.getId() == departtimelater_radiobutton
-							.getId()) {
-						departtimelater_button.setEnabled(isChecked);
-					}
-				}
-			});
-		}
-
 		// Setup handlers for the checkbox
 		fromcurrent_checkbox.setOnCheckedChangeListener(this);
 
@@ -330,11 +240,11 @@ public class PlanFragment extends Fragment implements Observer,
 			}
 		});
 
-		use_boat_checkbox.setOnCheckedChangeListener(this);
-		use_rail_checkbox.setOnCheckedChangeListener(this);
-		use_bus_checkbox.setOnCheckedChangeListener(this);
-		use_dlr_checkbox.setOnCheckedChangeListener(this);
-		use_tube_checkbox.setOnCheckedChangeListener(this);
+		use_boat_toggle.setOnCheckedChangeListener(this);
+		use_rail_toggle.setOnCheckedChangeListener(this);
+		use_bus_toggle.setOnCheckedChangeListener(this);
+		use_dlr_toggle.setOnCheckedChangeListener(this);
+		use_tube_toggle.setOnCheckedChangeListener(this);
 
 		topoi_radiobutton.setOnCheckedChangeListener(this);
 		toaddress_radiobutton.setOnCheckedChangeListener(this);
@@ -346,25 +256,6 @@ public class PlanFragment extends Fragment implements Observer,
 		frompostcode_radiobutton.setOnCheckedChangeListener(this);
 		fromstation_radiobutton.setOnCheckedChangeListener(this);
 
-		traveldate_checkbox
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						if (isChecked) {
-							traveldate_button.setEnabled(true);
-							departtimenow_radiobutton.setEnabled(false);
-							if (departtimenow_radiobutton.isChecked())
-								departtimelater_radiobutton.setChecked(true);
-						} else {
-							PlanActivity.getPlan().setTravelDate(null);
-							departtimenow_radiobutton.setEnabled(true);
-							traveldate_button.setText("Select travel date");
-							traveldate_button.setEnabled(false);
-						}
-
-					}
-				});
 		traveldate_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -680,7 +571,8 @@ public class PlanFragment extends Fragment implements Observer,
 							d.setHours(h);
 							d.setMinutes(m);
 							PlanActivity.getPlan().setTimeDepartureLater(d);
-							departtimelater_button.setText(timeFormat.format(d));
+							departtimelater_button.setText("Departure: "+timeFormat.format(d));
+							arrivetime_button.setText(R.string.arrivetime_button);
 						}
 					}, d.getHours(), d.getMinutes(), true);
 		} else if (arrivetime_button.getId() == id) {
@@ -695,7 +587,8 @@ public class PlanFragment extends Fragment implements Observer,
 							d.setHours(h);
 							d.setMinutes(m);
 							PlanActivity.getPlan().setTimeArrivalLater(d);
-							arrivetime_button.setText(timeFormat.format(d));
+							arrivetime_button.setText("Arrival: "+timeFormat.format(d));
+							departtimelater_button.setText(R.string.departtimelater_button);
 						}
 					}, d.getHours(), d.getMinutes(), true);
 		} else if (id == SELECT_TRAVEL_DATE) {
@@ -783,6 +676,7 @@ public class PlanFragment extends Fragment implements Observer,
 		fetcher.update();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void update() {
 		is_wait_dialog = false;
@@ -840,15 +734,15 @@ public class PlanFragment extends Fragment implements Observer,
 			}
 		}
 
-		if (bid == use_boat_checkbox.getId()) {
+		if (bid == use_boat_toggle.getId()) {
 			PlanActivity.getPlan().setUseBoat(isChecked);
-		} else if (bid == use_rail_checkbox.getId()) {
+		} else if (bid == use_rail_toggle.getId()) {
 			PlanActivity.getPlan().setUseRail(isChecked);
-		} else if (bid == use_bus_checkbox.getId()) {
+		} else if (bid == use_bus_toggle.getId()) {
 			PlanActivity.getPlan().setUseBuses(isChecked);
-		} else if (bid == use_tube_checkbox.getId()) {
+		} else if (bid == use_tube_toggle.getId()) {
 			PlanActivity.getPlan().setUseTube(isChecked);
-		} else if (bid == use_dlr_checkbox.getId()) {
+		} else if (bid == use_dlr_toggle.getId()) {
 			PlanActivity.getPlan().setUseDLR(isChecked);
 		} else if (bid == fromcurrent_checkbox.getId()) {
 			if (isChecked) {
@@ -876,22 +770,6 @@ public class PlanFragment extends Fragment implements Observer,
 			PlanActivity.getPlan().setStartingType(Point.STATION);
 		else if (selected == frompostcode_radiobutton.getId())
 			PlanActivity.getPlan().setStartingType(Point.POSTCODE);
-		else
-			PlanActivity.getPlan().setStartingType(Point.NONE);
-	}
-
-	private void updatePlanDestinationType(boolean isChecked) {
-		if (!isChecked)
-			return;
-		int selected = destination_radiogroup.getCheckedRadioButtonId();
-		if (selected == toaddress_radiobutton.getId())
-			PlanActivity.getPlan().setDestinationType(Point.ADDRESS);
-		else if (selected == topoi_radiobutton.getId())
-			PlanActivity.getPlan().setDestinationType(Point.POI);
-		else if (selected == tostation_radiobutton.getId())
-			PlanActivity.getPlan().setDestinationType(Point.STATION);
-		else if (selected == topostcode_radiobutton.getId())
-			PlanActivity.getPlan().setDestinationType(Point.POSTCODE);
 		else
 			PlanActivity.getPlan().setStartingType(Point.NONE);
 	}

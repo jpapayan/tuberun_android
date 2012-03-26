@@ -14,26 +14,24 @@ import android.location.Location;
  * The fetcher issues the request and then assigns to plan the resulting Routes. 
  */
 public class Plan implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+	private static final long serialVersionUID = 2L;
+	private static final SimpleDateFormat timeFormat = new SimpleDateFormat(
+			"HH:mm");
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
+			"yyyyMMdd");
 
-	
 	private String destination = "";
-	private transient ArrayList<String> destinationAlternatives=new ArrayList<String>();
+	private transient ArrayList<String> destinationAlternatives = new ArrayList<String>();
 	private Point destinationType = Point.STATION;
 	private String startingString = "";
-	private transient ArrayList<String> startingAlternatives=new ArrayList<String>();
+	private transient ArrayList<String> startingAlternatives = new ArrayList<String>();
 	private Point startingType = Point.LOCATION;
 	private transient Location startingLocation = null;
 
-	private boolean timeConstraint = true; // true for departure, false for
-											// arrival
-	private boolean timeDepartureNow = true;
 	private Date timeDepartureLater = null;
 	private Date timeArrivalLater = null;
-	private Date travelDate=null;
-	
+	private Date travelDate = null;
+
 	private transient boolean useTube = true;
 	private transient boolean useBuses = true;
 	private transient boolean useDLR = true;
@@ -42,8 +40,8 @@ public class Plan implements Serializable {
 
 	private ArrayList<Route> routes = new ArrayList<Route>();
 	private transient String error = "";
-	
-	private Boolean isStored=false;
+
+	private Boolean isStored = false;
 
 	public Plan() {
 	}
@@ -72,26 +70,24 @@ public class Plan implements Serializable {
 		try {
 			sb.append("language=en");
 			sb.append("&sessionID=0");
-			if (timeConstraint && !timeDepartureNow) {
+			if (timeDepartureLater != null) {
 				sb.append("&itdTripDateTimeDepArr=dep");
-				if (travelDate!=null) {
+				if (travelDate != null) {
 					sb.append("&itdDate=");
 					sb.append(dateFormat.format(travelDate));
 				}
 				sb.append("&itdTime=");
 				sb.append(timeFormat.format(timeDepartureLater));
-			}
-			if (!timeConstraint) {
+			} else if (timeArrivalLater != null) {
 				sb.append("&itdTripDateTimeDepArr=arr");
-				if (travelDate!=null) {
+				if (travelDate != null) {
 					sb.append("&itdDate=");
 					sb.append(dateFormat.format(travelDate));
 				}
 				sb.append("&itdTime=");
 				sb.append(timeFormat.format(timeArrivalLater));
 			}
-			
-			
+
 			sb.append("&name_destination=");
 			sb.append(URLEncoder.encode(destination, "utf-8"));
 			sb.append("&place_destination=London");
@@ -111,23 +107,29 @@ public class Plan implements Serializable {
 			sb.append("&place_origin=London");
 			sb.append("&type_origin=");
 			sb.append(Point.toRequestString(startingType));
-			
+
 			if (!useBoat || !useBuses || !useDLR || !useRail || !useTube) {
 				sb.append("&excludedMeans=checkbox");
-				if (!useBoat) sb.append("&exclMOT_9");
-				if (!useBuses) sb.append("&exclMOT_5");
-				if (!useDLR) sb.append("&exclMOT_1");
-				if (!useRail) sb.append("&exclMOT_0");
-				if (!useTube) sb.append("&exclMOT_2");
+				if (!useBoat)
+					sb.append("&exclMOT_9");
+				if (!useBuses)
+					sb.append("&exclMOT_5");
+				if (!useDLR)
+					sb.append("&exclMOT_1");
+				if (!useRail)
+					sb.append("&exclMOT_0");
+				if (!useTube)
+					sb.append("&exclMOT_2");
 			}
-			
+
 		} catch (Exception e) {
 
 		}
-		String reply=sb.toString();
+		String reply = sb.toString();
 		return reply;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean isValid() {
 		error = "";
 		if (destination == null || destination.equals(""))
@@ -136,29 +138,30 @@ public class Plan implements Serializable {
 			error += "Your current location is not yet known. ";
 		if (startingType != Point.LOCATION && startingString.equals(""))
 			error += "The starting point cannot be empty. ";
-		if (travelDate!=null) {
-			if (timeArrivalLater!=null) {
+		if (travelDate != null) {
+			if (timeArrivalLater != null) {
 				timeArrivalLater.setDate(travelDate.getDate());
 				timeArrivalLater.setMonth(travelDate.getMonth());
 				timeArrivalLater.setYear(travelDate.getYear());
 			}
-			if (timeDepartureLater!=null) {
+			if (timeDepartureLater != null) {
 				timeDepartureLater.setDate(travelDate.getDate());
 				timeDepartureLater.setMonth(travelDate.getMonth());
 				timeDepartureLater.setYear(travelDate.getYear());
 			}
 		}
-		if (timeConstraint && !timeDepartureNow) {
-			if (timeDepartureLater == null)
-				error += "Please select a time of departure. ";
-			else if (timeDepartureLater.before(new Date()))
+		boolean todayTravel = travelDate == null
+				|| dateFormat.format(travelDate).equals(
+						dateFormat.format(new Date()));
+		if (!todayTravel) {
+			if (timeDepartureLater != null
+					&& timeDepartureLater.before(new Date())) {
 				error += "The time of departure must be sometime in the future. ";
-		}
-		if (!timeConstraint) {
-			if (timeArrivalLater == null)
-				error += "Please select a time of arrival. ";
-			else if (timeArrivalLater.before(new Date()))
+			}
+			if (timeArrivalLater != null && timeArrivalLater.before(new Date())) {
 				error += "The time of arrival must be sometime in the future. ";
+
+			}
 		}
 		return error.equals("");
 	}
@@ -209,36 +212,35 @@ public class Plan implements Serializable {
 		this.startingLocation = startingLocation;
 	}
 
-	public boolean isTimeConstraint() {
-		return timeConstraint;
-	}
-
-	public void setTimeConstraint(boolean timeConstraint) {
-		this.timeConstraint = timeConstraint;
-	}
-
-	public boolean isTimeDepartureNow() {
-		return timeDepartureNow;
-	}
-
-	public void setTimeDepartureNow(boolean timeDepartureNow) {
-		this.timeDepartureNow = timeDepartureNow;
-	}
-
 	public Date getTimeDepartureLater() {
-		return timeDepartureLater;
+		return (timeDepartureLater == null) ? new Date() : timeDepartureLater;
 	}
 
 	public void setTimeDepartureLater(Date timeDepartureLater) {
 		this.timeDepartureLater = timeDepartureLater;
+		if (timeDepartureLater != null)
+			this.timeArrivalLater = null;
 	}
 
 	public Date getTimeArrivalLater() {
-		return timeArrivalLater;
+		return (timeArrivalLater == null) ? new Date() : timeArrivalLater;
 	}
 
 	public void setTimeArrivalLater(Date timeArrivalLater) {
 		this.timeArrivalLater = timeArrivalLater;
+		if (timeArrivalLater != null)
+			this.timeDepartureLater = null;
+	}
+
+	public void setTravelDate(Date travelDate) {
+		this.travelDate = travelDate;
+	}
+
+	public Date getTravelDate() {
+		if (travelDate == null)
+			return new Date();
+		else
+			return travelDate;
 	}
 
 	public boolean isUseTube() {
@@ -280,47 +282,47 @@ public class Plan implements Serializable {
 	public void setUseBoat(boolean useBoat) {
 		this.useBoat = useBoat;
 	}
-	public void addAlternativeDestination(String destination){
+
+	public void addAlternativeDestination(String destination) {
 		destinationAlternatives.add(destination);
 	}
-	public ArrayList<String> getAlternativeDestinations(){
+
+	public ArrayList<String> getAlternativeDestinations() {
 		return destinationAlternatives;
 	}
-	public void addAlternativeOrigin(String destination){
+
+	public void addAlternativeOrigin(String destination) {
 		startingAlternatives.add(destination);
 	}
-	public ArrayList<String> getAlternativeOrigins(){
+
+	public ArrayList<String> getAlternativeOrigins() {
 		return startingAlternatives;
 	}
 
 	public void copyAlterativeDestinationsFrom(Plan result) {
-		for (String s:result.getAlternativeDestinations()) destinationAlternatives.add(s);
-		
+		for (String s : result.getAlternativeDestinations())
+			destinationAlternatives.add(s);
+
 	}
+
 	public void copyAlterativeOriginsFrom(Plan result) {
-		for (String s:result.getAlternativeOrigins()) startingAlternatives.add(s);
+		for (String s : result.getAlternativeOrigins())
+			startingAlternatives.add(s);
 	}
+
 	public boolean hasAlternatives() {
-		return destinationAlternatives.size()>0 || startingAlternatives.size()>0;
+		return destinationAlternatives.size() > 0
+				|| startingAlternatives.size() > 0;
 	}
 
 	public void clearAlternativeDestinations() {
 		destinationAlternatives.clear();
-		
+
 	}
 
 	public void clearAlternativeOrigins() {
 		startingAlternatives.clear();
-		
-	}
 
-	public void setTravelDate(Date travelDate) {
-		this.travelDate=travelDate;
-	}
-
-	public Date getTravelDate() {
-		if (travelDate==null) return new Date();
-		else return travelDate;
 	}
 
 	public Boolean isStored() {
@@ -331,7 +333,7 @@ public class Plan implements Serializable {
 		this.isStored = isStored;
 		return this;
 	}
-	
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		if (getStartingType() == Point.LOCATION)
@@ -342,10 +344,9 @@ public class Plan implements Serializable {
 		sb.append(getDestination());
 		return sb.toString();
 	}
-	
-	public String toStringWithTotalRoutes() {
-		return toString()+" ("+routes.size()+" routes)";
-	}
 
+	public String toStringWithTotalRoutes() {
+		return toString() + " (" + routes.size() + " routes)";
+	}
 
 }
