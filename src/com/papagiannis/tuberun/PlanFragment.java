@@ -43,6 +43,7 @@ import com.papagiannis.tuberun.plan.Point;
 public class PlanFragment extends Fragment implements Observer,
 		OnClickListener, OnCheckedChangeListener {
 	private final PlanFragment self = this;
+	static final int PLANNING_FATAL_ERROR = -10;
 	static final int SELECT_PAST_DESTINATION_DIALOG = -9;
 	static final int LOCATION_SERVICE_FAILED = -8;
 	private final static int SELECT_TRAVEL_DATE = -7;
@@ -376,8 +377,6 @@ public class PlanFragment extends Fragment implements Observer,
 
 	}
 
-	Destination dnew_home;
-
 	void restoreDestination(Destination d) {
 		final boolean restoreToUI = true;
 		if (d == null || d.getDestination().equals(""))
@@ -449,7 +448,6 @@ public class PlanFragment extends Fragment implements Observer,
 			return builder.create();
 		}
 	}
-
 	private Dialog getHistoryDialog() {
 		ArrayList<Destination> h = planActivity.store.getAll(getActivity());
 		final String[] items = new String[h.size()];
@@ -480,10 +478,20 @@ public class PlanFragment extends Fragment implements Observer,
 		} 
 		return builder.create();
 	}
-
+	private Dialog getFatalErrorDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(planActivity);
+		builder.setTitle("Planning Failed")
+				.setMessage(
+						"Have you set correctly the type of your destination? \n\nAcceptable types: station, address, postcode, POI.")
+				.setCancelable(true).setPositiveButton("OK", null);
+		return builder.create();
+	}
+	
 	private Dialog wait_dialog;
 	private boolean is_location_dialog = false;
 	boolean is_wait_dialog = false;
+	ArrayList<String> previousAlternativeDestinations=new ArrayList<String>();
+	ArrayList<String> previousAlternativeOrigins=new ArrayList<String>();
 
 	@SuppressWarnings("deprecation")
 	protected Dialog showDialog(int id) {
@@ -548,8 +556,14 @@ public class PlanFragment extends Fragment implements Observer,
 		} else if (id == SELECT_ALTERNATIVE) {
 			if (showAlternativeDestinations) {
 				String[] d = {};
-				final String[] items = PlanActivity.getPlan()
-						.getAlternativeDestinations().toArray(d);
+				ArrayList<String> alternativeDestinations=PlanActivity.getPlan()
+						.getAlternativeDestinations();
+				if (alternativeDestinations.equals(previousAlternativeDestinations)) {
+					showAlternativeDestinations = false;
+					return showDialog(PLANNING_FATAL_ERROR);
+				}
+				else previousAlternativeDestinations=alternativeDestinations;
+				final String[] items = alternativeDestinations.toArray(d);
 				AlertDialog.Builder builder = new AlertDialog.Builder(
 						getActivity());
 				builder.setTitle("Pick an alternative destination");
@@ -581,6 +595,13 @@ public class PlanFragment extends Fragment implements Observer,
 				showAlternativeDestinations = false;
 			} else if (showAlternativeOrigins) {
 				String[] d = {};
+				ArrayList<String> alternativeOrigins=PlanActivity.getPlan()
+						.getAlternativeOrigins();
+				if (alternativeOrigins.equals(previousAlternativeOrigins)) {
+					showAlternativeOrigins = false;
+					return showDialog(PLANNING_FATAL_ERROR);
+				}
+				else previousAlternativeOrigins=alternativeOrigins;
 				final String[] items = PlanActivity.getPlan()
 						.getAlternativeOrigins().toArray(d);
 				AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -696,6 +717,8 @@ public class PlanFragment extends Fragment implements Observer,
 					}, d.getYear() + 1900, d.getMonth(), d.getDate());
 		} else if (id == SELECT_PAST_DESTINATION_DIALOG) {
 			ret = getHistoryDialog();
+		} else if (id == PLANNING_FATAL_ERROR) {
+			ret = getFatalErrorDialog();
 		}
 		wait_dialog = ret;
 		ret.show();
@@ -723,6 +746,9 @@ public class PlanFragment extends Fragment implements Observer,
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == go_layout.getId()) {
+			previousAlternativeDestinations=new ArrayList<String>();
+			previousAlternativeOrigins=new ArrayList<String>();
+			
 			// if the accuracy is not great wait more in a dialogue
 			Point type = PlanActivity.getPlan().getStartingType();
 			Location location = PlanActivity.getPlan().getStartingLocation();
