@@ -373,7 +373,7 @@ public class PlanFragment extends Fragment implements Observer,
 		AlertDialog.Builder builder = new AlertDialog.Builder(planActivity);
 		builder.setTitle("Planning Failed")
 				.setMessage(
-						"Have you set correctly the type of your destination? \n\nAcceptable types: station, address, postcode, POI.")
+						"Have you set correctly the type of your starting point or destination? \n\nAcceptable types: station, address, postcode, POI.")
 				.setCancelable(true).setPositiveButton("OK", null);
 		return builder.create();
 	}
@@ -449,7 +449,9 @@ public class PlanFragment extends Fragment implements Observer,
 				String[] d = {};
 				ArrayList<String> alternativeDestinations=PlanActivity.getPlan()
 						.getAlternativeDestinations();
-				if (alternativeDestinations.equals(previousAlternativeDestinations)) {
+				if (alternativeDestinations.equals(previousAlternativeDestinations) ||
+						(alternativeDestinations.size()==1 && 
+						alternativeDestinations.get(0).equalsIgnoreCase(PlanActivity.getPlan().getDestination())) ) {
 					showAlternativeDestinations = false;
 					return showDialog(PLANNING_FATAL_ERROR);
 				}
@@ -488,7 +490,9 @@ public class PlanFragment extends Fragment implements Observer,
 				String[] d = {};
 				ArrayList<String> alternativeOrigins=PlanActivity.getPlan()
 						.getAlternativeOrigins();
-				if (alternativeOrigins.equals(previousAlternativeOrigins)) {
+				if (alternativeOrigins.equals(previousAlternativeOrigins) ||
+						(alternativeOrigins.size()==1 && PlanActivity.getPlan().getStartingType()!=Point.LOCATION &&
+						alternativeOrigins.get(0).equalsIgnoreCase(PlanActivity.getPlan().getStartingString()))) {
 					showAlternativeOrigins = false;
 					return showDialog(PLANNING_FATAL_ERROR);
 				}

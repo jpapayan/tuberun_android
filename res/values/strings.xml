@@ -12,7 +12,7 @@
 	<string name="show_weekend">Show Weekend</string>
 	<string name="show_now">Show Now</string>
 	
-	<string name="departtimelater_button">Time of departure</string>
+	<string name="departtimelater_button">Departure time</string>
 	<string name="arrivetime_button">Arrival time</string>
 
 	<string-array name="ticket_type_spinner">
