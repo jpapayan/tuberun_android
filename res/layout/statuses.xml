@@ -18,7 +18,7 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="48dip"
-            android:background="#99000000"
+            android:background="@drawable/tuberun_semitransparent"
             android:orientation="horizontal" >
 
             <Button

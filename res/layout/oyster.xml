@@ -127,7 +127,7 @@
 
                 <Button
                     android:id="@+id/button_store"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dip"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/list"
@@ -139,7 +139,7 @@
 
                 <Button
                     android:id="@+id/button_erase"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dip"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/button_store"
                     android:layout_toLeftOf="@id/button_store"
