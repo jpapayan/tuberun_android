@@ -85,6 +85,7 @@ public class StationsTubeFetcher extends NearbyStationsFetcher {
 				        if (NodeValue.equalsIgnoreCase("StationName"))
 				        {
 				                name=myxml.nextText();
+				                name=name.trim();
 				        }
 				        if (NodeValue.equalsIgnoreCase("longtitude"))
 				        {

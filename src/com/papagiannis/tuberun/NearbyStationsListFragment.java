@@ -2,6 +2,7 @@ package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import android.content.Intent;
@@ -62,13 +63,13 @@ public class NearbyStationsListFragment extends ListFragment implements
 		ArrayList<HashMap<String, Object>> to_display = new ArrayList<HashMap<String, Object>>();
 
 		stations_nearby = fetcher.getResult();
+		
 		for (Station s : stations_nearby) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("name", s.getName());
 			m.put("distance",
 					(int) s.getLocation().distanceTo(lastKnownLocation));
-			ArrayList<LineType> lines = StationDetails.FetchLinesForStation(s
-					.getName());
+			List<LineType> lines = StationDetails.FetchLinesForStationWikipedia(s.getName());
 			for (LineType lt : lines) {
 				String line = LinePresentation.getStringRespresentation(lt);
 				m.put(line, line);
