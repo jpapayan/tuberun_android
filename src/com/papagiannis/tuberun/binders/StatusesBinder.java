@@ -83,7 +83,10 @@ public class StatusesBinder implements ViewBinder, OnClickListener {
 			subjects.put(temp.get(0), tv);
 			subjects.put(temp.get(1), tv);
 			subjects.put(tv, tv);
-			if (last_lt==LineType.DLR) lastView=temp.get(1);
+			if (last_lt==LineType.DLR) {
+				lastView=temp.get(1);
+				preLastView=temp.get(0);
+			}
 			temp.clear();
 		} else
 			temp.add(tv);
@@ -94,6 +97,7 @@ public class StatusesBinder implements ViewBinder, OnClickListener {
 	HashMap<View, View> subjects = new HashMap<View, View>();
 	ArrayList<View> temp = new ArrayList<View>();
 	View lastView=null; //this one must scroll
+	View preLastView=null; //this as well :-)
 
 	@Override
 	public void onClick(View v) {
@@ -126,6 +130,6 @@ public class StatusesBinder implements ViewBinder, OnClickListener {
 	}
 
 	private boolean isLastElement(View v) {
-		return lastView!=null && v==lastView;
+		return (lastView!=null && v==lastView) || (preLastView!=null && v==preLastView);
 	}
 }

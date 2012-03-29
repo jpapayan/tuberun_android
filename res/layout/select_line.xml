@@ -55,18 +55,6 @@
                 android:text="Select Line" />
         </LinearLayout>
         
-        <TextView
-            android:id="@+id/warning_textview"
-            style="@style/WhiteText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dip"
-            android:layout_marginTop="5dip"
-            android:background="@drawable/tuberun_red"
-            android:gravity="center_horizontal"
-            android:visibility="gone"
-            android:text="Train departures data is only provided by TfL for selected stations" />
-
         <ListView
             android:id="@+id/android:list"
             android:layout_width="fill_parent"

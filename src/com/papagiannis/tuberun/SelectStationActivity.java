@@ -23,7 +23,6 @@ public class SelectStationActivity extends ListActivity implements OnClickListen
 	protected Button backButton;
 	protected Button logoButton;
 	protected TextView titleTextView;
-	protected TextView warningTextview;
 
 	private final ArrayList<HashMap<String,Object>> stations_list=new ArrayList<HashMap<String,Object>>();
 	LineType lt;
@@ -39,9 +38,6 @@ public class SelectStationActivity extends ListActivity implements OnClickListen
 		backButton.setOnClickListener(this);
 		logoButton.setOnClickListener(this);
 		titleTextView.setText("Select Station");
-		
-		warningTextview = (TextView) findViewById(R.id.warning_textview);
-		warningTextview.setVisibility(View.VISIBLE);
 		
 		Bundle extras = getIntent().getExtras();
 		String line = (String)extras.get("line");

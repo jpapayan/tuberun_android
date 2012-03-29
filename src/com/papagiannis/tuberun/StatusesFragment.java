@@ -73,7 +73,7 @@ public class StatusesFragment extends ListFragment implements Observer {
 			if (s != null) {
 				m.put("status", s.short_status);
 				String long_status=s.long_status;
-				if (long_status.equals("")) long_status="No further information availabe";
+				if (long_status.equals("")) long_status="No further information available";
 				m.put("details", long_status);
 			} else {
 				m.put("status", "Failed");
