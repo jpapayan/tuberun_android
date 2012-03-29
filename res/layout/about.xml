@@ -106,7 +106,7 @@
             android:layout_gravity="bottom"
             android:background="@drawable/tuberun_semitransparent"
             android:gravity="center_horizontal"
-            android:text="Panagiota Dalamagka, Thomas Tziortziotis, Petr Hosek, Erikos Ouziel, Nikos Kantas, Ioannis Demetriou"
+            android:text="Panagiota Dalamagka, Thomas Tziortziotis, Petr Hosek, Erikos Ouziel, Nikos Kantas, Ioannis Demetriou, Dimitris Doukoglou"
             android:textColor="#FFFFFF" />
 
         <TextView
