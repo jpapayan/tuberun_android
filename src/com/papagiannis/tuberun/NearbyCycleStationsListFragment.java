@@ -3,6 +3,7 @@ package com.papagiannis.tuberun;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.papagiannis.tuberun.cyclehire.CycleHireStation;
 import com.papagiannis.tuberun.cyclehire.NearbyCyclesBinder;
@@ -99,7 +101,6 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 						R.id.total_bikes_textview});
 		adapter.setViewBinder(new NearbyCyclesBinder(getActivity()));
 		setListAdapter(adapter);
-
 	}
 
 	@Override
@@ -118,6 +119,12 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 
 		}
 	}
+	
+//	public void showToast() {
+//		String msg="Barclays Cycle Hire availability data is updated by TfL in 3min intervals";
+//		Toast toast = Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG);
+//		toast.show();
+//	}
 
 		
 }

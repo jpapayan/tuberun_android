@@ -484,7 +484,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		.setMessage(
 				"Your copy of this application is unauthorised. You may obtain a licensed copy from the Google Play " +
 				"Store.\n\n" +
-				"Please support the developer (I have spent many nights of my spare timne working on this ;-).\n\n" +
+				"Please support the developer (I have spent many nights working on this).\n\n" +
 				"If you think that you are seeing this in error, please contact the developer.")
 		.setCancelable(false)
 		.setPositiveButton("Open Play Store",

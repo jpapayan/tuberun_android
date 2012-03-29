@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginLeft="5dip"
+            android:paddingRight="5dip"
             android:layout_weight="1"
             android:text="Station"
             android:textSize="20sp"

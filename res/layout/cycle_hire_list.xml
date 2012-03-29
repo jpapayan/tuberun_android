@@ -5,29 +5,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ProgressBar
+    <FrameLayout
         android:id="@id/android:empty"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="true" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:text="Barclays Cycle Hire availability is updated by TfL in 3min intervals" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/map_textview"
-            style="@style/WhiteText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dip"
-            android:layout_marginTop="5dip"
-            android:background="@drawable/tuberun_red"
-            android:gravity="center_horizontal"
-            android:text="Barclays Cycle Hire availability data is only updated in 3min intervals by TfL" />
 
         <ListView
             android:id="@id/android:list"

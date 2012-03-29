@@ -12,7 +12,6 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -213,23 +212,28 @@
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center" >
+                    android:layout_gravity="center"
+                    android:gravity="center" >
 
                     <ToggleButton
                         android:id="@+id/usetube_toggle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@layout/tube_toggle_selector"
+                        android:minWidth="0dip"
+                        android:minHeight="0dip"
                         android:checked="true"
                         android:textOff=""
                         android:textOn="" />
-
+                    
                     <ToggleButton
                         android:id="@+id/userail_toggle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@layout/rail_toggle_selector"
                         android:checked="true"
+                        android:minWidth="0dip"
+                        android:minHeight="0dip"
                         android:textOff=""
                         android:textOn="" />
 
@@ -239,6 +243,8 @@
                         android:layout_height="wrap_content"
                         android:background="@layout/bus_toggle_selector"
                         android:checked="true"
+                        android:minWidth="0dip"
+                        android:minHeight="0dip"
                         android:textOff=""
                         android:textOn="" />
 
@@ -248,6 +254,8 @@
                         android:layout_height="wrap_content"
                         android:background="@layout/dlr_toggle_selector"
                         android:checked="true"
+                        android:minWidth="0dip"
+                        android:minHeight="0dip"
                         android:textOff=""
                         android:textOn="" />
 
@@ -257,6 +265,8 @@
                         android:layout_height="wrap_content"
                         android:background="@layout/river_toggle_selector"
                         android:checked="true"
+                        android:minWidth="0dip"
+                        android:minHeight="0dip"
                         android:textOff=""
                         android:textOn="" />
                 </LinearLayout>
