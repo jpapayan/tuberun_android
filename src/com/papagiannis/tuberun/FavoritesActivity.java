@@ -13,9 +13,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.ericharlow.DragNDrop.DragListener;
+import com.ericharlow.DragNDrop.DragNDropAdapter;
+import com.ericharlow.DragNDrop.DragNDropListView;
+import com.ericharlow.DragNDrop.DropListener;
+import com.ericharlow.DragNDrop.RemoveListener;
 import com.papagiannis.tuberun.binders.FavoritesBinder;
 import com.papagiannis.tuberun.favorites.DeparturesFavorite;
 import com.papagiannis.tuberun.favorites.Favorite;
@@ -59,7 +67,6 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		logo_button.setOnClickListener(back_listener);
 		
 		emptyLayout= (LinearLayout) findViewById(R.id.empty_layout);
-
 		favorites = Favorite.getFavorites(this);
 		fetchers_count = 0;
 		uses_status_weekend = false;
@@ -127,7 +134,8 @@ public class FavoritesActivity extends ListActivity implements Observer,
 
 	private void updateList(Boolean asEmpty) {
 		ArrayList<HashMap<String, Object>> favorites_list = new ArrayList<HashMap<String, Object>>();
-
+		ArrayList<String> content=new ArrayList<String>(); 
+		
 		int fav_index = 0;
 		for (Favorite fav : favorites) {
 			Fetcher f = fav.getFetcher();
@@ -140,6 +148,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 						.getDepartures(platform);
 				m.put("line", LinePresentation.getStringRespresentation(fav
 						.getLine()));
+				content.add((String)m.get("line"));
 				m.put("icon", LinePresentation.getIcon(fav.getLine()));
 				DeparturesFavorite dfav = (DeparturesFavorite) fav;
 				String platform_trimmed = dfav.getStation_nice() + " "
@@ -173,6 +182,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 					m.put("index", Integer.toString(fav_index - 1));
 					m.put("line", LinePresentation
 							.getStringRespresentation(LineType.BUSES));
+					content.add((String)m.get("line"));
 					m.put("icon", LinePresentation.getIcon(LineType.BUSES));
 					if (platform.length() > 35)
 						platform = platform.substring(0, 34) + ".";
@@ -195,6 +205,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 				StatusesFetcher fetcher = (StatusesFetcher) f;
 				m.put("line", LinePresentation.getStringRespresentation(fav
 						.getLine()));
+				content.add((String)m.get("line"));
 				m.put("platform", LinePresentation.getStringRespresentation(fav
 						.getLine()));
 				m.put("icon", LinePresentation.getIcon(fav.getLine()));
@@ -225,8 +236,63 @@ public class FavoritesActivity extends ListActivity implements Observer,
 						R.id.favorites_position2, R.id.favorites_time2,
 						R.id.favorites_destination3, R.id.favorites_position3,
 						R.id.favorites_time3 });
+		DragNDropAdapter adapter2=new DragNDropAdapter(this,new int[]{R.layout.favorites_item},
+				new int[]{R.id.favorites_platform},content);
+		String s="12";
 		adapter.setViewBinder(new FavoritesBinder(this));
-		setListAdapter(adapter);
+//		setListAdapter(adapter);
+		setListAdapter(adapter2);
+		ListView listView=getListView();
+		if (listView instanceof DragNDropListView) {
+        	((DragNDropListView) listView).setDropListener(mDropListener);
+        	((DragNDropListView) listView).setRemoveListener(mRemoveListener);
+        	((DragNDropListView) listView).setDragListener(mDragListener);
+        }
+		
 	}
+	
+	//The drang and drop stuff
+	private DropListener mDropListener = 
+			new DropListener() {
+	        public void onDrop(int from, int to) {
+	        	ListAdapter adapter = getListAdapter();
+	        	if (adapter instanceof DragNDropAdapter) {
+	        		((DragNDropAdapter)adapter).onDrop(from, to);
+	        		getListView().invalidateViews();
+	        	}
+	        }
+	    };
+	    
+	    private RemoveListener mRemoveListener =
+	        new RemoveListener() {
+	        public void onRemove(int which) {
+	        	ListAdapter adapter = getListAdapter();
+	        	if (adapter instanceof DragNDropAdapter) {
+	        		((DragNDropAdapter)adapter).onRemove(which);
+	        		getListView().invalidateViews();
+	        	}
+	        }
+	    };
+	    
+	    private DragListener mDragListener =
+	    	new DragListener() {
+
+				public void onDrag(int x, int y, ListView listView) {
+					// TODO Auto-generated method stub
+				}
+
+				public void onStartDrag(View itemView) {
+					itemView.setVisibility(View.INVISIBLE);
+					itemView.setBackgroundResource(R.drawable.board_highlight);
+				}
+
+				public void onStopDrag(View itemView) {
+					itemView.setVisibility(View.VISIBLE);
+					itemView.setBackgroundResource(R.drawable.board);
+				}
+	    	
+	    };
+	
+	
 
 }
