@@ -2,106 +2,102 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="5dip"
-    android:orientation="vertical"
+    android:layout_marginLeft="10dip"
+    android:orientation="horizontal"
     android:paddingLeft="5dip" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:id="@+id/images_layout"
+        android:layout_width="30dip"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="10dip"
+        android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/images_layout"
+        <ImageView
+            android:id="@+id/start_imageview"
             android:layout_width="30dip"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dip"
-            android:layout_marginRight="10dip"
-            android:orientation="vertical" >
+            android:layout_height="10dip"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/white"
+            android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/start_imageview"
-                android:layout_width="30dip"
-                android:layout_height="10dip"
-                android:layout_gravity="center_horizontal"
-                android:background="@android:color/white"
-                android:visibility="gone" />
+        <ImageView
+            android:id="@+id/intermediate_imageview"
+            android:layout_width="10dip"
+            android:layout_height="0dip"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@android:color/white" />
 
-            <ImageView
-                android:id="@+id/intermediate_imageview"
-                android:layout_width="10dip"
-                android:layout_height="0dip"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@android:color/white" />
-
-            <ImageView
-                android:id="@+id/destination_imageview"
-                android:layout_width="30dip"
-                android:layout_height="10dip"
-                android:layout_gravity="center_horizontal"
-                android:background="@android:color/white"
-                android:visibility="gone" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/duration_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="top"
-            android:orientation="vertical" >
-
-            <TableLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="5dip"
-                android:shrinkColumns="0"
-                android:stretchColumns="0" >
-
-                <TableRow>
-
-                    <TextView
-                        android:id="@+id/fromname_textview"
-                        style="@android:style/TextAppearance.Medium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="FROM" />
-
-                    <TextView
-                        android:id="@+id/fromtime_textview"
-                        style="@android:style/TextAppearance.Medium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="5dip"
-                        android:text="TIME" />
-                </TableRow>
-
-                <TableRow>
-
-                    <TextView
-                        android:id="@+id/directions_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left|center_vertical"
-                        android:text="aaasd" />
-
-                    <ImageView
-                        android:id="@+id/mot_imageview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"/>
-                </TableRow>
-            </TableLayout>
-
-            <TextView
-                android:id="@+id/duration_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:text="aaasd" />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/destination_imageview"
+            android:layout_width="30dip"
+            android:layout_height="10dip"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/white"
+            android:visibility="gone" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/duration_layout"
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:layout_gravity="top"
+        android:orientation="vertical" >
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dip"
+            android:orientation="horizontal"
+            android:shrinkColumns="0"
+            android:stretchColumns="0" >
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/fromname_textview"
+                    style="@android:style/TextAppearance.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FROM" />
+
+                <TextView
+                    android:id="@+id/fromtime_textview"
+                    style="@android:style/TextAppearance.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dip"
+                    android:text="TIME" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/directions_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:text="aaasd" />
+
+                <ImageView
+                    android:id="@+id/mot_imageview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+            android:id="@+id/duration_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="aaasd" />
+    </LinearLayout>
+    
 
 </LinearLayout>

@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="5dip"
         android:layout_marginTop="5dip"
-        android:background="#99801219"
+        android:background="@drawable/tuberun_red"
         android:gravity="center" />
 
     <ListView
