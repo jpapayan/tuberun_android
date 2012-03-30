@@ -17,8 +17,7 @@ public class StatusesFetcher extends Fetcher {
 		return statusurl == WEEKENDURL;
 	}
 
-	 private final String NOWURL =
-	 "http://www.tfl.gov.uk/tfl/livetravelnews/realtime/track.aspx";
+	 private final String NOWURL = "http://www.tfl.gov.uk/tfl/livetravelnews/realtime/tube/default.html";
 //	private final String NOWURL = "http://tuberun.dyndns.org:55559/getStatuses.php";
 	// private final String NOWURL = "http://localhost:55559/getStatuses.php";
 	private final String WEEKENDURL = "http://www.tfl.gov.uk/tfl/livetravelnews/realtime/track.aspx?offset=weekend";
