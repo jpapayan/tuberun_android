@@ -62,6 +62,7 @@ public class Favorite implements Serializable {
 		result = prime * result + ((lt == null) ? 0 : lt.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -81,7 +82,8 @@ public class Favorite implements Serializable {
 		return true;
 	}
 
-	//TODO: remove the statics and rewrite this to use the Store class, like the ClaimStore.
+	// TODO: remove the statics and rewrite this to use the Store class, like
+	// the ClaimStore.
 	transient private static ArrayList<Favorite> favorites = null;
 
 	private static ArrayList<Favorite> getFromFile(Activity activity) {
@@ -99,14 +101,15 @@ public class Favorite implements Serializable {
 			}
 			oi.close();
 		} catch (Exception e) {
-			Log.w("Favorites",e);
+			Log.w("Favorites", e);
 
 		}
 		return result;
 	}
 
 	public static ArrayList<Favorite> getFavorites(Activity activity) {
-		//returns a reference to the internal object, useful to keep all such refs in sync
+		// returns a reference to the internal object, useful to keep all such
+		// refs in sync
 		if (favorites != null)
 			return favorites;
 		else {
@@ -132,14 +135,25 @@ public class Favorite implements Serializable {
 		}
 
 	}
-	
+
 	public static void addFavorite(Favorite f, Activity a) {
-		if (favorites!=null) favorites.add(f);
+		if (favorites != null)
+			favorites.add(f);
 		storeToFile(a);
 	}
-	
+
+	public static void addFavorite(Favorite f, int to, Activity a) {
+		try {
+			if (favorites != null)
+				favorites.add(to, f);
+			storeToFile(a);
+		} catch (Exception e) {
+			Log.w("Favorties", e);
+		}
+	}
+
 	public static void removeFavorite(Favorite f, Activity a) {
-		if (favorites!=null) {
+		if (favorites != null) {
 			favorites.remove(f);
 		}
 		storeToFile(a);
@@ -150,7 +164,9 @@ public class Favorite implements Serializable {
 	}
 
 	public static void removeIndex(Integer i, Activity activity) {
-		if (favorites!=null) favorites.remove(favorites.get(i));
+		if (favorites != null)
+			favorites.remove(favorites.get(i));
 		storeToFile(activity);
 	}
+
 }

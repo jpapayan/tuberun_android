@@ -58,6 +58,11 @@ public class DragNDropListView extends ListView {
 	public void setDragListener(DragListener l) {
 		mDragListener = l;
 	}
+	
+	private Boolean isMoving=false;
+	public void setIsMoving(boolean isMoving) {
+		this.isMoving=isMoving;
+	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
@@ -65,7 +70,7 @@ public class DragNDropListView extends ListView {
 		final int x = (int) ev.getX();
 		final int y = (int) ev.getY();	
 		
-		if (action == MotionEvent.ACTION_DOWN && x < 3*this.getWidth()/4) {
+		if (action == MotionEvent.ACTION_DOWN && x < this.getWidth()/8) {
 			mDragMode = true;
 		}
 
@@ -94,6 +99,7 @@ public class DragNDropListView extends ListView {
 				stopDrag(mStartPosition - getFirstVisiblePosition());
 				if (mDropListener != null && mStartPosition != INVALID_POSITION && mEndPosition != INVALID_POSITION) 
 	        		 mDropListener.onDrop(mStartPosition, mEndPosition);
+				isMoving=false;
 				break;
 		}
 		return true;

@@ -4,20 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import com.ericharlow.DragNDrop.DragListener;
 import com.ericharlow.DragNDrop.DragNDropAdapter;
@@ -35,11 +29,12 @@ import com.papagiannis.tuberun.fetchers.StatusesFetcher;
 
 public class FavoritesActivity extends ListActivity implements Observer,
 		OnClickListener {
+	private DragNDropListView listView;
 	private ArrayList<Favorite> favorites = new ArrayList<Favorite>();
 	private int fetchers_count = 0;
 	private boolean uses_status_weekend = false;
 	private boolean uses_status_now = false;
-	
+
 	private LinearLayout emptyLayout;
 
 	/** Called when the activity is first created. */
@@ -66,7 +61,18 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		back_button.setOnClickListener(back_listener);
 		logo_button.setOnClickListener(back_listener);
 		
-		emptyLayout= (LinearLayout) findViewById(R.id.empty_layout);
+		listView = (DragNDropListView) getListView();
+		listView.setDropListener(mDropListener);
+        listView.setRemoveListener(mRemoveListener);
+        listView.setDragListener(mDragListener);
+        
+		emptyLayout = (LinearLayout) findViewById(R.id.empty_layout);
+
+		updateFavorites();
+		onClick(null);
+	}
+
+	private void updateFavorites() {
 		favorites = Favorite.getFavorites(this);
 		fetchers_count = 0;
 		uses_status_weekend = false;
@@ -97,21 +103,18 @@ public class FavoritesActivity extends ListActivity implements Observer,
 			fc.clearCallbacks();
 			fc.registerCallback(this);
 		}
-		
-		onClick(null);
 	}
-	
+
 	@Override
 	public void onClick(View arg0) {
 		if (favorites.size() > 0) {
 			emptyLayout.setVisibility(View.GONE);
 			setListAdapter(null);
-//			showDialog(0);
+			// showDialog(0);
 			for (Favorite f : favorites) {
 				f.getFetcher().update();
 			}
-		}
-		else {
+		} else {
 			emptyLayout.setVisibility(View.VISIBLE);
 		}
 	}
@@ -224,75 +227,68 @@ public class FavoritesActivity extends ListActivity implements Observer,
 			}
 		}
 
-		SimpleAdapter adapter = new SimpleAdapter(this, favorites_list,
+		DragNDropAdapter adapter = new DragNDropAdapter(this, favorites_list,
 				R.layout.favorites_item, new String[] { "line", "icon",
 						"platform", "index", "destination1", "position1",
 						"time1", "destination2", "position2", "time2",
-						"destination3", "position3", "time3" }, new int[] {
+						"destination3", "position3", "time3"}, new int[] {
 						R.id.favorites_line, R.id.favorites_icon,
 						R.id.favorites_platform, R.id.remove_favorite,
 						R.id.favorites_destination1, R.id.favorites_position1,
 						R.id.favorites_time1, R.id.favorites_destination2,
 						R.id.favorites_position2, R.id.favorites_time2,
 						R.id.favorites_destination3, R.id.favorites_position3,
-						R.id.favorites_time3 });
-		DragNDropAdapter adapter2=new DragNDropAdapter(this,new int[]{R.layout.favorites_item},
-				new int[]{R.id.favorites_platform},content);
-		String s="12";
-		adapter.setViewBinder(new FavoritesBinder(this));
-//		setListAdapter(adapter);
-		setListAdapter(adapter2);
-		ListView listView=getListView();
-		if (listView instanceof DragNDropListView) {
-        	((DragNDropListView) listView).setDropListener(mDropListener);
-        	((DragNDropListView) listView).setRemoveListener(mRemoveListener);
-        	((DragNDropListView) listView).setDragListener(mDragListener);
-        }
+						R.id.favorites_time3,});
+		adapter.setData(favorites_list);
+		adapter.setViewBinder(new FavoritesBinder(this,listView));
+		setListAdapter(adapter);
 		
 	}
-	
-	//The drang and drop stuff
-	private DropListener mDropListener = 
-			new DropListener() {
-	        public void onDrop(int from, int to) {
-	        	ListAdapter adapter = getListAdapter();
-	        	if (adapter instanceof DragNDropAdapter) {
-	        		((DragNDropAdapter)adapter).onDrop(from, to);
-	        		getListView().invalidateViews();
-	        	}
-	        }
-	    };
-	    
-	    private RemoveListener mRemoveListener =
-	        new RemoveListener() {
-	        public void onRemove(int which) {
-	        	ListAdapter adapter = getListAdapter();
-	        	if (adapter instanceof DragNDropAdapter) {
-	        		((DragNDropAdapter)adapter).onRemove(which);
-	        		getListView().invalidateViews();
-	        	}
-	        }
-	    };
-	    
-	    private DragListener mDragListener =
-	    	new DragListener() {
 
-				public void onDrag(int x, int y, ListView listView) {
-					// TODO Auto-generated method stub
-				}
+	private void updateFavoritesOrder(int from, int to) {
+		Favorite temp = favorites.get(from);
+		Favorite.removeIndex(from, this);
+		Favorite.addFavorite(temp, to, this);
+		updateFavorites();
+	}
 
-				public void onStartDrag(View itemView) {
-					itemView.setVisibility(View.INVISIBLE);
-					itemView.setBackgroundResource(R.drawable.board_highlight);
-				}
+	private DropListener mDropListener = new DropListener() {
+		public void onDrop(int from, int to) {
+			ListAdapter adapter = getListAdapter();
+			if (adapter instanceof DragNDropAdapter) {
+				((DragNDropAdapter) adapter).onDrop(from, to);
+				updateFavoritesOrder(from, to);
+				getListView().invalidateViews();
+			}
+		}
+	};
 
-				public void onStopDrag(View itemView) {
-					itemView.setVisibility(View.VISIBLE);
-					itemView.setBackgroundResource(R.drawable.board);
-				}
-	    	
-	    };
-	
-	
+	private RemoveListener mRemoveListener = new RemoveListener() {
+		public void onRemove(int which) {
+			ListAdapter adapter = getListAdapter();
+			if (adapter instanceof DragNDropAdapter) {
+				((DragNDropAdapter) adapter).onRemove(which);
+				getListView().invalidateViews();
+			}
+		}
+	};
+
+	private DragListener mDragListener = new DragListener() {
+
+		public void onDrag(int x, int y, ListView listView) {
+			// TODO Auto-generated method stub
+		}
+
+		public void onStartDrag(View itemView) {
+			itemView.setVisibility(View.INVISIBLE);
+			itemView.setBackgroundResource(R.drawable.board_highlight);
+		}
+
+		public void onStopDrag(View itemView) {
+			itemView.setVisibility(View.VISIBLE);
+			itemView.setBackgroundResource(R.drawable.board);
+		}
+
+	};
 
 }
