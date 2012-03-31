@@ -44,10 +44,10 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
 	public static final String VERSION = "1.0.0";
+	public static final Boolean USE_LICENSING=false;
 	
 	private static final String TUBE_MAP_URL = "https://www.tfl.gov.uk/assets/downloads/standard-tube-map.gif";
 	private static final String LOCAL_PATH = "standard-tube-map.gif";
-	private static final Boolean USE_LICENCING=true;
 	private static final String LICENCING_PUBLIC_KEY="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnskzkZ7GjJBChKebZfXVqdDnuqWDLNHuhhpIwL6a+g8OiNE52+LxolCAZJmOnHr3zvgdPw0vuRKrFfGjuPgVJV13nx1DKFi7LuXuK4rpmMucZ1qZf4kwbNw+iOmp6YqWT8OQ1RN94biWluZhwcee5sb16xmtJEeH2iHEKVtjheJUGebSm6mxiQO3S3LE4p9pWadPDfPmFEvw2vjVLtwyxUqBIhiMiEtOF3e6JDBE6kLndI97jZY4LXsfL7IDhiBe1pLCZrO90TQTKMzqwz8nowXqoQLvDJ78bUaCuJm7WwPPTgpZmAyL5P2bi+c5NDoJrZsntq82EL2hRnDPiP2+nwIDAQAB";
 	private static final byte[] LICENCING_SALT=new byte[]{100,78,89,45,21,45,21,90,23,45,67,12,11,54}; 
 	
@@ -102,7 +102,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		oysterProgress = (ProgressBar) findViewById(R.id.progressbar_balance);
 		oysterLayout = (LinearLayout) findViewById(R.id.layout_balance);
 		
-		if (USE_LICENCING) initializeLicencing();
+		if (USE_LICENSING) initializeLicencing();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -447,7 +447,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	@Override
     protected void onDestroy() {
         super.onDestroy();
-        mChecker.onDestroy();
+        if (USE_LICENSING) mChecker.onDestroy();
     }
 	
 	

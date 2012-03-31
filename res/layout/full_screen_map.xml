@@ -75,6 +75,9 @@
         android:layout_height="0dip"
         android:layout_weight="1" >
         
+<!--    private final String RELEASE_GMAPS_KEY="0dl-DOBdbuAppcA7UOEUHCKwpl9_gD8G5lealfw"; -->
+<!-- 	private final String DEBUG_GMAPS_KEY="0dl-DOBdbuArzbkNHPavhZ3AXr8F0oiQK18i5HA"; -->
+        
         <com.google.android.maps.MapView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/bus_mapview"

@@ -32,6 +32,7 @@ import com.papagiannis.tuberun.overlays.LocationItemizedOverlay;
  */
 public abstract class MeMapActivity extends MapActivity implements
 		LocationListener {
+	
 	private MeMapActivity self = this;
 	protected MapView mapView;
 	protected MapController mapController;
