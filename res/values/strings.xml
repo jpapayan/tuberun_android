@@ -3,7 +3,7 @@
 	<string name="app_name">TubeRun</string>
 	<string name="status_title">Status</string>
 	<string name="departures_title">Departures</string>
-	<string name="nearby_title">Nearby\nStations</string>
+	<string name="nearby_title">Nearby</string>
 	<string name="maps_title">Map</string>
 	<string name="claims_title">Refund\nClaims</string>
 	<string name="planner_title">Journey \nPlanner</string>

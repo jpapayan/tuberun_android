@@ -42,6 +42,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 	TabsAdapter mTabsAdapter;
 	NearbyStationsListFragment undergroundFragment;
 	NearbyCycleStationsListFragment cycleFragment;
+	NearbyBusLinesListFragment busesFragment;
 	TextView location_textview;
 	TextView location_accuracy_textview;
 	Button back_button;
@@ -88,6 +89,18 @@ public class NearbyStationsActivity extends FragmentActivity implements
 		// (int)(bmp.getWidth() / 1.5), (int) (bmp.getHeight() / 1.5), true);
 		// mTabsAdapter.getTabsImageView().setImageBitmap(resizedbitmap);
 		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.cycle_hire);
+		
+		mTabsAdapter.addTab(
+				mTabHost.newTabSpec("buses").setIndicator("Buses"),
+				NearbyBusLinesListFragment.class, null);
+		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
+		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
+		// bmp=BitmapFactory.decodeResource(this.getResources(),
+		// R.drawable.cycle_hire);
+		// resizedbitmap = Bitmap.createScaledBitmap(bmp,
+		// (int)(bmp.getWidth() / 1.5), (int) (bmp.getHeight() / 1.5), true);
+		// mTabsAdapter.getTabsImageView().setImageBitmap(resizedbitmap);
+		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.buses);
 
 		if (savedInstanceState != null) {
 			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
@@ -96,6 +109,8 @@ public class NearbyStationsActivity extends FragmentActivity implements
 				.getItem(0);
 		cycleFragment = (NearbyCycleStationsListFragment) mTabsAdapter
 				.getItem(1);
+		busesFragment = (NearbyBusLinesListFragment) mTabsAdapter
+				.getItem(2);
 
 		OnClickListener back_listener = new OnClickListener() {
 			@Override
@@ -144,6 +159,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 			reverseGeocode(lastKnownLocation);
 			undergroundFragment.locationChanged(lastKnownLocation);
 			cycleFragment.locationChanged(lastKnownLocation);
+			busesFragment.locationChanged(lastKnownLocation);
 		}
 	}
 

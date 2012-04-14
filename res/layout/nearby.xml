@@ -51,7 +51,7 @@
                 android:layout_marginLeft="5dip"
                 android:layout_weight="5"
                 android:gravity="left"
-                android:text="Nearby Stations" />
+                android:text="Nearby" />
         </LinearLayout>
 
         <TabWidget

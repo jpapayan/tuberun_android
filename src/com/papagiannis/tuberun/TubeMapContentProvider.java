@@ -68,14 +68,12 @@ public class TubeMapContentProvider extends ContentProvider {
 			int bufferLength = 0; // used to store a temporary size of the
 //									// buffer
 			int i=0;
-			int totalSize = 0;
 			while ((bufferLength = fis.read(buffer)) > 0) {
 				int k=0;
 				for (int j=i;j<i+bufferLength;j++) {
 					fullFile[j]=buffer[k++];
 				}
 				i+=bufferLength;
-				totalSize += bufferLength;
 			}
 			MatrixCursor res=new MatrixCursor(new String[]{"map"});
 			res.addRow(new Object[]{fullFile});
@@ -83,7 +81,6 @@ public class TubeMapContentProvider extends ContentProvider {
 		
 		}
 		catch (Exception e) {
-			String s=e.toString();
 			Log.w("MapProvider",e);
 		}
 		return null;

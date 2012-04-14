@@ -171,7 +171,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				new String[]{Long.toString(latitude-window),Long.toString(latitude+window),
 						     Long.toString(longtitude-window), Long.toString(longtitude+window)});
 		c.moveToFirst();
-		int total=c.getCount();
 		while (!c.isAfterLast()) {
 			BusStation s=new BusStation(c.getString(3),c.getInt(1),c.getInt(2),c.getString(0), c.getString(4));
 			c.moveToNext();

@@ -192,7 +192,6 @@ public class StationsCycleHireFetcher extends NearbyStationsFetcher {
 											.parseInt(value));
 							}
 						} catch (Exception e) {
-							String s = e.toString();
 							e.printStackTrace();
 						}
 						if (csStation.isValid())
@@ -202,7 +201,6 @@ public class StationsCycleHireFetcher extends NearbyStationsFetcher {
 				}
 			} catch (Exception e) {
 				// This should never happen
-				String s = e.toString();
 				e.printStackTrace();
 			}
 			return result;
