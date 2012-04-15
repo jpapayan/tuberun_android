@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -324,8 +325,14 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		ArrayList<Favorite> favs=new ArrayList<Favorite>();
 		fetchBalance();
-		ArrayList<Favorite> favs = Favorite.getFavorites(this);
+		try {
+			favs = Favorite.getFavorites(this);
+		}
+		catch (Exception e) {
+			Log.w("Main",e);
+		}
 		favoritesButton.setChecked(favs.size() > 0);
 	}
 
