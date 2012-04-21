@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -12,6 +13,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -41,30 +43,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	 * database.
 	 * */
 	public void createDatabase() throws IOException {
+		synchronized (DatabaseHelper.class) {
+			boolean dbExist = checkDataBase();
 
-		boolean dbExist = checkDataBase();
-
-		if (dbExist) {
-			// do nothing - database already exist
-		} else {
-
-			// By calling this method and empty database will be created into
-			// the default system path
-			// of your application so we are gonna be able to overwrite that
-			// database with our database.
-			this.getReadableDatabase();
-
-			try {
-
+			if (!dbExist) {
+				// By calling this method and empty database will be created into
+				// the default system path
+				// of your application so we are gonna be able to overwrite that
+				// database with our database.
+				this.getReadableDatabase();
 				copyDataBase();
-
-			} catch (IOException e) {
-
-				throw new Error("Error copying database");
-
 			}
 		}
-
 	}
 
 	/**
@@ -74,26 +64,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	 * @return true if it exists, false if it doesn't
 	 */
 	private boolean checkDataBase() {
-
 		SQLiteDatabase checkDB = null;
-
 		try {
 			String myPath = DB_PATH + DB_NAME;
 			checkDB = SQLiteDatabase.openDatabase(myPath, null,
 					SQLiteDatabase.OPEN_READONLY);
 
 		} catch (SQLiteException e) {
-
 			// database does't exist yet.
-
 		}
-
 		if (checkDB != null) {
-
 			checkDB.close();
-
 		}
-
 		return checkDB != null ? true : false;
 	}
 
@@ -176,6 +158,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			c.moveToNext();
 			res.add(s);
 		}
+		return res;
+	}
+	
+	public HashMap<String,Integer> getLinesNearby (long latitude, long longtitude) {
+		HashMap<String,Integer> res = new HashMap<String,Integer>();
+		Location me=new Location("");
+		me.setLatitude(((double)latitude)/1000000);
+		me.setLongitude(((double)longtitude)/1000000);
+		long window=4000;
+		Cursor c=myDataBase.rawQuery(
+				"SELECT route, latitude, longtitude " +
+				"FROM buslines " +
+				"WHERE ?<latitude AND latitude<? AND ?<longtitude AND longtitude<?",
+				new String[]{Long.toString(latitude-window),Long.toString(latitude+window),
+						     Long.toString(longtitude-window), Long.toString(longtitude+window)});
+		c.moveToFirst();
+		while (!c.isAfterLast()) {
+			String route=c.getString(0);
+			Location l=new Location("");
+			l.setLongitude(((double)c.getLong(2))/1000000);
+			l.setLatitude(((double)c.getLong(1))/1000000);
+			int ndistance=(int)me.distanceTo(l);
+			if (res.containsKey(route)) {
+				int odistance=(int)res.get(route);
+				if (odistance>ndistance) {
+					res.put(route, ndistance);
+				}
+			}
+			else {
+				res.put(route, ndistance);
+			}
+			c.moveToNext();
+		}
+		return res;
+	}
+	
+	public ArrayList<ArrayList<BusStation>> getStopsForLine (String line) {
+		ArrayList<ArrayList<BusStation>> res=new ArrayList<ArrayList<BusStation>>(2);
+		ArrayList<BusStation> run1=new ArrayList<BusStation>();
+		ArrayList<BusStation> run2=new ArrayList<BusStation>();
+		Cursor c=myDataBase.rawQuery(
+				"SELECT run, stop_code, latitude, longtitude , stop_name "+
+				"FROM buslines " +
+				"WHERE route=? "+
+				"ORDER BY run, sequence",
+				new String[]{line});
+		c.moveToFirst();
+		while (!c.isAfterLast()) {
+			BusStation s=new BusStation(c.getString(4),c.getInt(2),c.getInt(3),c.getString(1));
+			if (c.getInt(0)==1) run1.add(s);
+			else run2.add(s);
+			c.moveToNext();
+		}
+		res.add(run1);
+		res.add(run2);
 		return res;
 	}
 

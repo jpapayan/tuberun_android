@@ -29,7 +29,7 @@ public abstract class Fetcher implements Serializable
         		cb.update();
         	}
         	catch (Exception e) {
-        		Log.w("Fethcer", e);
+        		Log.w("Fetcher", e);
         	}
         }
     }

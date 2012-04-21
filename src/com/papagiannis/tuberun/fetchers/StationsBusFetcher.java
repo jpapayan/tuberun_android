@@ -65,17 +65,15 @@ public class StationsBusFetcher extends Fetcher {
 			ArrayList<BusStation> res = new ArrayList<BusStation>();
 			try {
 				DatabaseHelper myDbHelper = new DatabaseHelper(context);
-				try {
-					myDbHelper.createDatabase();
-				} catch (IOException ioe) {
-					throw new Error("Unable to create Database");
-				}
+				myDbHelper.createDatabase();
 				myDbHelper.openDataBase();
 				res = myDbHelper.getStationsNearby((long) (at[0].getLatitude()*1000000), (long) (at[0].getLongitude()*1000000));
 				myDbHelper.close();
+			} catch (IOException ioe) {
+				throw new Error("Unable to create Database");
 			} catch (Exception e) {
 				String eee=e.toString();
-				Log.d("MINE",eee);
+				Log.d("StationsBusFetcher",eee);
 			}
 			return res;
 		}

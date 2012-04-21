@@ -1,21 +1,28 @@
 package com.papagiannis.tuberun;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import android.app.Activity;
+import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
+import com.papagiannis.tuberun.cyclehire.NearbyCyclesBinder;
 import com.papagiannis.tuberun.fetchers.LinesBusFetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
 
 public class NearbyBusLinesListFragment extends ListFragment implements
 		Observer {
-	LinesBusFetcher fetcher;
+	LinesBusFetcher fetcher=new LinesBusFetcher(getActivity());
 	boolean has_moved = false;
 	boolean has_moved_accurate = false;
 
-	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,10 +32,63 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 
 	public void locationChanged(Location l) {
 		lastKnownLocation = l;
+//		fetcher.abort();
+//		fetcher.deregisterCallback(this);
+//		fetcher=new LinesBusFetcher(getActivity());
+		fetcher.registerCallback(this);
+		fetcher.setLocation(l);
+		fetcher.update();
 	}
 
 	@Override
 	public void update() {
+		HashMap<String,Integer> routes=fetcher.getResult();
+		ArrayList<String> routesSorted=sortRoutes(routes);
+		to_display = new ArrayList<HashMap<String, Object>>();
+		
+		for (String s : routesSorted) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("name", s);
+			m.put("distance", routes.get(s));
+			m.put("point1", fetcher.getEndpoint1(s));
+			m.put("point2", fetcher.getEndpoint2(s));
+			to_display.add(m);
+		}
+		if (getActivity()==null) return;
+		updateList();
+	}
+
+	private void updateList() {
+		LayoutInflater mInflater= (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		SimpleAdapter adapter = new SimpleAdapter(getActivity(), to_display,
+				R.layout.nearby_buslines_status, new String[] { "name", "distance", "point1", "point2"},
+				new int[] { R.id.nearby_name, R.id.nearby_distance, R.id.point1_textview, R.id.point2_textview});
+		adapter.setViewBinder(new NearbyCyclesBinder(getActivity()));
+		setListAdapter(adapter);
+		to_display=new ArrayList<HashMap<String,Object>>();
+	}
+	
+	ArrayList<HashMap<String, Object>> to_display = new ArrayList<HashMap<String, Object>>();
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (to_display.size()>0) updateList();
+	}
+
+	private ArrayList<String> sortRoutes(HashMap<String, Integer> routes) {
+		ArrayList<String> res=new ArrayList<String>(routes.keySet());
+		//bubblesort
+		for (int i=0; i<res.size()-1; i++) {
+			for (int j=i+1; j<res.size(); j++) {
+				if (routes.get(res.get(i))>routes.get(res.get(j))) {
+					String tmp=res.get(i);
+					res.set(i, res.get(j));
+					res.set(j, tmp);
+				}
+			}
+		}
+		return res;
 	}
 
 	@Override
@@ -49,7 +109,10 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (fetcher!=null) fetcher.deregisterCallback(this);
+		if (fetcher!=null) {
+			fetcher.abort();
+			fetcher.deregisterCallback(this);
+		}
 	}
 
 }

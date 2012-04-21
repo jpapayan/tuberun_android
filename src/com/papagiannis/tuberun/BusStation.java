@@ -32,6 +32,11 @@ public class BusStation extends Station  {
 	public String getName() {
 		String res=name.charAt(0)+"";;
 		res+=name.substring(1).toLowerCase();
+		try {
+			String[] tokens=res.split("<>");
+			res=tokens[0];
+		}
+		catch (Exception e){}
 		return res;
 	}
 	

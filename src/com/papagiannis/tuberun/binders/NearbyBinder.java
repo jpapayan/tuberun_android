@@ -25,11 +25,11 @@ public class NearbyBinder implements ViewBinder, OnClickListener {
 	public boolean setViewValue(View view, Object o, String s) {
 
 		TextView tv = (TextView) view;
-		if (view.getId()==R.id.nearby_name || view.getId()==R.id.nearby_distance) {
+		if (view.getId()==R.id.nearby_tubename || view.getId()==R.id.nearby_tubedistance) {
 			tv.setVisibility(View.VISIBLE);
 			Typeface mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/transport.ttf");
 		    tv.setTypeface(mTypeface);
-			if (view.getId()==R.id.nearby_distance) {
+			if (view.getId()==R.id.nearby_tubedistance) {
 				int i=(Integer) o;
 				if (i>10000) {
 					i=(i/1000);

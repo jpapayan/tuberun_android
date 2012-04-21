@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -33,6 +34,12 @@ public class NearbyStationsListFragment extends ListFragment implements
 		fetcher.registerCallback(this);
 	}
 
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+	}
+	
 	Location lastKnownLocation;
 
 	public void locationChanged(Location l) {
@@ -97,7 +104,7 @@ public class NearbyStationsListFragment extends ListFragment implements
 						LinePresentation.getStringRespresentation(LineType.PICACIDILY), 
 						LinePresentation.getStringRespresentation(LineType.VICTORIA),
 						LinePresentation.getStringRespresentation(LineType.WATERLOO) },
-				new int[] { R.id.nearby_name, R.id.nearby_distance,
+				new int[] { R.id.nearby_tubename, R.id.nearby_tubedistance,
 						R.id.nearby_Bakerloo, R.id.nearby_Central,
 						R.id.nearby_Circle, R.id.nearby_District,
 						R.id.nearby_DLR, R.id.nearby_Hammersmith,

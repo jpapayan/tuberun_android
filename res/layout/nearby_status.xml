@@ -13,7 +13,7 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:id="@+id/nearby_name"
+            android:id="@+id/nearby_tubename"
             style="@style/WhiteText"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         </TextView>
 
         <TextView
-            android:id="@+id/nearby_distance"
+            android:id="@+id/nearby_tubedistance"
             style="@style/WhiteText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
