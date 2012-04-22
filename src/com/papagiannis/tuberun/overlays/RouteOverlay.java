@@ -12,26 +12,24 @@ import com.google.android.maps.Projection;
 public class RouteOverlay extends Overlay {
 	private GeoPoint gp1;
 	private GeoPoint gp2;
-	private int color;
+	Paint paint = new Paint();
+	Point point = new Point();
+	Point point2 = new Point();
+	
 
 	public RouteOverlay(GeoPoint gp1, GeoPoint gp2, int color) {
 		this.gp1 = gp1;
 		this.gp2 = gp2;
-		this.color = color;
+		paint.setAntiAlias(true);
+		paint.setColor(color);
+		paint.setStrokeWidth(8);
 	}
 	
 	@Override
 	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-	    Projection projection = mapView.getProjection();
-	    Paint paint = new Paint();
-	    paint.setAntiAlias(true);
-	    Point point = new Point();
+		Projection projection = mapView.getProjection();
 	    projection.toPixels(gp1, point);
-	    paint.setColor(color);
-	    Point point2 = new Point();
 	    projection.toPixels(gp2, point2);
-	    paint.setStrokeWidth(8);
-//	    paint.setAlpha(120);
 	    canvas.drawLine(point.x, point.y, point2.x, point2.y, paint);
 	    super.draw(canvas, mapView, shadow);
 	}

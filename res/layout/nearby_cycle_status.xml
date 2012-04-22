@@ -42,7 +42,7 @@
 
     
     <LinearLayout
-        android:layout_width="200dip"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dip"
         android:layout_marginLeft="20dip"
@@ -52,7 +52,7 @@
         <TextView
             android:id="@+id/available_bikes_textview"
             style="@style/WhiteText"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:text="Available bikes:"
@@ -62,7 +62,7 @@
         <TextView
             android:id="@+id/empty_docks_textview"
             style="@style/WhiteText"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:text="Empty docks:"

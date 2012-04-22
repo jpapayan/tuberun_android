@@ -63,7 +63,7 @@ public class LinesBusFetcher extends Fetcher {
 
 		@Override
 		protected HashMap<String,Integer> doInBackground(Location... at) {
-			android.os.Debug.waitForDebugger();
+//			android.os.Debug.waitForDebugger();
 			HashMap<String,Integer> res = new HashMap<String,Integer>();
 			DatabaseHelper myDbHelper = new DatabaseHelper(context);
 			try {

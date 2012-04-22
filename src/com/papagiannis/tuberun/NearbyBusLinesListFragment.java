@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -22,6 +21,9 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 	LinesBusFetcher fetcher=new LinesBusFetcher(getActivity());
 	boolean has_moved = false;
 	boolean has_moved_accurate = false;
+	
+	ArrayList<String> routesSorted=new ArrayList<String>();
+	ArrayList<HashMap<String, Object>> to_display = new ArrayList<HashMap<String, Object>>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,9 +34,6 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 
 	public void locationChanged(Location l) {
 		lastKnownLocation = l;
-//		fetcher.abort();
-//		fetcher.deregisterCallback(this);
-//		fetcher=new LinesBusFetcher(getActivity());
 		fetcher.registerCallback(this);
 		fetcher.setLocation(l);
 		fetcher.update();
@@ -43,7 +42,7 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 	@Override
 	public void update() {
 		HashMap<String,Integer> routes=fetcher.getResult();
-		ArrayList<String> routesSorted=sortRoutes(routes);
+		routesSorted=sortRoutes(routes);
 		to_display = new ArrayList<HashMap<String, Object>>();
 		
 		for (String s : routesSorted) {
@@ -59,7 +58,6 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 	}
 
 	private void updateList() {
-		LayoutInflater mInflater= (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		SimpleAdapter adapter = new SimpleAdapter(getActivity(), to_display,
 				R.layout.nearby_buslines_status, new String[] { "name", "distance", "point1", "point2"},
 				new int[] { R.id.nearby_name, R.id.nearby_distance, R.id.point1_textview, R.id.point2_textview});
@@ -67,8 +65,6 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 		setListAdapter(adapter);
 		to_display=new ArrayList<HashMap<String,Object>>();
 	}
-	
-	ArrayList<HashMap<String, Object>> to_display = new ArrayList<HashMap<String, Object>>();
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -93,6 +89,23 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
+		if (routesSorted.size()>position) {
+			Intent i=new Intent(getActivity(), NearbyMapActivity.class);
+	    	ArrayList<String> al=new ArrayList<String>();
+	    	al.add(routesSorted.get(position));
+	    	i.putExtra("type", "bus");
+	    	i.putExtra("routes", al);
+	    	i.putExtra("point1", fetcher.getEndpoint1(al.get(0)));
+	    	i.putExtra("point2", fetcher.getEndpoint2(al.get(0)));
+			startActivity(i);
+		}
+	}
+	
+	public void showAllInMap() {
+		Intent i=new Intent(getActivity(), NearbyMapActivity.class);
+    	i.putExtra("type", "bus");
+    	i.putExtra("routes", routesSorted);
+		startActivity(i);
 	}
 	
 	@Override

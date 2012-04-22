@@ -34,12 +34,6 @@ public class NearbyStationsListFragment extends ListFragment implements
 		fetcher.registerCallback(this);
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
-		super.onAttach(activity);
-	}
-	
 	Location lastKnownLocation;
 
 	public void locationChanged(Location l) {
@@ -131,6 +125,10 @@ public class NearbyStationsListFragment extends ListFragment implements
 		} catch (Exception e) {
 
 		}
+	}
+	
+	public void showAllInMap() {
+		
 	}
 	
 	@Override

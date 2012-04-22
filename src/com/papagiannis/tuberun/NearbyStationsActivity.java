@@ -47,6 +47,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 	TextView location_accuracy_textview;
 	Button back_button;
 	Button logo_button;
+	Button map_button;
 	TextView title_textview;
 
 	@Override
@@ -59,6 +60,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 		title_textview = (TextView) findViewById(R.id.title_textview);
 		back_button = (Button) findViewById(R.id.back_button);
 		logo_button = (Button) findViewById(R.id.logo_button);
+		map_button = (Button) findViewById(R.id.map_button);
 		mTabHost = (TabHost) findViewById(android.R.id.tabhost);
 		mTabHost.setup();
 
@@ -118,11 +120,29 @@ public class NearbyStationsActivity extends FragmentActivity implements
 				self.finish();
 			}
 		};
-		// mainmenu_layout.setOnClickListener(back_listener);
 		back_button.setOnClickListener(back_listener);
 		logo_button.setOnClickListener(back_listener);
-		// title_textview.setOnClickListener(back_listener);
+		
+		map_button.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				int t=mTabHost.getCurrentTab();
+				switch (t) {
+					case 0:
+						undergroundFragment.showAllInMap();
+						break;
+					case 1:
+						cycleFragment.showAllInMap();
+						break;
+					case 2:
+						busesFragment.showAllInMap();
+						break;
+				}
+			}
+		});
 
+		
 		locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
 	}

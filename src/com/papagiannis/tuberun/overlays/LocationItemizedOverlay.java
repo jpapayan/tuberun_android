@@ -14,7 +14,7 @@ public class LocationItemizedOverlay<T extends OverlayItem> extends ItemizedOver
 	protected Context mContext;
 	
 	public LocationItemizedOverlay(Drawable defaultMarker) {
-		super(defaultMarker);
+		super(boundCenterBottom(defaultMarker));
 	}
 	
 	public ArrayList<GeoPoint> getPoints() {

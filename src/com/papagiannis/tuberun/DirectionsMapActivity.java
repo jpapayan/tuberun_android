@@ -42,7 +42,7 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 			int longtitude = (Integer) extras.get("user_longtitude");
 			int latitude = (Integer) extras.get("user_latitude");
 			GeoPoint me = new GeoPoint(latitude, longtitude);
-			GeoPoint to = new GeoPoint(st.getLatitude(), st.getLongtitude());
+			GeoPoint to = new GeoPoint(st.getLatitudeE6(), st.getLongtitudeE6());
 			Location l = new Location("");
 			l.setLongitude(longtitude / (double) 1000000);
 			l.setLatitude(latitude / (double) 1000000);

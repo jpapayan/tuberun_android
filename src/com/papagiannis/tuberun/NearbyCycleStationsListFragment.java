@@ -120,6 +120,10 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 		}
 	}
 	
+	public void showAllInMap() {
+		
+	}
+	
 //	public void showToast() {
 //		String msg="Barclays Cycle Hire availability data is updated by TfL in 3min intervals";
 //		Toast toast = Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG);

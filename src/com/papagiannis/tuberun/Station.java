@@ -27,12 +27,6 @@ public class Station  {
 	}
 	protected int longtitude;
 	protected int latitude;
-	public int getLatitude() {
-		return latitude;
-	}
-	public int getLongtitude() {
-		return longtitude;
-	}
 
 	public Station setLongtitude(int longtitude) {
 		this.longtitude = longtitude;
@@ -59,6 +53,14 @@ public class Station  {
 		l.setLongitude(((double)longtitude)/1000000);
 		l.setLatitude(((double)latitude)/1000000);
 		return l;
+	}
+	
+	public int getLongtitudeE6() {
+		return longtitude;
+	}
+	
+	public int getLatitudeE6() {
+		return latitude;
 	}
 
 	@Override

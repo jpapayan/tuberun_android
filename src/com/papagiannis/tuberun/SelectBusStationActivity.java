@@ -133,7 +133,7 @@ public class SelectBusStationActivity extends MeMapActivity implements  Location
 	        BusStationsOverlay<OverlayItem> itemizedoverlay = new BusStationsOverlay<OverlayItem>(drawable, this);
 	        
 	        for (BusStation s: result){
-	        	 GeoPoint point = new GeoPoint(s.getLatitude(),s.getLongtitude());
+	        	 GeoPoint point = new GeoPoint(s.getLatitudeE6(),s.getLongtitudeE6());
 	             OverlayItem overlayitem = new OverlayItem(point, s.getCode(), s.getName()+" (moving "+s.getHeading()+")");
 	             itemizedoverlay.addOverlay(overlayitem);
 	        }

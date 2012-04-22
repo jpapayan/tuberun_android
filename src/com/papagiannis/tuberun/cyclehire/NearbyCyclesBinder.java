@@ -28,9 +28,11 @@ public class NearbyCyclesBinder implements ViewBinder, OnClickListener {
 		tv.setTypeface(mTypeface);
 		switch (id) {
 		case R.id.available_bikes_textview:
+			tv.setBackgroundColor(s.equals("0")?0xFFFF0000:0x00FFFFFF);
 			tv.setText("Available bikes: "+s);
 			return true;
 		case R.id.empty_docks_textview:
+			tv.setBackgroundColor(s.equals("0")?0xFFFF0000:0x00FFFFFF);
 			tv.setText("Empty docks: "+s);
 			return true;
 		case R.id.total_bikes_textview:

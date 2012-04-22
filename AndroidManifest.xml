@@ -188,6 +188,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".NearbyMapActivity"
+            android:windowSoftInputMode="stateUnchanged"
+            android:screenOrientation="nosensor" 
+            android:configChanges="keyboardHidden|orientation" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".AboutActivity"
             android:windowSoftInputMode="stateUnchanged"
             android:screenOrientation="nosensor" 
