@@ -86,6 +86,20 @@
             android:apiKey="0dl-DOBdbuArzbkNHPavhZ3AXr8F0oiQK18i5HA"
             android:clickable="true" />
         
+        <LinearLayout 
+            android:id="@+id/key_layout"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:layout_marginLeft="15dip"
+            android:layout_marginTop="15dip"
+            android:padding="5dip"
+            android:minWidth="0dip"
+            android:minHeight="0dip"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:background="@drawable/tuberun_semitransparent"/>
+        
         <Button 
             android:id="@+id/mylocation_button"
             android:layout_width="wrap_content" 

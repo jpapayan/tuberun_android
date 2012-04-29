@@ -65,6 +65,7 @@ public class RoutesBusFetcher extends Fetcher {
 
 		private HashMap<String, ArrayList<ArrayList<BusStation>>> result = new HashMap<String, ArrayList<ArrayList<BusStation>>>();
 		private ArrayList<Overlay> resultOverlays=new ArrayList<Overlay>();
+		private HashMap<String, Integer> resultColors=new HashMap<String, Integer>();
 		Context context;
 
 		public GetRoutesTask(Context c) {
@@ -112,6 +113,7 @@ public class RoutesBusFetcher extends Fetcher {
 			Drawable dw=context.getResources().getDrawable(R.drawable.buses);
 			stopsOverlay=new ZoomingBusStationsOverlay<OverlayItem>(dw);
 			int color=0;
+			int strokeWidth= (routes.size()==1) ? 8 : 5+routes.size()/2;
 			for (String route:routes) {
 				ArrayList<ArrayList<BusStation>> directions = getRouteStops(route);
 				ArrayList<BusStation> stops = directions.get(direction); 
@@ -122,7 +124,8 @@ public class RoutesBusFetcher extends Fetcher {
 					GeoPoint fromGP=new GeoPoint( stop1.getLatitudeE6(), stop1.getLongtitudeE6() );
 					GeoPoint toGP = new GeoPoint( stop2.getLatitudeE6(), stop2.getLongtitudeE6() );
 					
-					overlays.add(new RouteOverlay(fromGP, toGP ,colors[color%colors.length]));
+					overlays.add(new RouteOverlay(fromGP, toGP ,colors[color%colors.length], strokeWidth));
+					if (i==1) resultColors.put(route, colors[color%colors.length]);
 					
 					if (routes.size()==1) {
 						stopsOverlay.addOverlay(addBusStopPushPin(stop1));
@@ -137,12 +140,17 @@ public class RoutesBusFetcher extends Fetcher {
 				}
 				overlays.add(stopsOverlay);
 				color++;
+				if (color%2==0) strokeWidth--;
 			}
 			return overlays;
 		}
 		
 		public ArrayList<Overlay> getResultOverlays() {
 			return overlays;
+		}
+		
+		public HashMap<String, Integer> getResultLineColors() {
+			return resultColors;
 		}
 		
 		private OverlayItem addBusStopPushPin(BusStation bs) {
@@ -170,6 +178,9 @@ public class RoutesBusFetcher extends Fetcher {
 		return o;
 	}
 	
+	public HashMap<String, Integer> getResultColors() {
+		return task.getResultLineColors();
+	}
 
 	public void abort() {
 		if (task != null)

@@ -1,14 +1,22 @@
 package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.view.ViewGroup.LayoutParams;
 
 import com.google.android.maps.MapController;
 import com.google.android.maps.Overlay;
@@ -20,6 +28,7 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 	private static final int WAIT_DIALOG=-2;
 	MapController mapController;
 	final NearbyMapActivity self=this;
+	private LinearLayout keyLayout;
 	
 	private String type="";
 	//when type==bus
@@ -32,6 +41,7 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		keyLayout=(LinearLayout) findViewById(R.id.key_layout);
 
 		try {
 			Bundle extras = getIntent().getExtras();
@@ -84,10 +94,36 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 		for (Overlay o:busFetcher.getOverlays()) {
 			mapOverlays.add(o);
 		}
+		generateKey(busFetcher.getResultColors());
 		animateToWithOverlays(null);
 		mapView.invalidate();
 	}
 	
+
+	private void generateKey(HashMap<String, Integer> resultColors) {
+		for (String route:routes) {
+			LinearLayout ll=new LinearLayout(this);
+			ll.setOrientation(LinearLayout.HORIZONTAL);
+			
+			ImageView iv=new ImageView(this);
+			iv.setBackgroundColor(resultColors.get(route));
+			LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(30,8);
+			params.gravity=Gravity.CENTER_VERTICAL;
+			params.rightMargin=5;
+			iv.setLayoutParams(params);
+			
+			TextView tv=new TextView(this);
+			tv.setText(route);
+			tv.setTextColor(Color.WHITE);
+			tv.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+			
+			ll.addView(iv);
+			ll.addView(tv);
+			keyLayout.addView(ll);
+		}
+		keyLayout.setVisibility(View.VISIBLE);
+	}
+
 
 	private Dialog wait_dialog;
 
@@ -95,7 +131,7 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 			case SELECT_DIRECTION_DIALOG:
-				String[] items = {point1, point2};
+				String[] items = {point2, point1};
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setTitle("Pick a direction");
 				builder.setItems(items, new DialogInterface.OnClickListener() {

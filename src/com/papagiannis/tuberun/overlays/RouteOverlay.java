@@ -22,7 +22,11 @@ public class RouteOverlay extends Overlay {
 		this.gp2 = gp2;
 		paint.setAntiAlias(true);
 		paint.setColor(color);
-		paint.setStrokeWidth(8);
+	}
+	
+	public RouteOverlay(GeoPoint gp1, GeoPoint gp2, int color, int strokeWidth) {
+		this(gp1, gp2, color);
+		paint.setStrokeWidth(strokeWidth);
 	}
 	
 	@Override

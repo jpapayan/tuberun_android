@@ -178,8 +178,8 @@ public class NearbyStationsActivity extends FragmentActivity implements
 			lastKnownLocation = l;
 			reverseGeocode(lastKnownLocation);
 			undergroundFragment.locationChanged(lastKnownLocation);
-			cycleFragment.locationChanged(lastKnownLocation);
 			busesFragment.locationChanged(lastKnownLocation);
+			cycleFragment.locationChanged(lastKnownLocation);
 		}
 	}
 
