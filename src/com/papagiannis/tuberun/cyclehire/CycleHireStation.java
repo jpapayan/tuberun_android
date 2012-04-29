@@ -3,7 +3,7 @@ package com.papagiannis.tuberun.cyclehire;
 import com.papagiannis.tuberun.Station;
 
 public class CycleHireStation extends Station {
-
+	private static final long serialVersionUID = 1L;
 	private int id=0;
 	private boolean installed=false;
 	private boolean locked=false;;

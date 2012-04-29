@@ -2,13 +2,17 @@ package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,10 +21,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
+import com.papagiannis.tuberun.cyclehire.CycleHireStation;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.RoutesBusFetcher;
+import com.papagiannis.tuberun.overlays.HereOverlay;
 
 public class NearbyMapActivity extends MeMapActivity implements Observer {
 	private static final int SELECT_DIRECTION_DIALOG=-1;
@@ -34,6 +42,8 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 	String point1=null;
 	String point2=null;
 	ArrayList<String> routes=new ArrayList<String>();
+	ArrayList<Station> tubeStations=new ArrayList<Station>();
+	ArrayList<CycleHireStation> csStations=new ArrayList<CycleHireStation>();
 	RoutesBusFetcher busFetcher=new RoutesBusFetcher(this);
 
 	@SuppressWarnings("unchecked")
@@ -50,6 +60,14 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 				point1 = extras.getString("point1");
 				point2 = extras.getString("point2");
 				askForDirection();
+			}
+			else if (type.equals("tube")) {
+				tubeStations = (ArrayList<Station>) extras.get("stations");
+				showTubePushPins();
+			}
+			else if (type.equals("cyclehire")) {
+				csStations = (ArrayList<CycleHireStation>) extras.get("stations");
+				showCycleHirePushPins();
 			}
 		} catch (Exception e) {
 			Log.w("Directions",e);
@@ -122,6 +140,61 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 		keyLayout.setVisibility(View.VISIBLE);
 	}
 
+	private void showTubePushPins() {
+		for (Station s : tubeStations) {
+			LinearLayout ll=generateLayout();
+			List<LineType> lines = StationDetails.FetchLinesForStationWikipedia(s.getName());
+			for (LineType lt : lines) {
+				String line = LinePresentation.getStringRespresentation(lt);
+				TextView tv=new TextView(this);
+				tv.setText(line);
+				tv.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
+				tv.setTextColor(LinePresentation.getForegroundColor(lt));
+				ll.addView(tv);
+			}
+			ll.setDrawingCacheEnabled(true);
+			ll.buildDrawingCache();
+			Bitmap bm = ll.getDrawingCache();
+			Drawable d=(bm!=null)?new BitmapDrawable(getResources(), bm):this.getResources().getDrawable(R.drawable.tube); 
+			HereOverlay<OverlayItem> overlay = new HereOverlay<OverlayItem>(d, this);
+			
+			GeoPoint gp = new GeoPoint(s.getLatitudeE6(), s.getLongtitudeE6());
+			OverlayItem overlayitem = new OverlayItem(gp,
+					s.getName(),
+					StationDetails.FetchLinesForStationWikipedia(s.getName()).toString());
+			overlay.addOverlay(overlayitem);
+			mapOverlays.add(overlay);
+		}
+		mapView.invalidate();
+		animateToWithOverlays(null);
+	}
+	
+	private void showCycleHirePushPins() {
+		for (CycleHireStation s : csStations) {
+			Drawable d=this.getResources().getDrawable(R.drawable.cycle_hire_pushpin); 
+			HereOverlay<OverlayItem> overlay = new HereOverlay<OverlayItem>(d, this);
+			
+			GeoPoint gp = new GeoPoint(s.getLatitudeE6(), s.getLongtitudeE6());
+			OverlayItem overlayitem = new OverlayItem(gp,
+					s.getName(),
+					"Available Bikes: "+s.getnAvailableBikes()+"\n"+
+					"Available Docks: "+s.getnEmptyDocks());
+			overlay.addOverlay(overlayitem);
+			mapOverlays.add(overlay);
+		}
+		mapView.invalidate();
+		animateToWithOverlays(null);
+	}
+
+	private LinearLayout generateLayout() {
+		LinearLayout ll=new LinearLayout(this);
+		ll.setOrientation(LinearLayout.VERTICAL);
+		ImageView iv=new ImageView(this);
+		Drawable drawable=this.getResources().getDrawable(R.drawable.tube);
+		iv.setBackgroundDrawable(drawable);
+		ll.addView(iv);
+		return ll;
+	}
 
 	private Dialog wait_dialog;
 

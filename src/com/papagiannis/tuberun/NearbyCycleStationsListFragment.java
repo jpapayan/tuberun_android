@@ -121,7 +121,12 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 	}
 	
 	public void showAllInMap() {
-		
+		if (stations_nearby.size()>0) {
+			Intent i=new Intent(getActivity(), NearbyMapActivity.class);
+    		i.putExtra("type", "cyclehire");
+    		i.putExtra("stations", stations_nearby);
+			startActivity(i);
+		}
 	}
 	
 //	public void showToast() {

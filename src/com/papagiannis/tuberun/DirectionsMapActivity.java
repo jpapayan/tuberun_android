@@ -117,7 +117,7 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 		ArrayList<GeoPoint> points = fetcher.getPoints();
 		for (int i = 1; i < points.size(); i++) {
 			mapOverlays.add(new RouteOverlay(points.get(i - 1), points.get(i),
-					Color.BLUE));
+					Color.BLUE,8));
 		}
 		animateToWithOverlays(null);
 		mapView.invalidate();

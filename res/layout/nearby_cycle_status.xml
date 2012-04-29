@@ -56,7 +56,9 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:text="Available bikes:"
-            android:textSize="16sp" >
+            android:textSize="16sp"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip" >
         </TextView>
 
         <TextView
@@ -66,7 +68,9 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:text="Empty docks:"
-            android:textSize="16sp" >
+            android:textSize="16sp"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip" >
         </TextView>
 
         <TextView

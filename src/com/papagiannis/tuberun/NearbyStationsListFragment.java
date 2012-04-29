@@ -46,7 +46,7 @@ public class NearbyStationsListFragment extends ListFragment implements
 		fetcher.update();
 	}
 
-	ArrayList<Station> stations_nearby;
+	ArrayList<Station> stations_nearby=new ArrayList<Station>();
 	ArrayList<BusStation> prev_result = new ArrayList<BusStation>();
 
 	/**
@@ -128,7 +128,12 @@ public class NearbyStationsListFragment extends ListFragment implements
 	}
 	
 	public void showAllInMap() {
-		
+		if (stations_nearby.size()>0) {
+			Intent i=new Intent(getActivity(), NearbyMapActivity.class);
+    		i.putExtra("type", "tube");
+    		i.putExtra("stations", stations_nearby);
+			startActivity(i);
+		}
 	}
 	
 	@Override

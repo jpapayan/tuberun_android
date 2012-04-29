@@ -102,10 +102,12 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 	}
 	
 	public void showAllInMap() {
-		Intent i=new Intent(getActivity(), NearbyMapActivity.class);
-    	i.putExtra("type", "bus");
-    	i.putExtra("routes", routesSorted);
-		startActivity(i);
+		if (routesSorted.size()>0) {
+			Intent i=new Intent(getActivity(), NearbyMapActivity.class);
+    		i.putExtra("type", "bus");
+    		i.putExtra("routes", routesSorted);
+			startActivity(i);
+		}
 	}
 	
 	@Override

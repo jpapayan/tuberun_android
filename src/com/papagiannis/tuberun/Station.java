@@ -1,8 +1,11 @@
 package com.papagiannis.tuberun;
 
+import java.io.Serializable;
+
 import android.location.Location;
 
-public class Station  {
+public class Station  implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
 	public Station() {
 		
