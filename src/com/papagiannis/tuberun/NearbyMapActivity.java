@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.view.ViewGroup.LayoutParams;
 
 import com.google.android.maps.MapController;
 import com.google.android.maps.Overlay;
@@ -74,7 +73,6 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 	}
 	
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public void update() {
 		displayRoute = true;
@@ -149,7 +147,10 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 				return wait_dialog;
 			case WAIT_DIALOG:
 				String msg="";
-				if (isBus()) msg="Fetching bus route";
+				if (isBus()) {
+					msg="Fetching bus route";
+					if (routes.size()>1) msg+="s";
+				}
 				wait_dialog = ProgressDialog.show(this, msg,"Please wait...", true);
 				wait_dialog.setCancelable(true);
 				wait_dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -173,7 +174,6 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 		return displayRoute;
 	}
 
-	
 	private boolean isBus() {
 		return type.equals("bus");
 	}

@@ -1,8 +1,11 @@
 package com.papagiannis.tuberun.overlays;
 
+import java.util.ArrayList;
+
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.location.Location;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -36,5 +39,12 @@ public class RouteOverlay extends Overlay {
 	    projection.toPixels(gp2, point2);
 	    canvas.drawLine(point.x, point.y, point2.x, point2.y, paint);
 	    super.draw(canvas, mapView, shadow);
+	}
+	
+	public Iterable<GeoPoint> getPoints() {
+		ArrayList<GeoPoint> a=new ArrayList<GeoPoint>();
+		a.add(gp1);
+		a.add(gp2);
+		return a;
 	}
 }

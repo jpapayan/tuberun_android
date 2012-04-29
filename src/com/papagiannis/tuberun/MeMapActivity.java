@@ -1,5 +1,6 @@
 package com.papagiannis.tuberun;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.papagiannis.tuberun.overlays.HereOverlay;
 import com.papagiannis.tuberun.overlays.LocationItemizedOverlay;
+import com.papagiannis.tuberun.overlays.RouteOverlay;
 
 /*
  * A MapActivity that always shows the user's location
@@ -159,6 +161,7 @@ public abstract class MeMapActivity extends MapActivity implements
 	}
 
 
+	@SuppressWarnings("unchecked")
 	protected void animateToWithOverlays(GeoPoint animateTarget) {
 		int minLat = Integer.MAX_VALUE;
 		int maxLat = Integer.MIN_VALUE;
@@ -167,9 +170,16 @@ public abstract class MeMapActivity extends MapActivity implements
 
 		for (Overlay overlay : mapOverlays) {
 			try {
-				@SuppressWarnings("unchecked")
-				LocationItemizedOverlay<OverlayItem> lo = (LocationItemizedOverlay<OverlayItem>) overlay;
-				for (GeoPoint gp : lo.getPoints()) {
+				Iterable<GeoPoint> points=new ArrayList<GeoPoint>();
+				if (overlay instanceof RouteOverlay) {
+					RouteOverlay ro=(RouteOverlay)overlay;
+					points=ro.getPoints();
+				}
+				else if (overlay instanceof LocationItemizedOverlay) {
+					LocationItemizedOverlay<OverlayItem> lo = (LocationItemizedOverlay<OverlayItem>) overlay;
+					points=lo.getPoints();
+				}
+				for (GeoPoint gp : points) {
 					int lat = gp.getLatitudeE6();
 					int lon = gp.getLongitudeE6();
 

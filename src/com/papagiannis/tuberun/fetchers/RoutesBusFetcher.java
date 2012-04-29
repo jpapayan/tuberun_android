@@ -104,7 +104,7 @@ public class RoutesBusFetcher extends Fetcher {
 		
 		private ArrayList<Overlay> overlays;
 		private final int[] colors=new int[]{Color.RED, Color.BLUE, Color.BLACK, 
-				Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.CYAN, 
+				Color.argb(255, 0, 127, 14), Color.MAGENTA, Color.YELLOW, Color.CYAN, 
 				Color.DKGRAY, Color.GRAY, Color.LTGRAY, Color.WHITE};
 
 		private ZoomingBusStationsOverlay<OverlayItem> stopsOverlay;
@@ -131,14 +131,14 @@ public class RoutesBusFetcher extends Fetcher {
 						stopsOverlay.addOverlay(addBusStopPushPin(stop1));
 						if (stops.size()-1==i) stopsOverlay.addOverlay(addBusStopPushPin(stop2));
 					}
-					else if (i==0) {
-						stopsOverlay.addOverlay(addBusStopPushPin(stop1));
-					}
-					else if (i==stops.size()-1) {
-						stopsOverlay.addOverlay(addBusStopPushPin(stop2));
-					}
+//					else if (i==0) {
+//						stopsOverlay.addOverlay(addBusStopPushPin(stop1));
+//					}
+//					else if (i==stops.size()-1) {
+//						stopsOverlay.addOverlay(addBusStopPushPin(stop2));
+//					}
 				}
-				overlays.add(stopsOverlay);
+				if (stopsOverlay.size()>0) overlays.add(stopsOverlay);
 				color++;
 				if (color%2==0) strokeWidth--;
 			}
