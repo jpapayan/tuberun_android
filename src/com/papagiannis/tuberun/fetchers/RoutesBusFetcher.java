@@ -111,7 +111,7 @@ public class RoutesBusFetcher extends Fetcher {
 		public ArrayList<Overlay> generateOverlays() {
 			overlays=new ArrayList<Overlay>();
 			Drawable dw=context.getResources().getDrawable(R.drawable.buses);
-			stopsOverlay=new ZoomingBusStationsOverlay<OverlayItem>(dw);
+			stopsOverlay=new ZoomingBusStationsOverlay<OverlayItem>(dw, context);
 			int color=0;
 			int strokeWidth= (routes.size()==1) ? 8 : 5+routes.size()/2;
 			for (String route:routes) {
@@ -129,16 +129,14 @@ public class RoutesBusFetcher extends Fetcher {
 					
 					if (routes.size()==1) {
 						stopsOverlay.addOverlay(addBusStopPushPin(stop1));
-						if (stops.size()-1==i) stopsOverlay.addOverlay(addBusStopPushPin(stop2));
+						if (stops.size()-1==i) { 
+							stopsOverlay.addOverlay(addBusStopPushPin(stop2));
+						}
 					}
-//					else if (i==0) {
-//						stopsOverlay.addOverlay(addBusStopPushPin(stop1));
-//					}
-//					else if (i==stops.size()-1) {
-//						stopsOverlay.addOverlay(addBusStopPushPin(stop2));
-//					}
 				}
-				if (stopsOverlay.size()>0) overlays.add(stopsOverlay);
+				if (stopsOverlay.size()>0) {
+					overlays.add(stopsOverlay);
+				}
 				color++;
 				if (color%2==0) strokeWidth--;
 			}
@@ -156,7 +154,7 @@ public class RoutesBusFetcher extends Fetcher {
 		private OverlayItem addBusStopPushPin(BusStation bs) {
 			Location l=bs.getLocation();
 			GeoPoint point = new GeoPoint((int) (l.getLatitude() * 1000000),(int) (l.getLongitude() * 1000000));
-			return new OverlayItem(point, bs.getName(), bs.getCode());
+			return new OverlayItem(point, bs.getCode(), bs.getName());
 		}
 		
 		@Override

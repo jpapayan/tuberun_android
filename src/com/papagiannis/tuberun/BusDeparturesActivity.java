@@ -84,7 +84,7 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
         
         ToggleButton favButton = (ToggleButton) findViewById(R.id.add_favorite);
         DeparturesFavorite fav=new  DeparturesFavorite(LineType.BUSES,new BusDeparturesFetcher(code,name));
-		fav.setIdentification(name);
+		fav.setIdentification(code);
 		favButton.setChecked(Favorite.isFavorite(fav));
         favButton.setOnClickListener(this);
     }
@@ -132,12 +132,12 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 		ToggleButton tb=(ToggleButton)v;
 		if (tb.isChecked()) {
 			DeparturesFavorite fav=new  DeparturesFavorite(LineType.BUSES,new BusDeparturesFetcher(code,name));
-			fav.setIdentification(name);
+			fav.setIdentification(code);
 			Favorite.addFavorite(fav, this);
 		}
 		else {
 			DeparturesFavorite fav=new  DeparturesFavorite(LineType.BUSES,new BusDeparturesFetcher(code,name));
-			fav.setIdentification(name);
+			fav.setIdentification(code);
 			Favorite.removeFavorite(fav, this);
 		}
 	}

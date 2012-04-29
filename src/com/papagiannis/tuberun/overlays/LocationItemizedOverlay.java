@@ -40,4 +40,8 @@ public class LocationItemizedOverlay<T extends OverlayItem> extends ItemizedOver
 	    populate();
 	}
 	
+	public void populateNow() {
+		populate();
+	}
+	
 }
