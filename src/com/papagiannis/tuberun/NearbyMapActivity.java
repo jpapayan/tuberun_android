@@ -10,10 +10,12 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager.LayoutParams;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -142,26 +144,20 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 
 	private void showTubePushPins() {
 		for (Station s : tubeStations) {
-			LinearLayout ll=generateLayout();
 			List<LineType> lines = StationDetails.FetchLinesForStationWikipedia(s.getName());
-			for (LineType lt : lines) {
-				String line = LinePresentation.getStringRespresentation(lt);
-				TextView tv=new TextView(this);
-				tv.setText(line);
-				tv.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
-				tv.setTextColor(LinePresentation.getForegroundColor(lt));
-				ll.addView(tv);
-			}
-			ll.setDrawingCacheEnabled(true);
-			ll.buildDrawingCache();
-			Bitmap bm = ll.getDrawingCache();
-			Drawable d=(bm!=null)?new BitmapDrawable(getResources(), bm):this.getResources().getDrawable(R.drawable.tube); 
+			Drawable d=this.getResources().getDrawable(R.drawable.tube); 
 			HereOverlay<OverlayItem> overlay = new HereOverlay<OverlayItem>(d, this);
 			
 			GeoPoint gp = new GeoPoint(s.getLatitudeE6(), s.getLongtitudeE6());
-			OverlayItem overlayitem = new OverlayItem(gp,
-					s.getName(),
-					StationDetails.FetchLinesForStationWikipedia(s.getName()).toString());
+			StringBuffer sb=new StringBuffer();
+			for (LineType lt :lines) {
+				sb.append(LinePresentation.getStringRespresentation(lt));
+				sb.append(" ");
+				sb.append("Line");
+				sb.append("\n");
+			}
+			sb.setCharAt(sb.length()-1, ' ');
+			OverlayItem overlayitem = new OverlayItem(gp,s.getName(),sb.toString());
 			overlay.addOverlay(overlayitem);
 			mapOverlays.add(overlay);
 		}
@@ -189,10 +185,13 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 	private LinearLayout generateLayout() {
 		LinearLayout ll=new LinearLayout(this);
 		ll.setOrientation(LinearLayout.VERTICAL);
+		int mode=LinearLayout.LayoutParams.WRAP_CONTENT;
+		LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(mode, mode);
 		ImageView iv=new ImageView(this);
 		Drawable drawable=this.getResources().getDrawable(R.drawable.tube);
 		iv.setBackgroundDrawable(drawable);
 		ll.addView(iv);
+		ll.setLayoutParams(params);
 		return ll;
 	}
 
