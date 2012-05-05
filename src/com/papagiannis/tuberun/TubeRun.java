@@ -14,6 +14,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,12 +32,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.google.android.vending.licensing.AESObfuscator;
 import com.google.android.vending.licensing.LicenseChecker;
 import com.google.android.vending.licensing.LicenseCheckerCallback;
 import com.google.android.vending.licensing.Policy;
 import com.google.android.vending.licensing.ServerManagedPolicy;
-import com.google.android.vending.licensing.AESObfuscator;
-
 import com.papagiannis.tuberun.favorites.Favorite;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.OysterFetcher;
@@ -44,18 +44,20 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
-	public static final String VERSION = "1.0.0";
-	public static final Boolean USE_LICENSING=false;
-	
+	public static final String VERSION = "1.1.0";
+	public static final Boolean USE_LICENSING = false;
+
 	private static final String TUBE_MAP_URL = "https://www.tfl.gov.uk/assets/downloads/standard-tube-map.gif";
 	private static final String LOCAL_PATH = "standard-tube-map.gif";
-	private static final String LICENCING_PUBLIC_KEY="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnskzkZ7GjJBChKebZfXVqdDnuqWDLNHuhhpIwL6a+g8OiNE52+LxolCAZJmOnHr3zvgdPw0vuRKrFfGjuPgVJV13nx1DKFi7LuXuK4rpmMucZ1qZf4kwbNw+iOmp6YqWT8OQ1RN94biWluZhwcee5sb16xmtJEeH2iHEKVtjheJUGebSm6mxiQO3S3LE4p9pWadPDfPmFEvw2vjVLtwyxUqBIhiMiEtOF3e6JDBE6kLndI97jZY4LXsfL7IDhiBe1pLCZrO90TQTKMzqwz8nowXqoQLvDJ78bUaCuJm7WwPPTgpZmAyL5P2bi+c5NDoJrZsntq82EL2hRnDPiP2+nwIDAQAB";
-	private static final byte[] LICENCING_SALT=new byte[]{100,78,89,45,21,45,21,90,23,45,67,12,11,54}; 
-	
+	private static final String LICENCING_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnskzkZ7GjJBChKebZfXVqdDnuqWDLNHuhhpIwL6a+g8OiNE52+LxolCAZJmOnHr3zvgdPw0vuRKrFfGjuPgVJV13nx1DKFi7LuXuK4rpmMucZ1qZf4kwbNw+iOmp6YqWT8OQ1RN94biWluZhwcee5sb16xmtJEeH2iHEKVtjheJUGebSm6mxiQO3S3LE4p9pWadPDfPmFEvw2vjVLtwyxUqBIhiMiEtOF3e6JDBE6kLndI97jZY4LXsfL7IDhiBe1pLCZrO90TQTKMzqwz8nowXqoQLvDJ78bUaCuJm7WwPPTgpZmAyL5P2bi+c5NDoJrZsntq82EL2hRnDPiP2+nwIDAQAB";
+	private static final byte[] LICENCING_SALT = new byte[] { 100, 78, 89, 45,
+			21, 45, 21, 90, 23, 45, 67, 12, 11, 54 };
+
 	private static final int DOWNLOAD_IMAGE_DIALOG = -1;
 	private static final int DOWNLOAD_IMAGE_PROGRESS_DIALOG = -2;
 	private static final int DOWNLOAD_IMAGE_FAILED_DIALOG = -3;
 	private static final int LICENCING_ERROR = -4;
+	private static final int SHOW_WELCOME = -5;
 
 	TextView oysterBalance;
 	ProgressBar oysterProgress;
@@ -102,8 +104,22 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		oysterBalance = (TextView) findViewById(R.id.view_balance);
 		oysterProgress = (ProgressBar) findViewById(R.id.progressbar_balance);
 		oysterLayout = (LinearLayout) findViewById(R.id.layout_balance);
-		
-		if (USE_LICENSING) initializeLicencing();
+
+		if (USE_LICENSING)
+			initializeLicencing();
+		showWelcome();
+	}
+
+	@SuppressWarnings("deprecation")
+	private void showWelcome() {
+		String l=preferences.getString("lastNotice", "");
+		if (!l.equals(VERSION)) {
+			Editor editor = preferences.edit();
+			editor.putString("lastNotice", VERSION);
+			editor.commit();
+			copyDatabase();
+			showDialog(SHOW_WELCOME);
+		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -183,13 +199,13 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 				&& !fetcher.isErrorResult()
 				&& !fetcher.getResult().equals("")
 				&& (now.getTime() - fetcher.getUpdateTime().getTime()) / 1000 < 5 * 60) {
-			//there is a result i can reuse
+			// there is a result i can reuse
 			update();
-		}
-		else if (credentials.size() == 2) {
-			OysterFetcher newFetcher=OysterFetcher.getInstance(credentials.get(0), credentials.get(1));
-			if (fetcher!=newFetcher) {
-				fetcher=newFetcher;
+		} else if (credentials.size() == 2) {
+			OysterFetcher newFetcher = OysterFetcher.getInstance(
+					credentials.get(0), credentials.get(1));
+			if (fetcher != newFetcher) {
+				fetcher = newFetcher;
 				fetcher.registerCallback(this);
 			}
 			oysterButtonActive.setVisibility(View.VISIBLE);
@@ -287,8 +303,12 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			result = wait_dialog;
 			break;
 		case LICENCING_ERROR:
-			wait_dialog=getLicensingErrorDialog();
-			result=wait_dialog;
+			wait_dialog = getLicensingErrorDialog();
+			result = wait_dialog;
+			break;
+		case SHOW_WELCOME:
+			wait_dialog = getWelcomeDialog();
+			result = wait_dialog;
 			break;
 		}
 		return result;
@@ -325,13 +345,12 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		ArrayList<Favorite> favs=new ArrayList<Favorite>();
+		ArrayList<Favorite> favs = new ArrayList<Favorite>();
 		fetchBalance();
 		try {
 			favs = Favorite.getFavorites(this);
-		}
-		catch (Exception e) {
-			Log.w("Main",e);
+		} catch (Exception e) {
+			Log.w("Main", e);
 		}
 		favoritesButton.setChecked(favs.size() > 0);
 	}
@@ -434,94 +453,133 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			progressDialog.setMax(total);
 		}
 	}
-	
-	
-	//*****************Licensing methods go here***********************
+
+	// *****************Licensing methods go here***********************
 	private LicenseCheckerCallback mLicenseCheckerCallback;
-    private LicenseChecker mChecker;
-	
+	private LicenseChecker mChecker;
+
 	private void initializeLicencing() {
-        mLicenseCheckerCallback = new MyLicenseCheckerCallback();
-        String deviceId = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
-        mChecker = new LicenseChecker(
-            this, new ServerManagedPolicy(this,
-                new AESObfuscator(LICENCING_SALT, getPackageName(), deviceId)),
-                LICENCING_PUBLIC_KEY 
-            );
-        mChecker.checkAccess(mLicenseCheckerCallback);
+		mLicenseCheckerCallback = new MyLicenseCheckerCallback();
+		String deviceId = Secure.getString(getContentResolver(),
+				Secure.ANDROID_ID);
+		mChecker = new LicenseChecker(this, new ServerManagedPolicy(this,
+				new AESObfuscator(LICENCING_SALT, getPackageName(), deviceId)),
+				LICENCING_PUBLIC_KEY);
+		mChecker.checkAccess(mLicenseCheckerCallback);
 	}
-	
+
 	@Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (USE_LICENSING) mChecker.onDestroy();
-    }
-	
-	
+	protected void onDestroy() {
+		super.onDestroy();
+		if (USE_LICENSING)
+			mChecker.onDestroy();
+	}
+
 	private class MyLicenseCheckerCallback implements LicenseCheckerCallback {
-	    public void allow(int reason) {
-	        if (isFinishing()) {
-	            return;
-	        }
-	    }
+		public void allow(int reason) {
+			if (isFinishing()) {
+				return;
+			}
+		}
 
-	    @SuppressWarnings("deprecation")
+		@SuppressWarnings("deprecation")
 		public void dontAllow(int reason) {
-	        if (isFinishing()) {
-	            return;
-	        }
-	        if (reason == Policy.RETRY) {
-	        } else {
-	        	showDialog(LICENCING_ERROR);
-	        }
-	    }
+			if (isFinishing()) {
+				return;
+			}
+			if (reason == Policy.RETRY) {
+			} else {
+				showDialog(LICENCING_ERROR);
+			}
+		}
 
-	    @SuppressWarnings("deprecation")
 		@Override
 		public void applicationError(int errorCode) {
-	    	//this is called for ERROR_NOT_MARKET_MANAGED, ERROR_INVALID_PACKAGE_NAME, ERROR_NON_MATCHING_UID
-	    	//see LicenseValidator.java
-			//showDialog(LICENCING_ERROR);
+			// this is called for ERROR_NOT_MARKET_MANAGED,
+			// ERROR_INVALID_PACKAGE_NAME, ERROR_NON_MATCHING_UID
+			// see LicenseValidator.java
+			// showDialog(LICENCING_ERROR);
 		}
 	}
-	
+
 	private Dialog getLicensingErrorDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Application Not Licensed")
-		.setMessage(
-				"Your copy of this application is unauthorised. You may obtain a licensed copy from the Google Play " +
-				"Store.\n\n" +
-				"Please support the developer (I have spent many nights working on this).\n\n" +
-				"If you think that you are seeing this in error, please contact the developer.")
-		.setCancelable(false)
-		.setPositiveButton("Open Play Store",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int id) {
-						Intent intent = new Intent(Intent.ACTION_VIEW);
-						intent.setData(Uri.parse("market://details?id=com.papagiannis.tuberun"));
-						startActivity(intent);
-						finish();
-					}
-				})
-		.setNeutralButton("Contact Developer", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-		                emailIntent.setType("plain/text");
-		                emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{ "jpapayan@gmail.com"});
-		                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, TubeRun.APPNAME+" Activation Error");
-		                emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
-		                startActivity(Intent.createChooser(emailIntent, "Send mail via"));
-		                finish();
-					}
-				})
-		.setNegativeButton("Exit Application", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
-			}
-		});
+				.setMessage(
+						"Your copy of this application is unauthorised. You may obtain a licensed copy from the Google Play "
+								+ "Store.\n\n"
+								+ "Please support the developer (I have spent many nights working on this).\n\n"
+								+ "If you think that you are seeing this in error, please contact the developer.")
+				.setCancelable(false)
+				.setPositiveButton("Open Play Store",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								Intent intent = new Intent(Intent.ACTION_VIEW);
+								intent.setData(Uri
+										.parse("market://details?id=com.papagiannis.tuberun"));
+								startActivity(intent);
+								finish();
+							}
+						})
+				.setNeutralButton("Contact Developer",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								final Intent emailIntent = new Intent(
+										android.content.Intent.ACTION_SEND);
+								emailIntent.setType("plain/text");
+								emailIntent.putExtra(
+										android.content.Intent.EXTRA_EMAIL,
+										new String[] { "jpapayan@gmail.com" });
+								emailIntent.putExtra(
+										android.content.Intent.EXTRA_SUBJECT,
+										TubeRun.APPNAME + " Activation Error");
+								emailIntent.putExtra(
+										android.content.Intent.EXTRA_TEXT, "");
+								startActivity(Intent.createChooser(emailIntent,
+										"Send mail via"));
+								finish();
+							}
+						})
+				.setNegativeButton("Exit Application",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								finish();
+							}
+						});
 		return builder.create();
+	}
+
+	private Dialog getWelcomeDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(APPNAME+" "+VERSION)
+				.setMessage("New features:\n\n"+
+						"*Nearby Bus lines\n\n" +
+						"*Nearby Tube/Bus/Cycle Hire data on a map")
+				.setCancelable(false).setPositiveButton("OK", null);
+		return builder.create();
+	}
+
+	private void copyDatabase() {
+		AsyncTask<Context, Integer, Boolean> task = new AsyncTask<Context, Integer, Boolean>() {
+
+			@Override
+			protected Boolean doInBackground(Context... params) {
+				try {
+					DatabaseHelper myDbHelper = new DatabaseHelper(params[0]);
+					myDbHelper.createDatabase();
+					myDbHelper.openDataBase();
+					myDbHelper.close();
+				} catch (Exception e) {
+					Log.w("CopyDatabase", e);
+					return false;
+				}
+				return true;
+			}
+		};
+		task.execute(this);
 	}
 }

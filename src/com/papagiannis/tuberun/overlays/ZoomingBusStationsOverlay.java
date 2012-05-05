@@ -13,10 +13,19 @@ public class ZoomingBusStationsOverlay<T extends OverlayItem> extends BusStation
 		super(defaultMarker, context);
 	}
 	
+	MapView mapView=null;
+	
 	@Override
 	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+		this.mapView=mapView;
 		if (mapView.getZoomLevel()>16) {
 			super.draw(canvas, mapView, shadow);
 		}
+	}
+	
+	@Override
+	protected boolean onTap(int index) {
+		if (mapView==null || mapView.getZoomLevel()>16) return super.onTap(index);
+		return true;
 	}
 }

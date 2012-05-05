@@ -3,7 +3,7 @@
     android:installLocation="auto"
     package="com.papagiannis.tuberun"
     android:versionCode="1"
-    android:versionName="1.0.0" >
+    android:versionName="1.1.0" >
 
     <uses-sdk
         android:maxSdkVersion="15"

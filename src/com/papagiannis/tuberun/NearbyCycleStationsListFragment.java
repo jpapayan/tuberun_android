@@ -70,7 +70,7 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 		fetcher.update();
 	}
 
-	ArrayList<CycleHireStation> stations_nearby;
+	ArrayList<CycleHireStation> stations_nearby=new ArrayList<CycleHireStation>();
 	ArrayList<CycleHireStation> prev_result = new ArrayList<CycleHireStation>();
 
 	/**

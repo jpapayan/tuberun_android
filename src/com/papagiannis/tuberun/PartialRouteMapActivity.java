@@ -66,7 +66,7 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 			    			color=(Integer)array.get(0);
 			    			if (color==Color.WHITE) color=Color.BLACK;
 			    		}
-			    		overlays.add(new RouteOverlay(result.get(i - 1), result.get(i),color));
+			    		overlays.add(new RouteOverlay(result.get(i - 1), result.get(i),color,8));
 			 		}
 			    	 //And then the pushpins
 			    	for (int i = 1; i < result.size(); i++) {

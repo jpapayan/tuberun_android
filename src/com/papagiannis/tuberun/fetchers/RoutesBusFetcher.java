@@ -80,7 +80,7 @@ public class RoutesBusFetcher extends Fetcher {
 
 			DatabaseHelper myDbHelper = new DatabaseHelper(context);
 			try {
-				myDbHelper.createDatabase();
+//				myDbHelper.createDatabase();
 				myDbHelper.openDataBase();
 				for (String route : routes[0]) {
 					ArrayList<ArrayList<BusStation>> stations = myDbHelper
@@ -92,8 +92,8 @@ public class RoutesBusFetcher extends Fetcher {
 				results=result;
 				resultOverlays=generateOverlays();
 				
-			} catch (IOException ioe) {
-				throw new Error("Unable to create Database");
+//			} catch (IOException ioe) {
+//				throw new Error("Unable to create Database");
 			} catch (Exception e) {
 				Log.w("LinesBusFetcher", e);
 			} finally {

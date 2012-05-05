@@ -101,7 +101,6 @@ public class SelectBusStationActivity extends MeMapActivity implements  Location
         return false;
     }
     
-    
     @Override
 	public void onLocationChanged(Location l) {
     	Location last=lastKnownLocation;
