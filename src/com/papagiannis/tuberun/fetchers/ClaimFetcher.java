@@ -55,6 +55,7 @@ public class ClaimFetcher extends Fetcher {
 		r=r.substring(i);
 		i=r.indexOf('"');
 		r=r.substring(0,i);
+		@SuppressWarnings("deprecation")
 		String s=URLEncoder.encode(r);
 		if (s.length() > 2)
 			return s;

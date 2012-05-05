@@ -536,7 +536,7 @@ public class Claim implements Serializable {
 					errors += "*TfL ticket duration not set. ";
 				if (ticket_tfl_expiry.getYear() != 1) {
 					if (journey_started.compareTo(ticket_tfl_expiry) < 0) {
-						postData += "&ctl00%24cphMain%24cal_tfl_expirydate%24ddl_day=" + ticket_tfl_expiry.getDay(); // 1
+						postData += "&ctl00%24cphMain%24cal_tfl_expirydate%24ddl_day=" + ticket_tfl_expiry.getDate(); // 1
 																														// to
 																														// 31
 						if (ticket_tfl_expiry.getMonth()+1 < 10)
@@ -578,7 +578,7 @@ public class Claim implements Serializable {
 				if (ticket_rail_expiry.getYear() != 1) {
 					if (journey_started.compareTo(ticket_rail_expiry) < 0) {
 						postData += "&ctl00%24cphMain%24cal_natrail_validuntil%24ddl_day="
-								+ ticket_rail_expiry.getDay(); // 1 to 31
+								+ ticket_rail_expiry.getDate(); // 1 to 31
 						if (ticket_rail_expiry.getMonth()+1 < 10)
 							postData += "&ctl00%24cphMain%24cal_natrail_validuntil%24ddl_month=0"
 									+ (ticket_rail_expiry.getMonth()+1); // 01 to 12
@@ -680,10 +680,10 @@ public class Claim implements Serializable {
 																		// in
 																		// millies
 			{
-				postData += "&ctl00%24cphMain%24calDelayDate%24ddl_day=" + journey_started.getDay(); // 1
+				postData += "&ctl00%24cphMain%24calDelayDate%24ddl_day=" + journey_started.getDate(); // 1
 																										// to
 																										// 31
-				postData += "&ctl00%24cphMain%24calJourneyDate%24ddl_day=" + journey_started.getDay(); // 1
+				postData += "&ctl00%24cphMain%24calJourneyDate%24ddl_day=" + journey_started.getDate(); // 1
 																										// to
 																										// 31
 				if (journey_started.getMonth()+1 < 10) {
@@ -919,10 +919,10 @@ public class Claim implements Serializable {
 																		// in
 																		// millies
 			{
-				if (journey_started.getDay() < 10)
-					postData += "&dateofdelayday=0" + journey_started.getDay();
+				if (journey_started.getDate() < 10)
+					postData += "&dateofdelayday=0" + journey_started.getDate();
 				else
-					postData += "&dateofdelayday=" + journey_started.getDay();
+					postData += "&dateofdelayday=" + journey_started.getDate();
 				if (journey_started.getMonth() < 10)
 					postData += "&dateofdelaymonth=0" + journey_started.getMonth(); // 1
 																					// to
@@ -1149,12 +1149,12 @@ public class Claim implements Serializable {
 					errors += "*Rail travelcard duration empty. ";
 				if (ticket_rail_expiry.getYear() != 1) {
 					if (journey_started.compareTo(ticket_rail_expiry) < 0) {
-						if (ticket_rail_expiry.getDay() < 10)
-							postData += "&natrail_validuntil_day=0" + ticket_rail_expiry.getDay(); // 1
+						if (ticket_rail_expiry.getDate() < 10)
+							postData += "&natrail_validuntil_day=0" + ticket_rail_expiry.getDate(); // 1
 																									// to
 																									// 31
 						else
-							postData += "&natrail_validuntil_day=" + ticket_rail_expiry.getDay(); // 1
+							postData += "&natrail_validuntil_day=" + ticket_rail_expiry.getDate(); // 1
 																									// to
 																									// 31
 						if (ticket_rail_expiry.getMonth() < 10)
@@ -1254,12 +1254,12 @@ public class Claim implements Serializable {
 																		// in
 																		// millies
 			{
-				if (journey_started.getDay() < 10)
-					postData += "&dateofdelayday=0" + journey_started.getDay(); // 1
+				if (journey_started.getDate() < 10)
+					postData += "&dateofdelayday=0" + journey_started.getDate(); // 1
 																				// to
 																				// 31
 				else
-					postData += "&dateofdelayday=" + journey_started.getDay(); // 1
+					postData += "&dateofdelayday=" + journey_started.getDate(); // 1
 																				// to
 																				// 31
 				if (journey_started.getMonth() < 10)

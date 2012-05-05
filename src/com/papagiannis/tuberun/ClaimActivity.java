@@ -766,18 +766,7 @@ public class ClaimActivity extends TabActivity implements Observer {
 				}
 			}, d.getYear() + 1900, d.getMonth(), d.getDate());
 		} else if (id == MESSAGE_WAIT) {
-			ProgressDialog d=new ProgressDialog(this);
-			wait_dialog=d;
-	    	d.setTitle("Submitting claim");
-	    	d.setMessage("Please wait...");
-	    	d.setIndeterminate(true);
-	    	d.setOnCancelListener(new OnCancelListener() {
-				@Override
-				public void onCancel(DialogInterface dialog) {
-//					fetcher.abort();
-				}
-			});
-			wait_dialog = ProgressDialog.show(this, "", ", please wait...", true);
+			wait_dialog = ProgressDialog.show(this, "Submitting claim", "Please wait...", true);
 			return wait_dialog;
 		} else if (id == MESSAGE_NOTICE) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);

@@ -13,7 +13,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
-import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -133,11 +132,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		try {
-			copyDataBase();
-		} catch (IOException e) {
-			Log.w("TubeRun", "Cannot createe DB");
-		}
+//		try {
+//			copyDataBase();
+//		} catch (IOException e) {
+//			Log.w("TubeRun", "Cannot createe DB");
+//		}
 	}
 
 	// Add your public helper methods to access and get content from the
