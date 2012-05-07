@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
     package="com.papagiannis.tuberun"
-    android:versionCode="1"
+    android:versionCode="2"
     android:versionName="1.1.0" >
 
     <uses-sdk
