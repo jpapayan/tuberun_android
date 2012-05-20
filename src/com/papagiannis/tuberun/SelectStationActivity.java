@@ -6,13 +6,10 @@ import java.util.HashMap;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -43,16 +40,6 @@ public class SelectStationActivity extends ListActivity implements OnClickListen
 		String line = (String)extras.get("line");
 		lt=LinePresentation.getLineTypeRespresentation(line);
 		
-		String type="";
-	    if(extras !=null)
-	    {
-	       type = extras.getString("type");
-	       ImageView back= (ImageView)findViewById(R.id.select_line_background);
-	       if (type.equals("background")) {
-	    	   Bitmap bmp=BitmapFactory.decodeResource(getResources(), R.drawable.background_depart);
-	    	   back.setImageBitmap(bmp);
-	       }
-	    }
 	    HashMap<String,String> stations_details=StationDetails.FetchStations(lt);
 	    ArrayList<String> stnames= new ArrayList<String>( stations_details.keySet() );
 	    Collections.sort(stnames);

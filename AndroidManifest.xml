@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
     package="com.papagiannis.tuberun"
-    android:versionCode="2"
-    android:versionName="1.1.0" >
+    android:versionCode="3"
+    android:versionName="1.1.1" >
 
     <uses-sdk
         android:maxSdkVersion="15"
@@ -58,10 +58,14 @@
         <activity
             android:name=".SelectLineActivity"
             android:screenOrientation="nosensor" 
-            android:configChanges="keyboardHidden|orientation" >
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                   android:resource="@xml/searchable"/>
         </activity>
         <activity
             android:name=".SelectStationActivity"
@@ -206,9 +210,14 @@
             </intent-filter>
         </activity>
 
+        
         <provider
             android:name=".TubeMapContentProvider"
             android:authorities="com.papagiannis.tuberun.mapprovider" >
+        </provider>
+        <provider
+            android:name=".StationsProvider"
+            android:authorities="com.papagiannis.tuberun.stationsprovider" >
         </provider>
 
         <uses-library android:name="com.google.android.maps" />

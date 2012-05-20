@@ -228,6 +228,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		res.add(run2);
 		return res;
 	}
+	
+	public Cursor getStationsSuggestions(String namePrefix) {
+		namePrefix+="%";
+		Cursor c = myDataBase.rawQuery(
+						  "SELECT CAST(sms_code AS INTEGER)  AS _id, " +
+						  "       name AS suggest_column_text_1," +
+						  "	      CAST(sms_code AS INTEGER) AS suggest_column_intent_data "
+						+ "FROM stops "
+						+ "WHERE lower(name) LIKE lower(?) OR lower(sms_code) LIKE lower(?) "
+						+ "ORDER BY name "
+						+ "LIMIT 50", new String[] { namePrefix, namePrefix });
+		c.moveToFirst();
+		return c;
+	}
 
 	public int getVersion() {
 		int res = 1;

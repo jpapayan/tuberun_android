@@ -63,6 +63,7 @@ public class StationsTubeFetcher extends NearbyStationsFetcher {
 
 		@Override
 		protected ArrayList<Station> doInBackground(Location... at) {
+			//TODO: use the DB, not the damn xml file
 //			android.os.Debug.waitForDebugger();
 			if (all_stations.size()>0) return  getNearbyStations(userLocation, all_stations);
 			try {

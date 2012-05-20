@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -92,8 +88,6 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 	@Override
 	public void update() {
 		departures_list.clear();
-		
-		Date d=fetcher.getUpdateTime();
 		
 		HashMap<String, ArrayList<HashMap<String, String>>> reply=fetcher.getDepartures();
 		for (String platform : reply.keySet()) {
