@@ -7,8 +7,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -36,11 +38,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// try {
-		// copyDataBase();
-		// } catch (IOException e) {
-		// Log.w("TubeRun", "Cannot createe DB");
-		// }
+//		 try {
+//		 copyDataBase();
+//		 } catch (IOException e) {
+//		 Log.w("TubeRun", "Cannot createe DB");
+//		 }
 	}
 
 	private void copyDataBase() throws IOException {
@@ -230,15 +232,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public Cursor getStationsSuggestions(String namePrefix) {
+		if (namePrefix==null || namePrefix.equals("")) return null;
 		namePrefix+="%";
-		Cursor c = myDataBase.rawQuery(
+		int idBuses=R.drawable.buses;
+		int idTube=R.drawable.tube;
+		int idDLR=R.drawable.dlr;
+		Cursor c = null;
+		if (namePrefix.charAt(0)>='0' && namePrefix.charAt(0)<='9') //only bus stop codes start with numbers
+			c=myDataBase.rawQuery(
 						  "SELECT CAST(sms_code AS INTEGER)  AS _id, " +
-						  "       name AS suggest_column_text_1," +
-						  "	      CAST(sms_code AS INTEGER) AS suggest_column_intent_data "
+						  "       CAST(name AS TEXT) AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
+						  "	      CAST(sms_code AS INTEGER) AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+						  "	      \"android.resource://com.papagiannis.tuberun/"+idBuses+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
 						+ "FROM stops "
-						+ "WHERE lower(name) LIKE lower(?) OR lower(sms_code) LIKE lower(?) "
+						+ "WHERE lower(sms_code) LIKE lower(?) AND name!=\"\" "
 						+ "ORDER BY name "
-						+ "LIMIT 50", new String[] { namePrefix, namePrefix });
+						+ "LIMIT 50", new String[] { namePrefix });
+		else c=myDataBase.rawQuery(
+				  "SELECT code AS _id, " +
+				  "       name AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
+				  "	      code AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "	      \"android.resource://com.papagiannis.tuberun/"+idTube+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
+				+ "FROM station_departures_code "
+				+ "WHERE lower(name) LIKE lower(?) AND is_tube "
+				+ "UNION "
+				+ "SELECT code AS _id, " +
+				  "       name AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
+				  "	      code AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "	      \"android.resource://com.papagiannis.tuberun/"+idDLR+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
+				+ "FROM station_departures_code "
+				+ "WHERE lower(name) LIKE lower(?) AND NOT is_tube "
+				+ "ORDER BY name "
+				+ "LIMIT 50", new String[] { namePrefix, namePrefix });				
 		c.moveToFirst();
 		return c;
 	}

@@ -5,7 +5,9 @@
     android:searchSuggestAuthority="com.papagiannis.tuberun.stationsprovider"
     android:searchSuggestSelection=" ?"
     android:searchSuggestIntentAction="android.Intent.action.VIEW"
-    android:searchMode="queryRewriteFromData"
+    android:searchSuggestIntentData="content://com.papagiannis.tuberun.stationsprovider/"
+    android:searchMode="queryRewriteFromText"
     android:includeInGlobalSearch="true"
+    android:searchButtonText="Enter bus stop number or station name"
     android:searchSettingsDescription="Bus, Tube and DLR departures">"
 </searchable>

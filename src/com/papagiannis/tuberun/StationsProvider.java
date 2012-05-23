@@ -8,16 +8,21 @@ import android.util.Log;
 
 public class StationsProvider extends SearchRecentSuggestionsProvider {
 	public final static String AUTHORITY = "com.papagiannis.tuberun.stationsprovider";
-	public final static int MODE = DATABASE_MODE_QUERIES;// // DATABASE_MODE_2LINES;|
+	public final static int MODE = DATABASE_MODE_QUERIES;// //
+															// DATABASE_MODE_2LINES;|
 	private final DatabaseHelper myDbHelper = new DatabaseHelper(getContext());
-															
+
 	private static final UriMatcher sUriMatcher = new UriMatcher(
 			UriMatcher.NO_MATCH);
 
 	public StationsProvider() {
-		setupSuggestions(AUTHORITY, MODE);
-		sUriMatcher.addURI(AUTHORITY, "stops/#", 1);
-		myDbHelper.openDataBase();
+		try {
+			setupSuggestions(AUTHORITY, MODE);
+			sUriMatcher.addURI(AUTHORITY, "stops/#", 1);
+			myDbHelper.openDataBase();
+		} catch (Exception e) {
+			Log.w("StationsProvider", e);
+		}
 	}
 
 	// Implements ContentProvider.query()
@@ -30,12 +35,12 @@ public class StationsProvider extends SearchRecentSuggestionsProvider {
 				break;
 			default:
 			}
-			result=myDbHelper.getStationsSuggestions(selectionArgs[0]);
+			result = myDbHelper.getStationsSuggestions(selectionArgs[0]);
 
 		} catch (Exception e) {
-			Log.w("StationsProvider",e);
+			Log.w("StationsProvider", e);
 		} finally {
-//			myDbHelper.close();
+			// myDbHelper.close();
 		}
 
 		return result;
