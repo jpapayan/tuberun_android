@@ -1,5 +1,6 @@
 package com.papagiannis.tuberun;
 
+import android.app.SearchManager;
 import android.content.SearchRecentSuggestionsProvider;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -18,7 +19,7 @@ public class StationsProvider extends SearchRecentSuggestionsProvider {
 	public StationsProvider() {
 		try {
 			setupSuggestions(AUTHORITY, MODE);
-			sUriMatcher.addURI(AUTHORITY, "stops/#", 1);
+			sUriMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY+"/#", 1);
 			myDbHelper.openDataBase();
 		} catch (Exception e) {
 			Log.w("StationsProvider", e);
@@ -32,6 +33,7 @@ public class StationsProvider extends SearchRecentSuggestionsProvider {
 		try {
 			switch (sUriMatcher.match(uri)) {
 			case 1:
+				result = myDbHelper.getStationsSuggestions(selectionArgs[0]);
 				break;
 			default:
 			}

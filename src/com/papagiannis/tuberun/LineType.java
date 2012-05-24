@@ -45,8 +45,8 @@ public enum LineType
     
     public static Iterable<LineType> allDepartures() {
     	ArrayList<LineType> res=(ArrayList<LineType>)allTube();
-    	res.add(LineType.DLR);
     	res.add(0,LineType.BUSES);
+    	res.add(1,LineType.DLR);
     	return res;
     }
 

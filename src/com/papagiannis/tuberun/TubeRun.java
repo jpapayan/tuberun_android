@@ -114,7 +114,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	@SuppressWarnings("deprecation")
 	private void showWelcome() {
 		String l=preferences.getString("lastNotice", "");
-		if (!l.equals(VERSION) || true) {
+		if (!l.equals(VERSION)) {
 			Editor editor = preferences.edit();
 			editor.putString("lastNotice", VERSION);
 			editor.commit();

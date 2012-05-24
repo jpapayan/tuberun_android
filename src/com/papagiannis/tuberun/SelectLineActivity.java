@@ -5,7 +5,11 @@ import java.util.HashMap;
 
 import android.app.ListActivity;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
@@ -19,13 +23,14 @@ import android.widget.SimpleAdapter;
 
 import com.papagiannis.tuberun.binders.SelectLinesBinder;
 
-public class SelectLineActivity extends ListActivity implements OnClickListener {
+public class SelectLineActivity extends ListActivity implements OnClickListener, LocationListener {
 	protected Button backButton;
 	protected Button logoButton;
 	protected Button searchButton;
 	protected EditText searchEditText;
 
 	private final ArrayList<HashMap<String, Object>> lines_list = new ArrayList<HashMap<String, Object>>();
+	private LocationManager locationManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,8 +54,53 @@ public class SelectLineActivity extends ListActivity implements OnClickListener 
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction()))
 			handleIntent(intent);
-		else onSearchRequested();
+//		else onSearchRequested();
 
+		
+		populateStatic();
+		locationManager = (LocationManager) this
+				.getSystemService(Context.LOCATION_SERVICE);
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (locationManager != null)
+			locationManager.removeUpdates(this);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (locationManager != null)
+			requestLocationUpdates();
+	}
+
+	// LocationListener Methods
+	private Location lastKnownLocation;
+
+	@Override
+	public void onLocationChanged(Location l) {
+		if (SelectBusStationActivity.isBetterLocation(l, lastKnownLocation)) {
+			lastKnownLocation = l;
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void requestLocationUpdates() {
+		try {
+			if (locationManager != null) {
+				locationManager.requestLocationUpdates(
+						LocationManager.NETWORK_PROVIDER, 2 * 1000, 5, this);
+				locationManager.requestLocationUpdates(
+						LocationManager.GPS_PROVIDER, 3 * 1000, 5, this);
+			}
+		} catch (Exception e) {
+			Log.w("LocationService",e);
+		}
+	}
+
+	private void populateStatic() {
 		Iterable<LineType> lines = LineType.allDepartures();
 
 		for (LineType lt : lines) {
@@ -116,6 +166,18 @@ public class SelectLineActivity extends ListActivity implements OnClickListener 
 	@Override
 	public void onClick(View v) {
 		finish();
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
 	}
 
 }
