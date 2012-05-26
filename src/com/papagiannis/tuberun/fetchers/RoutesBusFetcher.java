@@ -1,6 +1,5 @@
 package com.papagiannis.tuberun.fetchers;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;

@@ -2,17 +2,16 @@ package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -24,6 +23,7 @@ import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
 
 public class DeparturesActivity extends ListActivity implements Observer, OnClickListener {
+	private static final int ASK_LINE_DIALOG=1;
 	protected Button backButton;
 	protected Button logoButton;
 	protected TextView stationTextView;
@@ -34,6 +34,7 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 	private LineType lt;
 	private String stationcode;
 	private String stationnice;
+	private Station station;
 	
 	
 	
@@ -44,7 +45,8 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 		create();
     }
     
-    private void create() {
+    @SuppressWarnings("deprecation")
+	private void create() {
     	setContentView(R.layout.departures);
     	backButton = (Button) findViewById(R.id.back_button);
 		logoButton = (Button) findViewById(R.id.logo_button);
@@ -59,21 +61,32 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
     	Bundle extras = getIntent().getExtras();
     	String type = (String)extras.get("type");
     	if (type!=null && type.equals("station")) {
-    		Station s=(Station)extras.get("station");
-    		stationcode=s.getCode();
-    		stationnice=s.getName();
-    		lt=LineType.DISTRICT; //TODO fix me
+    		station=(Station)extras.get("station");
+    		stationcode=station.getCode();
+    		stationnice=station.getName();
+    		stationTextView.setVisibility(View.GONE);
+    		List<LineType> ls=station.getLinesForDepartures();
+    		if (ls.size()>1) showDialog(ASK_LINE_DIALOG);
+    		else if (ls.size()==1) {
+    			lt=ls.get(0);
+    			showDepartures();
+    		}
+    		//else no departures
     	}
     	else {
     		String line = (String)extras.get("line");
 			stationcode = (String)extras.get("stationcode");
 			stationnice = (String)extras.get("stationnice");
 			lt=LinePresentation.getLineTypeRespresentation(line);
+			showDepartures();
     	}
-		
+    }
+
+	private void showDepartures() {
 		stationTextView.setText(stationnice);
 		stationTextView.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
 		stationTextView.setTextColor(LinePresentation.getForegroundColor(lt));
+		stationTextView.setVisibility(View.VISIBLE);
     	
 		if (lt==LineType.DLR) fetcher=new DeparturesDLRFetcher(lt, stationcode, stationnice);
 		else fetcher=new DeparturesFetcher(lt, stationcode, stationnice);
@@ -89,10 +102,8 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
         		fetcher.update();
         	}
         });
-        
-        
         Favorite.getFavorites(this);
-    }
+	}
     
 	@Override
 	public void update() {
@@ -148,6 +159,33 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 		setListAdapter(adapter);
 		
 	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Dialog result=null;
+		switch (id) {
+			case ASK_LINE_DIALOG:
+				final List<LineType> ls=station.getLinesForDepartures();
+				final CharSequence[] items = new String[ls.size()];
+				int i=0;
+				for (LineType line : ls) {
+					items[i++]=LinePresentation.getStringRespresentation(line);
+				}
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("Select line");
+				builder.setItems(items, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
+						lt=ls.get(item);
+						showDepartures();
+					}
+				});
+				result= builder.create();
+			break;
+		}
+		return result;
+	};
+	
+	
 
     @Override
 	public void onClick(View v) {

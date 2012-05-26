@@ -10,7 +10,6 @@ import java.util.HashMap;
 import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -253,7 +252,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				  "SELECT code AS _id, " +
 				  "       name AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
 				  "       \"Live departures\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
-				  "	      name AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "	      name || \"_\" || code  AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
 				  "	      \"android.resource://com.papagiannis.tuberun/"+idTube+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
 				+ "FROM station_departures_code "
 				+ "WHERE lower(name) LIKE lower(?) AND is_tube "
@@ -261,7 +260,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ "SELECT code AS _id, " +
 				  "       name AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
 				  "       \"Live departures\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
-				  "	      name AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "	      name || \"_\" || code AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
 				  "	      \"android.resource://com.papagiannis.tuberun/"+idDLR+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
 				+ "FROM station_departures_code "
 				+ "WHERE lower(name) LIKE lower(?) AND NOT is_tube "

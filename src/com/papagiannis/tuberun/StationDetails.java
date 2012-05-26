@@ -486,7 +486,7 @@ public class StationDetails {
                 res.put("Gloucester Road","GRD");
                 res.put("Finsbury Park","FPK");
                 res.put("Eastcote","ETE");
-                res.put("Earls Court","ECT");
+                res.put("Earl's Court","ECT");
                 res.put("Ealing Common","ECM");
                 res.put("Covent Garden","COV");
                 res.put("Cockfosters","CFS");
@@ -499,9 +499,9 @@ public class StationDetails {
                 res.put("Green Park","GPK");
                 res.put("Hammersmith","HMD");
                 res.put("Hatton Cross","HTX");
-                res.put("Heathrow T4","HRF");
-                res.put("Heathrow T5","HRV");
-                res.put("Heathrow T123","HRC");
+                res.put("Heathrow Terminal 4","HRF");
+                res.put("Heathrow Terminal 5","HRV");
+                res.put("Heathrow Terminals 1 2 3","HRC");
                 res.put("Hillingdon","HDN");
                 res.put("Holborn","HOL");
                 res.put("Holloway Road","HRD");
@@ -600,7 +600,7 @@ public class StationDetails {
                 res.put("Redbridge","RED");
                 res.put("Roding Valley","ROD");
                 res.put("Ruislip Gardens","RUG");
-                res.put("Shepherds Bush (Central Line)","SBC");
+                res.put("Shepherd's Bush","SBC");
                 res.put("Snaresbrook","SNB");
                 res.put("South Ruislip","SRP");
                 res.put("South Woodford","SWF");
@@ -675,7 +675,7 @@ public class StationDetails {
                 res.put("Dagenham Heathway","DGH");
                 res.put("Ealing Broadway","EBY");
                 res.put("Ealing Common","ECM");
-                res.put("Earls Court","ECT");
+                res.put("Earl's Court","ECT");
                 res.put("East Ham","EHM");
                 res.put("East Putney","EPY");
                 res.put("Edgware Road (H & C)","ERD");
@@ -692,7 +692,7 @@ public class StationDetails {
                 res.put("Mile End","MLE");
                 res.put("Monument","MON");
                 res.put("Notting Hill Gate","NHG");
-                res.put("Olympia","OLY");
+                res.put("Kensington (Olympia)","OLY");
                 res.put("Paddington","PAD");
                 res.put("Parsons Green","PGR");
                 res.put("Plaistow","PLW");
@@ -832,7 +832,7 @@ public class StationDetails {
                 res.put("Mill Hill East","MHE");
                 res.put("Moorgate","MGT");
                 res.put("Morden","MOR");
-                res.put("Mornington C","MCR");
+                res.put("Mornington Crescent","MCR");
                 res.put("Old Street","OLD");
                 res.put("Oval","OVL");
                 res.put("South Wimbledon","SWM");
@@ -882,7 +882,7 @@ public class StationDetails {
                 res.put("Farringdon","FAR");
                 res.put("Finchley Road","FRD");
                 res.put("Great Portland Street","GPS");
-                res.put("Harrow on the Hill","HOH");
+                res.put("Harrow-on-the-Hill","HOH");
                 res.put("Hillingdon","HDN");
                 res.put("Ickenham","ICK");
                 res.put("King's Cross St. Pancras","KXX");
@@ -1217,14 +1217,6 @@ public class StationDetails {
     	HashMap<String,List<LineType>> all=getStationLinesWikipedia();
     	if (all.containsKey(station)) result=all.get(station);
     	return result;
-    }
-    private static String[] removeNicecess(String p)
-    {
-        //Make all station names that appear on StationsLocation equvalent to the representations here
-        if (p.equals("Bank Monument")) {
-            return new String[]{"Bank","Monument"};
-        }
-        else return new String[]{p};
     }
 
     

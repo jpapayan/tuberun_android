@@ -9,13 +9,9 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager.LayoutParams;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -180,19 +176,6 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 		}
 		mapView.invalidate();
 		animateToWithOverlays(null);
-	}
-
-	private LinearLayout generateLayout() {
-		LinearLayout ll=new LinearLayout(this);
-		ll.setOrientation(LinearLayout.VERTICAL);
-		int mode=LinearLayout.LayoutParams.WRAP_CONTENT;
-		LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(mode, mode);
-		ImageView iv=new ImageView(this);
-		Drawable drawable=this.getResources().getDrawable(R.drawable.tube);
-		iv.setBackgroundDrawable(drawable);
-		ll.addView(iv);
-		ll.setLayoutParams(params);
-		return ll;
 	}
 
 	private Dialog wait_dialog;

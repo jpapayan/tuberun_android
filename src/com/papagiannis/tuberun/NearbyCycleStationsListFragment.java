@@ -3,7 +3,6 @@ package com.papagiannis.tuberun;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import com.papagiannis.tuberun.cyclehire.CycleHireStation;
 import com.papagiannis.tuberun.cyclehire.NearbyCyclesBinder;

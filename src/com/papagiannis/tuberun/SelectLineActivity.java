@@ -104,6 +104,7 @@ public class SelectLineActivity extends ListActivity implements
 			m.put("line_more", true);
 			lines_list.add(m);
 		}
+		
 		populate(new ArrayList<Station>());
 
 		locationManager = (LocationManager) this
@@ -205,7 +206,9 @@ public class SelectLineActivity extends ListActivity implements
 				else startBusDepartures(tokens[1], tokens[0]);
 			}
 			else {
-				Station s=new Station(data.toString());
+				String[] tokens=data.toString().split("_");
+				if (tokens.length<2) showDialog(FAILED_DIALOG);
+				Station s=new Station(tokens[0],tokens[1]);
 				startDepartures(s);
 			}
 		}

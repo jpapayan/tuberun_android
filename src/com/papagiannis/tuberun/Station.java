@@ -8,14 +8,19 @@ import java.util.List;
 import android.location.Location;
 
 public class Station  implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
 	public Station() {
-		
+		name="";
 	}
 	
 	public Station(String name) {
 		this.name = name;
+	}
+	
+	public Station(String name, String code) {
+		this.name = name;
+		this.code=code;
 	}
 	
 	public Station(String name, Location location) {
@@ -38,6 +43,12 @@ public class Station  implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	protected String code;
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
 	protected int longtitude;
 	protected int latitude;
 
@@ -92,6 +103,7 @@ public class Station  implements Serializable {
 	}
 
 	public String getCode() {
+		if (code!=null && !code.equals("")) return code;
 		String result="";
 		ArrayList<LineType> lines=StationDetails.FetchLinesForStation(name);
 		if (lines.size()>0) {
@@ -99,6 +111,10 @@ public class Station  implements Serializable {
 			if (all.containsKey(name)) result=all.get(name);
 		}
 		return result;
+	}
+
+	public List<LineType> getLinesForDepartures() {
+		return StationDetails.FetchLinesForStation(name);
 	}
 
 }
