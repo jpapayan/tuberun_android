@@ -1,6 +1,9 @@
 package com.papagiannis.tuberun;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import android.location.Location;
 
@@ -11,8 +14,15 @@ public class Station  implements Serializable {
 		
 	}
 	
+	public Station(String name) {
+		this.name = name;
+	}
+	
 	public Station(String name, Location location) {
 		this.name = name;
+		this.longtitude = (int) (location.getLongitude()*1000000);
+		this.latitude = (int) (location.getLatitude()*1000000);
+		
 	}
 	
 	public Station(String name, int latitude, int longtitude) {
@@ -75,8 +85,20 @@ public class Station  implements Serializable {
 		String[] tok=station.split("#");
 		return new Station(tok[0], Integer.parseInt(tok[2]), Integer.parseInt(tok[1]));
 	}
-	
-	
-	
-	
+
+	public Integer getIcon() {
+		List<LineType> all = StationDetails.FetchLinesForStationWikipedia(getName());
+		return (all.contains(LineType.DLR)) ? R.drawable.dlr : R.drawable.tube;
+	}
+
+	public String getCode() {
+		String result="";
+		ArrayList<LineType> lines=StationDetails.FetchLinesForStation(name);
+		if (lines.size()>0) {
+			HashMap<String,String> all=StationDetails.FetchStations(lines.get(0));
+			if (all.containsKey(name)) result=all.get(name);
+		}
+		return result;
+	}
+
 }

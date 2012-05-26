@@ -5,9 +5,10 @@
     android:orientation="horizontal"
     android:paddingLeft="5dip" >
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="#FF808080" >
 
         <LinearLayout
             android:id="@+id/line_color"
@@ -16,33 +17,24 @@
             android:layout_margin="0dip"
             android:padding="10dp" >
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/line_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-    </FrameLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/line_name"
-        android:layout_width="0dip"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
         android:padding="10dp"
         android:textColor="@android:color/white"
-        android:layout_weight="1"
         android:textSize="16sp" >
     </TextView>
-    
-    <ImageView 
-        android:id="@+id/line_more"
+
+    <ImageView
+        android:id="@+id/line_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|right"
-        android:background="@drawable/ic_ab_forward_holo_light"
-        android:layout_marginRight="15dip"
-        />
+        android:layout_gravity="center_vertical"
+        android:visibility="gone"
+        android:layout_marginLeft="5dip" />
 
 </LinearLayout>

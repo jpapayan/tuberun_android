@@ -243,7 +243,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 						  "SELECT CAST(sms_code AS INTEGER)  AS _id, " +
 						  "       CAST(name AS TEXT) AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
 						  "       \"Stop code \" || sms_code AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
-						  "	      CAST(sms_code AS INTEGER) AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+						  "	      CAST(sms_code AS INTEGER) || \"_\" || name AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
 						  "	      \"android.resource://com.papagiannis.tuberun/"+idBuses+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
 						+ "FROM stops "
 						+ "WHERE lower(sms_code) LIKE lower(?) AND name!=\"\" "
@@ -252,16 +252,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		else c=myDataBase.rawQuery(
 				  "SELECT code AS _id, " +
 				  "       name AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
-				  "       \"Tube station live departures\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
-				  "	      code AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "       \"Live departures\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
+				  "	      name AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
 				  "	      \"android.resource://com.papagiannis.tuberun/"+idTube+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
 				+ "FROM station_departures_code "
 				+ "WHERE lower(name) LIKE lower(?) AND is_tube "
 				+ "UNION "
 				+ "SELECT code AS _id, " +
 				  "       name AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
-				  "       \"DLR station live departures\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
-				  "	      code AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "       \"Live departures\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
+				  "	      name AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
 				  "	      \"android.resource://com.papagiannis.tuberun/"+idDLR+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
 				+ "FROM station_departures_code "
 				+ "WHERE lower(name) LIKE lower(?) AND NOT is_tube "

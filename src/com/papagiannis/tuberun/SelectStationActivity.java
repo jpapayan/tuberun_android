@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -19,7 +20,9 @@ import com.papagiannis.tuberun.binders.SelectStationsBinder;
 public class SelectStationActivity extends ListActivity implements OnClickListener {
 	protected Button backButton;
 	protected Button logoButton;
+	protected Button searchButton;
 	protected TextView titleTextView;
+	protected LinearLayout locationLayout;
 
 	private final ArrayList<HashMap<String,Object>> stations_list=new ArrayList<HashMap<String,Object>>();
 	LineType lt;
@@ -28,6 +31,11 @@ public class SelectStationActivity extends ListActivity implements OnClickListen
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.select_line);
+		
+		searchButton = (Button) findViewById(R.id.search_button);
+		searchButton.setVisibility(View.GONE);
+		locationLayout = (LinearLayout) findViewById(R.id.location_layout);
+		locationLayout.setVisibility(View.GONE);
 		
 		backButton = (Button) findViewById(R.id.back_button);
 		logoButton = (Button) findViewById(R.id.logo_button);
@@ -54,7 +62,7 @@ public class SelectStationActivity extends ListActivity implements OnClickListen
 		
 		SimpleAdapter adapter=new SimpleAdapter(this,
 				stations_list, 
-				R.layout.line,
+				R.layout.station,
 				new String[]{"station_name","station_color"},
 				new int[]{R.id.line_name,R.id.line_color});
 		adapter.setViewBinder(new SelectStationsBinder(lt));

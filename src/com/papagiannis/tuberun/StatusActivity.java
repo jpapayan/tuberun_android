@@ -120,7 +120,8 @@ public class StatusActivity extends FragmentActivity {
 		startActivity(i);
 	}
     
-    private void showMapWarning() {
+    @SuppressWarnings("deprecation")
+	private void showMapWarning() {
 		showDialog(MAP_WARNING_DIALOG);
 		mapWarningShown=true;
 		Editor editor=preferences.edit();

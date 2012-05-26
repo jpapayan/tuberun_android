@@ -57,10 +57,19 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
     	departures_list.clear();
     	
     	Bundle extras = getIntent().getExtras();
-		String line = (String)extras.get("line");
-		stationcode = (String)extras.get("stationcode");
-		stationnice = (String)extras.get("stationnice");
-		lt=LinePresentation.getLineTypeRespresentation(line);
+    	String type = (String)extras.get("type");
+    	if (type!=null && type.equals("station")) {
+    		Station s=(Station)extras.get("station");
+    		stationcode=s.getCode();
+    		stationnice=s.getName();
+    		lt=LineType.DISTRICT; //TODO fix me
+    	}
+    	else {
+    		String line = (String)extras.get("line");
+			stationcode = (String)extras.get("stationcode");
+			stationnice = (String)extras.get("stationnice");
+			lt=LinePresentation.getLineTypeRespresentation(line);
+    	}
 		
 		stationTextView.setText(stationnice);
 		stationTextView.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
