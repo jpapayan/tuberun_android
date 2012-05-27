@@ -555,7 +555,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	}
 
 	private Dialog getWelcomeDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		ProgressDialog.Builder builder = new ProgressDialog.Builder(this);
 		builder.setTitle(APPNAME+" "+VERSION)
 				.setMessage("What's new:\n\n"+
 						"*New UI\n\n" +
@@ -576,6 +576,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 					myDbHelper.createDatabase();
 					myDbHelper.openDataBase();
 					myDbHelper.close();
+					wait_dialog.setCancelable(true);
 				} catch (Exception e) {
 					Log.w("CopyDatabase", e);
 					return false;

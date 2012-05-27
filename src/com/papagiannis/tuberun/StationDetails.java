@@ -1113,7 +1113,7 @@ public class StationDetails {
     	result.put("Park Royal", Arrays.asList(LineType.PICACIDILY ));
     	result.put("Parsons Green", Arrays.asList(LineType.DISTRICT ));
     	result.put("Perivale", Arrays.asList(LineType.CENTRAL ));
-    	result.put("Piccadily Circus", Arrays.asList(LineType.BAKERLOO, LineType.PICACIDILY ));
+    	result.put("Piccadilly Circus", Arrays.asList(LineType.BAKERLOO, LineType.PICACIDILY ));
     	result.put("Pimlico", Arrays.asList(LineType.VICTORIA ));
     	result.put("Pinner", Arrays.asList(LineType.METROPOLITAN ));
     	result.put("Plaistow", Arrays.asList(LineType.DISTRICT, LineType.HAMMERSMITH ));

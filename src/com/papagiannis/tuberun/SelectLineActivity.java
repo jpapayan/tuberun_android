@@ -161,7 +161,10 @@ public class SelectLineActivity extends ListActivity implements
 		populate(stationsList);
 	}
 
+	private ArrayList<Station> nearbyPrevious=new ArrayList<Station>();
 	private void populate(ArrayList<Station> nearby) {
+		if (nearby.size()>0) hasNearby=true;
+		if (nearbyPrevious.size()!=0 && nearbyPrevious.equals(nearby)) return;
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 
 		for (Station s : nearby) {
@@ -184,8 +187,13 @@ public class SelectLineActivity extends ListActivity implements
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		setIntent(intent);
-		handleIntent(intent);
+		try {
+			setIntent(intent);
+			handleIntent(intent);
+		}
+		catch (Exception e) {
+			Log.w("SelectLineActivity",e);
+		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -213,13 +221,15 @@ public class SelectLineActivity extends ListActivity implements
 			}
 		}
 	}
+	
+	private boolean hasNearby=false;
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		try {
-			if (position >= 6) {
-				position -= 6;
-				// display a list of stations
+			if (!hasNearby || position>=6) {
+				if (hasNearby && position>=6) position -= 6;
+				// display a l2ist of stations
 				String line_name = (String) lines_list.get(position).get(
 						"line_name");
 				Intent i = null;
