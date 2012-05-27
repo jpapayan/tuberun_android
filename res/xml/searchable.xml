@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
     android:label="@string/app_name"
-    android:hint="Search tube, DLR and bus stops"
+    android:hint="@string/search_hint"
     android:searchButtonText="Search tube, DLR and bus stops"
     android:searchSuggestAuthority="com.papagiannis.tuberun.stationsprovider"
     android:searchSuggestSelection=" ?"
@@ -9,7 +9,7 @@
     android:searchSuggestIntentData="content://com.papagiannis.tuberun.stationsprovider/"
     android:searchMode="queryRewriteFromText"
     android:includeInGlobalSearch="true"
-    android:searchSettingsDescription="Station departures"
+    android:searchSettingsDescription="@string/search_settings_description"
     android:searchSuggestThreshold="1"
     android:queryAfterZeroResults="false">
 </searchable>

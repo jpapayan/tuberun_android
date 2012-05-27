@@ -12,15 +12,21 @@ public class StationsProvider extends SearchRecentSuggestionsProvider {
 	public final static int MODE = DATABASE_MODE_QUERIES;// //
 															// DATABASE_MODE_2LINES;|
 	private final DatabaseHelper myDbHelper = new DatabaseHelper(getContext());
+	private boolean isOpen=false;
 
 	private static final UriMatcher sUriMatcher = new UriMatcher(
 			UriMatcher.NO_MATCH);
 
 	public StationsProvider() {
+		setupSuggestions(AUTHORITY, MODE);
+		sUriMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY+"/#", 1);
+		tryOpen();
+	}
+
+	private void tryOpen() {
 		try {
-			setupSuggestions(AUTHORITY, MODE);
-			sUriMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY+"/#", 1);
 			myDbHelper.openDataBase();
+			isOpen=true;
 		} catch (Exception e) {
 			Log.w("StationsProvider", e);
 		}
@@ -29,6 +35,8 @@ public class StationsProvider extends SearchRecentSuggestionsProvider {
 	// Implements ContentProvider.query()
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
+		if (!isOpen) tryOpen();
+		if (!isOpen) return null;
 		Cursor result = null;
 		try {
 			switch (sUriMatcher.match(uri)) {

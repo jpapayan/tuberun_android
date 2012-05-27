@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">TubeRun</string>
+	<string name="search_settings_description">Departures, Journey Planning</string>
+	<string name="search_hint">Enter station name</string>
 	<string name="status_title">Status</string>
 	<string name="departures_title">Departures</string>
 	<string name="nearby_title">Nearby</string>

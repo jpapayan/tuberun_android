@@ -164,7 +164,7 @@ public class SelectLineActivity extends ListActivity implements
 	private ArrayList<Station> nearbyPrevious=new ArrayList<Station>();
 	private void populate(ArrayList<Station> nearby) {
 		if (nearby.size()>0) hasNearby=true;
-		if (nearbyPrevious.size()!=0 && nearbyPrevious.equals(nearby)) return;
+		if (/*nearbyPrevious.size()!=0 &&*/ nearbyPrevious.equals(nearby)) return;
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 
 		for (Station s : nearby) {
