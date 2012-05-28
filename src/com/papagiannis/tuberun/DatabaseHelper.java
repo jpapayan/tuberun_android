@@ -232,6 +232,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	public Cursor getStationsSuggestions(String namePrefix) {
 		if (namePrefix==null || namePrefix.equals("")) return null;
+		namePrefix=namePrefix.trim();
 		namePrefix+="%";
 		int idBuses=R.drawable.buses;
 		int idTube=R.drawable.tube;

@@ -35,7 +35,7 @@ import com.papagiannis.tuberun.fetchers.StationsTubeFetcher;
 public class SelectLineActivity extends ListActivity implements
 		OnClickListener, LocationListener, Observer {
 	private static final int FAILED_DIALOG = 1;
-	private static final String VIEW = "android.Intent.action.VIEW";
+	public static final String VIEW = "android.Intent.action.VIEW";
 
 	protected Button backButton;
 	protected Button logoButton;
@@ -164,7 +164,7 @@ public class SelectLineActivity extends ListActivity implements
 	private ArrayList<Station> nearbyPrevious=new ArrayList<Station>();
 	private void populate(ArrayList<Station> nearby) {
 		if (nearby.size()>0) hasNearby=true;
-		if (/*nearbyPrevious.size()!=0 &&*/ nearbyPrevious.equals(nearby)) return;
+		if (nearbyPrevious.size()!=0 && nearbyPrevious.equals(nearby)) return;
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 
 		for (Station s : nearby) {

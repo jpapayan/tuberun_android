@@ -8,13 +8,19 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.database.Cursor;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter.CursorToStringConverter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -22,12 +28,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FilterQueryProvider;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -67,7 +77,7 @@ public class PlanFragment extends Fragment implements Observer,
 	Button advanced_button;
 	LinearLayout previous_layout;
 	TextView previous_textview;
-	EditText destination_edittext;
+	AutoCompleteTextView destination_edittext;
 	CheckBox fromcurrent_checkbox;
 	RadioGroup destination_radiogroup;
 	RadioButton tostation_radiobutton;
@@ -111,7 +121,7 @@ public class PlanFragment extends Fragment implements Observer,
 
 	private void createReferences(View v) {
 		go_layout = (LinearLayout) v.findViewById(R.id.go_layout);
-		destination_edittext = (EditText) v
+		destination_edittext = (AutoCompleteTextView) v
 				.findViewById(R.id.destination_edittext);
 		destination_radiogroup = (RadioGroup) v
 				.findViewById(R.id.destination_radiogroup);
@@ -154,6 +164,7 @@ public class PlanFragment extends Fragment implements Observer,
 		history_button = (Button) v.findViewById(R.id.history_button);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void create() {
 		go_layout.setOnClickListener(this);
 		go_layout.setVisibility(View.GONE);
@@ -206,7 +217,62 @@ public class PlanFragment extends Fragment implements Observer,
 			public void afterTextChanged(Editable s) {
 			}
 		});
-
+		Cursor c=null;
+		// Create a SimpleCursorAdapter for the State Name field.
+        SimpleCursorAdapter adapter =
+            new SimpleCursorAdapter(getActivity(),
+                    R.layout.suggestion_item, c,
+                    new String[] { SearchManager.SUGGEST_COLUMN_TEXT_1 }, new int[] {R.id.suggestion_textview });
+        destination_edittext.setAdapter(adapter);
+ 
+        // Set an OnItemClickListener, to update dependent fields when
+        // a choice is made in the AutoCompleteTextView.
+        destination_edittext.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> listView, View view,
+                        int position, long id) {
+                // Get the cursor, positioned to the corresponding row in the
+                // result set
+            	Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+            	 
+                // Get the state's capital from this row in the database.
+//                String name =
+//                    cursor.getString(cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1));
+ 
+//                 Update the parent class's TextView
+//                destination_edittext.setText(name);
+            }
+        });
+        
+ 
+        // Set the CursorToStringConverter, to provide the labels for the
+        // choices to be displayed in the AutoCompleteTextView.
+        adapter.setCursorToStringConverter(new CursorToStringConverter() {
+            public String convertToString(android.database.Cursor cursor) {
+                // Get the label for this row out of the "state" column
+                final int columnIndex = cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1);
+                final String str = cursor.getString(columnIndex);
+                return str;
+            }
+        });
+        
+        final DatabaseHelper myDbHelper = new DatabaseHelper(getActivity());
+        try {
+			myDbHelper.openDataBase();
+			// Set the FilterQueryProvider, to run queries for choices
+	        // that match the specified input.
+	        adapter.setFilterQueryProvider(new FilterQueryProvider() {
+	            public Cursor runQuery(CharSequence constraint) {
+	            	
+	                // Search for states whose names begin with the specified letters.
+	                Cursor cursor = myDbHelper.getStationsSuggestions(
+	                        (constraint != null ? constraint.toString() : ""));
+	                return cursor;
+	            }
+	        });
+		} catch (Exception e) {
+			Log.w("PlanFragment", e);
+		}
+ 
 		// listener for the selectDate buttons
 		OnClickListener l = new OnClickListener() {
 			@Override
@@ -776,6 +842,19 @@ public class PlanFragment extends Fragment implements Observer,
 			PlanActivity.getPlan().setStartingType(Point.POSTCODE);
 		else
 			PlanActivity.getPlan().setStartingType(Point.NONE);
+	}
+	
+	public void handleIntent(Intent intent) {
+		if (SelectLineActivity.VIEW.equals(intent.getAction())) {
+			//store the query as a future suggestion
+			String query = intent.getData().toString();
+			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(
+					getActivity(), StationsProvider.AUTHORITY, StationsProvider.MODE);
+			suggestions.saveRecentQuery(query, null);
+			
+			//and launch the new activity
+			Uri data = intent.getData();
+		}
 	}
 
 }

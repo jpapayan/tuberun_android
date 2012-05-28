@@ -104,7 +104,7 @@
                     android:layout_marginRight="16dip"
                     android:layout_marginTop="5dip" >
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/destination_edittext"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"

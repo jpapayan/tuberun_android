@@ -162,7 +162,10 @@
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                   android:resource="@xml/searchable_plan"/>
         </activity>
         <activity
             android:name=".RouteResultsActivity"
