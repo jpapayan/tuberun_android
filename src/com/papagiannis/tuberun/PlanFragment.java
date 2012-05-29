@@ -10,6 +10,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
@@ -36,7 +38,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -85,7 +86,7 @@ public class PlanFragment extends Fragment implements Observer,
 	RadioButton topostcode_radiobutton;
 	RadioButton toaddress_radiobutton;
 	RadioGroup from_radiogroup;
-	EditText from_edittext;
+	AutoCompleteTextView from_edittext;
 	RadioButton fromstation_radiobutton;
 	RadioButton frompoi_radiobutton;
 	RadioButton frompostcode_radiobutton;
@@ -142,7 +143,8 @@ public class PlanFragment extends Fragment implements Observer,
 		fromcurrent_checkbox = (CheckBox) v
 				.findViewById(R.id.fromcurrent_checkbox);
 		from_radiogroup = (RadioGroup) v.findViewById(R.id.from_radiogroup);
-		from_edittext = (EditText) v.findViewById(R.id.from_edittext);
+		from_edittext = (AutoCompleteTextView) v
+				.findViewById(R.id.from_edittext);
 		frompoi_radiobutton = (RadioButton) v
 				.findViewById(R.id.frompoi_radiobutton);
 		fromstation_radiobutton = (RadioButton) v
@@ -195,15 +197,16 @@ public class PlanFragment extends Fragment implements Observer,
 			public void afterTextChanged(Editable s) {
 			}
 		});
+
+		// prepare the auto complete textviews
 		destination_edittext.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 				PlanActivity.getPlan().setDestination(s.toString());
-				if (s!=null && !s.toString().trim().equals("")) {
+				if (s != null && !s.toString().trim().equals("")) {
 					go_layout.setVisibility(View.VISIBLE);
-				}
-				else {
+				} else {
 					go_layout.setVisibility(View.GONE);
 				}
 			}
@@ -217,62 +220,50 @@ public class PlanFragment extends Fragment implements Observer,
 			public void afterTextChanged(Editable s) {
 			}
 		});
-		Cursor c=null;
+		Cursor c = null;
 		// Create a SimpleCursorAdapter for the State Name field.
-        SimpleCursorAdapter adapter =
-            new SimpleCursorAdapter(getActivity(),
-                    R.layout.suggestion_item, c,
-                    new String[] { SearchManager.SUGGEST_COLUMN_TEXT_1 }, new int[] {R.id.suggestion_textview });
-        destination_edittext.setAdapter(adapter);
- 
-        // Set an OnItemClickListener, to update dependent fields when
-        // a choice is made in the AutoCompleteTextView.
-        destination_edittext.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> listView, View view,
-                        int position, long id) {
-                // Get the cursor, positioned to the corresponding row in the
-                // result set
-            	Cursor cursor = (Cursor) listView.getItemAtPosition(position);
-            	 
-                // Get the state's capital from this row in the database.
-//                String name =
-//                    cursor.getString(cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1));
- 
-//                 Update the parent class's TextView
-//                destination_edittext.setText(name);
-            }
-        });
-        
- 
-        // Set the CursorToStringConverter, to provide the labels for the
-        // choices to be displayed in the AutoCompleteTextView.
-        adapter.setCursorToStringConverter(new CursorToStringConverter() {
-            public String convertToString(android.database.Cursor cursor) {
-                // Get the label for this row out of the "state" column
-                final int columnIndex = cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1);
-                final String str = cursor.getString(columnIndex);
-                return str;
-            }
-        });
-        
-        final DatabaseHelper myDbHelper = new DatabaseHelper(getActivity());
-        try {
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(),
+				R.layout.suggestion_item, c,
+				new String[] { SearchManager.SUGGEST_COLUMN_TEXT_1 },
+				new int[] { R.id.suggestion_textview });
+		destination_edittext.setAdapter(adapter);
+		from_edittext.setAdapter(adapter);
+
+		destination_edittext.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> listView, View view,
+					int position, long id) {
+				// Cursor cursor = (Cursor)
+				// listView.getItemAtPosition(position);
+				// String name =
+				// cursor.getString(cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1));
+				hideKeyboard();
+			}
+		});
+
+		adapter.setCursorToStringConverter(new CursorToStringConverter() {
+			public String convertToString(android.database.Cursor cursor) {
+				final int columnIndex = cursor
+						.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1);
+				final String str = cursor.getString(columnIndex);
+				return str;
+			}
+		});
+
+		final DatabaseHelper myDbHelper = new DatabaseHelper(getActivity());
+		try {
 			myDbHelper.openDataBase();
-			// Set the FilterQueryProvider, to run queries for choices
-	        // that match the specified input.
-	        adapter.setFilterQueryProvider(new FilterQueryProvider() {
-	            public Cursor runQuery(CharSequence constraint) {
-	            	
-	                // Search for states whose names begin with the specified letters.
-	                Cursor cursor = myDbHelper.getStationsSuggestions(
-	                        (constraint != null ? constraint.toString() : ""));
-	                return cursor;
-	            }
-	        });
+			adapter.setFilterQueryProvider(new FilterQueryProvider() {
+				public Cursor runQuery(CharSequence constraint) {
+					Cursor cursor = myDbHelper
+							.getPlanningSuggestions((constraint != null ? constraint
+									.toString() : ""));
+					return cursor;
+				}
+			});
 		} catch (Exception e) {
 			Log.w("PlanFragment", e);
 		}
- 
+
 		// listener for the selectDate buttons
 		OnClickListener l = new OnClickListener() {
 			@Override
@@ -296,7 +287,7 @@ public class PlanFragment extends Fragment implements Observer,
 
 			@Override
 			public void onClick(View v) {
-				
+
 				isAdvanced = !isAdvanced;
 				int advanced_visibility = (isAdvanced) ? View.VISIBLE
 						: View.GONE;
@@ -332,6 +323,12 @@ public class PlanFragment extends Fragment implements Observer,
 			}
 		});
 
+	}
+
+	private void hideKeyboard() {
+		InputMethodManager imm = (InputMethodManager) getActivity()
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(destination_edittext.getWindowToken(), 0);
 	}
 
 	void restoreDestination(Destination d) {
@@ -374,17 +371,18 @@ public class PlanFragment extends Fragment implements Observer,
 	private Dialog getAddHomeDialog() {
 		ArrayList<Destination> h = planActivity.store.getAll(getActivity());
 		if (h.size() > 0) {
-			final String[] items = new String[h.size()+1];
-			items[0]="Past destinations:";
+			final String[] items = new String[h.size() + 1];
+			items[0] = "Past destinations:";
 			for (int i = 0; i < h.size(); i++) {
-				items[i+1] = h.get(i).getDestination();
+				items[i + 1] = h.get(i).getDestination();
 			}
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle("Set Your Home Address");
 			builder.setItems(items, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int item) {
-					if (item==0) return;
-					Destination dest = planActivity.store.get(item-1,
+					if (item == 0)
+						return;
+					Destination dest = planActivity.store.get(item - 1,
 							getActivity());
 					Destination d = new Destination(dest.getDestination(), dest
 							.getType());
@@ -393,10 +391,9 @@ public class PlanFragment extends Fragment implements Observer,
 					planActivity.updateHomeButton();
 				}
 			});
-			
+
 			return builder.create();
-		}
-		else {
+		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(planActivity);
 			builder.setTitle("Home Address Not Set")
 					.setMessage(
@@ -405,6 +402,7 @@ public class PlanFragment extends Fragment implements Observer,
 			return builder.create();
 		}
 	}
+
 	private Dialog getHistoryDialog() {
 		ArrayList<Destination> h = planActivity.store.getAll(getActivity());
 		final String[] items = new String[h.size()];
@@ -425,16 +423,18 @@ public class PlanFragment extends Fragment implements Observer,
 		boolean existsHome = d != null && !d.getDestination().equals("")
 				&& d.isHome();
 		if (existsHome) {
-			builder.setNeutralButton("Erase Home Address", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					planActivity.store.eraseHome(getActivity());
-					planActivity.updateHomeButton();
-				}
-			});
-		} 
+			builder.setNeutralButton("Erase Home Address",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							planActivity.store.eraseHome(getActivity());
+							planActivity.updateHomeButton();
+						}
+					});
+		}
 		return builder.create();
 	}
+
 	private Dialog getFatalErrorDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(planActivity);
 		builder.setTitle("Planning Failed")
@@ -443,12 +443,12 @@ public class PlanFragment extends Fragment implements Observer,
 				.setCancelable(true).setPositiveButton("OK", null);
 		return builder.create();
 	}
-	
+
 	private Dialog wait_dialog;
 	private boolean is_location_dialog = false;
 	boolean is_wait_dialog = false;
-	ArrayList<String> previousAlternativeDestinations=new ArrayList<String>();
-	ArrayList<String> previousAlternativeOrigins=new ArrayList<String>();
+	ArrayList<String> previousAlternativeDestinations = new ArrayList<String>();
+	ArrayList<String> previousAlternativeOrigins = new ArrayList<String>();
 
 	@SuppressWarnings("deprecation")
 	protected Dialog showDialog(int id) {
@@ -513,15 +513,18 @@ public class PlanFragment extends Fragment implements Observer,
 		} else if (id == SELECT_ALTERNATIVE) {
 			if (showAlternativeDestinations) {
 				String[] d = {};
-				ArrayList<String> alternativeDestinations=PlanActivity.getPlan()
-						.getAlternativeDestinations();
-				if (alternativeDestinations.equals(previousAlternativeDestinations) ||
-						(alternativeDestinations.size()==1 && 
-						alternativeDestinations.get(0).equalsIgnoreCase(PlanActivity.getPlan().getDestination())) ) {
+				ArrayList<String> alternativeDestinations = PlanActivity
+						.getPlan().getAlternativeDestinations();
+				if (alternativeDestinations
+						.equals(previousAlternativeDestinations)
+						|| (alternativeDestinations.size() == 1 && alternativeDestinations
+								.get(0)
+								.equalsIgnoreCase(
+										PlanActivity.getPlan().getDestination()))) {
 					showAlternativeDestinations = false;
 					return showDialog(PLANNING_FATAL_ERROR);
-				}
-				else previousAlternativeDestinations=alternativeDestinations;
+				} else
+					previousAlternativeDestinations = alternativeDestinations;
 				final String[] items = alternativeDestinations.toArray(d);
 				AlertDialog.Builder builder = new AlertDialog.Builder(
 						getActivity());
@@ -554,15 +557,18 @@ public class PlanFragment extends Fragment implements Observer,
 				showAlternativeDestinations = false;
 			} else if (showAlternativeOrigins) {
 				String[] d = {};
-				ArrayList<String> alternativeOrigins=PlanActivity.getPlan()
+				ArrayList<String> alternativeOrigins = PlanActivity.getPlan()
 						.getAlternativeOrigins();
-				if (alternativeOrigins.equals(previousAlternativeOrigins) ||
-						(alternativeOrigins.size()==1 && PlanActivity.getPlan().getStartingType()!=Point.LOCATION &&
-						alternativeOrigins.get(0).equalsIgnoreCase(PlanActivity.getPlan().getStartingString()))) {
+				if (alternativeOrigins.equals(previousAlternativeOrigins)
+						|| (alternativeOrigins.size() == 1
+								&& PlanActivity.getPlan().getStartingType() != Point.LOCATION && alternativeOrigins
+								.get(0).equalsIgnoreCase(
+										PlanActivity.getPlan()
+												.getStartingString()))) {
 					showAlternativeOrigins = false;
 					return showDialog(PLANNING_FATAL_ERROR);
-				}
-				else previousAlternativeOrigins=alternativeOrigins;
+				} else
+					previousAlternativeOrigins = alternativeOrigins;
 				final String[] items = PlanActivity.getPlan()
 						.getAlternativeOrigins().toArray(d);
 				AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -641,8 +647,10 @@ public class PlanFragment extends Fragment implements Observer,
 							d.setHours(h);
 							d.setMinutes(m);
 							PlanActivity.getPlan().setTimeDepartureLater(d);
-							departtimelater_button.setText("Departure: "+timeFormat.format(d));
-							arrivetime_button.setText(R.string.arrivetime_button);
+							departtimelater_button.setText("Departure: "
+									+ timeFormat.format(d));
+							arrivetime_button
+									.setText(R.string.arrivetime_button);
 						}
 					}, d.getHours(), d.getMinutes(), true);
 		} else if (arrivetime_button.getId() == id) {
@@ -657,8 +665,10 @@ public class PlanFragment extends Fragment implements Observer,
 							d.setHours(h);
 							d.setMinutes(m);
 							PlanActivity.getPlan().setTimeArrivalLater(d);
-							arrivetime_button.setText("Arrival: "+timeFormat.format(d));
-							departtimelater_button.setText(R.string.departtimelater_button);
+							arrivetime_button.setText("Arrival: "
+									+ timeFormat.format(d));
+							departtimelater_button
+									.setText(R.string.departtimelater_button);
 						}
 					}, d.getHours(), d.getMinutes(), true);
 		} else if (id == SELECT_TRAVEL_DATE) {
@@ -709,9 +719,9 @@ public class PlanFragment extends Fragment implements Observer,
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == go_layout.getId()) {
-			previousAlternativeDestinations=new ArrayList<String>();
-			previousAlternativeOrigins=new ArrayList<String>();
-			
+			previousAlternativeDestinations = new ArrayList<String>();
+			previousAlternativeOrigins = new ArrayList<String>();
+
 			// if the accuracy is not great wait more in a dialogue
 			Point type = PlanActivity.getPlan().getStartingType();
 			Location location = PlanActivity.getPlan().getStartingLocation();
@@ -843,16 +853,17 @@ public class PlanFragment extends Fragment implements Observer,
 		else
 			PlanActivity.getPlan().setStartingType(Point.NONE);
 	}
-	
+
 	public void handleIntent(Intent intent) {
 		if (SelectLineActivity.VIEW.equals(intent.getAction())) {
-			//store the query as a future suggestion
+			// store the query as a future suggestion
 			String query = intent.getData().toString();
 			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(
-					getActivity(), StationsProvider.AUTHORITY, StationsProvider.MODE);
+					getActivity(), StationsProvider.AUTHORITY,
+					StationsProvider.MODE);
 			suggestions.saveRecentQuery(query, null);
-			
-			//and launch the new activity
+
+			// and launch the new activity
 			Uri data = intent.getData();
 		}
 	}

@@ -230,7 +230,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return res;
 	}
 	
-	public Cursor getStationsSuggestions(String namePrefix) {
+	public Cursor getDeparturesSuggestions(String namePrefix) {
 		if (namePrefix==null || namePrefix.equals("")) return null;
 		namePrefix=namePrefix.trim();
 		namePrefix+="%";
@@ -267,6 +267,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ "WHERE lower(name) LIKE lower(?) AND NOT is_tube "
 				+ "ORDER BY name "
 				+ "LIMIT 50", new String[] { namePrefix, namePrefix });				
+		c.moveToFirst();
+		return c;
+	}
+	
+	public Cursor getPlanningSuggestions(String namePrefix) {
+		if (namePrefix==null || namePrefix.equals("")) return null;
+		namePrefix=namePrefix.trim();
+		namePrefix+="%";
+		int idTube=R.drawable.tube;
+		int idDLR=R.drawable.dlr;
+		Cursor c = null;
+		c=myDataBase.rawQuery(
+				  "SELECT code AS _id, " +
+				  "       name AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+" "
+				+ "FROM station_departures_code " 
+				+ "WHERE lower(name) LIKE lower(?) "
+				+ "ORDER BY name "
+				+ "LIMIT 50", new String[] { namePrefix });				
 		c.moveToFirst();
 		return c;
 	}

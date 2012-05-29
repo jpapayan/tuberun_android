@@ -41,11 +41,11 @@ public class StationsProvider extends SearchRecentSuggestionsProvider {
 		try {
 			switch (sUriMatcher.match(uri)) {
 			case 1:
-				result = myDbHelper.getStationsSuggestions(selectionArgs[0]);
+				result = myDbHelper.getDeparturesSuggestions(selectionArgs[0]);
 				break;
 			default:
 			}
-			result = myDbHelper.getStationsSuggestions(selectionArgs[0]);
+			result = myDbHelper.getDeparturesSuggestions(selectionArgs[0]);
 
 		} catch (Exception e) {
 			Log.w("StationsProvider", e);

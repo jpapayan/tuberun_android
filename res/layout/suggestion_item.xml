@@ -12,13 +12,12 @@
         style="@style/WhiteText"
         android:layout_width="0dip"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_height="40dip"
         android:layout_gravity="left|center_vertical"
         android:gravity="center_vertical"
-        android:singleLine="false"
+        android:singleLine="true"
         android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:textSize="16sp" >
+        android:layout_marginRight="10dip" >
     </TextView>
 
 </LinearLayout>
