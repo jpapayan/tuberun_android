@@ -15,8 +15,10 @@
 	<string name="show_weekend">Show Weekend</string>
 	<string name="show_now">Show Now</string>
 	
-	<string name="departtimelater_button">Departure time</string>
-	<string name="arrivetime_button">Arrival time</string>
+	<string name="current_location">My current location</string>
+	
+	<string name="departtimelater_button">Departure</string>
+	<string name="arrivetime_button">Arrival</string>
 
 	<string-array name="ticket_type_spinner">
 		<item>Oyster Card</item>

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -275,18 +276,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		if (namePrefix==null || namePrefix.equals("")) return null;
 		namePrefix=namePrefix.trim();
 		namePrefix+="%";
-		int idTube=R.drawable.tube;
-		int idDLR=R.drawable.dlr;
+		int idWalk=R.drawable.walk;
 		Cursor c = null;
 		c=myDataBase.rawQuery(
-				  "SELECT code AS _id, " +
-				  "       name AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+" "
-				+ "FROM station_departures_code " 
+				  "SELECT " +
+				  "       name || \" (Station)\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+", "+
+				  "		  name || \"_station\" AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "       \"android.resource://com.papagiannis.tuberun/"+idWalk+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
+				+ "FROM stations " 
 				+ "WHERE lower(name) LIKE lower(?) "
-				+ "ORDER BY name "
-				+ "LIMIT 50", new String[] { namePrefix });				
+				+ "UNION "
+				+ "SELECT " +
+				  "       name || \" (Place of Interest)\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+", "+
+				  "		  name || \"_poi\" AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "       \"android.resource://com.papagiannis.tuberun/"+idWalk+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
+				+ "FROM pois " 
+				+ "WHERE lower(name) LIKE lower(?) "
+				+ "ORDER BY "+ SearchManager.SUGGEST_COLUMN_TEXT_1 +" " 
+				+ "LIMIT 10", new String[] { namePrefix, namePrefix });				
+		MatrixCursor cc=new MatrixCursor(new String[]{"_id",
+													  SearchManager.SUGGEST_COLUMN_TEXT_1 ,
+									                  SearchManager.SUGGEST_COLUMN_INTENT_DATA,
+									                  SearchManager.SUGGEST_COLUMN_ICON_1});
 		c.moveToFirst();
-		return c;
+		int i=0;
+		while (!c.isAfterLast()) {
+			cc.addRow(new String[] {Integer.toString(i++),
+									c.getString(0),
+									c.getString(1),
+									c.getString(2)});
+			c.moveToNext();
+		}
+		return cc;
 	}
 
 	public int getVersion() {

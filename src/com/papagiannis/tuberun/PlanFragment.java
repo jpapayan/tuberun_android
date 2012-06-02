@@ -1,8 +1,10 @@
 package com.papagiannis.tuberun;
 
+import java.sql.DatabaseMetaData;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -15,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,20 +37,18 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.FilterQueryProvider;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.PlanFetcher;
+import com.papagiannis.tuberun.plan.Plan;
 import com.papagiannis.tuberun.plan.Point;
 
 public class PlanFragment extends Fragment implements Observer,
@@ -73,24 +74,9 @@ public class PlanFragment extends Fragment implements Observer,
 	PlanFetcher fetcher = new PlanFetcher(PlanActivity.getPlan());
 
 	LinearLayout go_layout;
-	Button history_button;
-	LinearLayout advanced_layout;
-	Button advanced_button;
-	LinearLayout previous_layout;
 	TextView previous_textview;
 	AutoCompleteTextView destination_edittext;
-	CheckBox fromcurrent_checkbox;
-	RadioGroup destination_radiogroup;
-	RadioButton tostation_radiobutton;
-	RadioButton topoi_radiobutton;
-	RadioButton topostcode_radiobutton;
-	RadioButton toaddress_radiobutton;
-	RadioGroup from_radiogroup;
 	AutoCompleteTextView from_edittext;
-	RadioButton fromstation_radiobutton;
-	RadioButton frompoi_radiobutton;
-	RadioButton frompostcode_radiobutton;
-	RadioButton fromaddress_radiobutton;
 	Button traveldate_button;
 	Button departtimelater_button;
 	Button arrivetime_button;
@@ -99,7 +85,6 @@ public class PlanFragment extends Fragment implements Observer,
 	ToggleButton use_dlr_toggle;
 	ToggleButton use_rail_toggle;
 	ToggleButton use_boat_toggle;
-	LinearLayout from_layout;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -124,35 +109,8 @@ public class PlanFragment extends Fragment implements Observer,
 		go_layout = (LinearLayout) v.findViewById(R.id.go_layout);
 		destination_edittext = (AutoCompleteTextView) v
 				.findViewById(R.id.destination_edittext);
-		destination_radiogroup = (RadioGroup) v
-				.findViewById(R.id.destination_radiogroup);
-		topoi_radiobutton = (RadioButton) v
-				.findViewById(R.id.topoi_radiobutton);
-		tostation_radiobutton = (RadioButton) v
-				.findViewById(R.id.tostation_radiobutton);
-		toaddress_radiobutton = (RadioButton) v
-				.findViewById(R.id.toaddress_radiobutton);
-		topostcode_radiobutton = (RadioButton) v
-				.findViewById(R.id.topostcode_radiobutton);
-		advanced_button = (Button) v.findViewById(R.id.advanced_button);
-		advanced_layout = (LinearLayout) v.findViewById(R.id.adv2anced_layout);
-		// previous_layout = (LinearLayout)
-		// v.findViewById(R.id.previous_layout);
-		// previous_textview = (TextView)
-		// v.findViewById(R.id.previous_textview);
-		fromcurrent_checkbox = (CheckBox) v
-				.findViewById(R.id.fromcurrent_checkbox);
-		from_radiogroup = (RadioGroup) v.findViewById(R.id.from_radiogroup);
 		from_edittext = (AutoCompleteTextView) v
 				.findViewById(R.id.from_edittext);
-		frompoi_radiobutton = (RadioButton) v
-				.findViewById(R.id.frompoi_radiobutton);
-		fromstation_radiobutton = (RadioButton) v
-				.findViewById(R.id.fromstation_radiobutton);
-		fromaddress_radiobutton = (RadioButton) v
-				.findViewById(R.id.fromaddress_radiobutton);
-		frompostcode_radiobutton = (RadioButton) v
-				.findViewById(R.id.frompostcode_radiobutton);
 		departtimelater_button = (Button) v
 				.findViewById(R.id.departtimelater_button);
 		arrivetime_button = (Button) v.findViewById(R.id.arrivetime_button);
@@ -162,30 +120,22 @@ public class PlanFragment extends Fragment implements Observer,
 		use_rail_toggle = (ToggleButton) v.findViewById(R.id.userail_toggle);
 		use_tube_toggle = (ToggleButton) v.findViewById(R.id.usetube_toggle);
 		traveldate_button = (Button) v.findViewById(R.id.traveldate_button);
-		from_layout = (LinearLayout) v.findViewById(R.id.from_layout);
-		history_button = (Button) v.findViewById(R.id.history_button);
 	}
+
+	boolean programmaticTextChange = false; // used to prevent infinite loops
+											// when changing textboxes within
+											// the listener
 
 	@SuppressWarnings("deprecation")
 	private void create() {
 		go_layout.setOnClickListener(this);
 		go_layout.setVisibility(View.GONE);
 
-		history_button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				showDialog(SELECT_PAST_DESTINATION_DIALOG);
-
-			}
-		});
-
 		// Listeners to store the values of the editboxes
 		from_edittext.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				PlanActivity.getPlan().setStartingString(s.toString());
 			}
 
 			@Override
@@ -195,29 +145,88 @@ public class PlanFragment extends Fragment implements Observer,
 
 			@Override
 			public void afterTextChanged(Editable s) {
+				if (programmaticTextChange) {
+					programmaticTextChange = false;
+					return;
+				}
+				String origin = s.toString().trim();
+				if (origin.equals("")
+						|| origin.equals(getResources().getText(
+								R.string.current_location))) {
+					PlanActivity.getPlan().setDestinationType(Point.LOCATION);
+					planActivity.requestLocationUpdates();
+					planActivity.location_layout.setVisibility(View.VISIBLE);
+				} else {
+					planActivity.stopLocationUpdates();
+					planActivity.location_layout.setVisibility(View.GONE);
+
+					PlanActivity.getPlan().setStartingString(origin);
+					// guess the type of the result!
+					String[] tokens = origin.split("_");
+					String str = tokens[0];
+					PlanActivity.getPlan().setStartingString(str);
+					if (tokens.length > 1) {
+						if (tokens[tokens.length - 1].equals("poi")) {
+							PlanActivity.getPlan().setStartingType(Point.POI);
+						} else if (tokens[tokens.length - 1].equals("station")) {
+							PlanActivity.getPlan().setStartingType(
+									Point.STATION);
+						}
+						programmaticTextChange = true;
+						s.replace(0, s.length(), str);
+					} else if (isPostcode(str)) {
+						PlanActivity.getPlan().setStartingType(Point.POSTCODE);
+					} else {
+						PlanActivity.getPlan().setStartingType(Point.ADDRESS);
+					}
+				}
 			}
 		});
 
+		destination_edittext.requestFocus();
 		// prepare the auto complete textviews
 		destination_edittext.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				if (programmaticTextChange) {
+					programmaticTextChange = false;
+					return;
+				}
 				PlanActivity.getPlan().setDestination(s.toString());
 				if (s != null && !s.toString().trim().equals("")) {
 					go_layout.setVisibility(View.VISIBLE);
 				} else {
 					go_layout.setVisibility(View.GONE);
 				}
-			}
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
+				// guess the type of the result!
+				String[] tokens = s.toString().split("_");
+				String str = tokens[0];
+				PlanActivity.getPlan().setDestination(str);
+				if (tokens.length > 1) {
+					if (tokens[tokens.length - 1].equals("poi")) {
+						PlanActivity.getPlan().setDestinationType(Point.POI);
+					} else if (tokens[tokens.length - 1].equals("station")) {
+						PlanActivity.getPlan()
+								.setDestinationType(Point.STATION);
+					}
+					programmaticTextChange = true;
+					s.replace(0, s.length(), str);
+				} else if (isPostcode(str)) {
+					PlanActivity.getPlan().setDestinationType(Point.POSTCODE);
+				} else {
+					PlanActivity.getPlan().setDestinationType(Point.ADDRESS);
+				}
 			}
 		});
 		Cursor c = null;
@@ -242,10 +251,11 @@ public class PlanFragment extends Fragment implements Observer,
 
 		adapter.setCursorToStringConverter(new CursorToStringConverter() {
 			public String convertToString(android.database.Cursor cursor) {
-				final int columnIndex = cursor
-						.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1);
-				final String str = cursor.getString(columnIndex);
-				return str;
+				String str = "";
+				final int dataIndex = cursor
+						.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_INTENT_DATA);
+				String data = cursor.getString(dataIndex);
+				return data;
 			}
 		});
 
@@ -254,10 +264,39 @@ public class PlanFragment extends Fragment implements Observer,
 			myDbHelper.openDataBase();
 			adapter.setFilterQueryProvider(new FilterQueryProvider() {
 				public Cursor runQuery(CharSequence constraint) {
-					Cursor cursor = myDbHelper
-							.getPlanningSuggestions((constraint != null ? constraint
-									.toString() : ""));
-					return cursor;
+					if (constraint == null || constraint.equals("")) {
+						Integer i=0;
+						//TODO: it doesnt work for some reason
+						MatrixCursor cursor = new MatrixCursor(new String[] {
+								"_id",
+								SearchManager.SUGGEST_COLUMN_TEXT_1,
+								SearchManager.SUGGEST_COLUMN_INTENT_DATA,
+								SearchManager.SUGGEST_COLUMN_ICON_1 });
+						ArrayList<Destination> h = planActivity.store.getAll(getActivity());
+						for (Destination d:h) {
+							String dataString="";
+							if (d.getType()==Point.POI) {
+								dataString+="_poi";
+							}
+							else if (d.getType()==Point.STATION) {
+								dataString+="_station";
+							}
+							ArrayList<String> list=new ArrayList<String>(4);
+							list.add(i.toString()); i++;
+							list.add(d.getDestination());
+							list.add(d.getDestination()+dataString);
+							list.add(Integer.toString(R.drawable.walk));
+							cursor.addRow(list);
+						}
+						cursor.moveToFirst();
+						return cursor;
+					} else {
+						Cursor cursor = myDbHelper
+								.getPlanningSuggestions((constraint != null ? constraint
+										.toString() : ""));
+						return cursor;
+					}
+
 				}
 			});
 		} catch (Exception e) {
@@ -277,41 +316,11 @@ public class PlanFragment extends Fragment implements Observer,
 		departtimelater_button.setOnClickListener(l);
 		arrivetime_button.setOnClickListener(l);
 
-		// Setup handlers for the checkbox
-		fromcurrent_checkbox.setOnCheckedChangeListener(this);
-
-		// Setup handlers for the more/less button
-		advanced_layout.setVisibility(View.GONE);
-		advanced_button.setOnClickListener(new OnClickListener() {
-			private boolean isAdvanced = false;
-
-			@Override
-			public void onClick(View v) {
-
-				isAdvanced = !isAdvanced;
-				int advanced_visibility = (isAdvanced) ? View.VISIBLE
-						: View.GONE;
-				advanced_layout.setVisibility(advanced_visibility);
-				advanced_button.setText(!isAdvanced ? "More>>" : "<<Less");
-				advanced_button.setVisibility(View.GONE);
-			}
-		});
-
 		use_boat_toggle.setOnCheckedChangeListener(this);
 		use_rail_toggle.setOnCheckedChangeListener(this);
 		use_bus_toggle.setOnCheckedChangeListener(this);
 		use_dlr_toggle.setOnCheckedChangeListener(this);
 		use_tube_toggle.setOnCheckedChangeListener(this);
-
-		topoi_radiobutton.setOnCheckedChangeListener(this);
-		toaddress_radiobutton.setOnCheckedChangeListener(this);
-		topostcode_radiobutton.setOnCheckedChangeListener(this);
-		tostation_radiobutton.setOnCheckedChangeListener(this);
-
-		frompoi_radiobutton.setOnCheckedChangeListener(this);
-		fromaddress_radiobutton.setOnCheckedChangeListener(this);
-		frompostcode_radiobutton.setOnCheckedChangeListener(this);
-		fromstation_radiobutton.setOnCheckedChangeListener(this);
 
 		traveldate_button.setOnClickListener(new OnClickListener() {
 			@Override
@@ -325,6 +334,13 @@ public class PlanFragment extends Fragment implements Observer,
 
 	}
 
+	private final Pattern pattern = Pattern
+			.compile("[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][A-Z]{2}");// .matcher(input).matches()
+
+	protected boolean isPostcode(String str) {
+		return pattern.matcher(str.trim().toUpperCase()).matches();
+	}
+
 	private void hideKeyboard() {
 		InputMethodManager imm = (InputMethodManager) getActivity()
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -332,40 +348,12 @@ public class PlanFragment extends Fragment implements Observer,
 	}
 
 	void restoreDestination(Destination d) {
-		final boolean restoreToUI = true;
 		if (d == null || d.getDestination().equals(""))
 			return;
-		if (restoreToUI)
-			destination_edittext.setText(d.getDestination());
-		else
-			PlanActivity.getPlan().setDestination(d.getDestination());
-		Point type = d.getType();
-		switch (type) {
-		case ADDRESS:
-			if (restoreToUI)
-				toaddress_radiobutton.setChecked(true);
-			else
-				PlanActivity.getPlan().setDestinationType(Point.ADDRESS);
-			break;
-		case POI:
-			if (restoreToUI)
-				topoi_radiobutton.setChecked(true);
-			else
-				PlanActivity.getPlan().setDestinationType(Point.POI);
-			break;
-		case POSTCODE:
-			if (restoreToUI)
-				topostcode_radiobutton.setChecked(true);
-			else
-				PlanActivity.getPlan().setDestinationType(Point.POSTCODE);
-			break;
-		case STATION:
-			if (restoreToUI)
-				tostation_radiobutton.setChecked(true);
-			else
-				PlanActivity.getPlan().setDestinationType(Point.STATION);
-			break;
-		}
+		programmaticTextChange = true;
+		destination_edittext.setText(d.getDestination());
+		PlanActivity.getPlan().setDestination(d.getDestination());
+		PlanActivity.getPlan().setDestinationType(d.getType());
 	}
 
 	private Dialog getAddHomeDialog() {
@@ -438,8 +426,7 @@ public class PlanFragment extends Fragment implements Observer,
 	private Dialog getFatalErrorDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(planActivity);
 		builder.setTitle("Planning Failed")
-				.setMessage(
-						"Have you set correctly the type of your starting point or destination? \n\nAcceptable types: station, address, postcode, POI.")
+				.setMessage("Try a nearby address or station.")
 				.setCancelable(true).setPositiveButton("OK", null);
 		return builder.create();
 	}
@@ -534,6 +521,7 @@ public class PlanFragment extends Fragment implements Observer,
 						showAlternativeDestinations = false;
 						PlanActivity.getPlan().setDestination(items[item]);
 						PlanActivity.getPlan().clearAlternativeDestinations();
+						programmaticTextChange = true;
 						destination_edittext.setText(items[item]);
 						if (showAlternativeOrigins)
 							showDialog(SELECT_ALTERNATIVE);
@@ -726,7 +714,7 @@ public class PlanFragment extends Fragment implements Observer,
 			Point type = PlanActivity.getPlan().getStartingType();
 			Location location = PlanActivity.getPlan().getStartingLocation();
 			if (type == Point.LOCATION
-					&& (location == null || location.getAccuracy() > 50))
+					&& (location == null || location.getAccuracy() > 600))
 				showDialog(LOCATION_DIALOG);
 			else {
 				if (!PlanActivity.getPlan().isValid()) {
@@ -745,6 +733,7 @@ public class PlanFragment extends Fragment implements Observer,
 	private boolean showAlternativeOrigins = false;
 
 	private void requestPlan() {
+		Plan p = PlanActivity.getPlan();
 		showAlternativeDestinations = false;
 		showAlternativeOrigins = false;
 		PlanActivity.getPlan().clearAlternativeDestinations();
@@ -779,40 +768,9 @@ public class PlanFragment extends Fragment implements Observer,
 		}
 	}
 
-	private void setFromViewsEnabled(boolean isEnabled) {
-		from_edittext.setEnabled(isEnabled);
-		fromstation_radiobutton.setEnabled(isEnabled);
-		frompoi_radiobutton.setEnabled(isEnabled);
-		fromaddress_radiobutton.setEnabled(isEnabled);
-		frompostcode_radiobutton.setEnabled(isEnabled);
-		if (isEnabled)
-			from_layout.setVisibility(View.VISIBLE);
-		else
-			from_layout.setVisibility(View.GONE);
-	}
-
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		int bid = buttonView.getId();
-		if (isChecked) {
-			if (bid == toaddress_radiobutton.getId()) {
-				PlanActivity.getPlan().setDestinationType(Point.ADDRESS);
-			} else if (bid == topoi_radiobutton.getId()) {
-				PlanActivity.getPlan().setDestinationType(Point.POI);
-			} else if (bid == topostcode_radiobutton.getId()) {
-				PlanActivity.getPlan().setDestinationType(Point.POSTCODE);
-			} else if (bid == tostation_radiobutton.getId()) {
-				PlanActivity.getPlan().setDestinationType(Point.STATION);
-			} else if (bid == fromaddress_radiobutton.getId()) {
-				PlanActivity.getPlan().setStartingType(Point.ADDRESS);
-			} else if (bid == frompoi_radiobutton.getId()) {
-				PlanActivity.getPlan().setStartingType(Point.POI);
-			} else if (bid == frompostcode_radiobutton.getId()) {
-				PlanActivity.getPlan().setStartingType(Point.POSTCODE);
-			} else if (bid == fromstation_radiobutton.getId()) {
-				PlanActivity.getPlan().setStartingType(Point.STATION);
-			}
-		}
 
 		if (bid == use_boat_toggle.getId()) {
 			PlanActivity.getPlan().setUseBoat(isChecked);
@@ -824,34 +782,7 @@ public class PlanFragment extends Fragment implements Observer,
 			PlanActivity.getPlan().setUseTube(isChecked);
 		} else if (bid == use_dlr_toggle.getId()) {
 			PlanActivity.getPlan().setUseDLR(isChecked);
-		} else if (bid == fromcurrent_checkbox.getId()) {
-			if (isChecked) {
-				PlanActivity.getPlan().setStartingType(Point.LOCATION);
-				planActivity.requestLocationUpdates();
-				planActivity.location_layout.setVisibility(View.VISIBLE);
-				setFromViewsEnabled(false);
-			} else {
-				updatePlanFromType();
-				planActivity.stopLocationUpdates();
-				planActivity.location_layout.setVisibility(View.GONE);
-				setFromViewsEnabled(true);
-			}
 		}
-
-	}
-
-	private void updatePlanFromType() {
-		int selected = from_radiogroup.getCheckedRadioButtonId();
-		if (selected == fromaddress_radiobutton.getId())
-			PlanActivity.getPlan().setStartingType(Point.ADDRESS);
-		else if (selected == frompoi_radiobutton.getId())
-			PlanActivity.getPlan().setStartingType(Point.POI);
-		else if (selected == fromstation_radiobutton.getId())
-			PlanActivity.getPlan().setStartingType(Point.STATION);
-		else if (selected == frompostcode_radiobutton.getId())
-			PlanActivity.getPlan().setStartingType(Point.POSTCODE);
-		else
-			PlanActivity.getPlan().setStartingType(Point.NONE);
 	}
 
 	public void handleIntent(Intent intent) {
