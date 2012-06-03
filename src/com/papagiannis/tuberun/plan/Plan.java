@@ -349,4 +349,22 @@ public class Plan implements Serializable {
 		return toString() + " (" + routes.size() + " routes)";
 	}
 
+	public Plan copyBasicInfo() {
+		Plan result=new Plan();
+		result.destination=destination;
+		result.destinationType=destinationType;
+		result.startingLocation=startingLocation;
+		result.startingString=startingString;
+		result.startingType=startingType;
+		result.timeArrivalLater=timeArrivalLater;
+		result.timeDepartureLater=timeDepartureLater;
+		result.travelDate=travelDate;
+		result.useBoat=useBoat;
+		result.useBuses=useBuses;
+		result.useDLR=useDLR;
+		result.useRail=useRail;
+		result.useTube=useTube;
+		return result;
+	}
+
 }

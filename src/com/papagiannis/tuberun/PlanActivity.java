@@ -9,9 +9,7 @@ import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
@@ -273,6 +271,7 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		setPlan(getPlan().copyBasicInfo()); //use a new instance that is separate from the old one
 		if (locationManager != null && !planFragment.is_wait_dialog)
 			requestLocationUpdates();
 	}

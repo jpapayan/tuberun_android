@@ -1,7 +1,6 @@
 package com.papagiannis.tuberun;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.widget.AutoCompleteTextView;
 
