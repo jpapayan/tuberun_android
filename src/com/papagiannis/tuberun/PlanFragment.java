@@ -1,6 +1,5 @@
 package com.papagiannis.tuberun;
 
-import java.sql.DatabaseMetaData;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,7 +74,7 @@ public class PlanFragment extends Fragment implements Observer,
 
 	LinearLayout go_layout;
 	TextView previous_textview;
-	AutoCompleteTextView destination_edittext;
+	HistoryAutoComplete destination_edittext;
 	AutoCompleteTextView from_edittext;
 	Button traveldate_button;
 	Button departtimelater_button;
@@ -107,7 +106,7 @@ public class PlanFragment extends Fragment implements Observer,
 
 	private void createReferences(View v) {
 		go_layout = (LinearLayout) v.findViewById(R.id.go_layout);
-		destination_edittext = (AutoCompleteTextView) v
+		destination_edittext = (HistoryAutoComplete) v
 				.findViewById(R.id.destination_edittext);
 		from_edittext = (AutoCompleteTextView) v
 				.findViewById(R.id.from_edittext);
@@ -265,43 +264,31 @@ public class PlanFragment extends Fragment implements Observer,
 			adapter.setFilterQueryProvider(new FilterQueryProvider() {
 				public Cursor runQuery(CharSequence constraint) {
 					if (constraint == null || constraint.equals("")) {
-						Integer i=0;
-						//TODO: it doesnt work for some reason
-						MatrixCursor cursor = new MatrixCursor(new String[] {
-								"_id",
-								SearchManager.SUGGEST_COLUMN_TEXT_1,
-								SearchManager.SUGGEST_COLUMN_INTENT_DATA,
-								SearchManager.SUGGEST_COLUMN_ICON_1 });
-						ArrayList<Destination> h = planActivity.store.getAll(getActivity());
-						for (Destination d:h) {
-							String dataString="";
-							if (d.getType()==Point.POI) {
-								dataString+="_poi";
-							}
-							else if (d.getType()==Point.STATION) {
-								dataString+="_station";
-							}
-							ArrayList<String> list=new ArrayList<String>(4);
-							list.add(i.toString()); i++;
-							list.add(d.getDestination());
-							list.add(d.getDestination()+dataString);
-							list.add(Integer.toString(R.drawable.walk));
-							cursor.addRow(list);
-						}
-						cursor.moveToFirst();
-						return cursor;
+						return getHistoryCursor();
 					} else {
 						Cursor cursor = myDbHelper
 								.getPlanningSuggestions((constraint != null ? constraint
 										.toString() : ""));
 						return cursor;
 					}
-
 				}
 			});
 		} catch (Exception e) {
 			Log.w("PlanFragment", e);
 		}
+		
+		destination_edittext.setThreshold(0);
+		destination_edittext.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String txt=destination_edittext.getText().toString();
+				if (txt==null || txt.equals("")) {
+					destination_edittext.manualFilter();
+				}
+			}
+		});
+		
 
 		// listener for the selectDate buttons
 		OnClickListener l = new OnClickListener() {
@@ -334,6 +321,33 @@ public class PlanFragment extends Fragment implements Observer,
 
 	}
 
+	private MatrixCursor getHistoryCursor() {
+		MatrixCursor cursor = new MatrixCursor(new String[] {
+				"_id",
+				SearchManager.SUGGEST_COLUMN_TEXT_1,
+				SearchManager.SUGGEST_COLUMN_INTENT_DATA,
+				SearchManager.SUGGEST_COLUMN_ICON_1 });
+		Integer i=0;
+		ArrayList<Destination> h = planActivity.store.getAll(getActivity());
+		for (Destination d:h) {
+			String dataString="";
+			if (d.getType()==Point.POI) {
+				dataString+="_poi";
+			}
+			else if (d.getType()==Point.STATION) {
+				dataString+="_station";
+			}
+			ArrayList<String> list=new ArrayList<String>(4);
+			list.add(i.toString()); i++;
+			list.add(d.getDestination());
+			list.add(d.getDestination()+dataString);
+			list.add(Integer.toString(R.drawable.walk));
+			cursor.addRow(list);
+		}
+		cursor.moveToFirst();
+		return cursor;
+	}
+		
 	private final Pattern pattern = Pattern
 			.compile("[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][A-Z]{2}");// .matcher(input).matches()
 
@@ -426,7 +440,7 @@ public class PlanFragment extends Fragment implements Observer,
 	private Dialog getFatalErrorDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(planActivity);
 		builder.setTitle("Planning Failed")
-				.setMessage("Try a nearby address or station.")
+				.setMessage("Try a nearby address or station. Alternatevely, try searching with a postcode only.")
 				.setCancelable(true).setPositiveButton("OK", null);
 		return builder.create();
 	}
@@ -635,7 +649,7 @@ public class PlanFragment extends Fragment implements Observer,
 							d.setHours(h);
 							d.setMinutes(m);
 							PlanActivity.getPlan().setTimeDepartureLater(d);
-							departtimelater_button.setText("Departure: "
+							departtimelater_button.setText("Depart: "
 									+ timeFormat.format(d));
 							arrivetime_button
 									.setText(R.string.arrivetime_button);
@@ -653,7 +667,7 @@ public class PlanFragment extends Fragment implements Observer,
 							d.setHours(h);
 							d.setMinutes(m);
 							PlanActivity.getPlan().setTimeArrivalLater(d);
-							arrivetime_button.setText("Arrival: "
+							arrivetime_button.setText("Arrive: "
 									+ timeFormat.format(d));
 							departtimelater_button
 									.setText(R.string.departtimelater_button);

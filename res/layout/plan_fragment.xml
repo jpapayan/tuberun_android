@@ -51,7 +51,7 @@
                     android:paddingRight="16dip"
                     android:text="Destination" />
 
-                <AutoCompleteTextView
+                <com.papagiannis.tuberun.HistoryAutoComplete
                     android:id="@+id/destination_edittext"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
