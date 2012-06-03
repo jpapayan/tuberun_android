@@ -127,6 +127,14 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 				planFragment.onClick(planFragment.go_layout);
 			}
 		});
+		go_home_full_button.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				planFragment.eraseHome();
+				return true;
+			}
+		});
+		
 		go_home_empty_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

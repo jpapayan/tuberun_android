@@ -52,6 +52,7 @@ import com.papagiannis.tuberun.plan.Point;
 
 public class PlanFragment extends Fragment implements Observer,
 		OnClickListener, OnCheckedChangeListener {
+	static final int HOME_ERASED_DIALOG= -11;
 	static final int PLANNING_FATAL_ERROR = -10;
 	static final int SELECT_PAST_DESTINATION_DIALOG = -9;
 	static final int LOCATION_SERVICE_FAILED = -8;
@@ -250,7 +251,6 @@ public class PlanFragment extends Fragment implements Observer,
 
 		adapter.setCursorToStringConverter(new CursorToStringConverter() {
 			public String convertToString(android.database.Cursor cursor) {
-				String str = "";
 				final int dataIndex = cursor
 						.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_INTENT_DATA);
 				String data = cursor.getString(dataIndex);
@@ -405,37 +405,6 @@ public class PlanFragment extends Fragment implements Observer,
 		}
 	}
 
-	private Dialog getHistoryDialog() {
-		ArrayList<Destination> h = planActivity.store.getAll(getActivity());
-		final String[] items = new String[h.size()];
-		for (int i = 0; i < h.size(); i++) {
-			items[i] = h.get(i).getDestination();
-		}
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle("Past destinations");
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int item) {
-				Destination dest = planActivity.store.get(item, getActivity());
-				Destination d = new Destination(dest.getDestination(), dest
-						.getType());
-				restoreDestination(d);
-			}
-		});
-		Destination d = planActivity.store.getHome(getActivity());
-		boolean existsHome = d != null && !d.getDestination().equals("")
-				&& d.isHome();
-		if (existsHome) {
-			builder.setNeutralButton("Erase Home Address",
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							planActivity.store.eraseHome(getActivity());
-							planActivity.updateHomeButton();
-						}
-					});
-		}
-		return builder.create();
-	}
 
 	private Dialog getFatalErrorDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(planActivity);
@@ -637,6 +606,8 @@ public class PlanFragment extends Fragment implements Observer,
 			ret = builder.create();
 		} else if (id == SET_HOME_DIALOG) {
 			ret = getAddHomeDialog();
+		} else if (id == HOME_ERASED_DIALOG) {
+			ret = getHomeErasedDialog();
 		} else if (departtimelater_button.getId() == id) {
 			Date d = PlanActivity.getPlan().getTimeDepartureLater();
 			if (d == null)
@@ -690,8 +661,6 @@ public class PlanFragment extends Fragment implements Observer,
 							traveldate_button.setText(dateFormat.format(now));
 						}
 					}, d.getYear() + 1900, d.getMonth(), d.getDate());
-		} else if (id == SELECT_PAST_DESTINATION_DIALOG) {
-			ret = getHistoryDialog();
 		} else if (id == PLANNING_FATAL_ERROR) {
 			ret = getFatalErrorDialog();
 		}
@@ -699,6 +668,7 @@ public class PlanFragment extends Fragment implements Observer,
 		ret.show();
 		return ret;
 	}
+
 
 	void updateLocationDialog(ProgressDialog pd,
 			CharSequence previous_location, CharSequence accuracy) {
@@ -750,11 +720,11 @@ public class PlanFragment extends Fragment implements Observer,
 		Plan p = PlanActivity.getPlan();
 		showAlternativeDestinations = false;
 		showAlternativeOrigins = false;
-		PlanActivity.getPlan().clearAlternativeDestinations();
-		PlanActivity.getPlan().clearAlternativeOrigins();
+		p.clearAlternativeDestinations();
+		p.clearAlternativeOrigins();
 
 		fetcher.clearCallbacks();
-		fetcher = new PlanFetcher(PlanActivity.getPlan());
+		fetcher = new PlanFetcher(p);
 		fetcher.registerCallback(this);
 		fetcher.update();
 	}
@@ -811,6 +781,19 @@ public class PlanFragment extends Fragment implements Observer,
 			// and launch the new activity
 			Uri data = intent.getData();
 		}
+	}
+
+	public void eraseHome() {
+		planActivity.store.eraseHome(getActivity());
+		planActivity.updateHomeButton();
+		showDialog(HOME_ERASED_DIALOG);
+	}
+	
+	private Dialog getHomeErasedDialog() {
+		AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+		builder.setMessage("Home Address Erased");
+		builder.setPositiveButton("OK", null);
+		return builder.create();
 	}
 
 }
