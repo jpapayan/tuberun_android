@@ -11,10 +11,10 @@ public class StationsProvider extends SearchRecentSuggestionsProvider {
 	public final static String AUTHORITY = "com.papagiannis.tuberun.stationsprovider";
 	public final static int MODE = DATABASE_MODE_QUERIES;// //
 															// DATABASE_MODE_2LINES;|
-	private final DatabaseHelper myDbHelper = new DatabaseHelper(getContext());
-	private boolean isOpen=false;
+	protected final DatabaseHelper myDbHelper = new DatabaseHelper(getContext());
+	protected boolean isOpen=false;
 
-	private static final UriMatcher sUriMatcher = new UriMatcher(
+	protected static final UriMatcher sUriMatcher = new UriMatcher(
 			UriMatcher.NO_MATCH);
 
 	public StationsProvider() {
@@ -23,7 +23,7 @@ public class StationsProvider extends SearchRecentSuggestionsProvider {
 		tryOpen();
 	}
 
-	private void tryOpen() {
+	protected void tryOpen() {
 		try {
 			myDbHelper.openDataBase();
 			isOpen=true;
@@ -41,11 +41,11 @@ public class StationsProvider extends SearchRecentSuggestionsProvider {
 		try {
 			switch (sUriMatcher.match(uri)) {
 			case 1:
-				result = myDbHelper.getDeparturesSuggestions(selectionArgs[0]);
+				result = myDbHelper.getAllSuggestions(selectionArgs[0]);
 				break;
 			default:
 			}
-			result = myDbHelper.getDeparturesSuggestions(selectionArgs[0]);
+			result = myDbHelper.getAllSuggestions(selectionArgs[0]);
 
 		} catch (Exception e) {
 			Log.w("StationsProvider", e);

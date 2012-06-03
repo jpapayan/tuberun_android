@@ -67,8 +67,7 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 		updateHomeButton();
 		Intent intent = getIntent();
 		if (SelectLineActivity.VIEW.equals(intent.getAction())) {
-			planFragment.handleIntent(intent);
-			finish();
+			onNewIntent(intent);
 			return;
 		}
 	}
@@ -287,12 +286,20 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		try {
-			setIntent(intent);
-			planFragment.handleIntent(intent);
+			activateDepartures(intent);
+//			setIntent(intent);
+//			planFragment.handleIntent(intent);
 		}
 		catch (Exception e) {
-			Log.w("SelectLineActivity",e);
+			Log.w("PlanActivity",e);
 		}
+	}
+	
+	private void activateDepartures(Intent intent) {
+		Intent i=new Intent(this,SelectLineActivity.class);
+		intent.setClass(this, SelectLineActivity.class);
+		startActivity(intent);
+		finish();
 	}
 
 }

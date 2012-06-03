@@ -153,7 +153,7 @@ public class PlanFragment extends Fragment implements Observer,
 				if (origin.equals("")
 						|| origin.equals(getResources().getText(
 								R.string.current_location))) {
-					PlanActivity.getPlan().setDestinationType(Point.LOCATION);
+					PlanActivity.getPlan().setStartingType(Point.LOCATION);
 					planActivity.requestLocationUpdates();
 					planActivity.location_layout.setVisibility(View.VISIBLE);
 				} else {
@@ -769,18 +769,19 @@ public class PlanFragment extends Fragment implements Observer,
 		}
 	}
 
+	
 	public void handleIntent(Intent intent) {
-		if (SelectLineActivity.VIEW.equals(intent.getAction())) {
-			// store the query as a future suggestion
-			String query = intent.getData().toString();
-			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(
-					getActivity(), StationsProvider.AUTHORITY,
-					StationsProvider.MODE);
-			suggestions.saveRecentQuery(query, null);
-
-			// and launch the new activity
-			Uri data = intent.getData();
-		}
+//		if (SelectLineActivity.VIEW.equals(intent.getAction())) {
+//			// store the query as a future suggestion
+//			String query = intent.getData().toString();
+//			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(
+//					getActivity(), StationsProvider.AUTHORITY,
+//					StationsProvider.MODE);
+//			suggestions.saveRecentQuery(query, null);
+//
+//			// and launch the new activity
+//			Uri data = intent.getData();
+//		}
 	}
 
 	public void eraseHome() {

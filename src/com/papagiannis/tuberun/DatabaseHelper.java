@@ -231,6 +231,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return res;
 	}
 	
+	public Cursor getAllSuggestions(String namePrefix) {
+		//TODO: Add joruney planning suggestions
+		return getDeparturesSuggestions(namePrefix);
+	}
+	
 	public Cursor getDeparturesSuggestions(String namePrefix) {
 		if (namePrefix==null || namePrefix.equals("")) return null;
 		namePrefix=namePrefix.trim();
