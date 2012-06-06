@@ -231,46 +231,107 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return res;
 	}
 	
+	private String getBusStopsQuery(int idBuses) {
+		return "SELECT CAST(sms_code AS INTEGER)  AS _id, " +
+				  "       CAST(name AS TEXT) AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
+				  "       \"Stop code \" || sms_code AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
+				  "	      CAST(sms_code AS INTEGER) || \"_\" || name AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "	      \"android.resource://com.papagiannis.tuberun/"+idBuses+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
+				+ "FROM stops "
+				+ "WHERE lower(sms_code) LIKE lower(?) AND name!=\"\" ";
+	}
+	
+	private String getBasicStationQuery(int imageId, String subtitle) {
+		return "SELECT code AS _id, " +
+				  "       name AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
+				  "       "+subtitle+" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
+				  "	      name || \"_\" || code  AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "	      \"android.resource://com.papagiannis.tuberun/"+imageId+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
+				+ "FROM station_departures_code "
+				+ "WHERE lower(name) LIKE lower(?) ";
+	}
+	
+	private String getTubeStationsQuery(String subtitle) {
+		return getBasicStationQuery(R.drawable.tube, subtitle) + "AND is_tube ";
+	}
+	
+	private String getDLRStationsQuery(String subtitle) {
+		return getBasicStationQuery(R.drawable.dlr, subtitle)+" AND NOT is_tube ";
+	}
+	
+	private String getJPDestinationsQuery(int imageId, String subtitle) {
+		return "SELECT " +
+				  "       name || \" (Station)\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+", "+
+				  "       "+subtitle+" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
+				  "		  name || \"_station\" AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "       \"android.resource://com.papagiannis.tuberun/"+imageId+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
+				+ "FROM stations " 
+				+ "WHERE lower(name) LIKE lower(?) "
+				+ "UNION "
+				+ "SELECT " +
+				  "       name || \" (Place of Interest)\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+", "+
+				  "       "+subtitle+" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
+				  "		  name || \"_poi\" AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "       \"android.resource://com.papagiannis.tuberun/"+imageId+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
+				+ "FROM pois " 
+				+ "WHERE lower(name) LIKE lower(?) ";		
+	}
+	
 	public Cursor getAllSuggestions(String namePrefix) {
-		//TODO: Add joruney planning suggestions
-		return getDeparturesSuggestions(namePrefix);
+		if (namePrefix==null || namePrefix.equals("")) return null;
+		namePrefix=namePrefix.trim();
+		namePrefix+="%";
+		String subtitle="\"Plan journey\"";
+		
+		//FIXME: remove redudancy
+		Cursor dc=getDeparturesSuggestions(namePrefix);
+		dc.moveToFirst();
+		
+		Cursor c = null;
+		c=myDataBase.rawQuery(
+				  getJPDestinationsQuery(R.drawable.walk, "\"Plan journey\"")
+//				+ "ORDER BY "+ SearchManager.SUGGEST_COLUMN_TEXT_1 +" " 
+				+ "LIMIT 10", new String[] { namePrefix, namePrefix });				
+		MatrixCursor cc=new MatrixCursor(new String[]{"_id",
+													  SearchManager.SUGGEST_COLUMN_TEXT_1 ,
+													  SearchManager.SUGGEST_COLUMN_TEXT_2,
+									                  SearchManager.SUGGEST_COLUMN_INTENT_DATA,
+									                  SearchManager.SUGGEST_COLUMN_ICON_1});
+		c.moveToFirst();
+		
+		int i=0;
+		while (!c.isAfterLast()) {
+			cc.addRow(new String[] {Integer.toString(i++),
+									c.getString(0),
+									c.getString(1),
+									c.getString(2),
+									c.getString(3)});
+			c.moveToNext();
+		}
+		while (!dc.isAfterLast()) {
+			cc.addRow(new String[] {Integer.toString(i++),
+									dc.getString(1),
+									dc.getString(2),
+									dc.getString(3),
+									dc.getString(4)});
+			dc.moveToNext();
+		}
+		return cc;
 	}
 	
 	public Cursor getDeparturesSuggestions(String namePrefix) {
 		if (namePrefix==null || namePrefix.equals("")) return null;
 		namePrefix=namePrefix.trim();
 		namePrefix+="%";
-		int idBuses=R.drawable.buses;
-		int idTube=R.drawable.tube;
-		int idDLR=R.drawable.dlr;
+		String subtitle="\"Live departures\"";
 		Cursor c = null;
 		if (namePrefix.charAt(0)>='0' && namePrefix.charAt(0)<='9') //only bus stop codes start with numbers
-			c=myDataBase.rawQuery(
-						  "SELECT CAST(sms_code AS INTEGER)  AS _id, " +
-						  "       CAST(name AS TEXT) AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
-						  "       \"Stop code \" || sms_code AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
-						  "	      CAST(sms_code AS INTEGER) || \"_\" || name AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
-						  "	      \"android.resource://com.papagiannis.tuberun/"+idBuses+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
-						+ "FROM stops "
-						+ "WHERE lower(sms_code) LIKE lower(?) AND name!=\"\" "
+			c=myDataBase.rawQuery( getBusStopsQuery(R.drawable.buses) 
 						+ "ORDER BY name "
 						+ "LIMIT 10", new String[] { namePrefix });
-		else c=myDataBase.rawQuery(
-				  "SELECT code AS _id, " +
-				  "       name AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
-				  "       \"Live departures\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
-				  "	      name || \"_\" || code  AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
-				  "	      \"android.resource://com.papagiannis.tuberun/"+idTube+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
-				+ "FROM station_departures_code "
-				+ "WHERE lower(name) LIKE lower(?) AND is_tube "
+		else c=myDataBase.rawQuery( getTubeStationsQuery(subtitle)				  
 				+ "UNION "
-				+ "SELECT code AS _id, " +
-				  "       name AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
-				  "       \"Live departures\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
-				  "	      name || \"_\" || code AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
-				  "	      \"android.resource://com.papagiannis.tuberun/"+idDLR+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
-				+ "FROM station_departures_code "
-				+ "WHERE lower(name) LIKE lower(?) AND NOT is_tube "
+				+ getDLRStationsQuery(subtitle)
 				+ "ORDER BY name "
 				+ "LIMIT 50", new String[] { namePrefix, namePrefix });				
 		c.moveToFirst();
@@ -282,22 +343,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		namePrefix=namePrefix.trim();
 		namePrefix+="%";
 		int idWalk=R.drawable.walk;
+		
 		Cursor c = null;
 		c=myDataBase.rawQuery(
-				  "SELECT " +
-				  "       name || \" (Station)\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+", "+
-				  "		  name || \"_station\" AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
-				  "       \"android.resource://com.papagiannis.tuberun/"+idWalk+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
-				+ "FROM stations " 
-				+ "WHERE lower(name) LIKE lower(?) "
-				+ "UNION "
-				+ "SELECT " +
-				  "       name || \" (Place of Interest)\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+", "+
-				  "		  name || \"_poi\" AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
-				  "       \"android.resource://com.papagiannis.tuberun/"+idWalk+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
-				+ "FROM pois " 
-				+ "WHERE lower(name) LIKE lower(?) "
-				+ "ORDER BY "+ SearchManager.SUGGEST_COLUMN_TEXT_1 +" " 
+				  getJPDestinationsQuery(R.drawable.walk, "\"Plan journey\"")
+//				+ "ORDER BY "+ SearchManager.SUGGEST_COLUMN_TEXT_1 +" " 
 				+ "LIMIT 10", new String[] { namePrefix, namePrefix });				
 		MatrixCursor cc=new MatrixCursor(new String[]{"_id",
 													  SearchManager.SUGGEST_COLUMN_TEXT_1 ,
@@ -308,8 +358,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		while (!c.isAfterLast()) {
 			cc.addRow(new String[] {Integer.toString(i++),
 									c.getString(0),
-									c.getString(1),
-									c.getString(2)});
+									c.getString(2),
+									c.getString(3)});
 			c.moveToNext();
 		}
 		return cc;
