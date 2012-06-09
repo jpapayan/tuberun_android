@@ -85,7 +85,7 @@ public class SelectLineActivity extends ListActivity implements
 		});
 
 		Intent intent = getIntent();
-		if (VIEW.equals(intent.getAction())) {
+		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
 			handleIntent(intent);
 			finish();
 			return;
@@ -198,7 +198,8 @@ public class SelectLineActivity extends ListActivity implements
 
 	@SuppressWarnings("deprecation")
 	private void handleIntent(Intent intent) {
-		if (VIEW.equals(intent.getAction())) {
+		String a=intent.getAction();
+		if (VIEW.equals(a) || Intent.ACTION_VIEW.equals(a)) {
 			//store the query as a future suggestion
 			String query = intent.getData().toString();
 			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(
