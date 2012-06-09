@@ -18,9 +18,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter.CursorToStringConverter;
@@ -99,6 +97,10 @@ public class PlanFragment extends Fragment implements Observer,
 			v = inflater.inflate(R.layout.plan_fragment, null);
 			createReferences(v);
 			create();
+			if (!initialDestination.equals("")) {
+				goToDestination(initialDestination);
+				initialDestination="";
+			}
 		} catch (Exception e) {
 			Log.w("PlanFragment", e);
 		}
@@ -770,18 +772,22 @@ public class PlanFragment extends Fragment implements Observer,
 	}
 
 	
+	private String initialDestination="";
 	public void handleIntent(Intent intent) {
-//		if (SelectLineActivity.VIEW.equals(intent.getAction())) {
-//			// store the query as a future suggestion
-//			String query = intent.getData().toString();
-//			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(
-//					getActivity(), StationsProvider.AUTHORITY,
-//					StationsProvider.MODE);
-//			suggestions.saveRecentQuery(query, null);
-//
-//			// and launch the new activity
-//			Uri data = intent.getData();
-//		}
+		String d=intent.getDataString();
+		if (destination_edittext!=null) {
+			goToDestination(d);
+		}
+		else {
+			initialDestination=d;
+		}
+	}
+
+	private void goToDestination(String d) {
+		programmaticTextChange=false;
+		destination_edittext.setText(d);
+		destination_edittext.clearListSelection();
+		onClick(go_layout);
 	}
 
 	public void eraseHome() {

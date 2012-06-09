@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.SQLException;
@@ -259,9 +260,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return getBasicStationQuery(R.drawable.dlr, subtitle)+" AND NOT is_tube ";
 	}
 	
-	private String getJPDestinationsQuery(int imageId, String subtitle) {
+	private String getJPDestinationsQuery(int imageId, String subtitle, Boolean modifyNames) {
+		String m1="";
+		String m2="";
+		if (modifyNames) {
+			m1="|| \" (Station)\"";
+			m2="|| \" (Place of Interest)\"";
+		}
 		return "SELECT " +
-				  "       name || \" (Station)\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+", "+
+				  "       name "+m1+" AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+", "+
 				  "       "+subtitle+" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
 				  "		  name || \"_station\" AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
 				  "       \"android.resource://com.papagiannis.tuberun/"+imageId+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
@@ -269,7 +276,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ "WHERE lower(name) LIKE lower(?) "
 				+ "UNION "
 				+ "SELECT " +
-				  "       name || \" (Place of Interest)\" AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+", "+
+				  "       name "+m2+" AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+", "+
 				  "       "+subtitle+" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
 				  "		  name || \"_poi\" AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
 				  "       \"android.resource://com.papagiannis.tuberun/"+imageId+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
@@ -281,40 +288,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		if (namePrefix==null || namePrefix.equals("")) return null;
 		namePrefix=namePrefix.trim();
 		namePrefix+="%";
-		String subtitle="\"Plan journey\"";
 		
-		//FIXME: remove redudancy
 		Cursor dc=getDeparturesSuggestions(namePrefix);
 		dc.moveToFirst();
 		
 		Cursor c = null;
 		c=myDataBase.rawQuery(
-				  getJPDestinationsQuery(R.drawable.walk, "\"Plan journey\"")
-//				+ "ORDER BY "+ SearchManager.SUGGEST_COLUMN_TEXT_1 +" " 
-				+ "LIMIT 10", new String[] { namePrefix, namePrefix });				
+				  getJPDestinationsQuery(R.drawable.walk, "\"Plan journey\"", false)
+				+ "LIMIT 5", new String[] { namePrefix, namePrefix });				
 		MatrixCursor cc=new MatrixCursor(new String[]{"_id",
 													  SearchManager.SUGGEST_COLUMN_TEXT_1 ,
 													  SearchManager.SUGGEST_COLUMN_TEXT_2,
 									                  SearchManager.SUGGEST_COLUMN_INTENT_DATA,
-									                  SearchManager.SUGGEST_COLUMN_ICON_1});
+									                  SearchManager.SUGGEST_COLUMN_ICON_1,
+									                  SearchManager.SUGGEST_COLUMN_INTENT_ACTION});
 		c.moveToFirst();
 		
 		int i=0;
-		while (!c.isAfterLast()) {
-			cc.addRow(new String[] {Integer.toString(i++),
-									c.getString(0),
-									c.getString(1),
-									c.getString(2),
-									c.getString(3)});
-			c.moveToNext();
-		}
 		while (!dc.isAfterLast()) {
 			cc.addRow(new String[] {Integer.toString(i++),
 									dc.getString(1),
 									dc.getString(2),
 									dc.getString(3),
-									dc.getString(4)});
+									dc.getString(4),
+									Intent.ACTION_VIEW});
 			dc.moveToNext();
+		}
+		while (!c.isAfterLast()) {
+			cc.addRow(new String[] {Integer.toString(i++),
+									c.getString(0),
+									c.getString(1),
+									c.getString(2),
+									c.getString(3),
+									Intent.ACTION_RUN});
+			c.moveToNext();
 		}
 		return cc;
 	}
@@ -342,11 +349,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		if (namePrefix==null || namePrefix.equals("")) return null;
 		namePrefix=namePrefix.trim();
 		namePrefix+="%";
-		int idWalk=R.drawable.walk;
 		
 		Cursor c = null;
 		c=myDataBase.rawQuery(
-				  getJPDestinationsQuery(R.drawable.walk, "\"Plan journey\"")
+				  getJPDestinationsQuery(R.drawable.walk, "\"Plan journey\"", true)
 //				+ "ORDER BY "+ SearchManager.SUGGEST_COLUMN_TEXT_1 +" " 
 				+ "LIMIT 10", new String[] { namePrefix, namePrefix });				
 		MatrixCursor cc=new MatrixCursor(new String[]{"_id",

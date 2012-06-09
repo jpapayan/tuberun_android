@@ -66,9 +66,8 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 		create();
 		updateHomeButton();
 		Intent intent = getIntent();
-		if (SelectLineActivity.VIEW.equals(intent.getAction())) {
+		if (intent!=null && intent.getAction()!=null) {
 			onNewIntent(intent);
-			return;
 		}
 	}
 
@@ -154,7 +153,7 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 		if (lastKnownLocation != null) {
 			// never trust old accuracies
 			if (lastKnownLocation.getAccuracy() < 50)
-				lastKnownLocation.setAccuracy(100);
+				lastKnownLocation.setAccuracy(1000);
 			// remeber to reverse gocode the old address.
 			reverseGeocode(lastKnownLocation);
 		} else {
@@ -286,9 +285,12 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		try {
-			activateDepartures(intent);
-//			setIntent(intent);
-//			planFragment.handleIntent(intent);
+			String a=intent.getAction();
+			if (a.equals(Intent.ACTION_RUN)) {
+				setIntent(intent);
+				planFragment.handleIntent(intent);
+			}
+			else activateDepartures(intent);
 		}
 		catch (Exception e) {
 			Log.w("PlanActivity",e);
@@ -296,7 +298,6 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 	}
 	
 	private void activateDepartures(Intent intent) {
-		Intent i=new Intent(this,SelectLineActivity.class);
 		intent.setClass(this, SelectLineActivity.class);
 		startActivity(intent);
 		finish();
