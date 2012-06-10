@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
@@ -92,6 +93,7 @@ public class SelectLineActivity extends ListActivity implements
 		}
 
 		Iterable<LineType> lines = LineType.allDepartures();
+		addSeparator(lines_list, "ALL STATIONS");
 		for (LineType lt : lines) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("line_name", LinePresentation.getStringRespresentation(lt));
@@ -109,6 +111,15 @@ public class SelectLineActivity extends ListActivity implements
 
 		locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
+	}
+	
+	private void addSeparator( ArrayList<HashMap<String, Object>> list, String text) {
+		HashMap<String, Object> m = new HashMap<String, Object>();
+		m.put("line_name", "_"+text);
+		m.put("line_color", LineType.ALL);
+		m.put("line_image", -1);
+		m.put("line_more", false);
+		list.add(m);
 	}
 
 	@Override
@@ -167,6 +178,7 @@ public class SelectLineActivity extends ListActivity implements
 		if (nearbyPrevious.size()!=0 && nearbyPrevious.equals(nearby)) return;
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 
+		if (nearby.size()>0) addSeparator(list, "NEARBY STATIONS");
 		for (Station s : nearby) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("line_name", s.getName());
@@ -228,9 +240,10 @@ public class SelectLineActivity extends ListActivity implements
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		try {
-			if (!hasNearby || position>=6) {
-				if (hasNearby && position>=6) position -= 6;
-				// display a l2ist of stations
+			if (!hasNearby || position>=7) {
+				if (hasNearby && position>=7) position -= 6 + 1;
+				if (position==0) return;
+				// display a list of stations
 				String line_name = (String) lines_list.get(position).get(
 						"line_name");
 				Intent i = null;
@@ -245,7 +258,7 @@ public class SelectLineActivity extends ListActivity implements
 				startActivity(i);
 			} else {
 				// jump to departures
-				Station s = stationsList.get(position);
+				Station s = stationsList.get(position-1);
 				startDepartures(s);
 			}
 

@@ -2,22 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/board"
     android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/favorites_line"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip" >
+        
         <ImageView
             android:id="@+id/favorites_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="3dip" />
-
+        
         <TextView
             android:id="@+id/favorites_platform"
             style="@style/WhiteText"
@@ -27,8 +28,10 @@
             android:layout_weight="1"
             android:gravity="center"
             android:singleLine="false"
-            android:textSize="16sp" >
+            android:textSize="14sp"
+            android:textStyle="bold" >
         </TextView>
+        
 
         <Button
             android:id="@+id/remove_favorite"
@@ -41,6 +44,14 @@
             android:textOff=""
             android:textOn="" />
     </LinearLayout>
+    
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/tuberun_red_bright" />
 
     <LinearLayout
         android:layout_width="fill_parent"

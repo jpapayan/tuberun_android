@@ -1,7 +1,6 @@
 package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import android.app.ListActivity;
@@ -61,7 +60,7 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 		Bundle extras = getIntent().getExtras();
 		code = (String) extras.get("code");
 		name = (String) extras.get("name");
-		lineTextView.setText(name);
+		lineTextView.setText(name.toUpperCase());
     	
 		fetcher=new BusDeparturesFetcher(code,name);
 		fetcher.registerCallback(this);

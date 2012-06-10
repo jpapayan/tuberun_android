@@ -4,11 +4,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background_oyster" />
+<!--     <ImageView -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="fill_parent" -->
+<!--         android:scaleType="centerCrop" -->
+<!--         android:src="@drawable/background_oyster" /> -->
 
     <LinearLayout
         android:id="@+id/mainmenu"
@@ -50,6 +50,12 @@
                 android:text="Oyster Balance" />
         </LinearLayout>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom"
+            android:background="@drawable/tuberun_red_bright" />
+        
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="0dip"
@@ -59,7 +65,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/tuberun_semitransparent"
             android:orientation="vertical"
             android:padding="10dp" >
 

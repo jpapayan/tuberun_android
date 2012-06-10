@@ -25,15 +25,15 @@ public class DeparturesBinder implements ViewBinder, OnClickListener {
 	private String station_code;
 	private String station_nice;
 	private Activity activity;
-	private SimpleAdapter adapter;
+	int grey=Color.RED;
 	
 	public DeparturesBinder (LineType lt, String station_code, String station_nice, Activity activity, SimpleAdapter adapter) {
 		super();
+		grey=activity.getResources().getColor(R.drawable.tuberun_grey_darker);
 		this.lt=lt;
 		this.activity=activity;
 		this.station_code=station_code;
 		this.station_nice=station_nice;
-		this.adapter=adapter;
 	}
 	
 	String last_platform;
@@ -54,8 +54,13 @@ public class DeparturesBinder implements ViewBinder, OnClickListener {
 		if (view.getId()==R.id.departures_platform) {
 			last_platform=s;
 			tv.setVisibility(View.VISIBLE);
-//			tv.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
-//			tv.setTextColor(LinePresentation.getForegroundColor(lt));
+		}
+		else if (view.getId()==R.id.departures_position1 ||
+				 view.getId()==R.id.departures_position2 ||
+				 view.getId()==R.id.departures_position3) {
+			tv.setVisibility(View.VISIBLE);
+			tv.setBackgroundColor(Color.TRANSPARENT);
+			tv.setTextColor(grey);
 		}
 		else if (s.equals("") || s.equals(DeparturesDLRFetcher.none_msg)) {
 			tv.setTextColor(Color.WHITE);

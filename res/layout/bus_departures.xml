@@ -4,11 +4,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background_buses" />
+<!--     <ImageView -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="fill_parent" -->
+<!--         android:scaleType="centerCrop" -->
+<!--         android:src="@drawable/background_buses" /> -->
 
     <LinearLayout
         android:id="@+id/mainmenu"
@@ -76,16 +76,34 @@
                 android:minWidth="0dip"
                 android:text="" />
         </LinearLayout>
-
+        
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_gravity="bottom"
+            android:background="@drawable/tuberun_grey_darker" />
+        
         <TextView
             android:id="@+id/line_textview"
             style="@style/WhiteText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFF0000"
-            android:gravity="center"
+            android:gravity="left|center_vertical"
             android:singleLine="false"
-            android:text="" />
+            android:layout_marginTop="10dip"
+            android:paddingLeft="10dp"
+			android:paddingRight="10dp"
+			android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@drawable/tuberun_red_bright" />
+        
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+            android:background="@drawable/tuberun_red_bright" />
 
         <LinearLayout
             android:id="@+id/empty_layout"
@@ -132,9 +150,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dip"
-            android:background="@drawable/board"
-            android:cacheColorHint="#FF000000"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:layout_marginBottom="10dip"
             android:divider="@android:color/transparent"
             android:dividerHeight="0dip" />
     </LinearLayout>

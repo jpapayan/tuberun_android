@@ -48,8 +48,7 @@
         android:layout_height="wrap_content"
         android:gravity="fill_horizontal"
         android:padding="10dp"
-        android:textSize="16sp"
-        android:background="@drawable/tuberun_semitransparent" >
+        android:textSize="16sp" >
     </TextView>
 
 </LinearLayout>

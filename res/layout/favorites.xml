@@ -4,11 +4,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background_favorites" />
+<!--     <ImageView -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="fill_parent" -->
+<!--         android:scaleType="centerCrop" -->
+<!--         android:src="@drawable/background_favorites" /> -->
 
     <LinearLayout
         android:id="@+id/mainmenu"
@@ -62,6 +62,12 @@
                 android:minWidth="0dip"
                 android:text="" />
         </LinearLayout>
+        
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom"
+            android:background="@drawable/tuberun_red_bright" />
 
         <LinearLayout
             android:id="@+id/empty_layout"
@@ -77,6 +83,8 @@
                 style="@style/WhiteText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
                 android:layout_marginBottom="5dip"
                 android:layout_marginTop="5dip"
                 android:gravity="center"
@@ -115,8 +123,7 @@
             android:layout_margin="10dip"
             android:cacheColorHint="#00000000"
             android:divider="@android:color/transparent"
-            android:dividerHeight="10dip"
-            android:scrollbars="none" />
+            android:dividerHeight="10dip" />
     </LinearLayout>
 
 </FrameLayout>

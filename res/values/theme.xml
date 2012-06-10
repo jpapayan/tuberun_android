@@ -84,5 +84,5 @@
 	<drawable name="tuberun_red_bright_transparent">#99DA2B2C</drawable>
 	<drawable name="tuberun_boardorange">#FFB8C600</drawable>
 	<drawable name="tuberun_grey">#F3D5D4D4</drawable>
-	<drawable name="tuberun_grey_darker">#F3C1C1C1</drawable>
+	<drawable name="tuberun_grey_darker">#FF888888</drawable>
 </resources>

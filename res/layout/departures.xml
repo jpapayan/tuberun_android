@@ -4,11 +4,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background_depart" />
+<!--     <ImageView -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="fill_parent" -->
+<!--         android:scaleType="centerCrop" -->
+<!--         android:src="@drawable/background_depart" /> -->
 
     <LinearLayout
         android:id="@+id/mainmenu"
@@ -65,7 +65,7 @@
                 android:minWidth="0dip"
                 android:minHeight="0dip" />
         </LinearLayout>
-
+        
         <TextView
             android:id="@+id/station_textview"
             style="@style/WhiteText"
@@ -116,8 +116,7 @@
             android:layout_weight="1"
             android:scrollbars="none"
             android:divider="@android:color/transparent"
-  			android:dividerHeight="10dip"
-            android:cacheColorHint="#00000000" />
+  			android:dividerHeight="10dip" />
     </LinearLayout>
 
 </FrameLayout>

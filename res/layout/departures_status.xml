@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/board" >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -23,9 +22,11 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@drawable/tuberun_boardorange"
-                    android:textSize="16sp" >
+                    android:paddingLeft="10dip"
+                    android:gravity="left"
+                    android:textColor="@drawable/tuberun_red_bright"
+                    android:textSize="14sp"
+                    android:textStyle="bold" >
                 </TextView>
 
                 <ToggleButton
@@ -33,6 +34,7 @@
                     style="@style/FavoriteButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dip"
                     android:gravity="center"
                     android:textOff=""
                     android:textOn=""
@@ -41,6 +43,14 @@
             </TableRow>
         </TableLayout>
     </LinearLayout>
+    
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/tuberun_red_bright" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -59,7 +69,6 @@
         </TextView>
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
@@ -88,7 +97,8 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="3dp"
-                android:textSize="14sp" >
+                android:textSize="14sp"
+                android:textColor="@drawable/tuberun_grey" >
             </TextView>
         </LinearLayout>
     </LinearLayout>
@@ -110,7 +120,6 @@
         </TextView>
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
@@ -139,7 +148,8 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="3dp"
-                android:textSize="14sp" >
+                android:textSize="14sp"
+                android:textColor="@drawable/tuberun_grey" >
             </TextView>
         </LinearLayout>
     </LinearLayout>
@@ -190,7 +200,8 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="3dp"
-                android:textSize="14sp" >
+                android:textSize="14sp"
+                android:textColor="@drawable/tuberun_grey" >
             </TextView>
         </LinearLayout>
     </LinearLayout>

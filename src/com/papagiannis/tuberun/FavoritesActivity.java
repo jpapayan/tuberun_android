@@ -158,7 +158,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 						+ platform;
 				if (platform_trimmed.length() > 35)
 					platform_trimmed = platform_trimmed.substring(0, 34);
-				m.put("platform", platform_trimmed);
+				m.put("platform", platform_trimmed.toUpperCase());
 				int i = 1;
 				if (!asEmpty) {
 					for (HashMap<String, String> train : trains) {
@@ -189,7 +189,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 					m.put("icon", LinePresentation.getIcon(LineType.BUSES));
 					if (platform.length() > 35)
 						platform = platform.substring(0, 34) + ".";
-					m.put("platform", platform);
+					m.put("platform", platform.toUpperCase());
 					int i = 1;
 					if (!asEmpty) {
 						for (HashMap<String, String> train : trains) {
@@ -210,7 +210,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 						.getLine()));
 				content.add((String)m.get("line"));
 				m.put("platform", LinePresentation.getStringRespresentation(fav
-						.getLine()));
+						.getLine()).toUpperCase());
 				m.put("icon", LinePresentation.getIcon(fav.getLine()));
 				if (!asEmpty) {
 					m.put("time1", "");
