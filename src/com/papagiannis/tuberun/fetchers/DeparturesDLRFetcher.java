@@ -328,7 +328,7 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 	public ArrayList<HashMap<String, String>> getDepartures(String platform) {
 		ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
 		for (HashMap<String, String> d : departures) {
-			if (d.get("platform").equals(platform)) {
+			if (d.get("platform").equalsIgnoreCase(platform)) {
 				result.add(d);
 			}
 		}

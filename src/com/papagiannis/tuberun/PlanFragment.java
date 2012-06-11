@@ -50,7 +50,7 @@ import com.papagiannis.tuberun.plan.Point;
 
 public class PlanFragment extends Fragment implements Observer,
 		OnClickListener, OnCheckedChangeListener {
-	static final int HOME_ERASED_DIALOG= -11;
+	static final int HOME_ERASED_DIALOG = -11;
 	static final int PLANNING_FATAL_ERROR = -10;
 	static final int SELECT_PAST_DESTINATION_DIALOG = -9;
 	static final int LOCATION_SERVICE_FAILED = -8;
@@ -99,7 +99,7 @@ public class PlanFragment extends Fragment implements Observer,
 			create();
 			if (!initialDestination.equals("")) {
 				goToDestination(initialDestination);
-				initialDestination="";
+				initialDestination = "";
 			}
 		} catch (Exception e) {
 			Log.w("PlanFragment", e);
@@ -151,36 +151,45 @@ public class PlanFragment extends Fragment implements Observer,
 					programmaticTextChange = false;
 					return;
 				}
-				String origin = s.toString().trim();
-				if (origin.equals("")
-						|| origin.equals(getResources().getText(
-								R.string.current_location))) {
-					PlanActivity.getPlan().setStartingType(Point.LOCATION);
-					planActivity.requestLocationUpdates();
-					planActivity.location_layout.setVisibility(View.VISIBLE);
-				} else {
-					planActivity.stopLocationUpdates();
-					planActivity.location_layout.setVisibility(View.GONE);
-
-					PlanActivity.getPlan().setStartingString(origin);
-					// guess the type of the result!
-					String[] tokens = origin.split("_");
-					String str = tokens[0];
-					PlanActivity.getPlan().setStartingString(str);
-					if (tokens.length > 1) {
-						if (tokens[tokens.length - 1].equals("poi")) {
-							PlanActivity.getPlan().setStartingType(Point.POI);
-						} else if (tokens[tokens.length - 1].equals("station")) {
-							PlanActivity.getPlan().setStartingType(
-									Point.STATION);
-						}
-						programmaticTextChange = true;
-						s.replace(0, s.length(), str);
-					} else if (isPostcode(str)) {
-						PlanActivity.getPlan().setStartingType(Point.POSTCODE);
+				try {
+					String origin = s.toString().trim();
+					if (origin.equals("")
+							|| origin.equals(getResources().getText(
+									R.string.current_location))) {
+						PlanActivity.getPlan().setStartingType(Point.LOCATION);
+						planActivity.requestLocationUpdates();
+						planActivity.location_layout
+								.setVisibility(View.VISIBLE);
 					} else {
-						PlanActivity.getPlan().setStartingType(Point.ADDRESS);
+						planActivity.stopLocationUpdates();
+						planActivity.location_layout.setVisibility(View.GONE);
+
+						PlanActivity.getPlan().setStartingString(origin);
+						// guess the type of the result!
+						String[] tokens = origin.split("_");
+						String str = tokens[0];
+						PlanActivity.getPlan().setStartingString(str);
+						if (tokens.length > 1) {
+							if (tokens[tokens.length - 1].equals("poi")) {
+								PlanActivity.getPlan().setStartingType(
+										Point.POI);
+							} else if (tokens[tokens.length - 1]
+									.equals("station")) {
+								PlanActivity.getPlan().setStartingType(
+										Point.STATION);
+							}
+							programmaticTextChange = true;
+							s.replace(0, s.length(), str);
+						} else if (isPostcode(str)) {
+							PlanActivity.getPlan().setStartingType(
+									Point.POSTCODE);
+						} else {
+							PlanActivity.getPlan().setStartingType(
+									Point.ADDRESS);
+						}
 					}
+				} catch (Exception e) {
+					Log.w("afterTextChnaged", e);
 				}
 			}
 		});
@@ -204,30 +213,37 @@ public class PlanFragment extends Fragment implements Observer,
 					programmaticTextChange = false;
 					return;
 				}
-				PlanActivity.getPlan().setDestination(s.toString());
-				if (s != null && !s.toString().trim().equals("")) {
-					go_layout.setVisibility(View.VISIBLE);
-				} else {
-					go_layout.setVisibility(View.GONE);
-				}
-
-				// guess the type of the result!
-				String[] tokens = s.toString().split("_");
-				String str = tokens[0];
-				PlanActivity.getPlan().setDestination(str);
-				if (tokens.length > 1) {
-					if (tokens[tokens.length - 1].equals("poi")) {
-						PlanActivity.getPlan().setDestinationType(Point.POI);
-					} else if (tokens[tokens.length - 1].equals("station")) {
-						PlanActivity.getPlan()
-								.setDestinationType(Point.STATION);
+				try {
+					PlanActivity.getPlan().setDestination(s.toString());
+					if (s != null && !s.toString().trim().equals("")) {
+						go_layout.setVisibility(View.VISIBLE);
+					} else {
+						go_layout.setVisibility(View.GONE);
 					}
-					programmaticTextChange = true;
-					s.replace(0, s.length(), str);
-				} else if (isPostcode(str)) {
-					PlanActivity.getPlan().setDestinationType(Point.POSTCODE);
-				} else {
-					PlanActivity.getPlan().setDestinationType(Point.ADDRESS);
+
+					// guess the type of the result!
+					String[] tokens = s.toString().split("_");
+					String str = tokens[0];
+					PlanActivity.getPlan().setDestination(str);
+					if (tokens.length > 1) {
+						if (tokens[tokens.length - 1].equals("poi")) {
+							PlanActivity.getPlan()
+									.setDestinationType(Point.POI);
+						} else if (tokens[tokens.length - 1].equals("station")) {
+							PlanActivity.getPlan().setDestinationType(
+									Point.STATION);
+						}
+						programmaticTextChange = true;
+						s.replace(0, s.length(), str);
+					} else if (isPostcode(str)) {
+						PlanActivity.getPlan().setDestinationType(
+								Point.POSTCODE);
+					} else {
+						PlanActivity.getPlan()
+								.setDestinationType(Point.ADDRESS);
+					}
+				} catch (Exception e) {
+					Log.w("afterDestinationTextChnaged", e);
 				}
 			}
 		});
@@ -278,19 +294,18 @@ public class PlanFragment extends Fragment implements Observer,
 		} catch (Exception e) {
 			Log.w("PlanFragment", e);
 		}
-		
+
 		destination_edittext.setThreshold(0);
 		destination_edittext.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				String txt=destination_edittext.getText().toString();
-				if (txt==null || txt.equals("")) {
+				String txt = destination_edittext.getText().toString();
+				if (txt == null || txt.equals("")) {
 					destination_edittext.manualFilter();
 				}
 			}
 		});
-		
 
 		// listener for the selectDate buttons
 		OnClickListener l = new OnClickListener() {
@@ -324,32 +339,31 @@ public class PlanFragment extends Fragment implements Observer,
 	}
 
 	private MatrixCursor getHistoryCursor() {
-		MatrixCursor cursor = new MatrixCursor(new String[] {
-				"_id",
+		MatrixCursor cursor = new MatrixCursor(new String[] { "_id",
 				SearchManager.SUGGEST_COLUMN_TEXT_1,
 				SearchManager.SUGGEST_COLUMN_INTENT_DATA,
 				SearchManager.SUGGEST_COLUMN_ICON_1 });
-		Integer i=0;
+		Integer i = 0;
 		ArrayList<Destination> h = planActivity.store.getAll(getActivity());
-		for (Destination d:h) {
-			String dataString="";
-			if (d.getType()==Point.POI) {
-				dataString+="_poi";
+		for (Destination d : h) {
+			String dataString = "";
+			if (d.getType() == Point.POI) {
+				dataString += "_poi";
+			} else if (d.getType() == Point.STATION) {
+				dataString += "_station";
 			}
-			else if (d.getType()==Point.STATION) {
-				dataString+="_station";
-			}
-			ArrayList<String> list=new ArrayList<String>(4);
-			list.add(i.toString()); i++;
+			ArrayList<String> list = new ArrayList<String>(4);
+			list.add(i.toString());
+			i++;
 			list.add(d.getDestination());
-			list.add(d.getDestination()+dataString);
+			list.add(d.getDestination() + dataString);
 			list.add(Integer.toString(R.drawable.walk));
 			cursor.addRow(list);
 		}
 		cursor.moveToFirst();
 		return cursor;
 	}
-		
+
 	private final Pattern pattern = Pattern
 			.compile("[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][A-Z]{2}");// .matcher(input).matches()
 
@@ -407,11 +421,11 @@ public class PlanFragment extends Fragment implements Observer,
 		}
 	}
 
-
 	private Dialog getFatalErrorDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(planActivity);
 		builder.setTitle("Planning Failed")
-				.setMessage("Try a nearby address or station. Alternatevely, try searching with a postcode only.")
+				.setMessage(
+						"Try a nearby address or station. Alternatevely, try searching with a postcode only.")
 				.setCancelable(true).setPositiveButton("OK", null);
 		return builder.create();
 	}
@@ -671,7 +685,6 @@ public class PlanFragment extends Fragment implements Observer,
 		return ret;
 	}
 
-
 	void updateLocationDialog(ProgressDialog pd,
 			CharSequence previous_location, CharSequence accuracy) {
 		if (pd == null && is_location_dialog && wait_dialog != null)
@@ -771,20 +784,19 @@ public class PlanFragment extends Fragment implements Observer,
 		}
 	}
 
-	
-	private String initialDestination="";
+	private String initialDestination = "";
+
 	public void handleIntent(Intent intent) {
-		String d=intent.getDataString();
-		if (destination_edittext!=null) {
+		String d = intent.getDataString();
+		if (destination_edittext != null) {
 			goToDestination(d);
-		}
-		else {
-			initialDestination=d;
+		} else {
+			initialDestination = d;
 		}
 	}
 
 	private void goToDestination(String d) {
-		programmaticTextChange=false;
+		programmaticTextChange = false;
 		destination_edittext.setText(d);
 		destination_edittext.clearListSelection();
 		onClick(go_layout);
@@ -795,9 +807,9 @@ public class PlanFragment extends Fragment implements Observer,
 		planActivity.updateHomeButton();
 		showDialog(HOME_ERASED_DIALOG);
 	}
-	
+
 	private Dialog getHomeErasedDialog() {
-		AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setMessage("Home Address Erased");
 		builder.setPositiveButton("OK", null);
 		return builder.create();

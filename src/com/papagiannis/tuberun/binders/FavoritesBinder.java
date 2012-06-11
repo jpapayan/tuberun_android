@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
@@ -25,9 +26,13 @@ public class FavoritesBinder implements ViewBinder, OnClickListener {
 
 	private final FavoritesActivity activity;
 	private final DragNDropListView listView;
+	private final int red;
+	private final int grey;
 	
 	public FavoritesBinder (FavoritesActivity activity, DragNDropListView listView) {
 		super();
+		grey=activity.getResources().getColor(R.drawable.tuberun_grey_darker);
+		red=activity.getResources().getColor(R.drawable.tuberun_red_bright);
 		this.activity=activity;
 		this.listView=listView;
 	}
@@ -36,16 +41,17 @@ public class FavoritesBinder implements ViewBinder, OnClickListener {
 	
 	@Override
 	public boolean setViewValue(View view, Object o, String s) {
-		int id=view.getId();
+		final int id=view.getId();
+		Class c= view.getClass();
+		String sss=c.toString();
 		switch (id) {
-		case R.id.favorites_line:
+		case R.id.line_favorites:
 			last_lt=LinePresentation.getLineTypeRespresentation(s);
 			view.setBackgroundColor(LinePresentation.getBackgroundColor(last_lt));
 			return true;
-		case R.id.favorites_icon:
+		case R.id.icon_favorites:
 			ImageView iv=(ImageView) view;
 			int icon=(Integer) o;
-			if (icon==R.drawable.buses) icon=R.drawable.buses_inverted;
 			Bitmap bmp = BitmapFactory.decodeResource(
 					activity.getResources(), icon);
 			Bitmap resizedbitmap = Bitmap.createScaledBitmap(bmp,
@@ -65,19 +71,14 @@ public class FavoritesBinder implements ViewBinder, OnClickListener {
 		}
 		
 		TextView tv = (TextView) view;
-		if (view.getId()==R.id.favorites_platform) {
+		if (id==R.id.platform_favorites) {
 			tv.setVisibility(View.VISIBLE);
-			tv.setBackgroundColor(LinePresentation.getBackgroundColor(last_lt));
-			tv.setTextColor(LinePresentation.getForegroundColor(last_lt));
+			tv.setTextColor(red);
 		}
 		else if (s.equals("") || s.equals(DeparturesDLRFetcher.none_msg)) {
-			tv.setTextColor(Color.WHITE);
-			tv.setBackgroundColor(Color.TRANSPARENT);
 			tv.setVisibility(View.GONE);
 		} else {
 			tv.setVisibility(View.VISIBLE);
-			tv.setBackgroundColor(Color.TRANSPARENT);
-			tv.setTextColor(Color.WHITE);
 		}
 		return false; // continue with the text
 	}

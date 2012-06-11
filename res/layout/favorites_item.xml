@@ -5,33 +5,30 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/favorites_line"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip" >
-        
-        <ImageView
-            android:id="@+id/favorites_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="3dip" />
-        
+        android:layout_marginRight="4dip"
+        android:orientation="horizontal" >
+
         <TextView
-            android:id="@+id/favorites_platform"
+            android:id="@+id/platform_favorites"
             style="@style/WhiteText"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="left|bottom"
+            android:gravity="left"
             android:layout_weight="1"
-            android:gravity="center"
             android:singleLine="false"
             android:textSize="14sp"
             android:textStyle="bold" >
         </TextView>
         
+        <ImageView
+            android:id="@+id/icon_favorites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" />
 
         <Button
             android:id="@+id/remove_favorite"
@@ -44,14 +41,15 @@
             android:textOff=""
             android:textOn="" />
     </LinearLayout>
-    
+
     <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="2dip"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip"
-            android:background="@drawable/tuberun_red_bright" />
+        android:id="@+id/line_favorites"
+        android:layout_width="match_parent"
+        android:layout_height="2dip"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@drawable/tuberun_red_bright" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -62,10 +60,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="5dip"
             android:layout_marginBottom="5dip"
-            android:layout_marginLeft="7dip"
+            android:layout_marginLeft="10dip"
             android:layout_marginRight="12dip"
+            android:layout_marginTop="5dip"
             android:background="@drawable/ic_move" />
 
         <TableLayout
@@ -76,7 +74,7 @@
 
             <TableRow
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
 
                 <TextView
                     android:id="@+id/favorites_time1"
@@ -84,9 +82,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="left|top"
-                    android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:paddingRight="10dp"
+                    android:paddingTop="10dp"
                     android:textSize="16sp"
                     android:visibility="gone" >
                 </TextView>
@@ -102,22 +100,21 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
+                        android:paddingRight="10dp"
                         android:paddingTop="10dp"
-                    	android:paddingRight="10dp"
                         android:textSize="16sp"
                         android:visibility="gone" >
                     </TextView>
 
                     <TextView
                         android:id="@+id/favorites_position1"
-                        style="@style/WhiteText"
+                        style="@style/PositionText"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
                         android:paddingBottom="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="3dp"
-                        android:textSize="14sp"
                         android:visibility="gone" >
                     </TextView>
                 </LinearLayout>
@@ -131,9 +128,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:paddingRight="10dp"
+                    android:paddingTop="10dp"
                     android:textSize="16sp"
                     android:visibility="gone" >
                 </TextView>
@@ -149,22 +146,21 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
+                        android:paddingRight="10dp"
                         android:paddingTop="10dp"
-                    	android:paddingRight="10dp"
                         android:textSize="16sp"
                         android:visibility="gone" >
                     </TextView>
 
                     <TextView
                         android:id="@+id/favorites_position2"
-                        style="@style/WhiteText"
+                        style="@style/PositionText"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
                         android:paddingBottom="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="3dp"
-                        android:textSize="14sp"
                         android:visibility="gone" >
                     </TextView>
                 </LinearLayout>
@@ -178,9 +174,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:paddingRight="10dp"
+                    android:paddingTop="10dp"
                     android:textSize="16sp"
                     android:visibility="gone" >
                 </TextView>
@@ -196,26 +192,26 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
+                        android:paddingRight="10dp"
                         android:paddingTop="10dp"
-                    	android:paddingRight="10dp"
                         android:textSize="16sp"
                         android:visibility="gone" >
                     </TextView>
 
                     <TextView
                         android:id="@+id/favorites_position3"
-                        style="@style/WhiteText"
+                        style="@style/PositionText"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
                         android:paddingBottom="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="3dp"
-                        android:textSize="14sp"
                         android:visibility="gone" >
                     </TextView>
                 </LinearLayout>
             </TableRow>
         </TableLayout>
     </LinearLayout>
+
 </LinearLayout>

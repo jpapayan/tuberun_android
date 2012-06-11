@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.ListActivity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +27,7 @@ import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
 import com.papagiannis.tuberun.fetchers.Fetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.StatusesFetcher;
+import com.papagiannis.tuberun.fetchers.DeparturesDLRFetcher;
 
 public class FavoritesActivity extends ListActivity implements Observer,
 		OnClickListener {
@@ -144,7 +146,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 			Fetcher f = fav.getFetcher();
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("index", Integer.toString(fav_index++));
-			if (f instanceof DeparturesFetcher) { // uglyyyyy
+			if ((f instanceof DeparturesFetcher) || (f instanceof DeparturesDLRFetcher)) {
 				DeparturesFetcher fetcher = (DeparturesFetcher) f;
 				String platform = ((DeparturesFavorite) fav).getPlatform();
 				ArrayList<HashMap<String, String>> trains = fetcher
@@ -156,8 +158,6 @@ public class FavoritesActivity extends ListActivity implements Observer,
 				DeparturesFavorite dfav = (DeparturesFavorite) fav;
 				String platform_trimmed = dfav.getStation_nice() + " "
 						+ platform;
-				if (platform_trimmed.length() > 35)
-					platform_trimmed = platform_trimmed.substring(0, 34);
 				m.put("platform", platform_trimmed.toUpperCase());
 				int i = 1;
 				if (!asEmpty) {
@@ -187,8 +187,6 @@ public class FavoritesActivity extends ListActivity implements Observer,
 							.getStringRespresentation(LineType.BUSES));
 					content.add((String)m.get("line"));
 					m.put("icon", LinePresentation.getIcon(LineType.BUSES));
-					if (platform.length() > 35)
-						platform = platform.substring(0, 34) + ".";
 					m.put("platform", platform.toUpperCase());
 					int i = 1;
 					if (!asEmpty) {
@@ -228,12 +226,12 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		}
 
 		DragNDropAdapter adapter = new DragNDropAdapter(this, favorites_list,
-				R.layout.favorites_item, new String[] { "line", "icon",
-						"platform", "index", "destination1", "position1",
+				R.layout.favorites_item, new String[] { "line", "platform",
+						"icon", "index", "destination1", "position1",
 						"time1", "destination2", "position2", "time2",
 						"destination3", "position3", "time3"}, new int[] {
-						R.id.favorites_line, R.id.favorites_icon,
-						R.id.favorites_platform, R.id.remove_favorite,
+						R.id.line_favorites, R.id.platform_favorites,
+						R.id.icon_favorites, R.id.remove_favorite,
 						R.id.favorites_destination1, R.id.favorites_position1,
 						R.id.favorites_time1, R.id.favorites_destination2,
 						R.id.favorites_position2, R.id.favorites_time2,
@@ -281,12 +279,12 @@ public class FavoritesActivity extends ListActivity implements Observer,
 
 		public void onStartDrag(View itemView) {
 			itemView.setVisibility(View.INVISIBLE);
-			itemView.setBackgroundResource(R.drawable.board_highlight);
+			itemView.setBackgroundColor(Color.YELLOW);
 		}
 
 		public void onStopDrag(View itemView) {
 			itemView.setVisibility(View.VISIBLE);
-			itemView.setBackgroundResource(R.drawable.board);
+			itemView.setBackgroundColor(Color.TRANSPARENT);
 		}
 
 	};
