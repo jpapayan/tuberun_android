@@ -227,16 +227,17 @@ public class FavoritesActivity extends ListActivity implements Observer,
 
 		DragNDropAdapter adapter = new DragNDropAdapter(this, favorites_list,
 				R.layout.favorites_item, new String[] { "line", "platform",
-						"icon", "index", "destination1", "position1",
+						"icon", "index", 
+						"destination1", "position1",
 						"time1", "destination2", "position2", "time2",
 						"destination3", "position3", "time3"}, new int[] {
-						R.id.line_favorites, R.id.platform_favorites,
-						R.id.icon_favorites, R.id.remove_favorite,
+						R.id.linee_favorites, R.id.platform_favorites, 
+						R.id.icon_favorites , R.id.remove_favorite,
 						R.id.favorites_destination1, R.id.favorites_position1,
 						R.id.favorites_time1, R.id.favorites_destination2,
 						R.id.favorites_position2, R.id.favorites_time2,
 						R.id.favorites_destination3, R.id.favorites_position3,
-						R.id.favorites_time3,});
+						R.id.favorites_time3});
 		adapter.setData(favorites_list);
 		adapter.setViewBinder(new FavoritesBinder(this,listView));
 		setListAdapter(adapter);

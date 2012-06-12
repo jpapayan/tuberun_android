@@ -45,13 +45,14 @@ public class FavoritesBinder implements ViewBinder, OnClickListener {
 		Class c= view.getClass();
 		String sss=c.toString();
 		switch (id) {
-		case R.id.line_favorites:
+		case R.id.linee_favorites:
 			last_lt=LinePresentation.getLineTypeRespresentation(s);
 			view.setBackgroundColor(LinePresentation.getBackgroundColor(last_lt));
 			return true;
 		case R.id.icon_favorites:
 			ImageView iv=(ImageView) view;
 			int icon=(Integer) o;
+			if (icon==R.drawable.buses) icon=R.drawable.buses_inverted;
 			Bitmap bmp = BitmapFactory.decodeResource(
 					activity.getResources(), icon);
 			Bitmap resizedbitmap = Bitmap.createScaledBitmap(bmp,

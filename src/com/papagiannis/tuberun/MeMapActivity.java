@@ -123,7 +123,7 @@ public abstract class MeMapActivity extends MapActivity implements
 	}
 
 	private HereOverlay<OverlayItem> generateMyLocationPushPin(Location l) {
-		Drawable drawable = this.getResources().getDrawable(R.drawable.here);
+		Drawable drawable = this.getResources().getDrawable(R.drawable.here_old);
 		HereOverlay<OverlayItem> hereo = new HereOverlay<OverlayItem>(drawable,
 				this);
 		hereo.setAccuracy((int) l.getAccuracy());
