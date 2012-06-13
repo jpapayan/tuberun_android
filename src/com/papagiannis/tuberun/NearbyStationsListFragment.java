@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -28,7 +31,6 @@ public class NearbyStationsListFragment extends ListFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		fetcher = new StationsTubeFetcher(getActivity());
 		fetcher.registerCallback(this);
 	}
@@ -63,6 +65,11 @@ public class NearbyStationsListFragment extends ListFragment implements
 		ArrayList<HashMap<String, Object>> to_display = new ArrayList<HashMap<String, Object>>();
 
 		stations_nearby = fetcher.getResult();
+		
+		ListView lv=getListView();
+		int[] colors = {0, Color.GRAY, 0}; // red for the example
+		lv.setDivider(new GradientDrawable(Orientation.RIGHT_LEFT, colors));
+		lv.setDividerHeight(1);
 		
 		for (Station s : stations_nearby) {
 			HashMap<String, Object> m = new HashMap<String, Object>();

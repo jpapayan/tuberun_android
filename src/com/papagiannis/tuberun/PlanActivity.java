@@ -121,8 +121,14 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 		go_home_full_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				planFragment.restoreDestination(store.getHome(self));
-				planFragment.onClick(planFragment.go_layout);
+				try {
+					planFragment.restoreDestination(store.getHome(self));
+					planFragment.onClick(planFragment.go_layout);
+				}
+				catch (Exception e) {
+					Log.w("PlanActivity", e);
+					finish();
+				}
 			}
 		});
 		go_home_full_button.setOnLongClickListener(new View.OnLongClickListener() {

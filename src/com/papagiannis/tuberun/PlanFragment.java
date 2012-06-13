@@ -190,6 +190,7 @@ public class PlanFragment extends Fragment implements Observer,
 					}
 				} catch (Exception e) {
 					Log.w("afterTextChnaged", e);
+					planActivity.finish();
 				}
 			}
 		});
@@ -244,6 +245,7 @@ public class PlanFragment extends Fragment implements Observer,
 					}
 				} catch (Exception e) {
 					Log.w("afterDestinationTextChnaged", e);
+					planActivity.finish();
 				}
 			}
 		});

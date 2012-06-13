@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.text.InputFilter.LengthFilter;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 
@@ -23,38 +27,37 @@ public class NearbyBinder implements ViewBinder, OnClickListener {
 	
 	@Override
 	public boolean setViewValue(View view, Object o, String s) {
-
-		TextView tv = (TextView) view;
 		if (view.getId()==R.id.nearby_tubename || view.getId()==R.id.nearby_tubedistance) {
+			TextView tv = (TextView) view;
 			tv.setVisibility(View.VISIBLE);
-			Typeface mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/transport.ttf");
-		    tv.setTypeface(mTypeface);
 			if (view.getId()==R.id.nearby_tubedistance) {
 				int i=(Integer) o;
 				if (i>10000) {
 					i=(i/1000);
-					tv.setText(i+"km");
+					tv.setText(i+" km");
 				}
 				else {
-					tv.setText(i+"m");
+					tv.setText(i+" m");
 				}
-				return true;
+			}
+			else {
+				tv.setText(s);
 			}
 			
 		}
 		else if (!s.equals("")) {
+			ImageView iv=(ImageView) view;
 			LineType lt=LinePresentation.getLineTypeRespresentation(s);
-			tv.setTextColor(LinePresentation.getForegroundColor(lt));
-			tv.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
-			tv.setVisibility(View.VISIBLE);
-//			Typeface mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/tfl.ttf");
-//		    tv.setTypeface(mTypeface);
+			iv.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
+			Bitmap bmp = BitmapFactory.decodeResource(
+					context.getResources(), LinePresentation.getIcon(lt));
+			iv.setImageBitmap(bmp);
+			iv.setVisibility(View.VISIBLE);
 		} 
 		else {
-			tv.setVisibility(View.GONE);
+			view.setVisibility(View.GONE);
 		}
-//		tv.setOnClickListener(this);
-		return false; // continue with the text
+		return true; // continue with the text
 	}
 
 	HashMap<View, View> subjects = new HashMap<View, View>();
