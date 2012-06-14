@@ -51,7 +51,9 @@ public class NearbyBinder implements ViewBinder, OnClickListener {
 			iv.setBackgroundColor(LinePresentation.getBackgroundColor(lt));
 			Bitmap bmp = BitmapFactory.decodeResource(
 					context.getResources(), LinePresentation.getIcon(lt));
-			iv.setImageBitmap(bmp);
+			Bitmap resizedbitmap = Bitmap.createScaledBitmap(bmp,
+					bmp.getWidth() / 2, bmp.getHeight() / 2, true);
+			iv.setImageBitmap(resizedbitmap);
 			iv.setVisibility(View.VISIBLE);
 		} 
 		else {

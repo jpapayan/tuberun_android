@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -65,11 +66,6 @@ public class NearbyStationsListFragment extends ListFragment implements
 		ArrayList<HashMap<String, Object>> to_display = new ArrayList<HashMap<String, Object>>();
 
 		stations_nearby = fetcher.getResult();
-		
-		ListView lv=getListView();
-		int[] colors = {0, Color.GRAY, 0}; // red for the example
-		lv.setDivider(new GradientDrawable(Orientation.RIGHT_LEFT, colors));
-		lv.setDividerHeight(1);
 		
 		for (Station s : stations_nearby) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
@@ -151,6 +147,10 @@ public class NearbyStationsListFragment extends ListFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
+		ListView lv=getListView();
+		int[] colors = {0, Color.GRAY, 0}; // red for the example
+		lv.setDivider(new GradientDrawable(Orientation.RIGHT_LEFT, colors));
+		lv.setDividerHeight(1);
 	}
 	
 	@Override

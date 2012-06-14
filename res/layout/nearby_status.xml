@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-		android:layout_marginLeft="10dip"
+        android:layout_marginLeft="10dip"
         android:text="Station"
         android:textSize="18sp"
         android:textStyle="bold" >
@@ -30,192 +30,186 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="2dip"
         android:orientation="horizontal" >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <ImageView
+            android:id="@+id/nearby_Piccadily"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginTop="2dip"
-            android:orientation="horizontal" >
+            android:gravity="center"
+            android:padding="4dip"
+            android:text="Picadilly"
+            android:textSize="16sp" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_Piccadily"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:text="Picadilly"
-                android:textSize="16sp" >
-            </ImageView>
+        <ImageView
+            android:id="@+id/nearby_Metropolitan"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dip"
+            android:text="Metropolitan"
+            android:textSize="16sp" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_Metropolitan"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:text="Metropolitan"
-                android:textSize="16sp" >
-            </ImageView>
+        <ImageView
+            android:id="@+id/nearby_District"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dip"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_District"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:text="Metropolitan"
-                android:textSize="16sp"
-                android:visibility="gone" >
-            </ImageView>
+        <ImageView
+            android:id="@+id/nearby_Hammersmith"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dip"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_Hammersmith"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:text="Metropolitan"
-                android:textSize="16sp"
-                android:visibility="gone" >
-            </ImageView>
+        <ImageView
+            android:id="@+id/nearby_Circle"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dip"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_Circle"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:text="Metropolitan"
-                android:textSize="16sp"
-                android:visibility="gone" >
-            </ImageView>
+        <ImageView
+            android:id="@+id/nearby_Northern"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dip"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_Northern"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:text="Metropolitan"
-                android:textSize="16sp"
-                android:visibility="gone" >
-            </ImageView>
+        <ImageView
+            android:id="@+id/nearby_DLR"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dip"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_DLR"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:text="Metropolitan"
-                android:textSize="16sp"
-                android:visibility="gone" >
-            </ImageView>
+        <ImageView
+            android:id="@+id/nearby_Overground"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dip"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_Overground"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:text="Metropolitan"
-                android:textSize="16sp"
-                android:visibility="gone" >
-            </ImageView>
+        <ImageView
+            android:id="@+id/nearby_Jubilee"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dip"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_Jubilee"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:text="Metropolitan"
-                android:textSize="16sp"
-                android:visibility="gone" >
-            </ImageView>
+        <ImageView
+            android:id="@+id/nearby_Victoria"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dip"
+            android:text="Metropolitan"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_Victoria"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:text="Metropolitan"
-                android:textSize="16sp"
-                android:visibility="gone" >
-            </ImageView>
+        <ImageView
+            android:id="@+id/nearby_Bakerloo"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dip"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_Bakerloo"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:textSize="16sp"
-                android:visibility="gone" >
-            </ImageView>
+        <ImageView
+            android:id="@+id/nearby_Waterloo"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dip"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_Waterloo"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:textSize="16sp"
-                android:visibility="gone" >
-            </ImageView>
+        <ImageView
+            android:id="@+id/nearby_Central"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dip"
+            android:textSize="16sp"
+            android:visibility="gone" >
+        </ImageView>
 
-            <ImageView
-                android:id="@+id/nearby_Central"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dip"
-                android:textSize="16sp"
-                android:visibility="gone" >
-            </ImageView>
+        <ImageView
+            android:layout_width="0dip"
+            android:layout_height="1dip"
+            android:layout_weight="1" />
 
-            <ImageView
-                android:layout_width="0dip"
-                android:layout_height="1dip"
-                android:layout_weight="1" />
+        <TextView
+            android:id="@+id/nearby_tubedistance"
+            style="@style/WhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:layout_marginRight="10dip"
+            android:text="300m"
+            android:textColor="@drawable/tuberun_grey_darker"
+            android:textSize="14sp" >
+        </TextView>
 
-            <TextView
-                android:id="@+id/nearby_tubedistance"
-                style="@style/WhiteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dip"
-                android:layout_gravity="right|top"
-                android:text="300m"
-                android:textColor="@drawable/tuberun_grey_darker"
-                android:textSize="14sp" >
-            </TextView>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|right"
-                android:layout_marginTop="3dip"
-                android:layout_marginRight="15dip"
-                android:background="@drawable/ic_ab_forward_holo_light" />
-        </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:layout_marginRight="15dip"
+            android:layout_marginTop="3dip"
+            android:background="@drawable/ic_ab_forward_holo_light" />
     </LinearLayout>
 
 </LinearLayout>

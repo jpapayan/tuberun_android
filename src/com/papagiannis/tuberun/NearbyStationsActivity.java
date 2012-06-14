@@ -6,6 +6,8 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.ReverseGeocodeFetcher;
@@ -142,9 +145,23 @@ public class NearbyStationsActivity extends FragmentActivity implements
 			}
 		});
 
+		SharedPreferences preferences=getPreferences(MODE_PRIVATE);
+		Boolean cycleNotice=preferences.getBoolean("cycleNotice", false);
+		if (cycleNotice==false) {
+			Editor editor = preferences.edit();
+			editor.putBoolean("cycleNotice", true);
+			editor.commit();
+			showToast();
+		}
 		
 		locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
+	}
+	
+	private void showToast() {
+		String msg="Barclays Cycle Hire data are updated by TfL every 3min";
+		Toast toast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
+		toast.show();
 	}
 
 	@Override

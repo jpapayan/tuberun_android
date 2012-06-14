@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.papagiannis.tuberun.cyclehire.CycleHireStation;
 import com.papagiannis.tuberun.cyclehire.NearbyCyclesBinder;
@@ -51,11 +55,6 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 		if (fetcher!=null) fetcher.abort();
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
 
 	Location lastKnownLocation;
 	public void locationChanged(Location l) {
@@ -92,11 +91,10 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 
 		SimpleAdapter adapter = new SimpleAdapter(getActivity(), to_display,
 				R.layout.nearby_cycle_status, new String[] { "name", "distance",
-						"nAvailableBikes","nEmptyDocks","nTotalDocks"},
+						"nAvailableBikes","nEmptyDocks"},
 				new int[] { R.id.nearby_name, R.id.nearby_distance,
 						R.id.available_bikes_textview,
-						R.id.empty_docks_textview,
-						R.id.total_bikes_textview});
+						R.id.empty_docks_textview});
 		adapter.setViewBinder(new NearbyCyclesBinder(getActivity()));
 		setListAdapter(adapter);
 	}
@@ -127,11 +125,13 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 		}
 	}
 	
-//	public void showToast() {
-//		String msg="Barclays Cycle Hire availability data is updated by TfL in 3min intervals";
-//		Toast toast = Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG);
-//		toast.show();
-//	}
-
-		
+	@Override
+	public void onResume() {
+		super.onResume();
+		ListView lv=getListView();
+		int[] colors = {0, Color.GRAY, 0}; // red for the example
+		lv.setDivider(new GradientDrawable(Orientation.RIGHT_LEFT, colors));
+		lv.setDividerHeight(1);
+	}
+	
 }
