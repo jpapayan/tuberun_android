@@ -4,73 +4,83 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dip"
     android:layout_marginLeft="5dip"
-    android:layout_marginTop="10dip"
-    android:background="@drawable/road_sign"
+    android:layout_marginTop="25dip"
     android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/nearby_name"
+        style="@style/WhiteText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="10dip"
+        android:paddingRight="5dip"
+        android:text="Station"
+        android:textSize="18sp"
+        android:textStyle="bold" >
+    </TextView>
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="14dip"
+        android:layout_marginTop="4dip" >
+        
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/busline_icon" />
 
-        <TextView
-            android:id="@+id/nearby_name"
-            style="@style/WhiteText"
+        <LinearLayout
             android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="5dip"
-            android:paddingRight="5dip"
             android:layout_weight="1"
-            android:text="Station"
-            android:textSize="20sp"
-            android:textStyle="bold" >
-        </TextView>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical" >
 
+            <TextView
+                android:id="@+id/point1_textview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="From"
+                android:textColor="@drawable/tuberun_grey_darker"
+                android:textSize="16sp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/point2_textview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="To"
+                android:textColor="@drawable/tuberun_grey_darker"
+                android:textSize="16sp" >
+            </TextView>
+        </LinearLayout>
+        
         <TextView
             android:id="@+id/nearby_distance"
             style="@style/WhiteText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
             android:layout_marginRight="10dip"
-            android:gravity="right"
             android:text="300m"
-            android:textColor="#ffff00"
-            android:textSize="20sp"
-            android:textStyle="bold" >
+            android:textColor="@drawable/tuberun_grey_darker"
+            android:textSize="14sp" >
         </TextView>
-    </LinearLayout>
 
-    
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dip"
-        android:layout_marginLeft="20dip"
-        android:layout_marginRight="10dip"
-        android:layout_marginTop="5dip"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/point1_textview"
-            style="@style/WhiteText"
-            android:layout_width="fill_parent"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="From"
-            android:textSize="16sp" >
-        </TextView>
-
-        <TextView
-            android:id="@+id/point2_textview"
-            style="@style/WhiteText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="To"
-            android:textSize="16sp" >
-        </TextView>
-
-
+            android:layout_gravity="top|right"
+            android:layout_marginRight="15dip"
+            android:layout_marginTop="3dip"
+            android:background="@drawable/ic_ab_forward_holo_light" />
     </LinearLayout>
 
 </LinearLayout>

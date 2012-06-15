@@ -159,7 +159,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 	}
 	
 	private void showToast() {
-		String msg="Barclays Cycle Hire data are updated by TfL every 3min";
+		String msg="Cycle Hire data are updated every 3 minutes";
 		Toast toast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
 		toast.show();
 	}

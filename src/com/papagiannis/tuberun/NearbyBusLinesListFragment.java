@@ -47,7 +47,7 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 		
 		for (String s : routesSorted) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
-			m.put("name", s);
+			m.put("name","Route " + s);
 			m.put("distance", routes.get(s));
 			m.put("point1", fetcher.getEndpoint1(s));
 			m.put("point2", fetcher.getEndpoint2(s));
