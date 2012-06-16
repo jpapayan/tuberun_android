@@ -25,7 +25,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginLeft="14dip"
-        android:layout_marginTop="4dip" >
+        android:layout_marginTop="4dip" 
+        android:layout_marginBottom="4dip">
         
         <ImageView
             android:layout_width="wrap_content"
@@ -45,7 +46,7 @@
                 android:id="@+id/point1_textview"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
+                android:gravity="left|top"
                 android:text="From"
                 android:textColor="@drawable/tuberun_grey_darker"
                 android:textSize="16sp" >
@@ -55,7 +56,8 @@
                 android:id="@+id/point2_textview"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
+                android:layout_marginTop="6dip"
+                android:gravity="left|bottom"
                 android:text="To"
                 android:textColor="@drawable/tuberun_grey_darker"
                 android:textSize="16sp" >
