@@ -82,10 +82,12 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_marginBottom="5dip"
+                android:layout_marginLeft="10dip"
+				android:layout_marginRight="10dip"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dip"
                 android:gravity="center"
-                android:text="Departures not available. Does TfL offer departure data for this station?" />
+                android:text="Departures are currently not available for this station. Does TfL offer departure data for this station?" />
 
         <LinearLayout
             android:id="@id/android:empty"

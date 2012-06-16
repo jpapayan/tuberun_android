@@ -11,7 +11,7 @@
         android:layout_marginTop="5dip"
         android:layout_weight="50"
         android:layout_gravity="bottom"
-        android:cacheColorHint="#00000000" />
+        android:cacheColorHint="@android:color/transparent" />
 
 
 </LinearLayout>

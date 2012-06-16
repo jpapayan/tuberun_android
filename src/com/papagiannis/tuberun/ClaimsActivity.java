@@ -31,9 +31,7 @@ public class ClaimsActivity extends ListActivity implements OnClickListener  {
 
 	public void create() {
 		View addButton = findViewById(R.id.button_add);
-//		View addButton2 = findViewById(R.id.button_add2);
 		addButton.setOnClickListener(this);
-//		addButton2.setOnClickListener(this);
 		store = ClaimStore.getInstance();
 		Button back_button = (Button) findViewById(R.id.back_button);
 		Button logo_button = (Button) findViewById(R.id.logo_button);

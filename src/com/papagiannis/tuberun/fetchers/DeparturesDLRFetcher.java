@@ -26,7 +26,7 @@ import com.papagiannis.tuberun.LineType;
 
 public class DeparturesDLRFetcher extends DeparturesFetcher {
 	private static final long serialVersionUID = 1L;
-	public static final String none_msg = "No train location information available for DLR.";
+	public static final String none_msg = "";
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
 	private Date last_update = new Date();
 	protected int update_counter = 0;

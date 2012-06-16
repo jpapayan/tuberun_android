@@ -2,21 +2,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/black"
     android:orientation="vertical" >
 
-    <!-- <ImageView -->
-    <!-- android:layout_width="fill_parent" -->
-    <!-- android:layout_height="fill_parent" -->
-    <!-- android:scaleType="centerCrop" -->
-    <!-- android:src="@drawable/background_claims" /> -->
-
-    <com.papagiannis.tuberun.AspectRatioImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:adjustViewBounds="true"
-        android:src="@drawable/about" />
+    <!-- <com.papagiannis.tuberun.AspectRatioImageView -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_gravity="bottom" -->
+    <!-- android:adjustViewBounds="true" -->
+    <!-- android:src="@drawable/about" /> -->
 
     <LinearLayout
         android:id="@+id/mainmenu"
@@ -37,8 +30,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:minWidth="0dip"
-                android:minHeight="0dip" />
+                android:minHeight="0dip"
+                android:minWidth="0dip" />
 
             <Button
                 android:id="@+id/logo_button"
@@ -68,17 +61,23 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|right"
                 android:layout_marginRight="5dip"
+                android:minHeight="0dip"
+                android:minWidth="0dip"
                 android:text=""
                 android:textOff=""
-                android:textOn=""
-                android:minWidth="0dip"
-                android:minHeight="0dip" />
+                android:textOn="" />
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom"
+            android:background="@drawable/tuberun_red_bright" />
 
         <LinearLayout
             android:id="@id/android:empty"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="0dip"
             android:layout_gravity="center"
             android:layout_marginBottom="5dip"
             android:layout_marginTop="5dip"
@@ -96,31 +95,29 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
                 android:layout_marginTop="5dip"
-                android:background="@drawable/tuberun_semitransparent"
                 android:gravity="center"
                 android:text="Do you know that you can claim your ticket money back if your underground train is delayed for more than 15min? Why don&apos;t you fill the form while waiting?" />
-
-<!--             <ImageView -->
-<!--                 android:id="@+id/button_add2" -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:layout_gravity="center" -->
-<!--                 android:background="@drawable/tuberun_semitransparent" -->
-<!--                 android:src="@drawable/content_new" /> -->
+            
+            <ImageView 
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                style="@style/AddButton"
+                android:layout_gravity="center_horizontal"/>
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="0dip"
-                android:layout_weight="4" />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <ListView
             android:id="@+id/android:list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/tuberun_semitransparent"
-            android:cacheColorHint="#00000000" />
+            android:cacheColorHint="@android:color/transparent" />
     </LinearLayout>
 
 </FrameLayout>

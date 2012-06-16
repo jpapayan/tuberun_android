@@ -18,9 +18,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
             android:layout_marginTop="5dip"
+            android:layout_marginLeft="16dip"
+			android:layout_marginRight="16dip"
             android:gravity="center"
-            android:layout_weight="1"
-            android:text="You can store journey plans for offline use by pressing the save button" />
+            android:text="Store journey plans for offline use by pressing the save button" />
         <ImageView 
             android:src="@drawable/content_save"
             android:layout_height="wrap_content"
@@ -32,7 +33,9 @@
         android:id="@id/android:list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_marginLeft="16dip"
+		android:layout_marginRight="16dip"
         android:drawSelectorOnTop="false"
-        android:cacheColorHint="#00000000" />
+        android:cacheColorHint="@android:color/transparent" />
 
 </FrameLayout>

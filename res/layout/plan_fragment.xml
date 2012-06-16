@@ -24,9 +24,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dip"
-                    android:paddingLeft="16dip"
-                    android:paddingRight="16dip"
-                    android:text="Starting point" />
+                    android:layout_marginLeft="16dip"
+                    android:layout_marginRight="16dip"
+                    android:textColor="@drawable/tuberun_grey_darker"
+                    android:textSize="14sp"
+                    android:text="FROM" />
 
                 <AutoCompleteTextView
                     android:id="@+id/from_edittext"
@@ -35,21 +37,23 @@
                     android:layout_marginBottom="10dip"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
-                    android:layout_marginTop="10dip"
+                    android:layout_marginTop="4dip"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:state_enabled="false"
                     android:text="@string/current_location"
-                    android:hint="Station, address, postcode or POI"/>"
+                    android:hint="Station, address, postcode or POI"/>
 
                 <TextView
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dip"
-                    android:paddingLeft="16dip"
-                    android:paddingRight="16dip"
-                    android:text="Destination" />
+                    android:layout_marginLeft="16dip"
+                    android:layout_marginRight="16dip"
+                    android:textSize="14sp"
+                    android:textColor="@drawable/tuberun_grey_darker"
+                    android:text="TO" />
 
                 <com.papagiannis.tuberun.HistoryAutoComplete
                     android:id="@+id/destination_edittext"
@@ -59,35 +63,13 @@
                     android:layout_marginBottom="10dip"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
-                    android:layout_marginTop="10dip"
+                    android:layout_marginTop="4dip"
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:text=""
                     android:hint="Station, address, postcode or POI" />
 
             </LinearLayout>
-
-            <!-- <TextView -->
-            <!-- android:id="@+id/previous_textview" -->
-            <!-- style="@style/WhiteText" -->
-            <!-- android:layout_width="fill_parent" -->
-            <!-- android:layout_height="wrap_content" -->
-            <!-- android:layout_marginTop="16dip" -->
-            <!-- android:background="#99000000" -->
-            <!-- android:paddingLeft="16dip" -->
-            <!-- android:paddingRight="16dip" -->
-            <!-- android:text="Past destinations" /> -->
-
-
-            <!-- <LinearLayout -->
-            <!-- android:id="@+id/previous_layout" -->
-            <!-- android:layout_width="fill_parent" -->
-            <!-- android:layout_height="wrap_content" -->
-            <!-- android:layout_marginBottom="16dip" -->
-            <!-- android:layout_marginLeft="16dip" -->
-            <!-- android:layout_marginRight="16dip" -->
-            <!-- android:layout_marginTop="5dip" -->
-            <!-- android:orientation="vertical" /> -->
 
             <LinearLayout
                 android:id="@+id/adv2anced_layout"
@@ -99,9 +81,11 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="16dip"
-                    android:paddingRight="16dip"
-                    android:text="Means of transport" />
+                    android:layout_marginLeft="16dip"
+                    android:layout_marginRight="16dip"
+                    android:textSize="14sp"
+                    android:textColor="@drawable/tuberun_grey_darker"
+                    android:text="MEANS OF TRANSPORT" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -171,10 +155,12 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="16dip"
-                    android:paddingRight="16dip"
-                    android:paddingTop="8dip"
-                    android:text="Travel date and time" />
+                    android:layout_marginLeft="20dip"
+                    android:layout_marginRight="16dip"
+                    android:textColor="@drawable/tuberun_grey_darker"
+                    android:layout_marginTop="8dip"
+                    android:textSize="14sp"
+                    android:text="TRAVEL DATE AND TIME" />
 
                 <Button
                     android:id="@+id/traveldate_button"
@@ -183,7 +169,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
-                    android:layout_marginTop="10dip"
+                    android:layout_marginTop="4dip"
                     android:focusable="true"
                     android:state_enabled="false"
                     android:text="Travel date" />

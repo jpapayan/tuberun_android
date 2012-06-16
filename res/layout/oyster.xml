@@ -4,18 +4,17 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-<!--     <ImageView -->
-<!--         android:layout_width="fill_parent" -->
-<!--         android:layout_height="fill_parent" -->
-<!--         android:scaleType="centerCrop" -->
-<!--         android:src="@drawable/background_oyster" /> -->
+    <!-- <ImageView -->
+    <!-- android:layout_width="fill_parent" -->
+    <!-- android:layout_height="fill_parent" -->
+    <!-- android:scaleType="centerCrop" -->
+    <!-- android:src="@drawable/background_oyster" /> -->
 
     <LinearLayout
         android:id="@+id/mainmenu"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="10dip"
-        android:orientation="vertical">
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -29,8 +28,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:minWidth="0dip"
-                android:minHeight="0dip" />
+                android:minHeight="0dip"
+                android:minWidth="0dip" />
 
             <Button
                 android:id="@+id/logo_button"
@@ -45,8 +44,8 @@
                 style="@android:style/TextAppearance.Medium"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dip"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dip"
                 android:text="Oyster Balance" />
         </LinearLayout>
 
@@ -55,7 +54,7 @@
             android:layout_height="2dip"
             android:layout_gravity="bottom"
             android:background="@drawable/tuberun_red_bright" />
-        
+
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="0dip"
@@ -128,7 +127,6 @@
                         android:inputType="textPassword"
                         android:singleLine="true" />
                 </LinearLayout>
-                
 
                 <Button
                     android:id="@+id/button_store"
@@ -150,15 +148,7 @@
                     android:layout_toLeftOf="@id/button_store"
                     android:text="Clear" />
             </RelativeLayout>
-            
-            <TextView
-                style="@style/WhiteText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
-                android:padding="10dip"
-                android:background="@drawable/tuberun_red"
-                android:text="Your credentials are only stored in your phone and are only used to fetch your Oyster balance from TfL's servers" />
+
         </LinearLayout>
         
         <TextView
@@ -166,6 +156,28 @@
             android:layout_height="0dip"
             android:layout_weight="1" />
         
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dip"
+                android:background="@drawable/tuberun_red"
+                android:orientation="horizontal"
+                android:padding="10dip" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_dialog_info" />
+
+                <TextView
+                    style="@style/WhiteText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:text="Your credentials are only stored in your phone and are only used to fetch your Oyster balance" />
+            </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>

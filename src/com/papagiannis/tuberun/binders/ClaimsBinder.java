@@ -36,11 +36,6 @@ public class ClaimsBinder implements ViewBinder, OnClickListener {
 			return true;
 		}
 		
-//		if (view.getId()==R.id.remove_claim) {
-//			view.setOnClickListener(this);
-//			view_claim_indexes.put(view, Integer.parseInt(s));
-//			return true;
-//		}
 		return false; // continue with the text
 	}
 

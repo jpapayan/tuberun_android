@@ -88,7 +88,7 @@
                 android:layout_marginBottom="5dip"
                 android:layout_marginTop="5dip"
                 android:gravity="center"
-                android:text="You can store tube lines, platforms and bus stops by pressing the favorite button" />
+                android:text="You can add tube lines, platforms and bus stops by pressing the favorite button" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dip"
-            android:cacheColorHint="#00000000"
+            android:cacheColorHint="@android:color/transparent"
             android:divider="@android:color/transparent"
             android:dividerHeight="10dip" />
     </LinearLayout>

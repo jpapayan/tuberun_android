@@ -58,20 +58,13 @@ public class DeparturesBinder implements ViewBinder, OnClickListener {
 		else if (view.getId()==R.id.departures_position1 ||
 				 view.getId()==R.id.departures_position2 ||
 				 view.getId()==R.id.departures_position3) {
-			tv.setVisibility(View.VISIBLE);
-			tv.setBackgroundColor(Color.TRANSPARENT);
 			tv.setTextColor(grey);
+			if (s.equals("") || s.equals(DeparturesDLRFetcher.none_msg)) {
+				tv.setVisibility(View.GONE);
+			} else {
+				tv.setVisibility(View.VISIBLE);
+			}
 		}
-		else if (s.equals("") || s.equals(DeparturesDLRFetcher.none_msg)) {
-			tv.setTextColor(Color.WHITE);
-			tv.setBackgroundColor(Color.TRANSPARENT);
-			tv.setVisibility(View.GONE);
-		} else {
-			tv.setVisibility(View.VISIBLE);
-			tv.setBackgroundColor(Color.TRANSPARENT);
-			tv.setTextColor(Color.WHITE);
-		}
-		// tv.setOnClickListener(this);
 		return false; // continue with the text
 	}
 
