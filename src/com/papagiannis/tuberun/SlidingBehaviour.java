@@ -18,7 +18,7 @@ public class SlidingBehaviour {
 	}
 	
 	protected MyHorizontalScrollView scrollView;
-    protected View menu;
+    protected MainMenu menu;
     protected View app;
     protected Button showMenuButton1;
     protected Button showMenuButton2;
@@ -38,6 +38,7 @@ public class SlidingBehaviour {
         showMenuButton2 = (Button) tabBar.findViewById(R.id.back_button);
         showMenuButton1.setOnClickListener(new ClickListenerForMenu(scrollView, menu));
         showMenuButton2.setOnClickListener(new ClickListenerForMenu(scrollView, menu));
+        menu.setMenuButton(showMenuButton1);
 
         final View[] children = new View[] { menu, app };
 

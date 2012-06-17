@@ -45,9 +45,7 @@
 
                     <TableRow
                         android:id="@+id/status_row"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginLeft="10dip"
-                        android:layout_marginTop="10dip" >
+                        android:background="@layout/transparent_button">
 
                         <Button
                             style="@style/LogoButton"
@@ -71,9 +69,7 @@
 
                     <TableRow
                         android:id="@+id/departures_row"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginLeft="10dip"
-                        android:layout_marginTop="10dip" >
+                        android:background="@layout/transparent_button">
 
                         <Button
                             style="@style/LogoButton"
@@ -97,9 +93,7 @@
 
                     <TableRow
                         android:id="@+id/nearby_row"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginLeft="10dip"
-                        android:layout_marginTop="10dip" >
+                        android:background="@layout/transparent_button" >
 
                         <Button
                             style="@style/LogoButton"
@@ -123,9 +117,7 @@
 
                     <TableRow
                         android:id="@+id/map_row"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginLeft="10dip"
-                        android:layout_marginTop="10dip" >
+                        android:background="@layout/transparent_button">
 
                         <Button
                             style="@style/MapButton"
@@ -149,9 +141,7 @@
 
                     <TableRow
                         android:id="@+id/planner_row"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginLeft="10dip"
-                        android:layout_marginTop="10dip" >
+                        android:background="@layout/transparent_button">
 
                         <Button
                             style="@style/LogoButton"
@@ -175,9 +165,7 @@
 
                     <TableRow
                         android:id="@+id/claims_row"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginLeft="10dip"
-                        android:layout_marginTop="10dip" >
+                        android:background="@layout/transparent_button">
 
                         <Button
                             style="@style/LogoButton"
@@ -201,9 +189,7 @@
 
                     <TableRow
                         android:id="@+id/favorites_row"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginLeft="10dip"
-                        android:layout_marginTop="10dip" >
+                        android:background="@layout/transparent_button">
 
                         <Button
                             style="@style/FavoriteButton"

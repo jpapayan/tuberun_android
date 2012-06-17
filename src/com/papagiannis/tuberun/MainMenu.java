@@ -21,6 +21,7 @@ public class MainMenu extends FrameLayout implements OnClickListener {
 	private boolean tubeMapDownloaded = false;
 	private ImageDownloadTask task;
 	
+	Button menuButton;
 	Button oysterButton;
 	Button oysterButtonActive;
 	
@@ -126,8 +127,12 @@ public class MainMenu extends FrameLayout implements OnClickListener {
 			context.startActivity(i);
 		}
 		else {
-			//TODO slide off the menu
+			if (menuButton!=null) menuButton.callOnClick();
 		}
+	}
+	
+	public void setMenuButton(Button menuButton) {
+		this.menuButton=menuButton;
 	}
 
 }

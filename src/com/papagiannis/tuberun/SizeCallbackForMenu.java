@@ -20,7 +20,6 @@ public class SizeCallbackForMenu implements SizeCallback {
     @Override
     public void onGlobalLayout() {
         btnWidth = btnSlide.getMeasuredWidth();
-        System.out.println("btnWidth=" + btnWidth);
     }
 
     @Override

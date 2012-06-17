@@ -4,12 +4,12 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ImageView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background" />
+    <!-- <ImageView -->
+    <!-- xmlns:android="http://schemas.android.com/apk/res/android" -->
+    <!-- android:layout_width="fill_parent" -->
+    <!-- android:layout_height="fill_parent" -->
+    <!-- android:scaleType="centerCrop" -->
+    <!-- android:src="@drawable/background" /> -->
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -113,6 +113,12 @@
                 android:textOn="" />
         </LinearLayout>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom"
+            android:background="@drawable/tuberun_red_bright" />
+
         <TableLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -126,34 +132,28 @@
 
             <TableRow
                 android:layout_height="fill_parent"
-                android:layout_weight="20.0" />
-
-            <TableRow
-                android:layout_height="fill_parent"
                 android:layout_weight="0.5" >
 
                 <Button
                     android:id="@+id/button_status"
-                    android:background="@layout/custom_button"
-                    android:textColor="@android:color/black"
-                    android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@layout/custom_button"
                     android:maxHeight="120dip"
                     android:minHeight="70dip"
                     android:text="@string/status_title"
+                    android:textColor="@android:color/black"
                     android:width="120dip" />
 
-                
-
                 <Button
-                    android:background="@layout/custom_button"
-                    android:textColor="@android:color/black"
                     android:id="@+id/button_departures"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:background="@layout/custom_button"
                     android:maxHeight="120dip"
                     android:minHeight="70dip"
                     android:text="@string/departures_title"
+                    android:textColor="@android:color/black"
                     android:width="120dip" />
             </TableRow>
 
@@ -164,24 +164,24 @@
 
                 <Button
                     android:id="@+id/button_nearby"
-                    android:background="@layout/custom_button"
-                    android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:background="@layout/custom_button"
                     android:maxHeight="120dip"
                     android:minHeight="70dip"
                     android:singleLine="false"
-                    android:text="@string/nearby_title" />
+                    android:text="@string/nearby_title"
+                    android:textColor="@android:color/black" />
 
                 <Button
                     android:id="@+id/button_maps"
-                    android:background="@layout/custom_button"
-                    android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:background="@layout/custom_button"
                     android:maxHeight="120dip"
                     android:minHeight="70dip"
-                    android:text="@string/maps_title" />
+                    android:text="@string/maps_title"
+                    android:textColor="@android:color/black" />
             </TableRow>
 
             <TableRow
@@ -191,30 +191,26 @@
 
                 <Button
                     android:id="@+id/button_planner"
-                    android:background="@layout/custom_button"
-                    android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:background="@layout/custom_button"
                     android:maxHeight="120dip"
                     android:minHeight="70dip"
                     android:singleLine="false"
-                    android:text="@string/planner_title" />
+                    android:text="@string/planner_title"
+                    android:textColor="@android:color/black" />
 
                 <Button
                     android:id="@+id/button_claims"
-                    android:background="@layout/custom_button"
-                    android:textColor="@android:color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:background="@layout/custom_button"
                     android:maxHeight="120dip"
                     android:minHeight="70dip"
                     android:singleLine="false"
-                    android:text="@string/claims_title" />
+                    android:text="@string/claims_title"
+                    android:textColor="@android:color/black" />
             </TableRow>
-            
-            <TableRow
-                android:layout_height="fill_parent"
-                android:layout_weight="1" />
         </TableLayout>
     </LinearLayout>
 
