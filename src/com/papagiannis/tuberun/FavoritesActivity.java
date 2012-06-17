@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -23,11 +22,11 @@ import com.papagiannis.tuberun.binders.FavoritesBinder;
 import com.papagiannis.tuberun.favorites.DeparturesFavorite;
 import com.papagiannis.tuberun.favorites.Favorite;
 import com.papagiannis.tuberun.fetchers.BusDeparturesFetcher;
+import com.papagiannis.tuberun.fetchers.DeparturesDLRFetcher;
 import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
 import com.papagiannis.tuberun.fetchers.Fetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.StatusesFetcher;
-import com.papagiannis.tuberun.fetchers.DeparturesDLRFetcher;
 
 public class FavoritesActivity extends ListActivity implements Observer,
 		OnClickListener {
@@ -43,7 +42,8 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.favorites);
+		new SlidingBehaviour(this, R.layout.favorites).setupHSVWithLayout();
+		
 		View updateButton = findViewById(R.id.button_update);
 		updateButton.setOnClickListener(this);
 		create();
@@ -52,17 +52,6 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	public void create() {
 		setListAdapter(null);
 
-		Button back_button = (Button) findViewById(R.id.back_button);
-		Button logo_button = (Button) findViewById(R.id.logo_button);
-		OnClickListener back_listener = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		};
-		back_button.setOnClickListener(back_listener);
-		logo_button.setOnClickListener(back_listener);
-		
 		listView = (DragNDropListView) getListView();
 		listView.setDropListener(mDropListener);
         listView.setRemoveListener(mRemoveListener);

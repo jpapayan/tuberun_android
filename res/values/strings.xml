@@ -8,10 +8,10 @@
 	<string name="departures_title">Departures</string>
 	<string name="nearby_title">Nearby</string>
 	<string name="maps_title">Map</string>
-	<string name="claims_title">Refund\nClaims</string>
-	<string name="planner_title">Journey \nPlanner</string>
+	<string name="claims_title">Refund Claims</string>
+	<string name="planner_title">Journey Planner</string>
 	<string name="favorites_title">Favourites</string>
-	<string name="oyster_title">Oyster\nBalance</string>
+	<string name="oyster_title">Oyster Balance</string>
 	<string name="show_weekend">Show Weekend</string>
 	<string name="show_now">Show Now</string>
 	

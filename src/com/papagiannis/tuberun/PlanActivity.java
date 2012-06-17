@@ -60,7 +60,8 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.plan);
+		new SlidingBehaviour(this, R.layout.plan).setupHSVWithLayout();
+		
 		setupTabHost(savedInstanceState);
 		plan = new Plan();
 		create();
@@ -106,16 +107,6 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 
 	private void create() {
 		createReferences();
-
-		// Setup handlers for the titlebar actions
-		OnClickListener back_listener = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				self.finish();
-			}
-		};
-		back_button.setOnClickListener(back_listener);
-		logo_button.setOnClickListener(back_listener);
 
 		// updateHistoryView();
 		go_home_full_button.setOnClickListener(new OnClickListener() {

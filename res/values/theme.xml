@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 	<style name="WhiteText" parent="@android:style/TextAppearance">
 		<item name="android:textColor">#FFFFFF</item>
 	</style>
@@ -80,7 +80,6 @@
 		<item name="android:listSelector">@layout/hue_list_selector</item>
 	</style>
 	
-
 	<drawable name="tuberun_semitransparent">#BA000000</drawable>
 	<drawable name="tuberun_red">#FF801219</drawable>
 	<drawable name="tuberun_red_semitransparent">#99801219</drawable>
@@ -89,4 +88,6 @@
 	<drawable name="tuberun_boardorange">#FFB8C600</drawable>
 	<drawable name="tuberun_grey">#F3D5D4D4</drawable>
 	<drawable name="tuberun_grey_darker">#FF888888</drawable>
+	<drawable name="tuberun_grey_menu_dark">#FF292929</drawable>
+	<drawable name="tuberun_grey_menu_light">#FF3C3C3C</drawable>
 </resources>

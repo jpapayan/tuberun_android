@@ -356,7 +356,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		favoritesButton.setChecked(favs.size() > 0);
 	}
 
-	private class ImageDownloadTask extends AsyncTask<String, Integer, Boolean> {
+	class ImageDownloadTask extends AsyncTask<String, Integer, Boolean> {
 
 		@Override
 		protected Boolean doInBackground(String... params) {

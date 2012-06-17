@@ -2,10 +2,6 @@ package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
 
-import com.papagiannis.tuberun.fetchers.Observer;
-import com.papagiannis.tuberun.fetchers.OysterFetcher;
-import com.papagiannis.tuberun.stores.CredentialsStore;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,6 +13,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.papagiannis.tuberun.fetchers.Observer;
+import com.papagiannis.tuberun.fetchers.OysterFetcher;
+import com.papagiannis.tuberun.stores.CredentialsStore;
 
 @SuppressWarnings("deprecation")
 public class OysterActivity extends Activity implements Observer{
@@ -34,22 +34,11 @@ public class OysterActivity extends Activity implements Observer{
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.oyster);
+		new SlidingBehaviour(this, R.layout.oyster).setupHSVWithLayout();
 		create();
     }
 	
 	private void create() {
-		Button back_button = (Button) findViewById(R.id.back_button);
-		Button logo_button = (Button) findViewById(R.id.logo_button);
-		OnClickListener back_listener = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		};
-		back_button.setOnClickListener(back_listener);
-		logo_button.setOnClickListener(back_listener);
-		
 		username = (EditText) findViewById(R.id.oyster_username);
 		password = (EditText) findViewById(R.id.oyster_password);
 		
@@ -150,5 +139,16 @@ public class OysterActivity extends Activity implements Observer{
 		if (fetcher!=null) fetcher.deregisterCallback(this);
 		super.onStop();
 	}
+	
+//	@Override
+//	protected void onPause() {
+//		super.onResume();
+//	}
+//	
+//	@Override
+//	protected void onResume() {
+//		btnSlide.callOnClick();
+//		super.onResume();
+//	}
 
 }

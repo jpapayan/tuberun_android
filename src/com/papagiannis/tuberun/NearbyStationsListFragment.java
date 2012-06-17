@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -148,7 +147,7 @@ public class NearbyStationsListFragment extends ListFragment implements
 	public void onResume() {
 		super.onResume();
 		ListView lv=getListView();
-		int[] colors = {0, Color.GRAY, 0}; // red for the example
+		int[] colors = {Color.TRANSPARENT, Color.GRAY, Color.TRANSPARENT};
 		lv.setDivider(new GradientDrawable(Orientation.RIGHT_LEFT, colors));
 		lv.setDividerHeight(1);
 	}

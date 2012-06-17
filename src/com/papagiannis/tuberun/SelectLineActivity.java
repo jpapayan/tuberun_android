@@ -9,7 +9,6 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
@@ -38,8 +37,6 @@ public class SelectLineActivity extends ListActivity implements
 	private static final int FAILED_DIALOG = 1;
 	public static final String VIEW = "android.Intent.action.VIEW";
 
-	protected Button backButton;
-	protected Button logoButton;
 	protected Button searchButton;
 	protected EditText searchEditText;
 	TextView locationTextview;
@@ -63,7 +60,8 @@ public class SelectLineActivity extends ListActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.select_line);
+		new SlidingBehaviour(this, R.layout.select_line).setupHSVWithLayout();
+		
 		fetcher.registerCallback(this);
 
 		locationTextview = (TextView) findViewById(R.id.location_textview);
@@ -71,11 +69,6 @@ public class SelectLineActivity extends ListActivity implements
 		locationProgressbar = (ProgressBar) findViewById(R.id.location_progressbar);
 		locationLayout = (LinearLayout) findViewById(R.id.location_layout);
 		
-		backButton = (Button) findViewById(R.id.back_button);
-		logoButton = (Button) findViewById(R.id.logo_button);
-		backButton.setOnClickListener(this);
-		logoButton.setOnClickListener(this);
-
 		searchButton = (Button) findViewById(R.id.search_button);
 		searchButton.setOnClickListener(new OnClickListener() {
 

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -23,7 +22,8 @@ public class ClaimsActivity extends ListActivity implements OnClickListener  {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.claims);
+//		setContentView(R.layout.claims);
+		new SlidingBehaviour(this, R.layout.claims).setupHSVWithLayout();
 		create();
 	}
 
@@ -33,16 +33,6 @@ public class ClaimsActivity extends ListActivity implements OnClickListener  {
 		View addButton = findViewById(R.id.button_add);
 		addButton.setOnClickListener(this);
 		store = ClaimStore.getInstance();
-		Button back_button = (Button) findViewById(R.id.back_button);
-		Button logo_button = (Button) findViewById(R.id.logo_button);
-		OnClickListener back_listener = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		};
-		back_button.setOnClickListener(back_listener);
-		logo_button.setOnClickListener(back_listener);
 	}
 
 	public void refresh() {

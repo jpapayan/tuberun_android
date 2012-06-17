@@ -31,6 +31,7 @@
             android:name=".TubeRun"
             android:label="@string/app_name"
             android:screenOrientation="nosensor" 
+            android:launchMode="singleTop"
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +40,7 @@
         </activity>
         <activity
             android:name=".StatusActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
@@ -101,6 +103,7 @@
         </activity>
         <activity
             android:name=".NearbyStationsListFragment"
+            android:launchMode="singleTop"
             android:label="Tube Stations Nearby" 
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation">
@@ -119,6 +122,7 @@
         </activity>
         <activity
             android:name=".FavoritesActivity"
+            android:launchMode="singleTop"
             android:label="Favorites"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
@@ -128,6 +132,7 @@
         </activity>
         <activity
             android:name=".ClaimsActivity"
+            android:launchMode="singleTop"
             android:label="Claims"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
@@ -147,6 +152,7 @@
         </activity>
         <activity
             android:name=".OysterActivity"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="stateUnchanged"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
@@ -187,6 +193,7 @@
         </activity>
         <activity
             android:name=".NearbyStationsActivity"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="stateUnchanged"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >
@@ -196,6 +203,7 @@
         </activity>
         <activity
             android:name=".NearbyMapActivity"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="stateUnchanged"
             android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation" >

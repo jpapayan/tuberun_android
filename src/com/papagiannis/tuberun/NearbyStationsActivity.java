@@ -56,8 +56,8 @@ public class NearbyStationsActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		new SlidingBehaviour(this, R.layout.nearby).setupHSVWithLayout();
 
-		setContentView(R.layout.nearby);
 		location_accuracy_textview = (TextView) findViewById(R.id.location_accuracy_textview);
 		location_textview = (TextView) findViewById(R.id.location_textview);
 		title_textview = (TextView) findViewById(R.id.title_textview);
@@ -117,15 +117,6 @@ public class NearbyStationsActivity extends FragmentActivity implements
 		busesFragment = (NearbyBusLinesListFragment) mTabsAdapter
 				.getItem(2);
 
-		OnClickListener back_listener = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				self.finish();
-			}
-		};
-		back_button.setOnClickListener(back_listener);
-		logo_button.setOnClickListener(back_listener);
-		
 		map_button.setOnClickListener(new OnClickListener() {
 			
 			@Override

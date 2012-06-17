@@ -43,7 +43,8 @@ public class StatusActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.statuses);
+//		setContentView(R.layout.statuses);
+		new SlidingBehaviour(this, R.layout.statuses).setupHSVWithLayout();
 		setupReferences();
 		create(savedInstanceState);
     }
@@ -61,15 +62,6 @@ public class StatusActivity extends FragmentActivity {
     private void create(Bundle savedInstanceState) {
     	preferences = getPreferences(MODE_PRIVATE);
         mapWarningShown = preferences.getBoolean("mapWarningShown",false);
-    	
-    	OnClickListener back_listener = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				self.finish();
-			}
-		};
-		back_button.setOnClickListener(back_listener);
-		logo_button.setOnClickListener(back_listener);
     	
 		mTabHost.setup();
     	mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
