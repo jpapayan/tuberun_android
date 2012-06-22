@@ -122,72 +122,110 @@
         <TableLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_gravity="center|bottom"
-            android:layout_marginBottom="10dip"
-            android:gravity="bottom"
+            android:layout_gravity="center"
+            android:layout_marginBottom="50dip"
+            android:layout_marginTop="40dip"
+            android:gravity="center"
             android:paddingLeft="20dip"
             android:paddingRight="20dip"
             android:shrinkColumns="*"
             android:stretchColumns="*" >
 
-            <TableRow
-                android:layout_height="fill_parent"
-                android:layout_weight="0.5" >
+            <TableRow android:layout_weight="1" >
 
-                <Button
-                    android:id="@+id/button_status"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:background="@layout/custom_button"
-                    android:maxHeight="120dip"
-                    android:minHeight="70dip"
-                    android:text="@string/status_title"
-                    android:textColor="@android:color/black"
-                    android:width="120dip" />
+                    android:orientation="vertical" >
 
-                <Button
-                    android:id="@+id/button_departures"
+                    <Button
+                        android:id="@+id/button_status"
+                        style="@style/StatusesButton"
+                        android:layout_width="70dip"
+                        android:layout_height="70dip"
+                        android:layout_gravity="center"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        style="@style/WhiteText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/status_title" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:background="@layout/custom_button"
-                    android:maxHeight="120dip"
-                    android:minHeight="70dip"
-                    android:text="@string/departures_title"
-                    android:textColor="@android:color/black"
-                    android:width="120dip" />
+                    android:orientation="vertical" >
+
+                    <Button
+                        android:id="@+id/button_departures"
+                        style="@style/DeparturesButton"
+                        android:layout_width="70dip"
+                        android:layout_height="70dip"
+                        android:layout_gravity="center"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        style="@style/WhiteText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/departures_title" />
+                </LinearLayout>
             </TableRow>
 
-            <TableRow
-                android:layout_height="fill_parent"
-                android:layout_marginTop="-4dip"
-                android:layout_weight="0.5" >
+            <TableRow android:layout_weight="1" >
 
-                <Button
-                    android:id="@+id/button_nearby"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:background="@layout/custom_button"
-                    android:maxHeight="120dip"
-                    android:minHeight="70dip"
-                    android:singleLine="false"
-                    android:text="@string/nearby_title"
-                    android:textColor="@android:color/black" />
+                    android:orientation="vertical" >
 
-                <Button
-                    android:id="@+id/button_maps"
+                    <Button
+                        android:id="@+id/button_nearby"
+                        style="@style/NearbyButton"
+                        android:layout_width="70dip"
+                        android:layout_height="70dip"
+                        android:layout_gravity="center"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        style="@style/WhiteText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/nearby_title" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:background="@layout/custom_button"
-                    android:maxHeight="120dip"
-                    android:minHeight="70dip"
-                    android:text="@string/maps_title"
-                    android:textColor="@android:color/black" />
+                    android:orientation="vertical" >
+
+                    <Button
+                        android:id="@+id/button_maps"
+                        style="@style/MapIconButton"
+                        android:layout_width="70dip"
+                        android:layout_height="70dip"
+                        android:layout_gravity="center"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        style="@style/WhiteText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/maps_title" />
+                </LinearLayout>
             </TableRow>
 
-            <TableRow
-                android:layout_height="fill_parent"
-                android:layout_marginTop="-4dip"
-                android:layout_weight="0.5" >
+            <TableRow android:layout_weight="1" >
 
                 <Button
                     android:id="@+id/button_planner"

@@ -38,7 +38,6 @@
                 <TableLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dip"
                     android:background="@android:color/black"
                     android:shrinkColumns="1"
                     android:stretchColumns="1" >
@@ -48,7 +47,7 @@
                         android:background="@layout/transparent_button">
 
                         <Button
-                            style="@style/LogoButton"
+                            style="@style/StatusesButton"
                             android:layout_width="40dip"
                             android:layout_height="40dip"
                             android:layout_gravity="center_vertical"
@@ -72,7 +71,7 @@
                         android:background="@layout/transparent_button">
 
                         <Button
-                            style="@style/LogoButton"
+                            style="@style/DeparturesButton"
                             android:layout_width="40dip"
                             android:layout_height="40dip"
                             android:layout_gravity="center_vertical"
@@ -96,7 +95,7 @@
                         android:background="@layout/transparent_button" >
 
                         <Button
-                            style="@style/LogoButton"
+                            style="@style/NearbyButton"
                             android:layout_width="40dip"
                             android:layout_height="40dip"
                             android:layout_gravity="center_vertical"
@@ -120,7 +119,7 @@
                         android:background="@layout/transparent_button">
 
                         <Button
-                            style="@style/MapButton"
+                            style="@style/MapIconButton"
                             android:layout_width="40dip"
                             android:layout_height="40dip"
                             android:layout_gravity="center_vertical"

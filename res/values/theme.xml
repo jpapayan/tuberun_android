@@ -42,6 +42,22 @@
 		<item name="android:background">@layout/back_button_selector</item>
 	</style>
 	
+	<style name="MenuButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/menu_button_selector</item>
+	</style>
+	<style name="StatusesButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/statuses_button_selector</item>
+	</style>
+	<style name="DeparturesButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/departures_button_selector</item>
+	</style>
+	<style name="NearbyButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/nearby_button_selector</item>
+	</style>
+	<style name="MapIconButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/mapicon_button_selector</item>
+	</style>
+	
 	<style name="LogoButton" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/logo_button_selector</item>
 	</style>
