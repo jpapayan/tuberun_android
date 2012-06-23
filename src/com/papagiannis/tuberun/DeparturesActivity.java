@@ -114,7 +114,7 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 			HashMap<String,Object> m=new HashMap<String,Object>();
 			ArrayList<HashMap<String, String>> trains=reply.get(platform);
 			m.put("line", LinePresentation.getStringRespresentation(lt));
-			m.put("platform", platform.toUpperCase());
+			m.put("platform", platform);
 			int i=1;
 			for (HashMap<String,String> train : trains) {
 				String s=train.get("destination");

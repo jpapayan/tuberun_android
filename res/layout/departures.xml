@@ -88,7 +88,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dip"
                 android:gravity="center"
-                android:text="Departures are currently not available for this station. Does TfL offer departure data for this station?" />
+                android:text="Departures are currently not available. Does TfL offer departure data for this station?" />
 
         <LinearLayout
             android:id="@id/android:empty"

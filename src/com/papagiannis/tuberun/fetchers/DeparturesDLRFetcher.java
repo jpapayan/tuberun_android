@@ -315,8 +315,9 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 	public HashMap<String, ArrayList<HashMap<String, String>>> getDepartures() {
 		HashMap<String, ArrayList<HashMap<String, String>>> categorised = new HashMap<String, ArrayList<HashMap<String, String>>>();
 		for (HashMap<String, String> train : departures) {
-			if (!categorised.containsKey(train.get("platform"))) {
-				categorised.put(train.get("platform"),
+			String platform=train.get("platform");
+			if (!categorised.containsKey(platform)) {
+				categorised.put(platform,
 						new ArrayList<HashMap<String, String>>());
 			}
 			categorised.get(train.get("platform")).add(train);

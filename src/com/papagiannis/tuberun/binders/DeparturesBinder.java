@@ -53,7 +53,9 @@ public class DeparturesBinder implements ViewBinder, OnClickListener {
 		TextView tv = (TextView) view;
 		if (view.getId()==R.id.departures_platform) {
 			last_platform=s;
+			tv.setText(s.toUpperCase());
 			tv.setVisibility(View.VISIBLE);
+			return true;
 		}
 		else if (view.getId()==R.id.departures_position1 ||
 				 view.getId()==R.id.departures_position2 ||
