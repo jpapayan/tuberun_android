@@ -163,8 +163,8 @@
         <activity
             android:name=".PlanActivity"
             android:windowSoftInputMode="stateUnchanged"
-            android:screenOrientation="nosensor" 
             android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="nosensor"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

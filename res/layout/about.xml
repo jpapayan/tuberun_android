@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/black"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -61,6 +60,12 @@
                 android:minWidth="0dip"
                 android:minHeight="0dip" />
         </LinearLayout>
+        
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom"
+            android:background="@drawable/tuberun_red_bright" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -81,14 +86,12 @@
             style="@style/WhiteText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/tuberun_semitransparent"
             android:gravity="center_horizontal"
             android:text="by Ioannis Papagiannis" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/tuberun_semitransparent"
             android:gravity="center_horizontal"
             android:text="I hope that you enjoy using the app as much I enjoyed writing it!"
             android:textColor="#FFFFFF" />
@@ -97,7 +100,6 @@
             style="@style/WhiteText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/tuberun_semitransparent"
             android:gravity="center_horizontal"
             android:text="Very special thanks to" />
 
@@ -105,7 +107,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@drawable/tuberun_semitransparent"
             android:gravity="center_horizontal"
             android:text="Panagiota Dalamagka, Thomas Tziortziotis, Petr Hosek, Erikos Ouziel, Nikos Kantas, Ioannis Demetriou, Dimitris Doukoglou"
             android:textColor="#FFFFFF" />

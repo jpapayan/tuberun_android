@@ -155,12 +155,12 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dip"
+                    android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
                     android:textColor="@drawable/tuberun_grey_darker"
                     android:layout_marginTop="8dip"
                     android:textSize="14sp"
-                    android:text="TRAVEL DATE AND TIME" />
+                    android:text="OPTIONS" />
 
                 <Button
                     android:id="@+id/traveldate_button"

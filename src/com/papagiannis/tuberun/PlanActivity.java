@@ -280,6 +280,12 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 	}
 	
 	@Override
+	protected void onSaveInstanceState(Bundle outState) {};
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {};
+	
+	@Override
 	protected void onNewIntent(Intent intent) {
 		try {
 			String a=intent.getAction();
