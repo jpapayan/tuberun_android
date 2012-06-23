@@ -4,6 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom"
+            android:background="@drawable/tuberun_red_bright" />
+    
     <ListView
         android:id="@+id/partial_route_listview"
         android:layout_width="match_parent"

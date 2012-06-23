@@ -28,7 +28,7 @@ public class SizeCallbackForMenu implements SizeCallback {
         dims[1] = h;
         final int menuIdx = 0;
         if (idx == menuIdx) {
-            dims[0] = w - (int) (2.5*btnWidth);
+            dims[0] = w - (int) (1.4*btnWidth);
         }
     }
 }

@@ -155,7 +155,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 			final int w = me.getMeasuredWidth();
 			final int h = me.getMeasuredHeight();
 
-			 System.out.println("w=" + w + ", h=" + h);
+//			 System.out.println("w=" + w + ", h=" + h);
 
 			// Add each view in turn, and apply the width and height returned by
 			// the SizeCallback.

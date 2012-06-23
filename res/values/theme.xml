@@ -57,6 +57,12 @@
 	<style name="MapIconButton" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/mapicon_button_selector</item>
 	</style>
+	<style name="PlanButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/plan_button_selector</item>
+	</style>
+	<style name="ClaimsButton" parent="@android:style/Widget.Button">
+		<item name="android:background">@layout/claims_button_selector</item>
+	</style>
 	
 	<style name="LogoButton" parent="@android:style/Widget.Button">
 		<item name="android:background">@layout/logo_button_selector</item>

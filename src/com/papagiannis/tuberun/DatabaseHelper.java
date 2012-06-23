@@ -294,7 +294,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 		Cursor c = null;
 		c=myDataBase.rawQuery(
-				  getJPDestinationsQuery(R.drawable.walk, "\"Plan journey\"", false)
+				  getJPDestinationsQuery(R.drawable.icon_plan, "\"Plan journey\"", false)
 				+ "LIMIT 5", new String[] { namePrefix, namePrefix });				
 		MatrixCursor cc=new MatrixCursor(new String[]{"_id",
 													  SearchManager.SUGGEST_COLUMN_TEXT_1 ,

@@ -44,7 +44,9 @@
 
                     <TableRow
                         android:id="@+id/status_row"
-                        android:background="@layout/transparent_button">
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/transparent_button" >
 
                         <Button
                             style="@style/StatusesButton"
@@ -55,6 +57,7 @@
 
                         <TextView
                             style="@android:style/TextAppearance.Large"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="8dip"
@@ -68,7 +71,9 @@
 
                     <TableRow
                         android:id="@+id/departures_row"
-                        android:background="@layout/transparent_button">
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/transparent_button" >
 
                         <Button
                             style="@style/DeparturesButton"
@@ -92,6 +97,8 @@
 
                     <TableRow
                         android:id="@+id/nearby_row"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
                         android:background="@layout/transparent_button" >
 
                         <Button
@@ -116,7 +123,9 @@
 
                     <TableRow
                         android:id="@+id/map_row"
-                        android:background="@layout/transparent_button">
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/transparent_button" >
 
                         <Button
                             style="@style/MapIconButton"
@@ -140,10 +149,12 @@
 
                     <TableRow
                         android:id="@+id/planner_row"
-                        android:background="@layout/transparent_button">
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/transparent_button" >
 
                         <Button
-                            style="@style/LogoButton"
+                            style="@style/PlanButton"
                             android:layout_width="40dip"
                             android:layout_height="40dip"
                             android:layout_gravity="center_vertical"
@@ -164,10 +175,12 @@
 
                     <TableRow
                         android:id="@+id/claims_row"
-                        android:background="@layout/transparent_button">
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/transparent_button" >
 
                         <Button
-                            style="@style/LogoButton"
+                            style="@style/ClaimsButton"
                             android:layout_width="40dip"
                             android:layout_height="40dip"
                             android:layout_gravity="center_vertical"
@@ -187,8 +200,72 @@
                         android:src="@drawable/holo_divider" />
 
                     <TableRow
+                        android:id="@+id/oyster_row"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/transparent_button" >
+
+                        <Button
+                            style="@style/OysterButtonActive"
+                            android:layout_width="40dip"
+                            android:layout_height="40dip"
+                            android:layout_gravity="center_vertical"
+                            android:text="" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                style="@android:style/TextAppearance.Large"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="8dip"
+                                android:text="@string/oyster_title" />
+
+                            <LinearLayout
+                                android:id="@+id/layout_balance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="35dip"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="8dip"
+                                android:background="@drawable/bubble_right"
+                                android:orientation="horizontal" >
+
+                                <ProgressBar
+                                    android:id="@+id/progressbar_balance"
+                                    style="@android:style/Widget.ProgressBar.Small"
+                                    android:layout_width="30dip"
+                                    android:layout_height="30dip"
+                                    android:layout_gravity="center"
+                                    android:padding="5dip" />
+
+                                <TextView
+                                    android:id="@+id/view_balance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:paddingLeft="5dip"
+                                    android:paddingRight="5dip"
+                                    android:textAppearance="?android:attr/textAppearanceLarge"
+                                    android:textColor="#00a1f5"
+                                    android:visibility="gone" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </TableRow>
+
+                    <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/holo_divider" />
+
+                    <TableRow
                         android:id="@+id/favorites_row"
-                        android:background="@layout/transparent_button">
+                        android:background="@layout/transparent_button" >
 
                         <Button
                             style="@style/FavoriteButton"
@@ -207,77 +284,36 @@
                 </TableLayout>
 
                 <ImageView
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="0dip"
                     android:layout_weight="1" />
 
                 <LinearLayout
-                    android:id="@+id/layout_oyster"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="10dip"
-                    android:orientation="horizontal" >
-
-                    <LinearLayout
-                        android:id="@+id/layout_balance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@drawable/bubble"
-                        android:orientation="horizontal" >
-
-                        <ProgressBar
-                            android:id="@+id/progressbar_balance"
-                            style="@android:style/Widget.ProgressBar.Small"
-                            android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="15dip" >
+                    <CheckBox 
+                        android:layout_width="30dip"
+                        android:layout_height="30dip"
+                        android:textOn=""
+                        android:textOff=""/>
+                    <TextView
+                            style="@android:style/TextAppearance.Small"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:padding="5dip"
-                            android:visibility="gone" />
-
-                        <TextView
-                            android:id="@+id/view_balance"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:paddingLeft="5dip"
-                            android:paddingRight="5dip"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textColor="#00a1f5"
-                            android:visibility="gone" />
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/button_oyster"
-                        style="@style/OysterButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|right"
-                        android:layout_marginRight="10dip"
-                        android:minHeight="0dip"
-                        android:minWidth="0dip"
-                        android:text="" />
-
-                    <Button
-                        android:id="@+id/button_oyster_active"
-                        style="@style/OysterButtonActive"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|right"
-                        android:layout_marginRight="10dip"
-                        android:minHeight="0dip"
-                        android:minWidth="0dip"
-                        android:text=""
-                        android:visibility="gone" />
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="12dip"
+                            android:text="Show this section by default" />
+                    
+                    
                 </LinearLayout>
             </LinearLayout>
 
             <ImageView
+                android:layout_width="2dip"
                 android:layout_height="fill_parent"
                 android:layout_gravity="right"
-                android:layout_width="2dip"
                 android:background="@drawable/tuberun_red_bright" />
         </LinearLayout>
     </ScrollView>

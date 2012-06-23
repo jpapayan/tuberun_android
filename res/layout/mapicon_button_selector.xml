@@ -5,8 +5,28 @@
         android:drawable="@drawable/icon_map" />
     <item 
     	android:state_pressed="true" 
-    	android:state_enabled="true"
-        android:drawable="@drawable/icon_map" />
+    	android:state_enabled="true" >
+        <layer-list >
+    		<item
+        		android:drawable="@drawable/icon_map"/>
+    		<item>
+    		    <shape>
+    				<gradient
+                		android:startColor="@drawable/tuberun_red_bright_transparent"
+                		android:endColor="@drawable/tuberun_red_bright_transparent"
+                		android:angle="270" />
+            		<corners
+                		android:radius="1dp" />
+            		<padding
+                		android:left="10dp"
+                		android:top="10dp"
+                		android:right="10dp"
+                		android:bottom="10dp" />
+            	</shape>
+    		    
+    		</item>
+		</layer-list>
+    </item>
     <item 
     	android:state_focused="true" 
     	android:state_enabled="true"

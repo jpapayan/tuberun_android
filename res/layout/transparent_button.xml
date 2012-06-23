@@ -12,9 +12,9 @@
                 android:radius="1dp" />
             <padding
                 android:left="10dp"
-                android:top="10dp"
+                android:top="7dp"
                 android:right="10dp"
-                android:bottom="10dp" />
+                android:bottom="7dp" />
         </shape>
     </item>
 
@@ -31,9 +31,9 @@
                 android:radius="1dp" />
             <padding
                 android:left="10dp"
-                android:top="10dp"
+                android:top="7dp"
                 android:right="10dp"
-                android:bottom="10dp" />
+                android:bottom="7dp" />
         </shape>
     </item>
 
