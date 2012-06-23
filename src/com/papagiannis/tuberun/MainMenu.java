@@ -4,18 +4,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.TableRow;
 
 import com.google.android.maps.MapActivity;
 import com.papagiannis.tuberun.TubeRun.ImageDownloadTask;
 
-public class MainMenu extends FrameLayout implements OnClickListener {
+public class MainMenu extends FrameLayout implements OnClickListener, OnCheckedChangeListener {
 	private Context context;
 	private SharedPreferences preferences;
 	private boolean tubeMapDownloaded = false;
@@ -32,6 +36,9 @@ public class MainMenu extends FrameLayout implements OnClickListener {
 	TableRow mapRow;
 	TableRow plannerRow;
 	TableRow claimsRow;
+	TableRow oysterRow;
+	
+	CheckBox autostartCheckbox;
 	
 	
 	public MainMenu(Context context, AttributeSet attrs,
@@ -65,6 +72,9 @@ public class MainMenu extends FrameLayout implements OnClickListener {
 		mapRow=(TableRow) findViewById(R.id.map_row);
 		plannerRow=(TableRow) findViewById(R.id.planner_row);
 		claimsRow=(TableRow) findViewById(R.id.claims_row);
+		oysterRow=(TableRow) findViewById(R.id.oyster_row);
+		
+		autostartCheckbox=(CheckBox)findViewById(R.id.autostart_checkbox);
 		
 		statusesRow.setOnClickListener(this);
 		departuresRow.setOnClickListener(this);
@@ -73,7 +83,39 @@ public class MainMenu extends FrameLayout implements OnClickListener {
 		mapRow.setOnClickListener(this);
 		plannerRow.setOnClickListener(this);
 		claimsRow.setOnClickListener(this);
+		oysterRow.setOnClickListener(this);
 		
+		SharedPreferences shPrefs = context.getSharedPreferences(TubeRun.PREFERENCES, TubeRun.MODE_PRIVATE);
+		int viewId = shPrefs.getInt( TubeRun.AUTOSTART, TubeRun.AUTOSTART_NONE);
+		int currentViewId=getAutoStartViewId();
+		autostartCheckbox.setChecked( viewId!=TubeRun.AUTOSTART_NONE && viewId==currentViewId );
+		autostartCheckbox.setOnCheckedChangeListener(this);
+		
+	}
+	
+	private int getAutoStartViewId() {
+		int viewId=TubeRun.AUTOSTART_NONE;
+		Class<? extends Context> c=context.getClass();
+		if (c==StatusActivity.class) viewId=R.id.button_status;
+		else if (c==SelectLineActivity.class) viewId=R.id.button_departures;
+		else if (c==NearbyStationsActivity.class) viewId=R.id.button_nearby;
+		else if (c==PlanActivity.class) viewId=R.id.button_planner;
+		else if (c==ClaimsActivity.class) viewId=R.id.button_claims;
+		else if (c==OysterActivity.class) viewId=R.id.button_oyster_active;
+		else if (c==FavoritesActivity.class) viewId=R.id.button_favorites;
+		return viewId;
+	}
+	
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		SharedPreferences shPrefs = context.getSharedPreferences(TubeRun.PREFERENCES, TubeRun.MODE_PRIVATE);
+		int viewId = shPrefs.getInt( TubeRun.AUTOSTART, TubeRun.AUTOSTART_NONE);
+		
+		viewId= (isChecked) ? getAutoStartViewId() : TubeRun.AUTOSTART_NONE;
+		
+		Editor editor = shPrefs.edit();
+		editor.putInt(TubeRun.AUTOSTART, viewId);
+		editor.commit();
 	}
 	
 	public void onClick(View v) {
@@ -110,8 +152,7 @@ public class MainMenu extends FrameLayout implements OnClickListener {
 		case R.id.planner_row:
 			i = (c!=PlanActivity.class) ? new Intent(context, PlanActivity.class) : null;
 			break;
-		case R.id.button_oyster:
-		case R.id.button_oyster_active:
+		case R.id.oyster_row:
 			i = (c!=OysterActivity.class) ? new Intent(context, OysterActivity.class) : null;
 			break;
 		case R.id.button_logo:

@@ -59,7 +59,11 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	private static final int DOWNLOAD_IMAGE_FAILED_DIALOG = -3;
 	private static final int LICENCING_ERROR = -4;
 	private static final int SHOW_WELCOME = -5;
-
+	
+	public static final String PREFERENCES="Preferences";
+	public static final String AUTOSTART="autostart";
+	public static final Integer AUTOSTART_NONE=-1;
+	
 	TextView oysterBalance;
 	ProgressBar oysterProgress;
 	LinearLayout oysterLayout;
@@ -80,8 +84,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 
 		preferences = getPreferences(MODE_PRIVATE);
 		tubeMapDownloaded = preferences.getBoolean("tubeMapDownloaded", false);
-		// tubeMapDownloaded = false; //always
-
+		
 		View statusButton = findViewById(R.id.button_status);
 		statusButton.setOnClickListener(this);
 		View departuresButton = findViewById(R.id.button_departures);
@@ -120,6 +123,16 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			editor.commit();
 			copyDatabase();
 			showDialog(SHOW_WELCOME);
+		}
+		else jump();
+	}
+	
+	private void jump() {
+		SharedPreferences shPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+		int viewId = shPrefs.getInt( AUTOSTART, AUTOSTART_NONE);
+		if (viewId != AUTOSTART_NONE) {
+			onClick(findViewById(viewId));
+			finish();
 		}
 	}
 
@@ -166,7 +179,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			i = new Intent(this, AboutActivity.class);
 			break;
 		}
-		startActivity(i);
+		if (i!=null) startActivity(i);
 	}
 
 	private Intent getMapIntent() {

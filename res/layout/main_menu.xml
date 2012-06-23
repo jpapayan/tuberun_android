@@ -293,7 +293,9 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginLeft="15dip" >
+                    
                     <CheckBox 
+                        android:id="@+id/autostart_checkbox"
                         android:layout_width="30dip"
                         android:layout_height="30dip"
                         android:textOn=""
@@ -304,9 +306,7 @@
                             android:layout_width="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="12dip"
-                            android:text="Show this section by default" />
-                    
-                    
+                            android:text="Show this section upon launch" />
                 </LinearLayout>
             </LinearLayout>
 
