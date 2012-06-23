@@ -122,9 +122,8 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="5dip"
                 android:layout_marginTop="5dip"
-                android:background="@drawable/tuberun_semitransparent"
                 android:gravity="center"
-                android:text="Departures not available. This is a beta TfL service so be patient." />
+                android:text="Departures data not available. Please try again later." />
         </LinearLayout>
 
         <LinearLayout

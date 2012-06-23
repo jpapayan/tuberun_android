@@ -23,7 +23,7 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dip"
+                    android:layout_marginTop="10dip"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
                     android:textColor="@drawable/tuberun_grey_darker"
@@ -48,7 +48,7 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dip"
+                    android:layout_marginTop="10dip"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
                     android:textSize="14sp"
@@ -81,6 +81,7 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dip"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
                     android:textSize="14sp"
@@ -91,7 +92,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="0dip"
+                    android:layout_marginBottom="10dip"
                     android:layout_marginTop="4dip"
                     android:gravity="center" >
 
@@ -155,10 +156,10 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="7dip"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
                     android:textColor="@drawable/tuberun_grey_darker"
-                    android:layout_marginTop="8dip"
                     android:textSize="14sp"
                     android:text="OPTIONS" />
 

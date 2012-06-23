@@ -559,8 +559,9 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		builder.setTitle(APPNAME+" "+VERSION)
 				.setMessage("What's new:\n\n"+
 						"*New UI\n\n" +
-						"*Station autocomplete\n\n"+
-						"*Search provider\n\n"+
+						"*Station autocomplete in textboxes\n\n"+
+						"*Search provider for quick access to departures from the homescreen (needs manual activation)\n\n"+
+						"*Official TfL Bus API\n\n"+
 						"*Bug fixes")
 				.setCancelable(false).setPositiveButton("OK", null);
 		return builder.create();
