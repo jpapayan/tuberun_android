@@ -22,17 +22,15 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.maps.MapActivity;
-import com.papagiannis.tuberun.TubeRun.ImageDownloadTask;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.OysterFetcher;
 import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class MainMenu extends FrameLayout 
 		implements OnClickListener, OnCheckedChangeListener, Observer {
+	public static final String SHOWMAP="showMap";
+	
 	private Context context;
-	private SharedPreferences preferences;
-	private boolean tubeMapDownloaded = false;
-	private ImageDownloadTask task;
 	
 	Button menuButton;
 	Button oysterButton;
@@ -72,12 +70,8 @@ public class MainMenu extends FrameLayout
 	private void init(Context context) {
 		this.context=context;
 		LayoutInflater.from(context).inflate(R.layout.main_menu, this, true);
-		
-		Activity a=(Activity) context;
-		preferences = a.getPreferences(Context.MODE_PRIVATE);
-		tubeMapDownloaded = preferences.getBoolean("tubeMapDownloaded", false);
 
-		// ********** initialize references ********************
+		// ********** Initialise references ********************
 		
 		statusesRow=(TableRow) findViewById(R.id.status_row);
 		departuresRow=(TableRow) findViewById(R.id.departures_row);
@@ -186,6 +180,10 @@ public class MainMenu extends FrameLayout
 			break;
 		case R.id.map_row:
 			if (c!=MapActivity.class) {
+				if (!isMapAvailable()) {
+					requestMapDownload();
+					return;
+				}
 				i = new Intent(context, StatusMapActivity.class);
 				i.putExtra("line",
 						LinePresentation.getStringRespresentation(LineType.ALL));
@@ -231,6 +229,22 @@ public class MainMenu extends FrameLayout
 		}
 	}
 	
+	private void requestMapDownload() {
+		Intent i=new Intent(context, TubeRun.class);
+		i.putExtra(SHOWMAP, true);
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		context.startActivity(i);
+		
+		Activity a=(Activity) context;
+		a.finish();
+		
+	}
+
+	private boolean isMapAvailable() {
+		SharedPreferences preferences = context.getSharedPreferences(TubeRun.PREFERENCES, TubeRun.MODE_PRIVATE);
+		return preferences.getBoolean(TubeRun.TUBEMAP_EXISTS, false);
+	}
+
 	public void setMenuButton(Button menuButton) {
 		this.menuButton=menuButton;
 	}

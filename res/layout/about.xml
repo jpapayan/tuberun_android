@@ -61,12 +61,6 @@
                 android:minHeight="0dip" />
         </LinearLayout>
         
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="2dip"
-            android:layout_gravity="bottom"
-            android:background="@drawable/tuberun_red_bright" />
-
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="0dip"

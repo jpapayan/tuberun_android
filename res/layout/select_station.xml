@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:orientation="vertical">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-	<ImageView
-	    android:id="@+id/select_station_background"
-	    android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:src="@drawable/background_depart"
-		android:scaleType="centerCrop" />
-
-	<ListView android:id="@+id/android:list"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:cacheColorHint="@android:color/transparent" />
+    <ListView
+        android:id="@+id/android:list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="@android:color/transparent" />
 
 </FrameLayout>

@@ -63,6 +63,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String PREFERENCES="Preferences";
 	public static final String AUTOSTART="autostart";
 	public static final Integer AUTOSTART_NONE=-1;
+	public static final String TUBEMAP_EXISTS="tubeMapDownloaded";
 	
 	TextView oysterBalance;
 	ProgressBar oysterProgress;
@@ -71,6 +72,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	Button oysterButtonActive;
 	Button logoButton;
 	ToggleButton favoritesButton;
+	Button mapsButton;
 
 	private SharedPreferences preferences;
 	private boolean tubeMapDownloaded = false;
@@ -82,14 +84,14 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		preferences = getPreferences(MODE_PRIVATE);
-		tubeMapDownloaded = preferences.getBoolean("tubeMapDownloaded", false);
+		preferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+		tubeMapDownloaded = preferences.getBoolean(TUBEMAP_EXISTS, false);
 		
 		View statusButton = findViewById(R.id.button_status);
 		statusButton.setOnClickListener(this);
 		View departuresButton = findViewById(R.id.button_departures);
 		departuresButton.setOnClickListener(this);
-		View mapsButton = findViewById(R.id.button_maps);
+		mapsButton = (Button) findViewById(R.id.button_maps);
 		mapsButton.setOnClickListener(this);
 		View nearbyButton = findViewById(R.id.button_nearby);
 		nearbyButton.setOnClickListener(this);
@@ -111,8 +113,16 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 
 		if (USE_LICENSING)
 			initializeLicencing();
-		showWelcome();
+		Intent i=getIntent();
+		Boolean showMap=i.getBooleanExtra(MainMenu.SHOWMAP, false);
+		if (showMap) onNewIntent(i);
+		else showWelcome();
 	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		onClick(mapsButton);
+	};
 
 	@SuppressWarnings("deprecation")
 	private void showWelcome() {
