@@ -148,8 +148,6 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			i.putExtra("type", "departures");
 			break;
 		case R.id.button_maps:
-			// i=new Intent(this, SelectLineActivity.class);
-			// i.putExtra("type", "maps");
 			if (tubeMapDownloaded)
 				i = getMapIntent();
 			else {
@@ -227,7 +225,6 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			oysterLayout.setVisibility(View.VISIBLE);
 			oysterProgress.setVisibility(View.VISIBLE);
 			username = credentials.get(0);
-			// oysterLayout.invalidate();
 			fetcher.update();
 		}
 	}
@@ -567,6 +564,8 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		return builder.create();
 	}
 
+	// *****************Welcome to TubeRun operations**************************
+	
 	private Dialog getWelcomeDialog() {
 		ProgressDialog.Builder builder = new ProgressDialog.Builder(this);
 		builder.setTitle(APPNAME+" "+VERSION)

@@ -21,13 +21,67 @@
                 android:layout_weight="1"
                 android:orientation="vertical" >
 
-                <TextView
-                    style="@android:style/TextAppearance.Large"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dip"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Menu" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" >
+
+                    <TextView
+                        style="@android:style/TextAppearance.Large"
+                        android:layout_width="0dip"
+                        android:layout_height="48dip"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginLeft="14dip"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"
+                        android:text="Menu" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="7dip" >
+
+                        <Button
+                            style="@style/OysterButtonActive"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dip"
+                            android:minHeight="0dip"
+                            android:layout_gravity="center_vertical"
+                            android:text="" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dip"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="8dip"
+                            android:background="@drawable/bubble_right"
+                            android:orientation="horizontal" >
+
+                            <ProgressBar
+                                android:id="@+id/progressbar_balance"
+                                style="@android:style/Widget.ProgressBar.Small"
+                    			android:layout_width="wrap_content"
+                    			android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:padding="5dip" />
+
+                            <TextView
+                                android:id="@+id/textview_balance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:paddingLeft="5dip"
+                                android:paddingRight="5dip"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textColor="#00a1f5"
+                                android:visibility="gone" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -225,36 +279,6 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="8dip"
                                 android:text="@string/oyster_title" />
-
-                            <LinearLayout
-                                android:id="@+id/layout_balance"
-                                android:layout_width="wrap_content"
-                                android:layout_height="35dip"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="8dip"
-                                android:background="@drawable/bubble_right"
-                                android:orientation="horizontal" >
-
-                                <ProgressBar
-                                    android:id="@+id/progressbar_balance"
-                                    style="@android:style/Widget.ProgressBar.Small"
-                                    android:layout_width="30dip"
-                                    android:layout_height="30dip"
-                                    android:layout_gravity="center"
-                                    android:padding="5dip" />
-
-                                <TextView
-                                    android:id="@+id/view_balance"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:paddingLeft="5dip"
-                                    android:paddingRight="5dip"
-                                    android:textAppearance="?android:attr/textAppearanceLarge"
-                                    android:textColor="#00a1f5"
-                                    android:visibility="gone" />
-                            </LinearLayout>
                         </LinearLayout>
                     </TableRow>
 
@@ -291,22 +315,23 @@
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="15dip" >
-                    
-                    <CheckBox 
+                    android:layout_marginLeft="15dip"
+                    android:orientation="horizontal" >
+
+                    <CheckBox
                         android:id="@+id/autostart_checkbox"
                         android:layout_width="30dip"
                         android:layout_height="30dip"
-                        android:textOn=""
-                        android:textOff=""/>
+                        android:textOff=""
+                        android:textOn="" />
+
                     <TextView
-                            style="@android:style/TextAppearance.Small"
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="12dip"
-                            android:text="Show this section upon launch" />
+                        style="@android:style/TextAppearance.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="12dip"
+                        android:text="Show this section upon launch" />
                 </LinearLayout>
             </LinearLayout>
 

@@ -1,10 +1,13 @@
 package com.papagiannis.tuberun.fetchers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.http.impl.client.BasicCookieStore;
+
+import android.util.Log;
 
 public class OysterFetcher extends Fetcher {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +40,7 @@ public class OysterFetcher extends Fetcher {
 
 	BasicCookieStore cookies;
 	StringBuilder postData;
-	private String errors;
+	private String errors="";
 	public String getErrors() {
 		return errors;
 	}
@@ -131,6 +134,12 @@ public class OysterFetcher extends Fetcher {
 			notifyClients();
 		}
 	}
+	
+	public Boolean hasResult() {
+		Date now=new Date();
+		Boolean isFresh = (now.getTime() - update_time.getTime()) / 1000 < 5 * 60;
+		return isFresh && !isErrorResult() && !oyster_balance.equals("");
+	}
 
 	public CharSequence getResult() {
 		if (!errors.equals("")) return "ERROR";
@@ -146,4 +155,5 @@ public class OysterFetcher extends Fetcher {
 		isFirst.set(true);
     	if (task!=null) task.cancel(true);
     }
+	
 }

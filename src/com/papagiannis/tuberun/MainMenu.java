@@ -1,5 +1,7 @@
 package com.papagiannis.tuberun;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,12 +16,19 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.google.android.maps.MapActivity;
 import com.papagiannis.tuberun.TubeRun.ImageDownloadTask;
+import com.papagiannis.tuberun.fetchers.Observer;
+import com.papagiannis.tuberun.fetchers.OysterFetcher;
+import com.papagiannis.tuberun.stores.CredentialsStore;
 
-public class MainMenu extends FrameLayout implements OnClickListener, OnCheckedChangeListener {
+public class MainMenu extends FrameLayout 
+		implements OnClickListener, OnCheckedChangeListener, Observer {
 	private Context context;
 	private SharedPreferences preferences;
 	private boolean tubeMapDownloaded = false;
@@ -40,6 +49,9 @@ public class MainMenu extends FrameLayout implements OnClickListener, OnCheckedC
 	
 	CheckBox autostartCheckbox;
 	
+	LinearLayout balanceLayout;
+	ProgressBar balanceProgressbar;
+	TextView balanceTextview;
 	
 	public MainMenu(Context context, AttributeSet attrs,
 			int defStyle) {
@@ -65,6 +77,8 @@ public class MainMenu extends FrameLayout implements OnClickListener, OnCheckedC
 		preferences = a.getPreferences(Context.MODE_PRIVATE);
 		tubeMapDownloaded = preferences.getBoolean("tubeMapDownloaded", false);
 
+		// ********** initialize references ********************
+		
 		statusesRow=(TableRow) findViewById(R.id.status_row);
 		departuresRow=(TableRow) findViewById(R.id.departures_row);
 		favoritesRow=(TableRow) findViewById(R.id.favorites_row);
@@ -76,6 +90,10 @@ public class MainMenu extends FrameLayout implements OnClickListener, OnCheckedC
 		
 		autostartCheckbox=(CheckBox)findViewById(R.id.autostart_checkbox);
 		
+		balanceLayout=(LinearLayout)findViewById(R.id.layout_balance);
+		balanceProgressbar=(ProgressBar)findViewById(R.id.progressbar_balance);
+		balanceTextview=(TextView)findViewById(R.id.textview_balance);
+		
 		statusesRow.setOnClickListener(this);
 		departuresRow.setOnClickListener(this);
 		favoritesRow.setOnClickListener(this);
@@ -84,6 +102,12 @@ public class MainMenu extends FrameLayout implements OnClickListener, OnCheckedC
 		plannerRow.setOnClickListener(this);
 		claimsRow.setOnClickListener(this);
 		oysterRow.setOnClickListener(this);
+//		balanceLayout.setOnClickListener(this);
+		
+		
+		// ********** initialize state ******************** 
+		
+		initializeOyster();
 		
 		SharedPreferences shPrefs = context.getSharedPreferences(TubeRun.PREFERENCES, TubeRun.MODE_PRIVATE);
 		int viewId = shPrefs.getInt( TubeRun.AUTOSTART, TubeRun.AUTOSTART_NONE);
@@ -91,6 +115,36 @@ public class MainMenu extends FrameLayout implements OnClickListener, OnCheckedC
 		autostartCheckbox.setChecked( viewId!=TubeRun.AUTOSTART_NONE && viewId==currentViewId );
 		autostartCheckbox.setOnCheckedChangeListener(this);
 		
+	}
+	
+	private OysterFetcher fetcher;
+	private void initializeOyster() {
+		CredentialsStore store = CredentialsStore.getInstance();
+		ArrayList<String> credentials = store.getAll(context);
+		if (credentials.size() != 2) {
+			balanceLayout.setVisibility(View.GONE);
+			return;
+		}
+		fetcher=OysterFetcher.getInstance(credentials.get(0), credentials.get(1));
+		if (fetcher.hasResult()) {
+			update();
+			return;
+		}
+		
+		balanceLayout.setVisibility(View.VISIBLE);
+		balanceTextview.setVisibility(View.GONE);
+		balanceProgressbar.setVisibility(View.VISIBLE);
+		fetcher.registerCallback(this);
+		fetcher.update();
+	}
+	
+	@Override
+	public void update() {
+		CharSequence balance = fetcher.getResult();
+		balanceTextview.setText(balance);
+		balanceLayout.setVisibility(View.VISIBLE);
+		balanceTextview.setVisibility(View.VISIBLE);
+		balanceProgressbar.setVisibility(View.GONE);
 	}
 	
 	private int getAutoStartViewId() {
@@ -153,6 +207,7 @@ public class MainMenu extends FrameLayout implements OnClickListener, OnCheckedC
 			i = (c!=PlanActivity.class) ? new Intent(context, PlanActivity.class) : null;
 			break;
 		case R.id.oyster_row:
+		case R.id.layout_balance:
 			i = (c!=OysterActivity.class) ? new Intent(context, OysterActivity.class) : null;
 			break;
 		case R.id.button_logo:
@@ -161,7 +216,11 @@ public class MainMenu extends FrameLayout implements OnClickListener, OnCheckedC
 		}
 		if (i!=null) {
 			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			if (finishActivity) a.finish();
+			if (finishActivity) {
+				//OysterFetcher (which is reused) holds a reference to this. To enable garbage collection:
+				if (fetcher!=null) fetcher.deregisterCallback(this);
+				a.finish();
+			}
 			else {
 				//TODO slide off the menu
 			}
