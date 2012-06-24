@@ -6,11 +6,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -23,6 +26,7 @@ public class OysterActivity extends Activity implements Observer{
 	static final int DIALOG_MESSAGE_NOTICE = 0;
 	static final int DIALOG_WAIT = 1;
 	
+	private Button menuButton;
 	private Button storeButton;
 	private Button eraseButton;
 	private EditText username;
@@ -41,6 +45,7 @@ public class OysterActivity extends Activity implements Observer{
 	private void create() {
 		username = (EditText) findViewById(R.id.oyster_username);
 		password = (EditText) findViewById(R.id.oyster_password);
+		menuButton = (Button) findViewById(R.id.logo_button);
 		
 		ArrayList<String> credentials=store.getAll(this);
 		if (credentials.size()==2) {
@@ -87,7 +92,16 @@ public class OysterActivity extends Activity implements Observer{
 			store.removeAll(this);
 			showDialogMessage("Error", fetcher.getErrors());
 		}
-		else finish();
+		else {
+			SharedPreferences shPrefs = getSharedPreferences(TubeRun.PREFERENCES, MODE_PRIVATE);
+			int viewId = shPrefs.getInt( TubeRun.AUTOSTART, TubeRun.AUTOSTART_NONE);
+			if (viewId == TubeRun.AUTOSTART_NONE) {
+				finish();
+			}
+			else {
+				menuButton.callOnClick();
+			}
+		}
 	}
 	
 	private String notice_title;
