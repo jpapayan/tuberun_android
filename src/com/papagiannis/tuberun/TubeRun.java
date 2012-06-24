@@ -46,7 +46,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
 	public static final String VERSION = "1.2";
 	//Don't forget to change the Gmaps API key in full_screen_map.xml and the version/version code in manifest
-	public static final Boolean USE_LICENSING = false;
+	public static final Boolean USE_LICENSING = true;
 
 	private static final String TUBE_MAP_URL = "https://www.tfl.gov.uk/assets/downloads/standard-tube-map.gif";
 	private static final String LOCAL_PATH = "standard-tube-map.gif";
@@ -116,12 +116,17 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		Intent i=getIntent();
 		Boolean showMap=i.getBooleanExtra(MainMenu.SHOWMAP, false);
 		if (showMap) onNewIntent(i);
-		else showWelcome();
+		else {
+			setIntent(new Intent());
+			showWelcome();
+		}
 	}
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
-		onClick(mapsButton);
+		setIntent(intent);
+		Boolean showMap=intent.getBooleanExtra(MainMenu.SHOWMAP, false);
+		if (showMap)onClick(mapsButton);
 	};
 
 	@SuppressWarnings("deprecation")
