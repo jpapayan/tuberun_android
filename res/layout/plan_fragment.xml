@@ -42,7 +42,7 @@
                     android:inputType="text"
                     android:state_enabled="false"
                     android:text="@string/current_location"
-                    android:hint="Station, address, postcode or POI"/>
+                    android:hint="Station, address or postcode"/>
 
                 <TextView
                     style="@style/WhiteText"
@@ -67,7 +67,7 @@
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:text=""
-                    android:hint="Station, address, postcode or POI" />
+                    android:hint="Station, address or postcode" />
 
             </LinearLayout>
 

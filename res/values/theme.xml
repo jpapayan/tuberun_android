@@ -1,115 +1,145 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-	<style name="WhiteText" parent="@android:style/TextAppearance">
-		<item name="android:textColor">#FFFFFF</item>
-	</style>
-	<style name="BlackText" parent="@android:style/TextAppearance">
-		<item name="android:textColor">#000000</item>
-	</style>
-	<style name="PositionText" parent="@android:style/TextAppearance">
-		<item name="android:textColor">#FF888888</item>
-		<item name="android:textSize">14sp</item>
-	</style>
 
-	<style name="FavoriteButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/favorite_toggle_button</item>
-	</style>
-	
-	<style name="OysterButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/oyster_button_selector</item>
-	</style>
-	
-	<style name="OysterButtonActive" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/oyster_active_button_selector</item>
-	</style>
-	
-	<style name="FavoriteNormalButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/favorite_button_selector</item>
-	</style>
+    <style name="WhiteText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
 
-	<style name="RemoveFavoriteButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/remove_favorite_selector</item>
-	</style>
+    <style name="BlackText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#000000</item>
+    </style>
 
-	<style name="RefreshButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/refresh_button_selector</item>
-	</style>
+    <style name="PositionText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#FF888888</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 
-	<style name="AddButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/add_button_selector</item>
-	</style>
+    <style name="FavoriteButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/favorite_toggle_button</item>
+    </style>
+
+    <style name="OysterButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/oyster_button_selector</item>
+    </style>
+
+    <style name="OysterButtonActive" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/oyster_active_button_selector</item>
+    </style>
+
+    <style name="FavoriteNormalButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/favorite_button_selector</item>
+    </style>
+
+    <style name="RemoveFavoriteButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/remove_favorite_selector</item>
+    </style>
+
+    <style name="RefreshButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/refresh_button_selector</item>
+    </style>
+
+    <style name="AddButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/add_button_selector</item>
+    </style>
+
+    <style name="BackButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/back_button_selector</item>
+    </style>
+
+    <style name="MenuButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/menu_button_selector</item>
+    </style>
+
+    <style name="StatusesButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/statuses_button_selector</item>
+    </style>
+
+    <style name="DeparturesButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/departures_button_selector</item>
+    </style>
+
+    <style name="NearbyButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/nearby_button_selector</item>
+    </style>
+
+    <style name="MapIconButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/mapicon_button_selector</item>
+    </style>
+
+    <style name="PlanButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/plan_button_selector</item>
+    </style>
+
+    <style name="ClaimsButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/claims_button_selector</item>
+    </style>
+
+    <style name="LogoButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/logo_button_selector</item>
+    </style>
+
+    <style name="HomeButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/home_button_selector</item>
+    </style>
+
+    <style name="HomeButtonActive" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/home_active_button_selector</item>
+    </style>
+
+    <style name="MapButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/map_button_selector</item>
+    </style>
+
+    <style name="SaveButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/save_button_selector</item>
+    </style>
+
+    <style name="SaveButtonActive" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/save_button_active_selector</item>
+    </style>
+
+    <style name="ShareButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/share_button_selector</item>
+    </style>
+
+    <style name="EmailButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/email_button_selector</item>
+    </style>
+
+    <style name="LocatemeButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/locateme_button_selector</item>
+    </style>
+
+    <style name="SearchButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/search_button_selector</item>
+    </style>
+
+    <style name="DirectionsButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/directions_button_selector</item>
+    </style>
+
+    <style name="RedListView" parent="@android:style/Widget.ListView">
+        <item name="android:listSelector">@layout/hue_list_selector</item>
+    </style>
+
 	
-	<style name="BackButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/back_button_selector</item>
-	</style>
-	
-	<style name="MenuButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/menu_button_selector</item>
-	</style>
-	<style name="StatusesButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/statuses_button_selector</item>
-	</style>
-	<style name="DeparturesButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/departures_button_selector</item>
-	</style>
-	<style name="NearbyButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/nearby_button_selector</item>
-	</style>
-	<style name="MapIconButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/mapicon_button_selector</item>
-	</style>
-	<style name="PlanButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/plan_button_selector</item>
-	</style>
-	<style name="ClaimsButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/claims_button_selector</item>
-	</style>
-	
-	<style name="LogoButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/logo_button_selector</item>
-	</style>
-	<style name="HomeButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/home_button_selector</item>
-	</style>
-	<style name="HomeButtonActive" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/home_active_button_selector</item>
-	</style>
-	<style name="MapButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/map_button_selector</item>
-	</style>
-	<style name="SaveButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/save_button_selector</item>
-	</style>
-	<style name="SaveButtonActive" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/save_button_active_selector</item>
-	</style>
-	<style name="ShareButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/share_button_selector</item>
-	</style>
-	<style name="EmailButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/email_button_selector</item>
-	</style>
-	<style name="LocatemeButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/locateme_button_selector</item>
-	</style>
-	<style name="SearchButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/search_button_selector</item>
-	</style>
-	<style name="DirectionsButton" parent="@android:style/Widget.Button">
-		<item name="android:background">@layout/directions_button_selector</item>
-	</style>
-	
-	<style name="RedListView" parent="@android:style/Widget.ListView">
-		<item name="android:listSelector">@layout/hue_list_selector</item>
-	</style>
-	
-	<drawable name="tuberun_semitransparent">#BA000000</drawable>
-	<drawable name="tuberun_red">#FF801219</drawable>
-	<drawable name="tuberun_red_semitransparent">#99801219</drawable>
-	<drawable name="tuberun_red_bright">#FFDA2B2C</drawable>
-	<drawable name="tuberun_red_bright_transparent">#99DA2B2C</drawable>
-	<drawable name="tuberun_boardorange">#FFB8C600</drawable>
-	<drawable name="tuberun_grey">#F3D5D4D4</drawable>
-	<drawable name="tuberun_grey_darker">#FF888888</drawable>
-	<drawable name="tuberun_grey_menu_dark">#FF292929</drawable>
-	<drawable name="tuberun_grey_menu_light">#FF3C3C3C</drawable>
+   <style name="Widget.AutoCompleteTextViewLight" parent="@android:style/Widget.EditText">
+        <item name="android:dropDownSelector">@android:drawable/list_selector_background</item>
+        <item name="android:popupBackground">@android:color/black</item>
+        <item name="android:dropDownVerticalOffset">-6dip</item>
+        <item name="android:dropDownHorizontalOffset">0dip</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+    </style>
+   
+
+    <drawable name="tuberun_semitransparent">#BA000000</drawable>
+    <drawable name="tuberun_red">#FF801219</drawable>
+    <drawable name="tuberun_red_semitransparent">#99801219</drawable>
+    <drawable name="tuberun_red_bright">#FFDA2B2C</drawable>
+    <drawable name="tuberun_red_bright_transparent">#99DA2B2C</drawable>
+    <drawable name="tuberun_boardorange">#FFB8C600</drawable>
+    <drawable name="tuberun_grey">#F3D5D4D4</drawable>
+    <drawable name="tuberun_grey_darker">#FF888888</drawable>
+    <drawable name="tuberun_grey_menu_dark">#FF292929</drawable>
+    <drawable name="tuberun_grey_menu_light">#FF3C3C3C</drawable>
+
 </resources>
