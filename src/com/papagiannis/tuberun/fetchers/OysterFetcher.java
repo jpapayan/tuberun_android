@@ -84,8 +84,8 @@ public class OysterFetcher extends Fetcher {
 			int j=response.indexOf("Balance: &pound;");
 			if (i>0) {
 				totalCards=0;
+				response=response.substring(i);
 				while (true) {
-					response=response.substring(i);
 					String mark="<option value=\"";
 					int ni=response.indexOf(mark);
 					if (ni==-1) {
@@ -151,6 +151,10 @@ public class OysterFetcher extends Fetcher {
 			
 			mark="Balance: &pound;";
 			i=response.indexOf(mark);
+			if (i<0) {
+				mark="&pound;";
+				i=response.indexOf(mark);
+			}
 			if (i<0) throw new Exception("Cannot parse server response");
 			response=response.substring(i+mark.length());
 			oyster_balance="£"+response.substring(0,response.indexOf("</span>"));

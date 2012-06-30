@@ -159,19 +159,17 @@ public class OysterActivity extends Activity implements Observer{
 		display=new ArrayList<HashMap<String,Object>>();
 		int index=0;
 		
-		for (int j=0;j<20 ;j++) {
 		for (String card: cards.keySet()) {
 			if (!exists && index==0) {
 				defaultCard=card;
 				setDefaultCard(card);
 			}
 			HashMap<String,Object> m=new HashMap<String,Object>();
-			m.put("card_selected", defaultCard.equals(card) && j==0);
-			if (j!=0)  card+="_"+Integer.toString(j);
+			m.put("card_selected", defaultCard.equals(card));
 			m.put("card_number", card);
 			m.put("card_balance", cards.get(card));
 			display.add(m);	
-		}
+			index++;
 		}
 		
 		adapter=new SimpleAdapter(this,
