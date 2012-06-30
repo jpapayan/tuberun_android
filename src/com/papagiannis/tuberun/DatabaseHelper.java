@@ -351,8 +351,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		namePrefix+="%";
 		
 		Cursor c = null;
-		c=myDataBase.rawQuery(
-				  getJPDestinationsQuery(R.drawable.walk, "\"Plan journey\"", true)
+		String q=getJPDestinationsQuery(R.drawable.walk, "\"Plan journey\"", true);
+		c=myDataBase.rawQuery( q
 //				+ "ORDER BY "+ SearchManager.SUGGEST_COLUMN_TEXT_1 +" " 
 				+ "LIMIT 10", new String[] { namePrefix, namePrefix });				
 		MatrixCursor cc=new MatrixCursor(new String[]{"_id",

@@ -59,7 +59,8 @@ public class LinePresentation
         else if (line.equals( LineType.WATERLOO) ) result = 0xFF70C3CE;
         else if (line.equals( LineType.CENTRAL) ) result = 0xFFE41F1F;
         else if (line.equals( LineType.BUSES) ) result = Color.RED;
-        else if (line.equals( LineType.ALL) ) result=Color.WHITE;           
+        else if (line.equals( LineType.ALL) ) result=Color.WHITE;  
+        else if (line.equals( LineType.RAIL) ) result = Color.RED;
         return result;
     }
     public static int getForegroundColor(LineType line)
@@ -79,6 +80,7 @@ public class LinePresentation
         else if (line.equals( LineType.WATERLOO) ) result = 0xFF243B92;
         else if (line.equals( LineType.CENTRAL) ) result = Color.WHITE;
         else if (line.equals( LineType.BUSES) ) result = Color.WHITE;
+        else if (line.equals( LineType.RAIL) ) result = Color.WHITE;
         else if (line==LineType.ALL) result= Color.BLACK;
         return result;
     }
@@ -99,6 +101,7 @@ public class LinePresentation
         else if (line.equals( LineType.WATERLOO) ) result = "Waterloo";
         else if (line.equals( LineType.CENTRAL) ) result = "Central";
         else if (line.equals( LineType.BUSES) ) result = "Buses";
+        else if (line.equals( LineType.RAIL) ) result = "Rail";
         else if (line.equals( LineType.ALL) ) result = "All";
         return result;
     }
@@ -117,6 +120,7 @@ public class LinePresentation
         else if (line.equals( LineType.VICTORIA) ) result = "victoria";
         else if (line.equals( LineType.BAKERLOO) ) result = "bakerloo";
         else if (line.equals( LineType.WATERLOO) ) result = "waterlooandcity";
+        else if (line.equals( LineType.RAIL) ) result = "rail"; //stupid
         else if (line.equals( LineType.CENTRAL) ) result = "central";
         return result;
     }
@@ -136,6 +140,7 @@ public class LinePresentation
         else if (line.equals( LineType.BAKERLOO) ) result = "bakerloo";
         else if (line.equals( LineType.WATERLOO) ) result = "waterlooandcity";
         else if (line.equals( LineType.CENTRAL) ) result = "central";
+        else if (line.equals( LineType.RAIL) ) result = "rail";
         return result;
     }
     public static LineType  getLineTypeRespresentation(String line)
@@ -155,6 +160,7 @@ public class LinePresentation
         else if (line.equals( "Waterloo") ) result = LineType.WATERLOO;
         else if (line.equals( "Central") ) result = LineType.CENTRAL;
         else if (line.equals( "Buses") ) result = LineType.BUSES;
+        else if (line.equals( "Rail") ) result = LineType.RAIL;
         else if (line.equals( "All") ) result = LineType.ALL;
         return result;
     }
@@ -172,6 +178,9 @@ public class LinePresentation
 			break;
 		case DLR:
 			res=R.drawable.dlr;
+			break;
+		case RAIL:
+			res=R.drawable.rail;
 			break;
 		default:
 			res=R.drawable.tube;

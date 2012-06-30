@@ -44,7 +44,7 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
-	public static final String VERSION = "1.2.1";
+	public static final String VERSION = "1.2.2";
 	//Don't forget to change the Gmaps API key in full_screen_map.xml and the version/version code in manifest
 	public static final Boolean USE_LICENSING = true;
 
@@ -585,10 +585,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		ProgressDialog.Builder builder = new ProgressDialog.Builder(this);
 		builder.setTitle(APPNAME+" "+VERSION)
 				.setMessage("What's new:\n\n"+
-						"*New UI (+minor fixes for GB)\n\n" +
-						"*Station autocomplete in textboxes\n\n"+
-						"*Search provider for quick access to departures from the homescreen (needs manual activation)\n\n"+
-						"*Official TfL Bus API\n\n"+
+						"*Rail stations suggestions in the Journey planner\n\n"+
 						"*Bug fixes")
 				.setCancelable(false).setPositiveButton("OK", null);
 		return builder.create();

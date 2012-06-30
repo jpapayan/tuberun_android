@@ -18,7 +18,8 @@ public enum LineType
     BAKERLOO,
     WATERLOO,
     CENTRAL,
-    BUSES;
+    BUSES,
+    RAIL;
     
     private static Iterable<LineType> allTube() {
     	ArrayList<LineType> res=new ArrayList<LineType>();
@@ -85,6 +86,8 @@ public enum LineType
 			ln = LineType.DLR;
 		else if (name.equalsIgnoreCase("overground"))
 			ln = LineType.OVERGROUND;
+		else if (name.equalsIgnoreCase("rail"))
+			ln = LineType.RAIL;
 		return ln;
 	}
 }
