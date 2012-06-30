@@ -1,80 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <!-- <ImageView -->
-    <!-- android:layout_width="fill_parent" -->
-    <!-- android:layout_height="fill_parent" -->
-    <!-- android:scaleType="centerCrop" -->
-    <!-- android:src="@drawable/background_oyster" /> -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dip"
+        android:background="@drawable/tuberun_semitransparent"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/back_button"
+            style="@style/BackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:minHeight="0dip"
+            android:minWidth="0dip" />
+
+        <Button
+            android:id="@+id/logo_button"
+            style="@style/MenuButton"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_gravity="center_vertical"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/lastupdate"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dip"
+            android:layout_weight="1"
+            android:text="Oyster Balance" />
+
+        <Button
+            android:id="@+id/update_button"
+            style="@style/RefreshButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dip"
+            android:minHeight="0dip"
+            android:minWidth="0dip"
+            android:text=""
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2dip"
+        android:layout_gravity="bottom"
+        android:background="@drawable/tuberun_red_bright" />
 
     <LinearLayout
-        android:id="@+id/mainmenu"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp" >
 
-        <LinearLayout
+        <TextView
+            style="@style/WhiteText"
             android:layout_width="fill_parent"
-            android:layout_height="48dip"
-            android:background="@drawable/tuberun_semitransparent"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/back_button"
-                style="@style/BackButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:minHeight="0dip"
-                android:minWidth="0dip" />
-
-            <Button
-                android:id="@+id/logo_button"
-                style="@style/MenuButton"
-                android:layout_width="40dip"
-                android:layout_height="40dip"
-                android:layout_gravity="center_vertical"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/lastupdate"
-                style="@android:style/TextAppearance.Medium"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dip"
-                android:text="Oyster Balance" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="false"
+            android:text="CREDENTIALS (oyster.tfl.gov.uk)"
+            android:textColor="@drawable/tuberun_red_bright"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="2dip"
             android:layout_gravity="bottom"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/tuberun_red_bright" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:padding="10dp" >
+            android:orientation="horizontal"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:paddingTop="5dip" >
 
             <TextView
                 style="@style/WhiteText"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Username"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/oyster_username"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Add your oyster.tfl.gov.uk credentials:" />
+                android:layout_gravity="center_vertical|right"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
 
             <LinearLayout
+                android:id="@+id/list"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -87,98 +129,120 @@
                     android:layout_width="100dip"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="Username"
+                    android:text="Password"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <EditText
-                    android:id="@+id/oyster_username"
+                    android:id="@+id/oyster_password"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|right"
+                    android:inputType="textPassword"
                     android:singleLine="true" />
             </LinearLayout>
 
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-
-                <LinearLayout
-                    android:id="@+id/list"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dip"
-                    android:paddingRight="10dip"
-                    android:paddingTop="5dip" >
-
-                    <TextView
-                        style="@style/WhiteText"
-                        android:layout_width="100dip"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="Password"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                    <EditText
-                        android:id="@+id/oyster_password"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|right"
-                        android:inputType="textPassword"
-                        android:singleLine="true" />
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/button_store"
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/list"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="10dip"
-                    android:layout_marginRight="10dip"
-                    android:layout_marginTop="5dip"
-                    android:text="Save" />
-
-                <Button
-                    android:id="@+id/button_erase"
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/button_store"
-                    android:layout_toLeftOf="@id/button_store"
-                    android:text="Clear" />
-            </RelativeLayout>
-
-        </LinearLayout>
-        
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1" />
-        
-        <LinearLayout
-                android:layout_width="fill_parent"
+            <Button
+                android:id="@+id/button_store"
+                android:layout_width="100dip"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_margin="10dip"
-                android:background="@drawable/tuberun_red"
-                android:orientation="horizontal"
-                android:padding="10dip" >
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/list"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="9dip"
+                android:layout_marginTop="5dip"
+                android:text="Save" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_dialog_info" />
-
-                <TextView
-                    style="@style/WhiteText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dip"
-                    android:text="Your credentials are only stored in your phone and are only used to fetch your Oyster balance" />
-            </LinearLayout>
-
+            <Button
+                android:id="@+id/button_erase"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/button_store"
+                android:layout_toLeftOf="@id/button_store"
+                android:text="Clear" />
+        </RelativeLayout>
     </LinearLayout>
 
-</FrameLayout>
+<!--     <LinearLayout -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_gravity="bottom" -->
+<!--         android:layout_marginLeft="22dip" -->
+<!--         android:layout_marginRight="22dip" -->
+<!--         android:orientation="horizontal" -->
+<!--         android:padding="10dip" > -->
+
+<!--         <ImageView -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:src="@android:drawable/ic_dialog_info" /> -->
+
+<!--         <TextView -->
+<!--             style="@style/WhiteText" -->
+<!--             android:layout_width="fill_parent" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_marginLeft="10dip" -->
+<!--             android:text="Your credentials are only stored in your phone and are only used to fetch your Oyster balance" /> -->
+<!--     </LinearLayout> -->
+
+    <LinearLayout
+        android:id="@+id/cards_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <TextView
+            style="@style/WhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="false"
+            android:text="CARDS"
+            android:textColor="@drawable/tuberun_red_bright"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/tuberun_red_bright" />
+
+        <ListView
+            android:id="@+id/cards_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="15dp"
+            android:clickable="true"
+             />
+
+        <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ProgressBar
+            android:id="@+id/cards_progressbar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone" />
+        
+        <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+        
+    </LinearLayout>
+
+</LinearLayout>

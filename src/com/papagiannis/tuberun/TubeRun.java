@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -246,7 +247,16 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 
 	@Override
 	public void update() {
-		CharSequence balance = fetcher.getResult();
+		SharedPreferences preferences = getSharedPreferences(TubeRun.PREFERENCES, MODE_PRIVATE);
+		String defaultCard = preferences.getString(OysterActivity.DEFAULT_CARD, "");
+		
+		CharSequence balance="";
+		HashMap<String,String> cards = fetcher.getCards();
+		if (!defaultCard.equals("") && cards.containsKey(defaultCard)) {
+			balance=cards.get(defaultCard);
+		}
+		else balance = fetcher.getResult();
+		
 		oysterBalance.setText(balance);
 		oysterButtonActive.setVisibility(View.VISIBLE);
 		oysterButton.setVisibility(View.GONE);
@@ -585,6 +595,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		ProgressDialog.Builder builder = new ProgressDialog.Builder(this);
 		builder.setTitle(APPNAME+" "+VERSION)
 				.setMessage("What's new:\n\n"+
+						"*Support for accounts with multiple oyster cards\n\n"+
 						"*Rail stations suggestions in the Journey planner\n\n"+
 						"*Bug fixes")
 				.setCancelable(false).setPositiveButton("OK", null);

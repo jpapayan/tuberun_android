@@ -1,6 +1,7 @@
 package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Context;
@@ -134,7 +135,16 @@ public class MainMenu extends FrameLayout
 	
 	@Override
 	public void update() {
-		CharSequence balance = fetcher.getResult();
+		SharedPreferences preferences = context.getSharedPreferences(TubeRun.PREFERENCES, Context.MODE_PRIVATE);
+		String defaultCard = preferences.getString(OysterActivity.DEFAULT_CARD, "");
+		
+		CharSequence balance="";
+		HashMap<String,String> cards = fetcher.getCards();
+		if (!defaultCard.equals("") && cards.containsKey(defaultCard)) {
+			balance=cards.get(defaultCard);
+		}
+		else balance = fetcher.getResult();
+		
 		balanceTextview.setText(balance);
 		balanceLayout.setVisibility(View.VISIBLE);
 		balanceTextview.setVisibility(View.VISIBLE);

@@ -1,13 +1,11 @@
 package com.papagiannis.tuberun.fetchers;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.http.impl.client.BasicCookieStore;
-
-import android.util.Log;
 
 public class OysterFetcher extends Fetcher {
 	private static final long serialVersionUID = 1L;
@@ -15,6 +13,7 @@ public class OysterFetcher extends Fetcher {
 	private String password="";
 	private String oyster_no="";
 	private String oyster_balance="";
+	private HashMap<String,String> cards=new HashMap<String,String>();
 	@SuppressWarnings("deprecation")
 	private Date update_time=new Date(2000,1,1);
 	private transient RequestTask task=null;
@@ -52,6 +51,8 @@ public class OysterFetcher extends Fetcher {
 		boolean first = isFirst.compareAndSet(true, false);
 		if (!first)	return; // only one at a time
 		errors="";
+		cards.clear();
+		cardsReturned.set(0);
 		postData = new StringBuilder();
 		cookies = new BasicCookieStore();
 		String q1 = "https://oyster.tfl.gov.uk/oyster/security_check";
@@ -69,6 +70,8 @@ public class OysterFetcher extends Fetcher {
 	}
 
 	String param = "";
+	private int totalCards=0;
+	private AtomicInteger cardsReturned=new AtomicInteger(0);
 
 	private void getCallBack1(String response) {
 		try {
@@ -80,26 +83,43 @@ public class OysterFetcher extends Fetcher {
 			int i=response.indexOf("Select card number");
 			int j=response.indexOf("Balance: &pound;");
 			if (i>0) {
-				//multiple cards parsing
-				response=response.substring(i);
-				String mark="<option value=\"";
-				response=response.substring(response.indexOf(mark)+mark.length());
-				oyster_no=response.substring(0, response.indexOf("\""));
-				postData = new StringBuilder();
-				String q = "https://oyster.tfl.gov.uk/oyster/selectCard.do";
-				postData.append("method=input&cardId="+oyster_no);
-
-				PostRequestTask r = new PostRequestTask(new HttpCallback() {
-					public void onReturn(String s) {
-						getCallBack2(s);
+				totalCards=0;
+				while (true) {
+					response=response.substring(i);
+					String mark="<option value=\"";
+					int ni=response.indexOf(mark);
+					if (ni==-1) {
+						if (totalCards==0) throw new Exception("No cards detected"); 
+						break;
 					}
-				});
-				r.setPostData(postData);
-				r.setCookies(cookies);
-				task=r;
-				r.execute(q);
+					response=response.substring(ni+mark.length());
+					int end=response.indexOf("\"");
+					oyster_no=response.substring(0, end);
+					response=response.substring(end);
+					
+					postData = new StringBuilder();
+					String q = "https://oyster.tfl.gov.uk/oyster/selectCard.do";
+					postData.append("method=input&cardId="+oyster_no);
+
+					PostRequestTask r = new PostRequestTask(new HttpCallback() {
+						public void onReturn(String s) {
+							getCallBack2(s);
+						}
+					});
+					r.setPostData(postData);
+					r.setCookies(cookies);
+					task=r;
+					r.execute(q);
+					totalCards++;
+				}
+				
+				//multiple cards parsing
+				
+				
+				
 			}
 			else if (j>0) {
+				totalCards=1;
 				//single card parsing
 				getCallBack2(response);
 			}
@@ -121,17 +141,30 @@ public class OysterFetcher extends Fetcher {
 		try {
 			if (response==null || response.equals("")) 
 				throw new Exception("The server tfl.gov.uk did not respond to your request (3)");
-			String mark="Balance: &pound;";
+			String mark="<h2>Card No: ";
 			int i=response.indexOf(mark);
 			if (i<0) throw new Exception("Cannot parse server response");
 			response=response.substring(i+mark.length());
+			String number=response.substring(0,response.indexOf("</h2>"));
+			
+			response=response.substring(response.indexOf("</h2>"));
+			
+			mark="Balance: &pound;";
+			i=response.indexOf(mark);
+			if (i<0) throw new Exception("Cannot parse server response");
+			response=response.substring(i+mark.length());
 			oyster_balance="£"+response.substring(0,response.indexOf("</span>"));
+			
+			cards.put(number, oyster_balance);
 			update_time=new Date();
+			
+			cardsReturned.incrementAndGet();
+			
 		} catch (Exception e) {
 			errors+=e.getMessage();
 		} finally {
 			isFirst.set(true);
-			notifyClients();
+			if (totalCards==cardsReturned.get()) notifyClients();
 		}
 	}
 	
@@ -155,5 +188,9 @@ public class OysterFetcher extends Fetcher {
 		isFirst.set(true);
     	if (task!=null) task.cancel(true);
     }
+
+	public HashMap<String,String> getCards() {
+		return cards;
+	}
 	
 }

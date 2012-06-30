@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="45dip"
+    android:layout_marginTop="10dip"
+    android:orientation="horizontal"
+    android:clickable="false"
+    android:focusable="false" >
+
+    <ToggleButton
+        android:id="@+id/enabled_button"
+        android:focusable="false"
+        android:clickable="false"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:background="@layout/oyster_toggle_selector"
+        android:checked="true"
+        android:minHeight="0dip"
+        android:minWidth="0dip"
+        android:layout_marginBottom="1dip"
+        android:textOff=""
+        android:textOn="" />
+
+    <TextView
+        android:id="@+id/number_textview"
+        style="@style/WhiteText"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="10dip"
+        android:layout_weight="1"
+        android:text="475803458388845" />
+
+    <TextView
+        android:id="@+id/balance_textview"
+        style="@style/WhiteText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:text="$53.23" />
+
+</LinearLayout>
