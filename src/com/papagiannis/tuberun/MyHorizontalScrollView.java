@@ -88,11 +88,6 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 		getViewTreeObserver().addOnGlobalLayoutListener(listener);
 	}
 	
-	public void scrollToContent() {
-		
-		
-	}
-
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
 		// Do not allow touch events.
@@ -137,8 +132,6 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 
 		@Override
 		public void onGlobalLayout() {
-			// System.out.println("onGlobalLayout");
-
 			final HorizontalScrollView me = MyHorizontalScrollView.this;
 
 			// The listener will remove itself as a layout listener to the HSV
@@ -181,6 +174,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 					me.scrollBy(scrollToViewPos, 0);
 				}
 			});
+			
 		}
 	}
 
@@ -208,5 +202,6 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 		 */
 		public void getViewSize(int idx, int w, int h, int[] dims);
 	}
+	
 	
 }

@@ -45,9 +45,9 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
-	public static final String VERSION = "1.2.2";
+	public static final String VERSION = "1.2.3";
 	//Don't forget to change the Gmaps API key in full_screen_map.xml and the version/version code in manifest
-	public static final Boolean USE_LICENSING = true;
+	public static final Boolean USE_LICENSING = false;
 
 	private static final String TUBE_MAP_URL = "https://www.tfl.gov.uk/assets/downloads/standard-tube-map.gif";
 	private static final String LOCAL_PATH = "standard-tube-map.gif";
@@ -595,9 +595,8 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		ProgressDialog.Builder builder = new ProgressDialog.Builder(this);
 		builder.setTitle(APPNAME+" "+VERSION)
 				.setMessage("What's new:\n\n"+
-						"*Support for accounts with multiple oyster cards\n\n"+
-						"*Rail stations suggestions in the Journey planner\n\n"+
-						"*Bug fixes")
+						"*Tested on JellyBean\n\n"+
+						"*Minor bug fixes")
 				.setCancelable(false).setPositiveButton("OK", null);
 		return builder.create();
 	}

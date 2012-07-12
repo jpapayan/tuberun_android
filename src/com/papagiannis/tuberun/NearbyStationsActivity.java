@@ -56,7 +56,8 @@ public class NearbyStationsActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		new SlidingBehaviour(this, R.layout.nearby).setupHSVWithLayout();
+		SlidingBehaviour sb=new SlidingBehaviour(this, R.layout.nearby);
+		sb.setupHSVWithLayout();
 
 		location_accuracy_textview = (TextView) findViewById(R.id.location_accuracy_textview);
 		location_textview = (TextView) findViewById(R.id.location_textview);
@@ -76,11 +77,6 @@ public class NearbyStationsActivity extends FragmentActivity implements
 				NearbyStationsListFragment.class, null);
 		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
 		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
-		// Bitmap bmp = BitmapFactory.decodeResource(this.getResources(),
-		// R.drawable.tube);
-		// Bitmap resizedbitmap = Bitmap.createScaledBitmap(bmp,
-		// (int)(bmp.getWidth() / 1.5), (int) (bmp.getHeight() / 1.5), true);
-		// mTabsAdapter.getTabsImageView().setImageBitmap(resizedbitmap);
 		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.tube);
 
 		mTabsAdapter.addTab(
@@ -88,11 +84,6 @@ public class NearbyStationsActivity extends FragmentActivity implements
 				NearbyCycleStationsListFragment.class, null);
 		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
 		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
-		// bmp=BitmapFactory.decodeResource(this.getResources(),
-		// R.drawable.cycle_hire);
-		// resizedbitmap = Bitmap.createScaledBitmap(bmp,
-		// (int)(bmp.getWidth() / 1.5), (int) (bmp.getHeight() / 1.5), true);
-		// mTabsAdapter.getTabsImageView().setImageBitmap(resizedbitmap);
 		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.cycle_hire);
 		
 		mTabsAdapter.addTab(
@@ -100,13 +91,9 @@ public class NearbyStationsActivity extends FragmentActivity implements
 				NearbyBusLinesListFragment.class, null);
 		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
 		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
-		// bmp=BitmapFactory.decodeResource(this.getResources(),
-		// R.drawable.cycle_hire);
-		// resizedbitmap = Bitmap.createScaledBitmap(bmp,
-		// (int)(bmp.getWidth() / 1.5), (int) (bmp.getHeight() / 1.5), true);
-		// mTabsAdapter.getTabsImageView().setImageBitmap(resizedbitmap);
 		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.buses);
 
+		
 		if (savedInstanceState != null) {
 			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
 		}
@@ -185,9 +172,9 @@ public class NearbyStationsActivity extends FragmentActivity implements
 		if (SelectBusStationActivity.isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
 			reverseGeocode(lastKnownLocation);
-			undergroundFragment.locationChanged(lastKnownLocation);
-			busesFragment.locationChanged(lastKnownLocation);
-			cycleFragment.locationChanged(lastKnownLocation);
+			if (undergroundFragment!=null) undergroundFragment.locationChanged(lastKnownLocation);
+			if (busesFragment!=null) busesFragment.locationChanged(lastKnownLocation);
+			if (cycleFragment!=null) cycleFragment.locationChanged(lastKnownLocation);
 		}
 	}
 

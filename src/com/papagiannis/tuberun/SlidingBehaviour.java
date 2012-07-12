@@ -3,7 +3,11 @@ package com.papagiannis.tuberun;
 import android.app.Activity;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnGenericMotionListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -29,7 +33,7 @@ public class SlidingBehaviour {
     public void setupHSVWithLayout() {
 		LayoutInflater inflater = LayoutInflater.from(activity);
         scrollView = (MyHorizontalScrollView) inflater.inflate(R.layout.horz_scroll_with_list_menu, null);
-        
+
         menu = new MainMenu(activity);
         app = inflater.inflate(mainLayout, null);
         ViewGroup tabBar = (ViewGroup) app.findViewById(R.id.main_layout);
@@ -48,5 +52,5 @@ public class SlidingBehaviour {
         
         activity.setContentView(scrollView);
 	}
-
+    
 }

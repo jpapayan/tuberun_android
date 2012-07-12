@@ -367,10 +367,11 @@ public class PlanFragment extends Fragment implements Observer,
 	}
 
 	private final Pattern pattern = Pattern
-			.compile("[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][A-Z]{2}");// .matcher(input).matches()
+			.compile("[A-Z]{1,2}[0-9R][0-9A-Z]?[ ]?[0-9][A-Z]{2}");// .matcher(input).matches()
 
 	protected boolean isPostcode(String str) {
-		return pattern.matcher(str.trim().toUpperCase()).matches();
+		boolean res=pattern.matcher(str.trim().toUpperCase()).matches();
+		return res;
 	}
 
 	private void hideKeyboard() {

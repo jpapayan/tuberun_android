@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -158,5 +159,6 @@ public class NearbyStationsListFragment extends ListFragment implements
 		if (fetcher!=null) fetcher.deregisterCallback(this);
 		
 	}
+	
 
 }
