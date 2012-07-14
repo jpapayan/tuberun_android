@@ -1,8 +1,12 @@
 package com.papagiannis.tuberun.fetchers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.json.JSONArray;
@@ -58,7 +62,8 @@ public class BusDeparturesFetcher extends Fetcher {
 				JSONArray locations = (JSONArray) tokener.nextValue();
 				line++;
 				if (line == 1)
-					continue; // the first line contains version info, let's ignore it
+					continue; // the first line contains version info, let's
+								// ignore it
 				HashMap<String, String> bus_map = new HashMap<String, String>();
 				bus_map.put("platform", stop_nice);
 				bus_map.put("destination", locations.getString(2));
@@ -70,6 +75,9 @@ public class BusDeparturesFetcher extends Fetcher {
 				bus_map.put("estimatedWait", toTextual(total));
 				departures.add(bus_map);
 			}
+			//the following two calls are requires because the TfL api messes results up
+			removeDuplicates(departures);
+			sort(departures);
 			notifyClients();
 			isFirst.set(true);
 		} catch (Exception e) {
@@ -78,12 +86,40 @@ public class BusDeparturesFetcher extends Fetcher {
 		}
 	}
 
+	private void removeDuplicates(ArrayList<HashMap<String, String>> list) {
+		HashSet<HashMap<String, String>> hs = new HashSet<HashMap<String,String>>(list);
+		list.clear();
+		list.addAll(hs);
+	}
+
+	private void sort(ArrayList<HashMap<String, String>> ar) {
+		Collections.sort(ar, new Comparator<HashMap<String,String>>() {
+			@Override
+			public int compare(HashMap<String, String> lhs,
+					HashMap<String, String> rhs) {
+				String time1 = lhs.get("estimatedWait").split(" ")[0];
+				String time2 = rhs.get("estimatedWait").split(" ")[0];
+				Integer t1 = 0;
+				Integer t2 = 0;
+				if (!time1.equals("due"))
+					t1 = Integer.parseInt(time1);
+				if (!time2.equals("due"))
+					t2 = Integer.parseInt(time2);
+				if (t1<t2) return -1;
+				else if (t1==t2) return 0;
+				else return 1;
+			}
+		});
+	}
+		
 	private String toTextual(Long timespan) {
-		String result="";
-		long sec=timespan/1000;
-		long min=sec/60;
-		if (min==0) result="due";
-		else result=String.valueOf(min)+" min";
+		String result = "";
+		long sec = timespan / 1000;
+		long min = sec / 60;
+		if (min == 0)
+			result = "due";
+		else
+			result = String.valueOf(min) + " min";
 		return result;
 	}
 
