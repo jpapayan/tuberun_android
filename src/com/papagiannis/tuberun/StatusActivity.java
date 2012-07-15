@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -30,6 +31,7 @@ public class StatusActivity extends FragmentActivity {
 	TextView title_textview;
 	StatusesFragment nowFragment;
 	StatusesFragment weekendFragment;
+	Fragment stationsFragment;
 	Button updateButton;
 	Button mapButton;
 	
@@ -71,8 +73,12 @@ public class StatusActivity extends FragmentActivity {
 		mTabsAdapter.addTab(
 				mTabHost.newTabSpec("weekend").setIndicator("This Weekend"),
 				StatusesFragment.class, null);
+		mTabsAdapter.addTab(
+				mTabHost.newTabSpec("stations").setIndicator("Stations"),
+				StationsStatusesFragment.class, null);
 		nowFragment = (StatusesFragment) mTabsAdapter.getItem(0);
 		weekendFragment = (StatusesFragment) mTabsAdapter.getItem(1);
+		stationsFragment = (StationsStatusesFragment) mTabsAdapter.getItem(2);
 		
 		if (savedInstanceState != null) {
 			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
