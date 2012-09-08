@@ -9,9 +9,11 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -21,6 +23,7 @@ import com.papagiannis.tuberun.favorites.Favorite;
 import com.papagiannis.tuberun.fetchers.DeparturesDLRFetcher;
 import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
+import com.papagiannis.tuberun.fetchers.StationStatusesFetcher;
 
 public class DeparturesActivity extends ListActivity implements Observer, OnClickListener {
 	private static final int ASK_LINE_DIALOG=1;
@@ -28,8 +31,13 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 	protected Button logoButton;
 	protected TextView stationTextView;
 	protected TextView emptyTextView;
+	protected RelativeLayout warningLayout;
+	protected TextView warningTextview;
 	
-	private DeparturesFetcher fetcher;
+	private DeparturesFetcher departuresFetcher;
+	private StationStatusesFetcher statusesFetcher;
+	private Observer statusesCallback;
+	
 	private final ArrayList<HashMap<String,Object>> departures_list=new ArrayList<HashMap<String,Object>>();
 	private LineType lt;
 	private String stationcode;
@@ -56,6 +64,10 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 		backButton.setOnClickListener(this);
 		logoButton.setOnClickListener(this);
     	
+		warningLayout=(RelativeLayout) findViewById(R.id.warning_layout);
+		warningTextview=(TextView) findViewById(R.id.warning_textview);
+		warningTextview.setMovementMethod(new ScrollingMovementMethod());
+		
     	departures_list.clear();
     	
     	Bundle extras = getIntent().getExtras();
@@ -88,18 +100,31 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 		stationTextView.setTextColor(LinePresentation.getForegroundColor(lt));
 		stationTextView.setVisibility(View.VISIBLE);
     	
-		if (lt==LineType.DLR) fetcher=new DeparturesDLRFetcher(lt, stationcode, stationnice);
-		else fetcher=new DeparturesFetcher(lt, stationcode, stationnice);
-		fetcher.registerCallback(this);
+		if (lt==LineType.DLR) departuresFetcher=new DeparturesDLRFetcher(lt, stationcode, stationnice);
+		else departuresFetcher=new DeparturesFetcher(lt, stationcode, stationnice);
+		
+		departuresFetcher.registerCallback(this);
 		emptyTextView.setVisibility(View.GONE);
-		fetcher.update();
+		departuresFetcher.update();
+		
+		statusesFetcher=new StationStatusesFetcher();
+		statusesCallback = new Observer() {
+			@Override
+			public void update() {
+				updateStatus();
+				
+			}
+		};
+		statusesFetcher.registerCallback(statusesCallback);
+		statusesFetcher.update();
+		
 		
 		View updateButton = findViewById(R.id.button_update);
         updateButton.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		emptyTextView.setVisibility(View.GONE);
         		setListAdapter(null);
-        		fetcher.update();
+        		departuresFetcher.update();
         	}
         });
         Favorite.getFavorites(this);
@@ -109,7 +134,7 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 	public void update() {
 		departures_list.clear();
 		
-		HashMap<String, ArrayList<HashMap<String, String>>> reply=fetcher.getDepartures();
+		HashMap<String, ArrayList<HashMap<String, String>>> reply=departuresFetcher.getDepartures();
 		for (String platform : reply.keySet()) {
 			HashMap<String,Object> m=new HashMap<String,Object>();
 			ArrayList<HashMap<String, String>> trains=reply.get(platform);
@@ -160,6 +185,14 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 		
 	}
 	
+	private void updateStatus() {
+		if (statusesFetcher.hasStatus(stationnice)) {
+			warningTextview.setText(statusesFetcher.getStatus(stationnice));
+			warningLayout.setVisibility(View.VISIBLE);
+		}
+		else warningLayout.setVisibility(View.GONE);
+	}
+	
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		Dialog result=null;
@@ -185,6 +218,13 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 		return result;
 	};
 	
+	@Override 
+	protected void onDestroy() {
+		if (statusesCallback!=null && statusesFetcher!=null) { 
+			statusesFetcher.deregisterCallback(statusesCallback);
+		}
+		super.onDestroy();
+	};
 	
 
     @Override

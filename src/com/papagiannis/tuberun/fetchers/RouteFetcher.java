@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.google.android.maps.GeoPoint;
 
 public class RouteFetcher extends Fetcher {
-
+	private static final long serialVersionUID = 1L;
 	GeoPoint from;
 	GeoPoint to;
     public RouteFetcher(GeoPoint me, GeoPoint to) {
