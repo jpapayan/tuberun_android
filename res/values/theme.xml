@@ -133,6 +133,7 @@
 
     <drawable name="tuberun_semitransparent">#BA000000</drawable>
     <drawable name="tuberun_red">#FF801219</drawable>
+    <drawable name="tuberun_red_copy">#FF801219</drawable>
     <drawable name="tuberun_red_semitransparent">#99801219</drawable>
     <drawable name="tuberun_red_bright">#FFDA2B2C</drawable>
     <drawable name="tuberun_red_bright_transparent">#99DA2B2C</drawable>

@@ -23,7 +23,8 @@ public class BusDeparturesFetcher extends Fetcher {
 			return; // only one at a time
 		String request_query = "http://countdown.api.tfl.gov.uk/interfaces/ura/instant_V1?StopCode1="
 				+ stop_code
-				+ "&ReturnList=LineName,DestinationText,EstimatedTime";
+				+ "&ReturnList=LineName,DestinationText,EstimatedTime," //for departures
+				+ "MessageType,MessagePriority,MessageText"; //for statuses
 		task = new RequestTask(new HttpCallback() {
 			public void onReturn(String s) {
 				getDeparturesCallBack(s);
@@ -44,6 +45,7 @@ public class BusDeparturesFetcher extends Fetcher {
 	protected String stop_nice;
 
 	protected ArrayList<HashMap<String, String>> departures = new ArrayList<HashMap<String, String>>();
+	protected String warnings="";
 
 	public BusDeparturesFetcher(String stop_code, String stop_nice) {
 		this.stop_code = stop_code;
@@ -53,28 +55,35 @@ public class BusDeparturesFetcher extends Fetcher {
 	private void getDeparturesCallBack(String reply) {
 		try {
 			departures.clear();
+			warnings="";
 			last_update = new Date();
 
 			JSONTokener tokener = new JSONTokener(reply);
-			int line = 0;
 			while (tokener.more()) {
 				JSONArray locations = (JSONArray) tokener.nextValue();
-				line++;
-				if (line == 1)
-					continue; // the first line contains version info, let's
-								// ignore it
-				HashMap<String, String> bus_map = new HashMap<String, String>();
-				bus_map.put("platform", stop_nice);
-				bus_map.put("destination", locations.getString(2));
-				bus_map.put("routeId", locations.getString(1));
-				bus_map.put("routeName", locations.getString(1));
-				Long time = locations.getLong(3);
-				Long now = last_update.getTime();
-				Long total = time - now;
-				bus_map.put("estimatedWait", toTextual(total));
-				departures.add(bus_map);
+				int type=locations.getInt(0);
+				switch (type){
+					case 4:
+						continue;
+					case 1:
+						HashMap<String, String> bus_map = new HashMap<String, String>();
+						bus_map.put("platform", stop_nice);
+						bus_map.put("destination", locations.getString(2));
+						bus_map.put("routeId", locations.getString(1));
+						bus_map.put("routeName", locations.getString(1));
+						Long time = locations.getLong(3);
+						Long now = last_update.getTime();
+						Long total = time - now;
+						bus_map.put("estimatedWait", toTextual(total));
+						departures.add(bus_map);
+						break;
+					case 2:
+						if (warnings.length()>0) warnings+="\n";
+						warnings+=locations.getString(3);
+						break;
+				}
 			}
-			//the following two calls are requires because the TfL api messes results up
+			//the following two calls are required because the TfL api messes results up
 			removeDuplicates(departures);
 			sort(departures);
 			notifyClients();
@@ -132,7 +141,13 @@ public class BusDeparturesFetcher extends Fetcher {
 			categorised.get(train.get("platform")).add(train);
 		}
 		return categorised;
-
+	}
+	
+	public boolean hasWarnings() {
+		return warnings.length()>0;
+	}
+	public String getWarnings() {
+		return warnings;
 	}
 
 	@Override

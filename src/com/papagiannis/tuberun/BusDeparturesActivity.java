@@ -5,11 +5,13 @@ import java.util.HashMap;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -28,6 +30,8 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 	private ListView listView;
 	private TextView lineTextView;
 	private LinearLayout emptyLayout;
+	private RelativeLayout warningLayout;
+	private TextView warningTextview;
 	
     /** Called when the activity is first created. */
     @Override
@@ -57,6 +61,10 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 		listView=getListView();
 		lineTextView=(TextView)findViewById(R.id.line_textview);
 		
+		warningLayout=(RelativeLayout) findViewById(R.id.warning_layout);
+		warningTextview=(TextView) findViewById(R.id.warning_textview);
+		warningTextview.setMovementMethod(new ScrollingMovementMethod());
+		
 		Bundle extras = getIntent().getExtras();
 		code = (String) extras.get("code");
 		name = (String) extras.get("name");
@@ -72,6 +80,7 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
         updateButton.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		emptyLayout.setVisibility(View.GONE);
+        		warningLayout.setVisibility(View.GONE);
         		setListAdapter(null);
         		fetcher.update();
         	}
@@ -118,6 +127,12 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 		adapter.setViewBinder(new BusDeparturesBinder());
 		setListAdapter(adapter);
 		listView.setVisibility(View.VISIBLE);
+		
+		if (fetcher.hasWarnings()) {
+			warningTextview.setText(fetcher.getWarnings());
+			warningLayout.setVisibility(View.VISIBLE);
+		}
+		else warningLayout.setVisibility(View.GONE); 
 	}
     
     @Override

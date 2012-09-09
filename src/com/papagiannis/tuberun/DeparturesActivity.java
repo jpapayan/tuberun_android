@@ -112,7 +112,6 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 			@Override
 			public void update() {
 				updateStatus();
-				
 			}
 		};
 		statusesFetcher.registerCallback(statusesCallback);
@@ -123,8 +122,10 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
         updateButton.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		emptyTextView.setVisibility(View.GONE);
+        		warningLayout.setVisibility(View.GONE);
         		setListAdapter(null);
         		departuresFetcher.update();
+        		statusesFetcher.update();
         	}
         });
         Favorite.getFavorites(this);

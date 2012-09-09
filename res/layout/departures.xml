@@ -121,7 +121,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@drawable/tuberun_red"
+        android:background="@drawable/tuberun_red_copy"
         android:visibility="gone"
         android:padding="8dip" >
         
@@ -134,11 +134,11 @@
         <TextView 
             android:id="@+id/warning_textview"
             android:layout_toRightOf="@id/warning_imageview"
-            style="@style/WhiteText"
+            android:textColor="@android:color/white"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dip"
-            android:maxLines="5"
+            android:maxLines="4"
             android:scrollbars="vertical"/>
         
     </RelativeLayout>

@@ -60,6 +60,7 @@ public class StationStatusesFetcher extends Fetcher {
 			return; // only one at a time
 		if (isRecent()) {
 			notifyClients();
+			isFirst.set(true);
 			return;
 		}
 		task = new RequestTask(new HttpCallback() {
@@ -90,14 +91,12 @@ public class StationStatusesFetcher extends Fetcher {
 						result=res;
 						resultTime=new Date();
 						notifyClients();
+						isFirst.set(true);
 					}
 
 				};
 				decodeTask.execute(reply);
-			} else {
-				notifyClients();
 			}
-
 		} catch (Exception e) {
 			Log.w(getClass().toString(), e);
 		} finally {
