@@ -64,7 +64,10 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	}
 
 	private void updateFavorites() {
+		//count how many unique fetchers are needed
+		//and initialise those with this as a callback
 		favorites = Favorite.getFavorites(this);
+		lastFavoritesCount=favorites.size();
 		fetchers_count = 0;
 		uses_status_weekend = false;
 		uses_status_now = false;
@@ -101,7 +104,6 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		if (favorites.size() > 0) {
 			emptyLayout.setVisibility(View.GONE);
 			setListAdapter(null);
-			// showDialog(0);
 			for (Favorite f : favorites) {
 				f.getFetcher().update();
 			}
@@ -215,12 +217,12 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		}
 
 		DragNDropAdapter adapter = new DragNDropAdapter(this, favorites_list,
-				R.layout.favorites_item, new String[] { "line", "platform",
+				R.layout.favorites_item, new String[] { "line", "platform", "index",
 						"icon", "index", 
 						"destination1", "position1",
 						"time1", "destination2", "position2", "time2",
 						"destination3", "position3", "time3"}, new int[] {
-						R.id.linee_favorites, R.id.platform_favorites, 
+						R.id.linee_favorites, R.id.platform_favorites, R.id.platform_favorites, 
 						R.id.icon_favorites , R.id.remove_favorite,
 						R.id.favorites_destination1, R.id.favorites_position1,
 						R.id.favorites_time1, R.id.favorites_destination2,
@@ -264,7 +266,6 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	private DragListener mDragListener = new DragListener() {
 
 		public void onDrag(int x, int y, ListView listView) {
-			// TODO Auto-generated method stub
 		}
 
 		public void onStartDrag(View itemView) {
@@ -279,4 +280,20 @@ public class FavoritesActivity extends ListActivity implements Observer,
 
 	};
 
+	
+	private int lastFavoritesCount=0;
+	@Override
+	protected void onPause() {
+		lastFavoritesCount=Favorite.getFavorites(this).size();
+		super.onPause();
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (Favorite.getFavorites(this).size()!=lastFavoritesCount) {
+			updateFavorites();
+			onClick(null);
+		}
+	}
 }

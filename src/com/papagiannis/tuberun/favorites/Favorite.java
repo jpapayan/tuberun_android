@@ -130,8 +130,7 @@ public class Favorite implements Serializable {
 			}
 			oo.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.w("Favorite.java", e);
 		}
 
 	}

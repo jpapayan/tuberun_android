@@ -14,7 +14,7 @@ public class DeparturesFavorite extends Favorite implements Serializable {
 
 	private String station_nice;
 	public String getStation_nice() {
-		return station_nice;
+		return (station_nice!=null)?station_nice:"";
 	}
 
 	public void setStation_nice(String station_nice) {

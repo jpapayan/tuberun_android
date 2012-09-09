@@ -140,11 +140,18 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 		ToggleButton tb=(ToggleButton)v;
 		if (tb.isChecked()) {
 			DeparturesFavorite fav=new  DeparturesFavorite(LineType.BUSES,new BusDeparturesFetcher(code,name));
+			fav.setStation_nice(name);
 			fav.setIdentification(code);
 			Favorite.addFavorite(fav, this);
 		}
 		else {
 			DeparturesFavorite fav=new  DeparturesFavorite(LineType.BUSES,new BusDeparturesFetcher(code,name));
+			fav.setIdentification(code);
+			fav.setStation_nice(name);
+			Favorite.removeFavorite(fav, this);
+			
+			//also try this without station_nice for compatibility before 1.2.3
+			fav=new  DeparturesFavorite(LineType.BUSES,new BusDeparturesFetcher(code,name));
 			fav.setIdentification(code);
 			Favorite.removeFavorite(fav, this);
 		}
