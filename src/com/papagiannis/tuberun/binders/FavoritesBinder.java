@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 
-import com.ericharlow.DragNDrop.DragNDropListView;
 import com.papagiannis.tuberun.BusDeparturesActivity;
 import com.papagiannis.tuberun.DeparturesActivity;
 import com.papagiannis.tuberun.FavoritesActivity;
@@ -32,14 +31,12 @@ import com.papagiannis.tuberun.fetchers.StatusesFetcher;
 public class FavoritesBinder implements ViewBinder, OnClickListener {
 
 	private final FavoritesActivity activity;
-	private final DragNDropListView listView;
 	private final int red;
 	
-	public FavoritesBinder (FavoritesActivity activity, DragNDropListView listView) {
+	public FavoritesBinder (FavoritesActivity activity) {
 		super();
 		red=activity.getResources().getColor(R.drawable.tuberun_red_bright);
 		this.activity=activity;
-		this.listView=listView;
 	}
 	
 	LineType last_lt;
@@ -61,12 +58,6 @@ public class FavoritesBinder implements ViewBinder, OnClickListener {
 			Bitmap resizedbitmap = Bitmap.createScaledBitmap(bmp,
 					bmp.getWidth() / 2, bmp.getHeight() / 2, true);
 			iv.setImageBitmap(resizedbitmap);
-			view.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					listView.setIsMoving(true);
-				}
-			});
 			return true;
 		case R.id.remove_favorite:
 			view.setOnClickListener(this);

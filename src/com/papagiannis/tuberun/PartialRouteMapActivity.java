@@ -24,7 +24,7 @@ public class PartialRouteMapActivity extends MeMapActivity  {
 	AsyncTask<ArrayList<Integer>, Integer, ArrayList<GeoPoint>> task;
 
 	/** Called when the activity is first created. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

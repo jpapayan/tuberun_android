@@ -4,6 +4,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -80,10 +81,7 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 			ArrayList<HashMap<String, String>> res;
 			try {
 				res = parseXMLResponse(params[0]);
-				int i = res.size();
 			} catch (Exception e) {
-				String s = e.toString();
-				s = s + s;
 				res = new ArrayList<HashMap<String, String>>();
 			}
 			return res;
@@ -183,7 +181,6 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 				}
 			} catch (Exception e) {
 				// This should never happen
-				String s = e.toString();
 				Log.w("DLR Fetcher", e);
 			}
 			return result;
@@ -215,10 +212,7 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 
 		private HashMap<String, String> getInfo(String tr1) {
 			HashMap<String, String> train1 = new HashMap<String, String>();
-			String alphaS = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|z|y|z";
-			String alphaC = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";
 			String dec = "(1|2|3|4|5|6|7|8|9|0)";
-			String alpha = "(" + alphaC + "|" + alphaS + ")";
 			Pattern pat = Pattern.compile("[1-3]( )((([^0-9])+[0-9]+.*)| *)");
 			Matcher m = pat.matcher(tr1);
 			String dest = "";
@@ -262,7 +256,7 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 					char c = tr1.charAt(j);
 					if (white) {
 						white = false;
-						destn += String.valueOf(c).toUpperCase();
+						destn += String.valueOf(c).toUpperCase(Locale.ENGLISH);
 					} else {
 						if (c == ' ')
 							white = true;
@@ -288,9 +282,9 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 			for (int i = 0; i < s.length(); i++) {
 				String next = s.substring(i, i + 1);
 				if (previous_whitespace) {
-					result += next.toUpperCase();
+					result += next.toUpperCase(Locale.ENGLISH);
 				} else {
-					result += next.toLowerCase();
+					result += next.toLowerCase(Locale.ENGLISH);
 				}
 				previous_whitespace=next.equals(" ");
 			}
@@ -342,5 +336,9 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
     	if (task!=null) task.cancel(true);
     	if (deserialiserTask!=null) deserialiserTask.cancel(true);
     }
+	
+	public String getError() {
+		return error;
+	}
 
 }

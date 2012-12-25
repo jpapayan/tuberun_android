@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.widget.LinearLayout;
 
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;

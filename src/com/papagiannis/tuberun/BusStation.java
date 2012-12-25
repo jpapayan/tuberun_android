@@ -1,9 +1,12 @@
 package com.papagiannis.tuberun;
 
+import java.util.Locale;
+
 import android.location.Location;
 
 public class BusStation extends Station  {
 	
+	private static final long serialVersionUID = 1L;
 	public BusStation(String name, Location location, String code) {
 		super(name,location);
 		this.code=code;
@@ -31,7 +34,7 @@ public class BusStation extends Station  {
 	@Override
 	public String getName() {
 		String res=name.charAt(0)+"";;
-		res+=name.substring(1).toLowerCase();
+		res+=name.substring(1).toLowerCase(Locale.ENGLISH);
 		try {
 			String[] tokens=res.split("<>");
 			res=tokens[0];

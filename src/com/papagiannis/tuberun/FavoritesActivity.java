@@ -2,6 +2,7 @@ package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.ListActivity;
@@ -149,7 +150,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 				DeparturesFavorite dfav = (DeparturesFavorite) fav;
 				String platform_trimmed = dfav.getStation_nice() + " "
 						+ platform;
-				m.put("platform", platform_trimmed.toUpperCase());
+				m.put("platform", platform_trimmed.toUpperCase(Locale.ENGLISH));
 				int i = 1;
 				if (!asEmpty) {
 					for (HashMap<String, String> train : trains) {
@@ -178,7 +179,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 							.getStringRespresentation(LineType.BUSES));
 					content.add((String)m.get("line"));
 					m.put("icon", LinePresentation.getIcon(LineType.BUSES));
-					m.put("platform", platform.toUpperCase());
+					m.put("platform", platform.toUpperCase(Locale.ENGLISH));
 					int i = 1;
 					if (!asEmpty) {
 						for (HashMap<String, String> train : trains) {
@@ -199,7 +200,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 						.getLine()));
 				content.add((String)m.get("line"));
 				m.put("platform", LinePresentation.getStringRespresentation(fav
-						.getLine()).toUpperCase());
+						.getLine()).toUpperCase(Locale.ENGLISH));
 				m.put("icon", LinePresentation.getIcon(fav.getLine()));
 				if (!asEmpty) {
 					m.put("time1", "");
@@ -230,7 +231,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 						R.id.favorites_destination3, R.id.favorites_position3,
 						R.id.favorites_time3});
 		adapter.setData(favorites_list);
-		adapter.setViewBinder(new FavoritesBinder(this,listView));
+		adapter.setViewBinder(new FavoritesBinder(this));
 		setListAdapter(adapter);
 		
 	}

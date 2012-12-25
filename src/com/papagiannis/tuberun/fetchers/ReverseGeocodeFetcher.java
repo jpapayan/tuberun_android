@@ -12,7 +12,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 
 public class ReverseGeocodeFetcher extends Fetcher {
-
+	private static final long serialVersionUID = 1L;
 	private Context context;
 	private Location location;
 	private List<Address> result=new ArrayList<Address>();

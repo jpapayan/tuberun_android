@@ -30,6 +30,7 @@ public class RoutesBinder implements ViewBinder {
 		case R.id.changes_layout:
 			LinearLayout layout = (LinearLayout) view;
 			layout.removeAllViews();
+			@SuppressWarnings("unchecked")
 			ArrayList<Integer> a = (ArrayList<Integer>) o;
 			for (Integer i : a) {
 				ImageView iv = new ImageView(activity);

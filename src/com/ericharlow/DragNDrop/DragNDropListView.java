@@ -59,10 +59,6 @@ public class DragNDropListView extends ListView {
 		mDragListener = l;
 	}
 	
-	private Boolean isMoving=false;
-	public void setIsMoving(boolean isMoving) {
-		this.isMoving=isMoving;
-	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
@@ -99,7 +95,6 @@ public class DragNDropListView extends ListView {
 				stopDrag(mStartPosition - getFirstVisiblePosition());
 				if (mDropListener != null && mStartPosition != INVALID_POSITION && mEndPosition != INVALID_POSITION) 
 	        		 mDropListener.onDrop(mStartPosition, mEndPosition);
-				isMoving=false;
 				break;
 		}
 		return true;

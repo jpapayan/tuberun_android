@@ -63,7 +63,6 @@ public class RequestTask extends AsyncTask<String, String, String> {
 				boolean isUTF=false;
 				Header[] headers=response.getAllHeaders();
 				for (Header header:headers) {
-					String s=header.toString();
 					if (header.getName().equals("Content-Type") && header.getValue().contains("utf-8")) {
 						isUTF=true;
 						break;

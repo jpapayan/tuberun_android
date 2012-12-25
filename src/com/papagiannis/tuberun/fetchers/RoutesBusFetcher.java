@@ -21,7 +21,6 @@ import com.papagiannis.tuberun.overlays.RouteOverlay;
 import com.papagiannis.tuberun.overlays.ZoomingBusStationsOverlay;
 
 public class RoutesBusFetcher extends Fetcher {
-
 	private static final long serialVersionUID = 1L;
 	private Context context;
 	private transient GetRoutesTask task = new GetRoutesTask(context);
@@ -33,7 +32,7 @@ public class RoutesBusFetcher extends Fetcher {
 	public RoutesBusFetcher(Context c) {
 		super();
 		context = c;
-		this.routes = new ArrayList<String>();
+		routes = new ArrayList<String>();
 	}
 	
 	public RoutesBusFetcher(Context c, ArrayList<String> routes) {
@@ -63,7 +62,6 @@ public class RoutesBusFetcher extends Fetcher {
 			AsyncTask<ArrayList<String>, Integer, HashMap<String, ArrayList<ArrayList<BusStation>>>> {
 
 		private HashMap<String, ArrayList<ArrayList<BusStation>>> result = new HashMap<String, ArrayList<ArrayList<BusStation>>>();
-		private ArrayList<Overlay> resultOverlays=new ArrayList<Overlay>();
 		private HashMap<String, Integer> resultColors=new HashMap<String, Integer>();
 		Context context;
 
@@ -89,10 +87,8 @@ public class RoutesBusFetcher extends Fetcher {
 					}
 				}
 				results=result;
-				resultOverlays=generateOverlays();
+				generateOverlays();
 				
-//			} catch (IOException ioe) {
-//				throw new Error("Unable to create Database");
 			} catch (Exception e) {
 				Log.w("LinesBusFetcher", e);
 			} finally {

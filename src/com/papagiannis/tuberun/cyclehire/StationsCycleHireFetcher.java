@@ -51,7 +51,7 @@ public class StationsCycleHireFetcher extends NearbyStationsFetcher {
 
 	@Override
 	public synchronized void update() {
-		errors = "";
+		setErrors("");
 		if (isRecent()) {
 			calculateNearestStations(all_stations);
 			return;
@@ -88,7 +88,7 @@ public class StationsCycleHireFetcher extends NearbyStationsFetcher {
 				deserialiserTask.execute(response);
 			}
 		} catch (Exception e) {
-			errors += e.getMessage();
+			setErrors(getErrors() + e.getMessage());
 			notifyClients();
 		}
 	}
@@ -98,7 +98,7 @@ public class StationsCycleHireFetcher extends NearbyStationsFetcher {
 	 */
 	private synchronized void calculateNearestStations(
 			ArrayList<CycleHireStation> stations) {
-		nearbyStationsTask = new GetNearbyStationsTask(context);
+		nearbyStationsTask = new GetNearbyStationsTask();
 		nearbyStationsTask.execute(userLocation);
 	}
 	
@@ -109,7 +109,6 @@ public class StationsCycleHireFetcher extends NearbyStationsFetcher {
 			ArrayList<CycleHireStation> res;
 			try {
 				res = parseXMLResponse(params[0]);
-				int i = res.size();
 			} catch (Exception e) {
 				String s = e.toString();
 				s = s + s;
@@ -227,12 +226,7 @@ public class StationsCycleHireFetcher extends NearbyStationsFetcher {
 	private class GetNearbyStationsTask extends
 			AsyncTask<Location, Integer, ArrayList<? extends Station>> {
 		ArrayList<CycleHireStation> result = new ArrayList<CycleHireStation>();
-		Context context;
 
-		public GetNearbyStationsTask(Context c) {
-			super();
-			this.context = c;
-		}
 
 		@Override
 		protected ArrayList<? extends Station> doInBackground(Location... at) {
@@ -293,6 +287,20 @@ public class StationsCycleHireFetcher extends NearbyStationsFetcher {
 			requestTask.cancel(true);
 		if (deserialiserTask!=null) 
 			deserialiserTask.cancel(true);
+	}
+
+	/**
+	 * @return the errors
+	 */
+	public String getErrors() {
+		return errors;
+	}
+
+	/**
+	 * @param errors the errors to set
+	 */
+	public void setErrors(String errors) {
+		this.errors = errors;
 	}
 
 }

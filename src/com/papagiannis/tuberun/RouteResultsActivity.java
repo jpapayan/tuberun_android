@@ -211,7 +211,6 @@ public class RouteResultsActivity extends Activity {
 		ArrayList<HashMap<String, Object>> adapter_list = new ArrayList<HashMap<String, Object>>();
 
 		ArrayList<Route> route_list = plan.getRoutes();
-		int i = 0;
 		for (Route r : route_list) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("duration", format.format(r.getDuration()));

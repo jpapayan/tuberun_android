@@ -10,7 +10,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.http.impl.client.BasicCookieStore;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -113,7 +112,6 @@ public class PlanFetcher extends Fetcher {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document dom = builder
 				.parse(new InputSource(new StringReader(response)));
-		Element root = dom.getDocumentElement();
 		
 		NodeList ilist = dom.getElementsByTagName("itdItinerary");
 		Node itinerary= ilist.item(0);
@@ -173,6 +171,7 @@ public class PlanFetcher extends Fetcher {
 		return new ArrayList<String>(result);
 	}
 
+	@SuppressWarnings("deprecation")
 	private Route getRouteFromNode(Node route) {
 		Route result = new Route();
 		NamedNodeMap attributes = route.getAttributes();
@@ -313,6 +312,7 @@ public class PlanFetcher extends Fetcher {
 		return result;
 	}
 
+	@SuppressWarnings("deprecation")
 	private Date getTimeFromPoint(Node point) {
 		Date result = new Date();
 		try {

@@ -9,6 +9,7 @@ import com.papagiannis.tuberun.LineType;
 import com.papagiannis.tuberun.Status;
 
 public class StatusesFetcher extends Fetcher {
+	private static final long serialVersionUID = 1L;
 	// region private state
 	protected ArrayList<Status> _all_statuses = new ArrayList<Status>();
 	protected Date last_update;
