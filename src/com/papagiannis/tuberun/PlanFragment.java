@@ -195,7 +195,6 @@ public class PlanFragment extends Fragment implements Observer,
 			}
 		});
 
-		destination_edittext.requestFocus();
 		// prepare the auto complete textviews
 		destination_edittext.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -261,10 +260,6 @@ public class PlanFragment extends Fragment implements Observer,
 		destination_edittext.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> listView, View view,
 					int position, long id) {
-				// Cursor cursor = (Cursor)
-				// listView.getItemAtPosition(position);
-				// String name =
-				// cursor.getString(cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1));
 				hideKeyboard();
 			}
 		});
@@ -338,6 +333,8 @@ public class PlanFragment extends Fragment implements Observer,
 			}
 		});
 
+//		destination_edittext.requestFocus();
+//		from_edittext.clearFocus();
 	}
 
 	private MatrixCursor getHistoryCursor() {

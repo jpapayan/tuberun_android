@@ -23,12 +23,23 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dip"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
+                    android:layout_marginTop="10dip"
+                    android:text="FROM"
                     android:textColor="@drawable/tuberun_grey_darker"
-                    android:textSize="14sp"
-                    android:text="FROM" />
+                    android:textSize="14sp" />
+
+				<!-- This is a stupid hack, used to steal focus from
+				     the AutoCompleteTextView below. Nothing else works.
+				 -->
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true" >
+                    <requestFocus />
+                </LinearLayout>
 
                 <AutoCompleteTextView
                     android:id="@+id/from_edittext"
@@ -38,22 +49,22 @@
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
                     android:layout_marginTop="4dip"
+                    android:hint="Station, address or postcode"
                     android:imeOptions="actionNext"
                     android:inputType="text"
-                    android:state_enabled="false"
-                    android:text="@string/current_location"
-                    android:hint="Station, address or postcode"/>
+                    android:selectAllOnFocus="true"
+                    android:text="@string/current_location" />
 
                 <TextView
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dip"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
-                    android:textSize="14sp"
+                    android:layout_marginTop="10dip"
+                    android:text="TO"
                     android:textColor="@drawable/tuberun_grey_darker"
-                    android:text="TO" />
+                    android:textSize="14sp" />
 
                 <com.papagiannis.tuberun.HistoryAutoComplete
                     android:id="@+id/destination_edittext"
@@ -64,11 +75,11 @@
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
                     android:layout_marginTop="4dip"
+                    android:hint="Station, address or postcode"
                     android:imeOptions="actionDone"
                     android:inputType="text"
-                    android:text=""
-                    android:hint="Station, address or postcode" />
-
+                    android:selectAllOnFocus="true"
+                    android:text="" />
             </LinearLayout>
 
             <LinearLayout
@@ -81,12 +92,12 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dip"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
-                    android:textSize="14sp"
+                    android:layout_marginTop="10dip"
+                    android:text="MEANS OF TRANSPORT"
                     android:textColor="@drawable/tuberun_grey_darker"
-                    android:text="MEANS OF TRANSPORT" />
+                    android:textSize="14sp" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -156,12 +167,12 @@
                     style="@style/WhiteText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dip"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
+                    android:layout_marginTop="7dip"
+                    android:text="OPTIONS"
                     android:textColor="@drawable/tuberun_grey_darker"
-                    android:textSize="14sp"
-                    android:text="OPTIONS" />
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/traveldate_button"
@@ -184,23 +195,23 @@
                     android:layout_marginTop="0dip"
                     android:orientation="horizontal" >
 
-                        <Button
-                            android:id="@+id/departtimelater_button"
-                            android:layout_width="0dip"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:focusable="true"
-                            android:state_enabled="false"
-                            android:text="@string/departtimelater_button" />
-                        
-                        <Button
-                            android:id="@+id/arrivetime_button"
-                            android:layout_width="0dip"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:focusable="true"
-                            android:state_enabled="false"
-                            android:text="@string/arrivetime_button" />
+                    <Button
+                        android:id="@+id/departtimelater_button"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:focusable="true"
+                        android:state_enabled="false"
+                        android:text="@string/departtimelater_button" />
+
+                    <Button
+                        android:id="@+id/arrivetime_button"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:focusable="true"
+                        android:state_enabled="false"
+                        android:text="@string/arrivetime_button" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
