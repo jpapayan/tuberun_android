@@ -80,7 +80,7 @@ public class OysterFetcher extends Fetcher {
 			if (response.contains("Login failed")) {
 				throw new Exception("Login failed, please check your credentials.");
 			}
-			int i=response.indexOf("Select card number");
+			int i=response.indexOf("Choose card number");
 			int j=response.indexOf("Balance: &pound;");
 			if (i>0) {
 				totalCards=0;
@@ -114,9 +114,6 @@ public class OysterFetcher extends Fetcher {
 				}
 				
 				//multiple cards parsing
-				
-				
-				
 			}
 			else if (j>0) {
 				totalCards=1;
