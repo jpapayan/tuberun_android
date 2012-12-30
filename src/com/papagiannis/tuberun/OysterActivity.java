@@ -51,7 +51,7 @@ public class OysterActivity extends Activity implements Observer{
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		new SlidingBehaviour(this, R.layout.oyster).setupHSVWithLayout();
+		new SlidingBehaviour(this, R.layout.oyster);
 		create();
     }
 	

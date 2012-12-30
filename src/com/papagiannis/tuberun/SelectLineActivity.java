@@ -60,7 +60,7 @@ public class SelectLineActivity extends ListActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		new SlidingBehaviour(this, R.layout.select_line).setupHSVWithLayout();
+		new SlidingBehaviour(this, R.layout.select_line);
 		
 		fetcher.registerCallback(this);
 

@@ -60,7 +60,7 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		new SlidingBehaviour(this, R.layout.plan).setupHSVWithLayout();
+		new SlidingBehaviour(this, R.layout.plan);
 		
 		setupTabHost(savedInstanceState);
 		plan = new Plan();

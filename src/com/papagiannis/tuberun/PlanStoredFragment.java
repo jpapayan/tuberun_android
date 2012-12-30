@@ -3,6 +3,7 @@ package com.papagiannis.tuberun;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,8 +20,7 @@ import com.papagiannis.tuberun.plan.Plan;
 import com.papagiannis.tuberun.stores.PlanStore;
 
 public class PlanStoredFragment extends ListFragment {
-	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-	private final SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy");
+	private final SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy", Locale.ENGLISH);
 	PlanStore store = PlanStore.getInstance();
 
 	@Override

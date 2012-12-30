@@ -43,7 +43,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		new SlidingBehaviour(this, R.layout.favorites).setupHSVWithLayout();
+		new SlidingBehaviour(this, R.layout.favorites);
 		
 		View updateButton = findViewById(R.id.button_update);
 		updateButton.setOnClickListener(this);

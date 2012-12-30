@@ -1,5 +1,8 @@
 package com.papagiannis.tuberun;
 
+import java.util.Locale;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebSettings;
@@ -11,13 +14,14 @@ public class StatusMapActivity extends Activity {
 	
 	private boolean isWeekend=false;
 	
+	@SuppressLint("SetJavaScriptEnabled")
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.statuses_map);
 
 	    mWebView = (WebView) findViewById(R.id.webview);
 	    mWebView.getSettings().setJavaScriptEnabled(true);
-	    mWebView.getSettings().setPluginsEnabled(true);
+	    mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
 	    
 	    Bundle extras = getIntent().getExtras();
 	    String url="";
@@ -29,7 +33,7 @@ public class StatusMapActivity extends Activity {
 	    		settings.setBuiltInZoomControls(true);
 	    		settings.setUseWideViewPort(true);
 	    		url="file:///android_asset/map_";
-	    		String last=extras.getString("line").toLowerCase()+".html";
+	    		String last=extras.getString("line").toLowerCase(Locale.ENGLISH)+".html";
 	    		url+=last;
 	    	}
 	    	else if (type.equals("status")) {

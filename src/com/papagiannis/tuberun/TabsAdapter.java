@@ -1,6 +1,7 @@
 package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -35,12 +36,10 @@ public class TabsAdapter extends FragmentPagerAdapter implements
 	private final ArrayList<Fragment> mPastFragments = new ArrayList<Fragment>();
 
 	static final class TabInfo {
-		private final String tag;
 		private final Class<?> clss;
 		private final Bundle args;
 
-		TabInfo(String _tag, Class<?> _class, Bundle _args) {
-			tag = _tag;
+		TabInfo(Class<?> _class, Bundle _args) {
 			clss = _class;
 			args = _args;
 		}
@@ -77,7 +76,7 @@ public class TabsAdapter extends FragmentPagerAdapter implements
 		String tag = tabSpec.getTag();
 		tabSpec.setContent(new DummyTabFactory(mContext));
 		tabSpec.setIndicator(createTabView(mContext, tag));
-		TabInfo info = new TabInfo(tag, clss, args);
+		TabInfo info = new TabInfo(clss, args);
 		mTabs.add(info);
 		mTabHost.addTab(tabSpec);
 		notifyDataSetChanged();
@@ -137,7 +136,7 @@ public class TabsAdapter extends FragmentPagerAdapter implements
 		View view = LayoutInflater.from(context)
 				.inflate(R.layout.tabs_background, null);
 		tabsTextView = (TextView) view.findViewById(R.id.tabs_textview);
-		tabsTextView.setText(text.toUpperCase());
+		tabsTextView.setText(text.toUpperCase(Locale.ENGLISH));
 		tabsImageView = (ImageView) view.findViewById(R.id.tabs_imageview);
 		return view;
 	}

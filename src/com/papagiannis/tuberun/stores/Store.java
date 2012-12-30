@@ -22,8 +22,13 @@ public class Store<T> {
 			ObjectInputStream oi = new ObjectInputStream(fis);
 			try {
 				while (true) {
-					T f = (T) oi.readObject();
-					result.add(f);
+					try {
+						@SuppressWarnings("unchecked")
+						T f = (T) oi.readObject();
+						result.add(f);
+					}catch (ClassCastException e) {
+						//safe to ignore
+					}
 				}
 			} catch (EOFException e) {
 

@@ -43,8 +43,8 @@ public class StatusActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.statuses);
-		new SlidingBehaviour(this, R.layout.statuses).setupHSVWithLayout();
+		setContentView(R.layout.statuses);
+		new SlidingBehaviour(this, R.layout.statuses);
 		setupReferences();
 		create(savedInstanceState);
     }

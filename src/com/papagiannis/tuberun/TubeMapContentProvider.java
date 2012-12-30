@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.HashMap;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -21,7 +20,6 @@ public class TubeMapContentProvider extends ContentProvider {
 	String FILENAME="tuberun.map";
     public static final String AUTHORITY = "com.papagiannis.tuberun.mapprovider";
     public static final String IMAGE = "map";
-    private static HashMap<String, String> notesProjectionMap;
     
 	@Override
 	public boolean onCreate() {

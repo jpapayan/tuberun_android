@@ -56,8 +56,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		SlidingBehaviour sb=new SlidingBehaviour(this, R.layout.nearby);
-		sb.setupHSVWithLayout();
+		new SlidingBehaviour(this, R.layout.nearby);
 
 		location_accuracy_textview = (TextView) findViewById(R.id.location_accuracy_textview);
 		location_textview = (TextView) findViewById(R.id.location_textview);
