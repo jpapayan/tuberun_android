@@ -45,8 +45,10 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
-	public static final String VERSION = "1.2.4";
-	//Don't forget to change the Gmaps API key in full_screen_map.xml and the version/version code in manifest
+	public static final String VERSION = "1.2.5";
+	//Don't gorget to update the app version in the manifest
+	//Don't forget to update the changelog later in this file
+	//Don't forget to change the Gmaps API key in full_screen_map.xml
 	public static final Boolean USE_LICENSING = false;
 
 	private static final String TUBE_MAP_URL = "https://www.tfl.gov.uk/assets/downloads/standard-tube-map.gif";
@@ -595,9 +597,9 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		ProgressDialog.Builder builder = new ProgressDialog.Builder(this);
 		builder.setTitle(APPNAME+" "+VERSION)
 				.setMessage("What's new:\n\n"+
-						"*Added: service messages appear on departures\n\n"+
-						"*Added: favorites now expand on click\n\n"+
-						"*Fixes: bus departures are now sorted by time")
+						"*Added: New sliding menu implementation\n\n"+
+						"*Added: Android 4.2 support\n\n"+
+						"*Fixes: Oyster functionality")
 				.setCancelable(false).setPositiveButton("OK", null);
 		return builder.create();
 	}
