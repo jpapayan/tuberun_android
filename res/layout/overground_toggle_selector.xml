@@ -1,0 +1,7 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/overground_toggle_on" android:state_checked="true"/>
+ 	<!-- pressed -->
+    <item android:drawable="@drawable/overground_toggle_off"/>
+ 	<!-- default/unchecked -->
+</selector>

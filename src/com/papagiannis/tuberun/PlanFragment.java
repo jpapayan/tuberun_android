@@ -3,6 +3,7 @@ package com.papagiannis.tuberun;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import android.app.AlertDialog;
@@ -63,9 +64,9 @@ public class PlanFragment extends Fragment implements Observer,
 	private final static int LOCATION_DIALOG = -1;
 	private final static int WAIT_DIALOG = 0;
 
-	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.US);
 	private final SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"EEEE, dd/MM/yyyy");
+			"EEEE, dd/MM/yyyy", Locale.US);
 
 	PlanActivity planActivity;
 
@@ -83,6 +84,7 @@ public class PlanFragment extends Fragment implements Observer,
 	ToggleButton use_dlr_toggle;
 	ToggleButton use_rail_toggle;
 	ToggleButton use_boat_toggle;
+	ToggleButton use_overground_toggle;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -121,6 +123,7 @@ public class PlanFragment extends Fragment implements Observer,
 		use_dlr_toggle = (ToggleButton) v.findViewById(R.id.usedlr_toggle);
 		use_rail_toggle = (ToggleButton) v.findViewById(R.id.userail_toggle);
 		use_tube_toggle = (ToggleButton) v.findViewById(R.id.usetube_toggle);
+		use_overground_toggle = (ToggleButton) v.findViewById(R.id.useoverground_toggle);
 		traveldate_button = (Button) v.findViewById(R.id.traveldate_button);
 	}
 
@@ -322,6 +325,7 @@ public class PlanFragment extends Fragment implements Observer,
 		use_bus_toggle.setOnCheckedChangeListener(this);
 		use_dlr_toggle.setOnCheckedChangeListener(this);
 		use_tube_toggle.setOnCheckedChangeListener(this);
+		use_overground_toggle.setOnCheckedChangeListener(this);
 
 		traveldate_button.setOnClickListener(new OnClickListener() {
 			@Override
@@ -367,7 +371,7 @@ public class PlanFragment extends Fragment implements Observer,
 			.compile("[A-Z]{1,2}[0-9R][0-9A-Z]?[ ]?[0-9][A-Z]{2}");// .matcher(input).matches()
 
 	protected boolean isPostcode(String str) {
-		boolean res=pattern.matcher(str.trim().toUpperCase()).matches();
+		boolean res=pattern.matcher(str.trim().toUpperCase(Locale.ENGLISH)).matches();
 		return res;
 	}
 
@@ -781,7 +785,10 @@ public class PlanFragment extends Fragment implements Observer,
 			PlanActivity.getPlan().setUseTube(isChecked);
 		} else if (bid == use_dlr_toggle.getId()) {
 			PlanActivity.getPlan().setUseDLR(isChecked);
+		} else if (bid == use_overground_toggle.getId()) {
+			PlanActivity.getPlan().setUseOverground(isChecked);
 		}
+		
 	}
 
 	private String initialDestination = "";

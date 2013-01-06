@@ -1,150 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-<!--     <ImageView -->
-<!--         android:layout_width="fill_parent" -->
-<!--         android:layout_height="fill_parent" -->
-<!--         android:scaleType="centerCrop" -->
-<!--         android:src="@drawable/background_plan" /> -->
-
     <LinearLayout
-        android:id="@+id/mainmenu_layout"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:background="@drawable/tuberun_semitransparent"
+        android:orientation="horizontal" >
 
-        <LinearLayout
+        <Button
+            android:id="@+id/back_button"
+            style="@style/BackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:minHeight="0dip"
+            android:minWidth="0dip" />
+
+        <Button
+            android:id="@+id/logo_button"
+            style="@style/MenuButton"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="3dip"
+            android:layout_marginTop="3dip"
+            android:layout_weight="0"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/title_textview"
+            style="@android:style/TextAppearance.Medium"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/tuberun_semitransparent"
-            android:orientation="horizontal" >
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dip"
+            android:layout_weight="5"
+            android:gravity="left"
+            android:text="Journey Planner" />
 
-            <Button
-                android:id="@+id/back_button"
-                style="@style/BackButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:minWidth="0dip"
-                android:minHeight="0dip" />
-
-            <Button
-                android:id="@+id/logo_button"
-                style="@style/MenuButton"
-                android:layout_width="40dip"
-                android:layout_height="40dip"
-                android:layout_gravity="center_vertical"
-                android:layout_marginBottom="3dip"
-                android:layout_marginTop="3dip"
-                android:layout_weight="0"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/title_textview"
-                style="@android:style/TextAppearance.Medium"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dip"
-                android:layout_weight="5"
-                android:gravity="left"
-                android:text="Journey Planner" />
-
-            <Button
-                android:id="@+id/go_home_empty_button"
-                style="@style/HomeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dip"
-                android:text=""
-                android:minWidth="0dip"
-                android:minHeight="0dip" />
-
-            <Button
-                android:id="@+id/go_home_full_button"
-                style="@style/HomeButtonActive"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dip"
-                android:text=""
-                android:minWidth="0dip"
-                android:minHeight="0dip" />
-            
-        </LinearLayout>
-
-        <TabHost
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@android:id/tabhost"
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1" >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical" >
-
-                <TabWidget
-                    android:id="@android:id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" />
-
-                <FrameLayout
-                    android:id="@android:id/tabcontent"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"/>
-
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dip"
-                    android:layout_weight="1" />
-            </LinearLayout>
-        </TabHost>
-
-        <LinearLayout
-            android:id="@+id/location_layout"
-            android:layout_width="fill_parent"
+        <Button
+            android:id="@+id/go_home_empty_button"
+            style="@style/HomeButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="#99000000"
-            android:gravity="bottom"
-            android:orientation="horizontal" >
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dip"
+            android:minHeight="0dip"
+            android:minWidth="0dip"
+            android:text="" />
 
-            <ProgressBar
-                android:id="@+id/location_progressbar"
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dip" />
-
-            <TextView
-                android:id="@+id/location_textview"
-                style="@android:style/TextAppearance.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dip"
-                android:layout_weight="1"
-                android:gravity="center" />
-
-            <TextView
-                android:id="@+id/location_accuracy_textview"
-                style="@android:style/TextAppearance.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dip"
-                android:layout_marginRight="5dip" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/go_home_full_button"
+            style="@style/HomeButtonActive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dip"
+            android:minHeight="0dip"
+            android:minWidth="0dip"
+            android:text="" />
     </LinearLayout>
 
-</FrameLayout>
+    <TabHost
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@android:id/tabhost"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </TabHost>
+
+    <LinearLayout
+        android:id="@+id/location_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#99000000"
+        android:gravity="bottom"
+        android:orientation="horizontal" >
+
+        <ProgressBar
+            android:id="@+id/location_progressbar"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dip" />
+
+        <TextView
+            android:id="@+id/location_textview"
+            style="@android:style/TextAppearance.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dip"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/location_accuracy_textview"
+            style="@android:style/TextAppearance.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import android.location.Location;
 
@@ -14,11 +15,11 @@ import android.location.Location;
  * The fetcher issues the request and then assigns to plan the resulting Routes. 
  */
 public class Plan implements Serializable {
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 	private static final SimpleDateFormat timeFormat = new SimpleDateFormat(
-			"HH:mm");
+			"HH:mm", Locale.US);
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"yyyyMMdd");
+			"yyyyMMdd", Locale.US);
 
 	private String destination = "";
 	private transient ArrayList<String> destinationAlternatives = new ArrayList<String>();
@@ -37,6 +38,7 @@ public class Plan implements Serializable {
 	private transient boolean useDLR = true;
 	private transient boolean useRail = true;
 	private transient boolean useBoat = true;
+	private transient boolean useOverground = true;
 
 	private ArrayList<Route> routes = new ArrayList<Route>();
 	private transient String error = "";
@@ -108,10 +110,13 @@ public class Plan implements Serializable {
 			sb.append("&type_origin=");
 			sb.append(Point.toRequestString(startingType));
 
-			if (!useBoat || !useBuses || !useDLR || !useRail || !useTube) {
+			if (!useBoat || !useBuses || !useDLR ||
+					!useRail || !useTube || !useOverground) {
 				sb.append("&excludedMeans=checkbox");
 				if (!useBoat)
 					sb.append("&exclMOT_9");
+				if (!useOverground)
+					sb.append("&exclMOT_3");
 				if (!useBuses)
 					sb.append("&exclMOT_5");
 				if (!useDLR)
@@ -282,6 +287,14 @@ public class Plan implements Serializable {
 	public void setUseBoat(boolean useBoat) {
 		this.useBoat = useBoat;
 	}
+	
+	public boolean isUseOverground() {
+		return useOverground;
+	}
+
+	public void setUseOverground(boolean useOverground) {
+		this.useOverground = useOverground;
+	}
 
 	public void addAlternativeDestination(String destination) {
 		destinationAlternatives.add(destination);
@@ -360,6 +373,7 @@ public class Plan implements Serializable {
 		result.timeDepartureLater=timeDepartureLater;
 		result.travelDate=travelDate;
 		result.useBoat=useBoat;
+		result.useOverground=useOverground;
 		result.useBuses=useBuses;
 		result.useDLR=useDLR;
 		result.useRail=useRail;

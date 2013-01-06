@@ -4,7 +4,7 @@ import com.papagiannis.tuberun.R;
 import android.graphics.Color;
 
 public enum PartialRouteType  {
-	BOAT, BUS, DLR, RAIL, TUBE, COACH, WALK;
+	BOAT, BUS, DLR, RAIL, TUBE, COACH, WALK, OVERGROUND;
 
 	public static String toString(PartialRouteType p) {
 		switch (p) {
@@ -22,6 +22,8 @@ public enum PartialRouteType  {
 			return "coach";
 		case WALK:
 			return "walk";
+		case OVERGROUND:
+			return "overground";
 		}
 		return "";
 	}
@@ -33,6 +35,7 @@ public enum PartialRouteType  {
 		else if (s.equals("rail") || s.equals("0")) return RAIL;
 		else if (s.equals("tube") || s.equals("2")) return TUBE;
 		else if (s.equals("coach") || s.equals("7")) return COACH;
+		else if (s.equals("overground") || s.equals("3")) return OVERGROUND;
 		else return WALK;
 	}
 	
@@ -50,6 +53,8 @@ public enum PartialRouteType  {
 			return "Take the tube,  "+line+" line, towards "+destination+".";
 		case COACH:
 			return "Take the coach towards "+destination+".";
+		case OVERGROUND:
+			return "Take the overground towards "+destination+".";	
 		case WALK:
 			return "Walk to "+destination+".";
 		}
@@ -77,6 +82,9 @@ public enum PartialRouteType  {
 		case COACH:
 			ret=Color.argb(255, 255, 106, 0);
 			break;
+		case OVERGROUND:
+			ret=Color.argb(255, 244, 125, 31);
+			break;	
 		case WALK:
 			ret=Color.WHITE;
 			break;
@@ -104,6 +112,9 @@ public enum PartialRouteType  {
 			break;
 		case COACH:
 			ret=R.drawable.buses;
+			break;
+		case OVERGROUND:
+			ret=R.drawable.overground;
 			break;
 		case WALK:
 			ret=R.drawable.walk;
