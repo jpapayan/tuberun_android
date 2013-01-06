@@ -30,15 +30,14 @@
                     android:textColor="@drawable/tuberun_grey_darker"
                     android:textSize="14sp" />
 
-                <!--This is a stupid hack, used to steal focus from
-				     the AutoCompleteTextView below. Nothing else works.-->
-
+				<!-- This is a stupid hack, used to steal focus from
+				     the AutoCompleteTextView below. Nothing else works.
+				 -->
                 <LinearLayout
                     android:layout_width="0px"
                     android:layout_height="0px"
                     android:focusable="true"
                     android:focusableInTouchMode="true" >
-
                     <requestFocus />
                 </LinearLayout>
 
@@ -84,7 +83,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/advanced_layout"
+                android:id="@+id/adv2anced_layout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
@@ -104,89 +103,75 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginBottom="10dip"
                     android:layout_marginTop="4dip"
-                    android:gravity="center"
-                    android:orientation="vertical" >
+                    android:gravity="center" >
 
-                    <LinearLayout
-                        android:layout_width="fill_parent"
+                    <ToggleButton
+                        android:id="@+id/usetube_toggle"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center">
+                        android:background="@layout/tube_toggle_selector"
+                        android:checked="true"
+                        android:minHeight="0dip"
+                        android:minWidth="0dip"
+                        android:textOff=""
+                        android:textOn="" />
 
-                        <ToggleButton
-                            android:id="@+id/usetube_toggle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@layout/tube_toggle_selector"
-                            android:checked="true"
-                            android:minHeight="0dip"
-                            android:minWidth="0dip"
-                            android:textOff=""
-                            android:textOn="" />
-
-                        <ToggleButton
-                            android:id="@+id/usebus_toggle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@layout/bus_toggle_selector"
-                            android:checked="true"
-                            android:minHeight="0dip"
-                            android:minWidth="0dip"
-                            android:textOff=""
-                            android:textOn="" />
-                        
-                        <ToggleButton
-                            android:id="@+id/useoverground_toggle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@layout/overground_toggle_selector"
-                            android:checked="true"
-                            android:minHeight="0dip"
-                            android:minWidth="0dip"
-                            android:textOff=""
-                            android:textOn="" />
-
-                        <ToggleButton
-                            android:id="@+id/usedlr_toggle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@layout/dlr_toggle_selector"
-                            android:checked="true"
-                            android:minHeight="0dip"
-                            android:minWidth="0dip"
-                            android:textOff=""
-                            android:textOn="" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
+                    <ToggleButton
+                        android:id="@+id/usebus_toggle"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center" >
-                        
-                        <ToggleButton
-                            android:id="@+id/userail_toggle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@layout/rail_toggle_selector"
-                            android:checked="true"
-                            android:minHeight="0dip"
-                            android:minWidth="0dip"
-                            android:textOff=""
-                            android:textOn="" />
+                        android:background="@layout/bus_toggle_selector"
+                        android:checked="true"
+                        android:minHeight="0dip"
+                        android:minWidth="0dip"
+                        android:textOff=""
+                        android:textOn="" />
+                    
+                    <ToggleButton
+                        android:id="@+id/useoverground_toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/overground_toggle_selector"
+                        android:checked="true"
+                        android:minHeight="0dip"
+                        android:minWidth="0dip"
+                        android:textOff=""
+                        android:textOn="" />
 
-                        <ToggleButton
-                            android:id="@+id/useboat_toggle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@layout/river_toggle_selector"
-                            android:checked="true"
-                            android:minHeight="0dip"
-                            android:minWidth="0dip"
-                            android:textOff=""
-                            android:textOn="" />
-                    </LinearLayout>
+                    <ToggleButton
+                        android:id="@+id/usedlr_toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/dlr_toggle_selector"
+                        android:checked="true"
+                        android:minHeight="0dip"
+                        android:minWidth="0dip"
+                        android:textOff=""
+                        android:textOn="" />
+                    
+                    <ToggleButton
+                        android:id="@+id/userail_toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/rail_toggle_selector"
+                        android:checked="true"
+                        android:minHeight="0dip"
+                        android:minWidth="0dip"
+                        android:textOff=""
+                        android:textOn="" />
+
+                    <ToggleButton
+                        android:id="@+id/useboat_toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@layout/river_toggle_selector"
+                        android:checked="true"
+                        android:minHeight="0dip"
+                        android:minWidth="0dip"
+                        android:textOff=""
+                        android:textOn="" />
                 </LinearLayout>
 
                 <TextView
@@ -195,6 +180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
+                    android:layout_marginTop="7dip"
                     android:text="OPTIONS"
                     android:textColor="@drawable/tuberun_grey_darker"
                     android:textSize="14sp" />

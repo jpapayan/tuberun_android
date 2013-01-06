@@ -148,6 +148,7 @@
             android:screenOrientation="nosensor"
             android:windowSoftInputMode="stateUnchanged" 
             android:permission="android.permission.GLOBAL_SEARCH" >
+<!-- 			the above line breaks the activity launch in GB             -->
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
