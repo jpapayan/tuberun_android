@@ -44,15 +44,18 @@
         </activity>
         <activity
             android:name=".StatusActivity"
+            android:exported="true"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="nosensor" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".StatusMapActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar.Fullscreen" >
         </activity>
@@ -72,32 +75,27 @@
         <activity
             android:name=".SelectStationActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:screenOrientation="nosensor" >
         </activity>
         <activity
             android:name=".SelectBusStationActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:screenOrientation="nosensor" >
         </activity>
         <activity
             android:name=".DeparturesActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:screenOrientation="nosensor" >
         </activity>
         <activity
             android:name=".BusDeparturesActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:label="Bus Departures"
             android:screenOrientation="nosensor" >
         </activity>
         <activity
             android:name=".NearbyStationsListFragment"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:label="Tube Stations Nearby"
             android:launchMode="singleTop"
             android:screenOrientation="nosensor" >
@@ -105,22 +103,24 @@
         <activity
             android:name=".DirectionsMapActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:label="Directions to "
             android:screenOrientation="nosensor" >
         </activity>
         <activity
             android:name=".FavoritesActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
+            android:exported="true"
             android:label="Favorites"
             android:launchMode="singleTop"
             android:screenOrientation="nosensor" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ClaimsActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:label="Claims"
             android:launchMode="singleTop"
             android:screenOrientation="nosensor" >
@@ -128,7 +128,6 @@
         <activity
             android:name=".ClaimActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:label="Underground Claim"
             android:screenOrientation="nosensor"
             android:windowSoftInputMode="stateUnchanged" >
@@ -136,7 +135,6 @@
         <activity
             android:name=".OysterActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="nosensor"
             android:windowSoftInputMode="stateUnchanged" >
@@ -146,8 +144,8 @@
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTop"
             android:screenOrientation="nosensor"
-            android:windowSoftInputMode="stateUnchanged" 
-            android:permission="android.permission.GLOBAL_SEARCH" >
+            android:windowSoftInputMode="stateUnchanged" > 
+<!--             android:permission="android.permission.GLOBAL_SEARCH" > -->
 <!-- 			the above line breaks the activity launch in GB             -->
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -159,21 +157,18 @@
         <activity
             android:name=".RouteResultsActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:screenOrientation="nosensor"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".PartialRouteMapActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:screenOrientation="nosensor"
             android:windowSoftInputMode="stateUnchanged" >
         </activity>
         <activity
             android:name=".NearbyStationsActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="nosensor"
             android:windowSoftInputMode="stateUnchanged" >
@@ -181,7 +176,6 @@
         <activity
             android:name=".NearbyMapActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="nosensor"
             android:windowSoftInputMode="stateUnchanged" >
@@ -189,7 +183,6 @@
         <activity
             android:name=".AboutActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false"
             android:screenOrientation="nosensor"
             android:windowSoftInputMode="stateUnchanged" >
         </activity>
