@@ -1,9 +1,7 @@
 package com.papagiannis.tuberun.fetchers;
 
 import java.util.ArrayList;
-
 import android.location.Location;
-
 import com.papagiannis.tuberun.Station;
 
 public abstract class NearbyStationsFetcher extends Fetcher{
