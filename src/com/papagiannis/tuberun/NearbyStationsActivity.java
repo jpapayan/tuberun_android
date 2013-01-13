@@ -46,6 +46,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 	NearbyStationsListFragment undergroundFragment;
 	NearbyCycleStationsListFragment cycleFragment;
 	NearbyBusLinesListFragment busesFragment;
+	NearbyOysterListFragment oysterFragment;
 	TextView location_textview;
 	TextView location_accuracy_textview;
 	Button back_button;
@@ -91,6 +92,13 @@ public class NearbyStationsActivity extends FragmentActivity implements
 		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
 		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
 		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.buses);
+		
+		mTabsAdapter.addTab(
+				mTabHost.newTabSpec("oyster").setIndicator("Oyster"),
+				NearbyOysterListFragment.class, null);
+		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
+		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
+		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.oyster_wletters);
 
 		
 		if (savedInstanceState != null) {
@@ -102,6 +110,8 @@ public class NearbyStationsActivity extends FragmentActivity implements
 				.getItem(1);
 		busesFragment = (NearbyBusLinesListFragment) mTabsAdapter
 				.getItem(2);
+		oysterFragment = (NearbyOysterListFragment) mTabsAdapter
+				.getItem(3);
 
 		map_button.setOnClickListener(new OnClickListener() {
 			
@@ -117,6 +127,9 @@ public class NearbyStationsActivity extends FragmentActivity implements
 						break;
 					case 2:
 						busesFragment.showAllInMap();
+						break;
+					case 3:
+						oysterFragment.showAllInMap();
 						break;
 				}
 			}
@@ -174,6 +187,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 			if (undergroundFragment!=null) undergroundFragment.locationChanged(lastKnownLocation);
 			if (busesFragment!=null) busesFragment.locationChanged(lastKnownLocation);
 			if (cycleFragment!=null) cycleFragment.locationChanged(lastKnownLocation);
+			if (oysterFragment!=null) oysterFragment.locationChanged(lastKnownLocation);
 		}
 	}
 

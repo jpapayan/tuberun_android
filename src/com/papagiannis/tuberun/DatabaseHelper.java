@@ -370,6 +370,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 		return cc;
 	}
+	
+	public ArrayList<OysterShop> getOysterShopsNearby(long lat, long lng) {
+		String query="SELECT name, longtitude, latitude "+
+				"FROM oyster_shops "+
+				"WHERE ABS(longtitude-?)<40000 AND ABS(latitude-?)<40000";
+		ArrayList<OysterShop> res = new ArrayList<OysterShop>();
+		
+		Cursor c = myDataBase.rawQuery(query,
+						new String[] { Long.toString(lng),Long.toString(lat) });
+		c.moveToFirst();
+		while (!c.isAfterLast()) {
+			OysterShop s=new OysterShop(c.getString(0));
+			s.setLatitude(c.getInt(2)).setLongtitude(c.getInt(1));
+			res.add(s);
+			c.moveToNext();
+		}
+		return res;
+	}
 
 	public int getVersion() {
 		int res = 1;
@@ -381,5 +399,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 		return res;
 	}
+
 
 }

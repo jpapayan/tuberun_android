@@ -597,8 +597,8 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		ProgressDialog.Builder builder = new ProgressDialog.Builder(this);
 		builder.setTitle(APPNAME+" "+VERSION)
 				.setMessage("What's new:\n\n"+
-						"*Added: Overground option in the Journey Planner\n\n"+
-						"*Fixes: Oyster functionality")
+						"*Added: Overground support in the Journey Planner\n\n"+
+						"*Added: Nearby oyster ticket shops\n\n")
 				.setCancelable(false).setPositiveButton("OK", null);
 		return builder.create();
 	}

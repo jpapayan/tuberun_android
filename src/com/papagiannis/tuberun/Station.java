@@ -7,8 +7,8 @@ import java.util.List;
 
 import android.location.Location;
 
-public class Station  implements Serializable {
-	private static final long serialVersionUID = 2L;
+public class Station  implements Serializable, Locatable {
+	private static final long serialVersionUID = 3L;
 	
 	public Station() {
 		name="";
@@ -72,6 +72,7 @@ public class Station  implements Serializable {
 		return this;
 	}
 	
+	@Override
 	public Location getLocation() {
 		Location l=new Location("mine");
 		l.setLongitude(((double)longtitude)/1000000);
@@ -79,10 +80,12 @@ public class Station  implements Serializable {
 		return l;
 	}
 	
+	@Override
 	public int getLongtitudeE6() {
 		return longtitude;
 	}
 	
+	@Override
 	public int getLatitudeE6() {
 		return latitude;
 	}

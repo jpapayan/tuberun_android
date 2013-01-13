@@ -42,6 +42,7 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 	ArrayList<String> routes=new ArrayList<String>();
 	ArrayList<Station> tubeStations=new ArrayList<Station>();
 	ArrayList<CycleHireStation> csStations=new ArrayList<CycleHireStation>();
+	ArrayList<OysterShop> oysterShops=new ArrayList<OysterShop>(); 
 	RoutesBusFetcher busFetcher=new RoutesBusFetcher(this);
 
 	@SuppressWarnings("unchecked")
@@ -66,6 +67,10 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 			else if (type.equals("cyclehire")) {
 				csStations = (ArrayList<CycleHireStation>) extras.get("stations");
 				showCycleHirePushPins();
+			}
+			else if (type.equals("oystershop")) {
+				oysterShops = (ArrayList<OysterShop>) extras.get("stations");
+				showOysterPushPins();
 			}
 		} catch (Exception e) {
 			Log.w("Directions",e);
@@ -171,6 +176,20 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 					s.getName(),
 					"Available Bikes: "+s.getnAvailableBikes()+"\n"+
 					"Available Docks: "+s.getnEmptyDocks());
+			overlay.addOverlay(overlayitem);
+			mapOverlays.add(overlay);
+		}
+		mapView.invalidate();
+		animateToWithOverlays(null);
+	}
+	
+	private void showOysterPushPins() {
+		for (OysterShop s : oysterShops) {
+			Drawable d=this.getResources().getDrawable(R.drawable.ic_oyster_selected); 
+			HereOverlay<OverlayItem> overlay = new HereOverlay<OverlayItem>(d, this);
+			
+			GeoPoint gp = new GeoPoint(s.getLatitudeE6(), s.getLongtitudeE6());
+			OverlayItem overlayitem = new OverlayItem(gp,s.getName(),null);
 			overlay.addOverlay(overlayitem);
 			mapOverlays.add(overlay);
 		}

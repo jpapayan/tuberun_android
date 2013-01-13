@@ -15,7 +15,7 @@ import android.util.Log;
 import com.papagiannis.tuberun.R;
 import com.papagiannis.tuberun.Station;
 
-public class StationsTubeFetcher extends NearbyStationsFetcher {
+public class StationsTubeFetcher extends NearbyFetcher<Station> {
 	private static final long serialVersionUID = 1L;
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
 	private Context context;

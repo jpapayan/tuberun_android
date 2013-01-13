@@ -20,10 +20,10 @@ import android.os.AsyncTask;
 
 import com.papagiannis.tuberun.Station;
 import com.papagiannis.tuberun.fetchers.HttpCallback;
-import com.papagiannis.tuberun.fetchers.NearbyStationsFetcher;
+import com.papagiannis.tuberun.fetchers.NearbyFetcher;
 import com.papagiannis.tuberun.fetchers.RequestTask;
 
-public class StationsCycleHireFetcher extends NearbyStationsFetcher {
+public class StationsCycleHireFetcher extends NearbyFetcher<CycleHireStation> {
 	private static final long serialVersionUID = 1L;
 	private static final String URL = "http://www.tfl.gov.uk/tfl/syndication/feeds/cycle-hire/livecyclehireupdates.xml";
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
