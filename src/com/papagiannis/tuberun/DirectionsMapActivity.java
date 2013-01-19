@@ -38,7 +38,8 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 			String type = (String) extras.get("type");
 			Boolean isCycleHire = type != null && type.equals("cyclehire");
 			Boolean isOysterShop = type != null && type.equals("oystershop");
-			Station st = Station.fromString(station);
+			Boolean isRailStation = type != null && type.equals("rail");
+			AbstractLocatable st = AbstractLocatable.fromString(station);
 
 			int longtitude = (Integer) extras.get("user_longtitude");
 			int latitude = (Integer) extras.get("user_latitude");
@@ -62,6 +63,9 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 			else if (isOysterShop) 
 				drawable = this.getResources().getDrawable(
 						R.drawable.ic_oyster_selected);
+			else if (isRailStation) 
+				drawable = this.getResources().getDrawable(
+						R.drawable.rail);
 			else
 				drawable = this.getResources().getDrawable(R.drawable.tube);
 			HereOverlay<OverlayItem> tube = new HereOverlay<OverlayItem>(drawable, this);

@@ -16,6 +16,8 @@ public abstract class NearbyFetcher<C extends Locatable> extends Fetcher{
 	 */
 	protected ArrayList<C> getNearbyStations(final Location myLocation,
 			ArrayList<? extends C> allItems, int maxStations) {
+		if (allItems==null || allItems.size()==0) return new ArrayList<C>();
+
 		PriorityQueue<C> result=new PriorityQueue<C>(maxStations, new Comparator<C>() {
 			//This is a max heap, the furthest away stays on top
 			@Override

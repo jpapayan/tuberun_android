@@ -47,6 +47,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 	NearbyCycleStationsListFragment cycleFragment;
 	NearbyBusLinesListFragment busesFragment;
 	NearbyOysterListFragment oysterFragment;
+	NearbyRailListFragment railFragment;
 	TextView location_textview;
 	TextView location_accuracy_textview;
 	Button back_button;
@@ -80,18 +81,26 @@ public class NearbyStationsActivity extends FragmentActivity implements
 		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.tube);
 
 		mTabsAdapter.addTab(
+				mTabHost.newTabSpec("buses").setIndicator("Buses"),
+				NearbyBusLinesListFragment.class, null);
+		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
+		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
+		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.buses);
+		
+		mTabsAdapter.addTab(
 				mTabHost.newTabSpec("cycle hire").setIndicator("Cycle Hire"),
 				NearbyCycleStationsListFragment.class, null);
 		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
 		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
 		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.cycle_hire);
 		
+		
 		mTabsAdapter.addTab(
-				mTabHost.newTabSpec("buses").setIndicator("Buses"),
-				NearbyBusLinesListFragment.class, null);
+				mTabHost.newTabSpec("rail").setIndicator("Rail"),
+				NearbyRailListFragment.class, null);
 		mTabsAdapter.getTabsTextView().setVisibility(View.GONE);
 		mTabsAdapter.getTabsImageView().setVisibility(View.VISIBLE);
-		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.buses);
+		mTabsAdapter.getTabsImageView().setImageResource(R.drawable.rail_tab);
 		
 		mTabsAdapter.addTab(
 				mTabHost.newTabSpec("oyster").setIndicator("Oyster"),
@@ -106,12 +115,14 @@ public class NearbyStationsActivity extends FragmentActivity implements
 		}
 		undergroundFragment = (NearbyStationsListFragment) mTabsAdapter
 				.getItem(0);
-		cycleFragment = (NearbyCycleStationsListFragment) mTabsAdapter
-				.getItem(1);
 		busesFragment = (NearbyBusLinesListFragment) mTabsAdapter
+				.getItem(1);
+		cycleFragment = (NearbyCycleStationsListFragment) mTabsAdapter
 				.getItem(2);
-		oysterFragment = (NearbyOysterListFragment) mTabsAdapter
+		railFragment = (NearbyRailListFragment) mTabsAdapter
 				.getItem(3);
+		oysterFragment = (NearbyOysterListFragment) mTabsAdapter
+				.getItem(4);
 
 		map_button.setOnClickListener(new OnClickListener() {
 			
@@ -122,13 +133,16 @@ public class NearbyStationsActivity extends FragmentActivity implements
 					case 0:
 						undergroundFragment.showAllInMap();
 						break;
-					case 1:
+					case 2:
 						cycleFragment.showAllInMap();
 						break;
-					case 2:
+					case 1:
 						busesFragment.showAllInMap();
 						break;
 					case 3:
+						railFragment.showAllInMap();
+						break;
+					case 4:
 						oysterFragment.showAllInMap();
 						break;
 				}
@@ -188,6 +202,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 			if (busesFragment!=null) busesFragment.locationChanged(lastKnownLocation);
 			if (cycleFragment!=null) cycleFragment.locationChanged(lastKnownLocation);
 			if (oysterFragment!=null) oysterFragment.locationChanged(lastKnownLocation);
+			if (railFragment!=null) railFragment.locationChanged(lastKnownLocation);
 		}
 	}
 

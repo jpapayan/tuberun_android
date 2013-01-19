@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -49,7 +50,8 @@ public class NearbyStationsListFragment extends ListFragment implements
 
 	ArrayList<Station> stations_nearby=new ArrayList<Station>();
 	ArrayList<BusStation> prev_result = new ArrayList<BusStation>();
-
+	private ArrayList<HashMap<String, Object>> to_display=new ArrayList<HashMap<String,Object>>();
+	
 	/**
 	 * Called when the background thread has finished the calculation of nearby
 	 * stations
@@ -62,10 +64,8 @@ public class NearbyStationsListFragment extends ListFragment implements
 		accuracy.setText("accuracy: " + (int) (lastKnownLocation.getAccuracy())
 				+ "m");
 
-		ArrayList<HashMap<String, Object>> to_display = new ArrayList<HashMap<String, Object>>();
-
+		to_display = new ArrayList<HashMap<String, Object>>();
 		stations_nearby = fetcher.getResult();
-		
 		for (Station s : stations_nearby) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("name", s.getName());
@@ -84,7 +84,16 @@ public class NearbyStationsListFragment extends ListFragment implements
 			to_display.add(m);
 		}
 
-		SimpleAdapter adapter = new SimpleAdapter(getActivity(), to_display,
+		updateList();
+
+	}
+
+	private void updateList() {
+		if (to_display.size()==0) return;
+		Activity a=getActivity();
+		if (a==null) return;
+		
+		SimpleAdapter adapter = new SimpleAdapter(a, to_display,
 				R.layout.nearby_status, new String[] { "name", "distance",
 						LinePresentation.getStringRespresentation(LineType.BAKERLOO), 
 						LinePresentation.getStringRespresentation(LineType.CENTRAL),
@@ -109,7 +118,6 @@ public class NearbyStationsListFragment extends ListFragment implements
 						R.id.nearby_Waterloo });
 		adapter.setViewBinder(new NearbyBinder(getActivity()));
 		setListAdapter(adapter);
-
 	}
 
 	@Override
@@ -150,6 +158,7 @@ public class NearbyStationsListFragment extends ListFragment implements
 		int[] colors = {Color.TRANSPARENT, Color.GRAY, Color.TRANSPARENT};
 		lv.setDivider(new GradientDrawable(Orientation.RIGHT_LEFT, colors));
 		lv.setDividerHeight(1);
+		updateList();
 	}
 	
 	@Override

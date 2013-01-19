@@ -3,6 +3,15 @@ package com.papagiannis.tuberun.cyclehire;
 import com.papagiannis.tuberun.Station;
 
 public class CycleHireStation extends Station {
+	
+	public CycleHireStation() {
+		super("");
+	}
+	
+	public CycleHireStation(String name) {
+		super(name);
+	}
+
 	private static final long serialVersionUID = 1L;
 	private int id=0;
 	private boolean installed=false;
@@ -11,10 +20,6 @@ public class CycleHireStation extends Station {
 	private int nEmptyDocks;
 	private int nTotalDocks=0;
 	
-	public CycleHireStation() {
-		super();
-	}
-
 	public int getId() {
 		return id;
 	}

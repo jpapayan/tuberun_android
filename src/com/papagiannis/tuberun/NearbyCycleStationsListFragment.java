@@ -3,6 +3,7 @@ package com.papagiannis.tuberun;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -66,6 +67,7 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 		fetcher.update();
 	}
 
+	ArrayList<HashMap<String, Object>> to_display = new ArrayList<HashMap<String,Object>>();
 	ArrayList<CycleHireStation> stations_nearby=new ArrayList<CycleHireStation>();
 	ArrayList<CycleHireStation> prev_result = new ArrayList<CycleHireStation>();
 
@@ -75,7 +77,7 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 	 **/
 	@Override
 	public void update() {
-		ArrayList<HashMap<String, Object>> to_display = new ArrayList<HashMap<String, Object>>();
+		to_display = new ArrayList<HashMap<String, Object>>();
 		stations_nearby = fetcher.getResult();
 		for (CycleHireStation s : stations_nearby) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
@@ -87,8 +89,16 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 			m.put("nTotalDocks", ""+ s.getnTotalDocks());
 			to_display.add(m);
 		}
+		
+		updateList();
+	}
 
-		SimpleAdapter adapter = new SimpleAdapter(getActivity(), to_display,
+	private void updateList() {
+		if (to_display.size()==0) return;
+		Activity a=getActivity();
+		if (a==null) return;
+
+		SimpleAdapter adapter = new SimpleAdapter(a, to_display,
 				R.layout.nearby_cycle_status, new String[] { "name", "distance",
 						"nAvailableBikes","nEmptyDocks"},
 				new int[] { R.id.nearby_name, R.id.nearby_distance,
@@ -131,6 +141,7 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 		int[] colors = {0, Color.GRAY, 0}; // red for the example
 		lv.setDivider(new GradientDrawable(Orientation.RIGHT_LEFT, colors));
 		lv.setDividerHeight(1);
+		updateList();
 	}
 	
 }

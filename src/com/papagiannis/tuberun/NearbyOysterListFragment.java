@@ -3,6 +3,7 @@ package com.papagiannis.tuberun;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -24,6 +25,7 @@ public class NearbyOysterListFragment extends ListFragment implements Observer {
 	private OysterShopFetcher fetcher;
 	private Location lastKnownLocation;
 	private ArrayList<OysterShop> shops_nearby = new ArrayList<OysterShop>();
+	private ArrayList<HashMap<String, Object>> to_display = new ArrayList<HashMap<String,Object>>(); 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,10 +53,8 @@ public class NearbyOysterListFragment extends ListFragment implements Observer {
 	 **/
 	@Override
 	public void update() {
-		ArrayList<HashMap<String, Object>> to_display = new ArrayList<HashMap<String, Object>>();
-
 		shops_nearby = fetcher.getResult();
-
+		to_display = new ArrayList<HashMap<String, Object>>();
 		for (OysterShop s : shops_nearby) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("name", s.getName());
@@ -62,8 +62,15 @@ public class NearbyOysterListFragment extends ListFragment implements Observer {
 					(int) s.getLocation().distanceTo(lastKnownLocation));
 			to_display.add(m);
 		}
+		updateList();
+	}
+
+	private void updateList() {
+		if (to_display.size()==0) return;
+		Activity a=getActivity();
+		if (a==null) return;
 		SimpleAdapter adapter = new SimpleAdapter(
-				getActivity(),
+				a,
 				to_display,
 				R.layout.nearby_oyster_shop,
 				new String[] { "name", "distance" },
@@ -89,7 +96,6 @@ public class NearbyOysterListFragment extends ListFragment implements Observer {
 			}
 		});
 		setListAdapter(adapter);
-		
 	}
 
 	@Override
@@ -132,6 +138,7 @@ public class NearbyOysterListFragment extends ListFragment implements Observer {
 		int[] colors = { Color.TRANSPARENT, Color.GRAY, Color.TRANSPARENT };
 		lv.setDivider(new GradientDrawable(Orientation.RIGHT_LEFT, colors));
 		lv.setDividerHeight(1);
+		updateList();
 	}
 
 	@Override

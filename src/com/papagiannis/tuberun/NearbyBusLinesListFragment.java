@@ -1,6 +1,7 @@
 package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -58,12 +59,14 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 	}
 
 	private void updateList() {
-		SimpleAdapter adapter = new SimpleAdapter(getActivity(), to_display,
+		if (to_display.size()==0) return;
+		Activity a=getActivity();
+		if (a==null) return;
+		SimpleAdapter adapter = new SimpleAdapter(a, to_display,
 				R.layout.nearby_buslines_status, new String[] { "name", "distance", "point1", "point2"},
 				new int[] { R.id.nearby_name, R.id.nearby_distance, R.id.point1_textview, R.id.point2_textview});
 		adapter.setViewBinder(new NearbyCyclesBinder(getActivity()));
 		setListAdapter(adapter);
-		to_display=new ArrayList<HashMap<String,Object>>();
 	}
 	
 	@Override
@@ -74,16 +77,7 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 
 	private ArrayList<String> sortRoutes(HashMap<String, Integer> routes) {
 		ArrayList<String> res=new ArrayList<String>(routes.keySet());
-		//bubblesort
-		for (int i=0; i<res.size()-1; i++) {
-			for (int j=i+1; j<res.size(); j++) {
-				if (routes.get(res.get(i))>routes.get(res.get(j))) {
-					String tmp=res.get(i);
-					res.set(i, res.get(j));
-					res.set(j, tmp);
-				}
-			}
-		}
+		Collections.sort(res);
 		return res;
 	}
 
@@ -119,6 +113,7 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
+		updateList();
 	}
 	
 	@Override

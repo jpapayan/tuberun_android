@@ -372,21 +372,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public ArrayList<OysterShop> getOysterShopsNearby(long lat, long lng) {
-		String query="SELECT name, longtitude, latitude "+
-				"FROM oyster_shops "+
-				"WHERE ABS(longtitude-?)<40000 AND ABS(latitude-?)<40000";
-		ArrayList<OysterShop> res = new ArrayList<OysterShop>();
-		
-		Cursor c = myDataBase.rawQuery(query,
-						new String[] { Long.toString(lng),Long.toString(lat) });
-		c.moveToFirst();
-		while (!c.isAfterLast()) {
-			OysterShop s=new OysterShop(c.getString(0));
-			s.setLatitude(c.getInt(2)).setLongtitude(c.getInt(1));
-			res.add(s);
-			c.moveToNext();
+		long distance=500;
+		for (int i=0;i<4;i++) {
+			distance*=4;
+			String query="SELECT name, longtitude, latitude "+
+					"FROM oyster_shops "+
+					"WHERE ABS(longtitude-(?))<? AND ABS(latitude-(?))<?";
+			ArrayList<OysterShop> res = new ArrayList<OysterShop>();
+			String distanceString=Long.toString(distance);
+			Cursor c = myDataBase.rawQuery(query,
+					new String[] { Long.toString(lng), distanceString,
+								   Long.toString(lat), distanceString });
+			c.moveToFirst();
+			while (!c.isAfterLast()) {
+				OysterShop s=new OysterShop(c.getString(0));
+				s.setLatitude(c.getInt(2)).setLongtitude(c.getInt(1));
+				res.add(s);
+				c.moveToNext();
+			}
+			if (res.size()>5) return res;
 		}
-		return res;
+		return new ArrayList<OysterShop>();
+	}
+	
+	public ArrayList<RailStation> getRailStationsNearby(long lat, long lng) {
+		long distance=40000;
+		for (int i=0;i<4;i++) {
+			distance*=2;
+			String query="SELECT stations.name, longtitude, latitude " +
+					"FROM stations, station_lines "+
+					"WHERE stations.name=station_lines.name AND "+
+						  "station_lines.line=\"Rail\" AND " +
+						  "ABS(longtitude-(?))<? AND ABS(latitude-(?))<?";
+			ArrayList<RailStation> res = new ArrayList<RailStation>();
+			String distanceString=Long.toString(distance);
+			Cursor c = myDataBase.rawQuery(query,
+							new String[] { Long.toString(lng), distanceString,
+										   Long.toString(lat), distanceString });
+			c.moveToFirst();
+			while (!c.isAfterLast()) {
+				RailStation s=new RailStation(c.getString(0));
+				s.setLatitude(c.getInt(2)).setLongtitude(c.getInt(1));
+				res.add(s);
+				c.moveToNext();
+			}
+			if (res.size()>5) return res;
+		}
+		return new ArrayList<RailStation>();
 	}
 
 	public int getVersion() {
