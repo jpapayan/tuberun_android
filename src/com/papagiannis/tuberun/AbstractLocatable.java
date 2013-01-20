@@ -5,6 +5,7 @@ import java.io.Serializable;
 import android.location.Location;
 
 public class AbstractLocatable  implements Locatable, Serializable {
+	//TODO: make the above trully abstract
 	private static final long serialVersionUID = 1L;
 	
 	public AbstractLocatable(String name) {
@@ -25,6 +26,7 @@ public class AbstractLocatable  implements Locatable, Serializable {
 	}
 
 	protected String name;
+	@Override
 	public String getName() {
 		return name;
 	}

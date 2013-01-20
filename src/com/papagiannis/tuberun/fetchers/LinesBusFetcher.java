@@ -66,7 +66,6 @@ public class LinesBusFetcher extends Fetcher {
 			HashMap<String,Integer> res = new HashMap<String,Integer>();
 			DatabaseHelper myDbHelper = new DatabaseHelper(context);
 			try {
-//				myDbHelper.createDatabase();
 				myDbHelper.openDataBase();
 				res = myDbHelper.getLinesNearby((long) (at[0].getLatitude()*1000000), (long) (at[0].getLongitude()*1000000));
 				for (String route:res.keySet()) {
@@ -82,8 +81,6 @@ public class LinesBusFetcher extends Fetcher {
 						}
 					}
 				}
-//			} catch (IOException ioe) {
-//				throw new Error("Unable to create Database");
 			} catch (Exception e) {
 				Log.w("LinesBusFetcher",e);
 			}

@@ -2,7 +2,6 @@ package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -27,6 +26,7 @@ import com.papagiannis.tuberun.cyclehire.CycleHireStation;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.RoutesBusFetcher;
 import com.papagiannis.tuberun.overlays.HereOverlay;
+import com.papagiannis.tuberun.overlays.TubeOverlay;
 
 public class NearbyMapActivity extends MeMapActivity implements Observer {
 	private static final int SELECT_DIRECTION_DIALOG=-1;
@@ -42,7 +42,8 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 	ArrayList<String> routes=new ArrayList<String>();
 	ArrayList<Station> tubeStations=new ArrayList<Station>();
 	ArrayList<CycleHireStation> csStations=new ArrayList<CycleHireStation>();
-	ArrayList<OysterShop> oysterShops=new ArrayList<OysterShop>(); 
+	ArrayList<OysterShop> oysterShops=new ArrayList<OysterShop>();
+	ArrayList<RailStation> railStations=new ArrayList<RailStation>();
 	RoutesBusFetcher busFetcher=new RoutesBusFetcher(this);
 
 	@SuppressWarnings("unchecked")
@@ -71,6 +72,10 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 			else if (type.equals("oystershop")) {
 				oysterShops = (ArrayList<OysterShop>) extras.get("stations");
 				showOysterPushPins();
+			}
+			else if (type.equals("rail")) {
+				railStations = (ArrayList<RailStation>) extras.get("stations");
+				showRailPushPins();
 			}
 		} catch (Exception e) {
 			Log.w("Directions",e);
@@ -145,20 +150,10 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 
 	private void showTubePushPins() {
 		for (Station s : tubeStations) {
-			List<LineType> lines = StationDetails.FetchLinesForStationWikipedia(s.getName());
 			Drawable d=this.getResources().getDrawable(R.drawable.tube); 
-			HereOverlay<OverlayItem> overlay = new HereOverlay<OverlayItem>(d, this);
-			
+			TubeOverlay<OverlayItem> overlay = new TubeOverlay<OverlayItem>(d, this);
 			GeoPoint gp = new GeoPoint(s.getLatitudeE6(), s.getLongtitudeE6());
-			StringBuffer sb=new StringBuffer();
-			for (LineType lt :lines) {
-				sb.append(LinePresentation.getStringRespresentation(lt));
-				sb.append(" ");
-				sb.append("Line");
-				sb.append("\n");
-			}
-			sb.setCharAt(sb.length()-1, ' ');
-			OverlayItem overlayitem = new OverlayItem(gp,s.getName(),sb.toString());
+			OverlayItem overlayitem = new OverlayItem(gp,s.getName(),s.getCode());
 			overlay.addOverlay(overlayitem);
 			mapOverlays.add(overlay);
 		}
@@ -189,7 +184,20 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 			HereOverlay<OverlayItem> overlay = new HereOverlay<OverlayItem>(d, this);
 			
 			GeoPoint gp = new GeoPoint(s.getLatitudeE6(), s.getLongtitudeE6());
-			OverlayItem overlayitem = new OverlayItem(gp,s.getName(),null);
+			OverlayItem overlayitem = new OverlayItem(gp,null,s.getName());
+			overlay.addOverlay(overlayitem);
+			mapOverlays.add(overlay);
+		}
+		mapView.invalidate();
+		animateToWithOverlays(null);
+	}
+	
+	private void showRailPushPins() {
+		for (RailStation s : railStations) {
+			Drawable d=this.getResources().getDrawable(R.drawable.rail); 
+			HereOverlay<OverlayItem> overlay = new HereOverlay<OverlayItem>(d, this);
+			GeoPoint gp = new GeoPoint(s.getLatitudeE6(), s.getLongtitudeE6());
+			OverlayItem overlayitem = new OverlayItem(gp,null,s.getName());
 			overlay.addOverlay(overlayitem);
 			mapOverlays.add(overlay);
 		}

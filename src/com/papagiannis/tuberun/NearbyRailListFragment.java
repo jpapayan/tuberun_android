@@ -104,7 +104,7 @@ public class NearbyRailListFragment extends ListFragment implements Observer {
 		try {
 			RailStation s = stations_nearby.get(position);
 			Intent i = new Intent(getActivity(), DirectionsMapActivity.class);
-			i.putExtra("station", s.toString());
+			i.putExtra("station", s);
 			i.putExtra("type", "rail");
 			i.putExtra("user_longtitude",
 					(int) (lastKnownLocation.getLongitude() * 1000000));

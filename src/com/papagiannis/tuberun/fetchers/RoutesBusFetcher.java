@@ -77,7 +77,6 @@ public class RoutesBusFetcher extends Fetcher {
 
 			DatabaseHelper myDbHelper = new DatabaseHelper(context);
 			try {
-//				myDbHelper.createDatabase();
 				myDbHelper.openDataBase();
 				for (String route : routes[0]) {
 					ArrayList<ArrayList<BusStation>> stations = myDbHelper

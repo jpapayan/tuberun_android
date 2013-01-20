@@ -240,22 +240,19 @@ public abstract class MeMapActivity extends MapActivity implements
 		// Check whether the new location fix is more or less accurate
 		int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation
 				.getAccuracy());
-		boolean isLessAccurate = accuracyDelta > 0;
-		boolean isMoreAccurate = accuracyDelta < 0;
-		boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+		boolean isSignificantlyMoreAccurate = accuracyDelta < -10;
 
 		// Check if the old and new location are from the same provider
-		boolean isFromSameProvider = isSameProvider(location.getProvider(),
-				currentBestLocation.getProvider());
-
-		// Determine location quality using a combination of timeliness and
-		// accuracy
-		if (isMoreAccurate) {
+//		boolean isFromSameProvider = isSameProvider(location.getProvider(),
+//				currentBestLocation.getProvider());
+		
+		float distance=location.distanceTo(currentBestLocation);
+		boolean hasMovedSignificantly=distance>5;
+		
+		if (isNewer && isSignificantlyMoreAccurate) {
 			return true;
-		} else if (isNewer && !isLessAccurate) {
-			return true;
-		} else if (isNewer && !isSignificantlyLessAccurate
-				&& isFromSameProvider) {
+		}
+		if (isNewer && hasMovedSignificantly) {
 			return true;
 		}
 		return false;
@@ -294,12 +291,12 @@ public abstract class MeMapActivity extends MapActivity implements
 	}
 
 	/** Checks whether two providers are the same */
-	private static boolean isSameProvider(String provider1, String provider2) {
-		if (provider1 == null) {
-			return provider2 == null;
-		}
-		return provider1.equals(provider2);
-	}
+//	private static boolean isSameProvider(String provider1, String provider2) {
+//		if (provider1 == null) {
+//			return provider2 == null;
+//		}
+//		return provider1.equals(provider2);
+//	}
 
 	@Override
 	protected void onPause() {

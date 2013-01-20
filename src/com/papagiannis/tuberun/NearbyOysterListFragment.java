@@ -103,7 +103,7 @@ public class NearbyOysterListFragment extends ListFragment implements Observer {
 		try {
 			OysterShop s = shops_nearby.get(position);
 			Intent i = new Intent(getActivity(), DirectionsMapActivity.class);
-			i.putExtra("station", s.toString());
+			i.putExtra("station", s);
 			i.putExtra("type", "oystershop");
 			i.putExtra("user_longtitude",
 					(int) (lastKnownLocation.getLongitude() * 1000000));

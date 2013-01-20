@@ -60,7 +60,7 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 	public void locationChanged(Location l) {
 		lastKnownLocation = l;
 		if (fetcher == null) {
-			fetcher = new StationsCycleHireFetcher(getActivity());
+			fetcher = new StationsCycleHireFetcher();
 			fetcher.registerCallback(this);
 		}
 		fetcher.setLocation(lastKnownLocation);
@@ -113,7 +113,7 @@ public class NearbyCycleStationsListFragment extends ListFragment implements
 		try {
 			Station s = stations_nearby.get(position);
 			Intent i = new Intent(getActivity(), DirectionsMapActivity.class);
-			i.putExtra("station", s.toString());
+			i.putExtra("station", s);
 			i.putExtra("type", "cyclehire");
 			i.putExtra("user_longtitude",
 					(int) (lastKnownLocation.getLongitude() * 1000000));

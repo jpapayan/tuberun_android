@@ -15,10 +15,12 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
+import com.papagiannis.tuberun.cyclehire.CycleHireStation;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.RouteFetcher;
 import com.papagiannis.tuberun.overlays.HereOverlay;
 import com.papagiannis.tuberun.overlays.RouteOverlay;
+import com.papagiannis.tuberun.overlays.TubeOverlay;
 
 public class DirectionsMapActivity extends MeMapActivity implements Observer {
 	MapView mapView;
@@ -34,12 +36,13 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 
 		try {
 			Bundle extras = getIntent().getExtras();
-			String station = (String) extras.get("station");
+			Locatable st = (Locatable) extras.get("station");
+
 			String type = (String) extras.get("type");
 			Boolean isCycleHire = type != null && type.equals("cyclehire");
 			Boolean isOysterShop = type != null && type.equals("oystershop");
 			Boolean isRailStation = type != null && type.equals("rail");
-			AbstractLocatable st = AbstractLocatable.fromString(station);
+			Boolean isTubeStation = type != null && type.equals("tube");
 
 			int longtitude = (Integer) extras.get("user_longtitude");
 			int latitude = (Integer) extras.get("user_latitude");
@@ -66,22 +69,30 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 			else if (isRailStation) 
 				drawable = this.getResources().getDrawable(
 						R.drawable.rail);
-			else
+			else {
+				isTubeStation=true;
 				drawable = this.getResources().getDrawable(R.drawable.tube);
-			HereOverlay<OverlayItem> tube = new HereOverlay<OverlayItem>(drawable, this);
-
-			StringBuffer sb = new StringBuffer();
-			if (!isCycleHire) {
-				Iterable<LineType> lines = StationDetails
-						.FetchLinesForStation(st.getName());
-				for (LineType lt : lines) {
-					sb.append(LinePresentation.getStringRespresentation(lt));
-					sb.append("\n");
-				}
 			}
-			OverlayItem overlayitem = new OverlayItem(to, st.getName(), sb.toString());
-			tube.addOverlay(overlayitem);
-			mapOverlays.add(tube);
+				
+			HereOverlay<OverlayItem> overlays = isTubeStation ? new TubeOverlay<OverlayItem>(drawable, this) 
+					: new HereOverlay<OverlayItem>(drawable, this);
+
+			OverlayItem overlayitem;
+			if (isTubeStation) {
+				Station tst=(Station) st;
+				overlayitem = new OverlayItem(to, tst.getName(), tst.getCode());
+			}
+			else if (isCycleHire) {
+				CycleHireStation cst=(CycleHireStation) st;
+				String snippet="Available Bikes: "+cst.getnAvailableBikes()+"\n"+
+						"Available Docks: "+cst.getnEmptyDocks();
+				overlayitem = new OverlayItem(to, cst.getName(), snippet);
+			}
+			else {
+				overlayitem = new OverlayItem(to, "" , st.getName());
+			}
+			overlays.addOverlay(overlayitem);
+			mapOverlays.add(overlays);
 
 			showDialog(0);
 			mapView.invalidate();

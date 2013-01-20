@@ -14,9 +14,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.AsyncTask.Status;
+import android.util.Log;
 
 import com.papagiannis.tuberun.Station;
 import com.papagiannis.tuberun.fetchers.HttpCallback;
@@ -26,59 +27,66 @@ import com.papagiannis.tuberun.fetchers.RequestTask;
 public class StationsCycleHireFetcher extends NearbyFetcher<CycleHireStation> {
 	private static final long serialVersionUID = 1L;
 	private static final String URL = "http://www.tfl.gov.uk/tfl/syndication/feeds/cycle-hire/livecyclehireupdates.xml";
-	private AtomicBoolean isFirst = new AtomicBoolean(true);
-	final StationsCycleHireFetcher self = this;
-	Context context;
-	Location userLocation;
-
-	// These are the 3 tasks
-	GetNearbyStationsTask nearbyStationsTask;
-	RequestTask requestTask;
-	XMLDeserialiserTask deserialiserTask;
-
-	// These are the two results
-	private static Date lastUpdate = new Date(0); /*this also serves as a lock for all fetchers*/
-	private static ArrayList<CycleHireStation> all_stations = new ArrayList<CycleHireStation>();
-	ArrayList<CycleHireStation> result = new ArrayList<CycleHireStation>();
 	
+	//This serves as a quick flag to allow only a single active request at a time
+	private final AtomicBoolean isFirst = new AtomicBoolean(true);
+	//Since the state of this fetcher may be accessed by multiple subscribers while a request is active 
+	//(so the state may be accessed by the request as well),
+	//mutating operations lock on *this* to prevent concurrent edits.
+	
+	private final StationsCycleHireFetcher self = this;
 
+	//THIS IS THE STATE OF THE FETCHER
+	private Location userLocation;
 	private String errors;
-
-	public StationsCycleHireFetcher(Context c) {
+	// This fetcher uses 3 ASyncTasks for async processing
+	private RequestTask requestTask; //TASK 1: first fetch the data
+	private XMLDeserialiserTask deserialiserTask; //TASK 2: then deserialize it
+	private GetNearbyStationsTask nearbyStationsTask; //TASK 3: then calculate the nearest stations
+	// These are the results
+	private static Date lastUpdate = new Date(0); 
+	private static ArrayList<CycleHireStation> all_stations = new ArrayList<CycleHireStation>();
+	//FETCHER STATE ENDS HERE
+	
+	public StationsCycleHireFetcher() {
 		super();
-		context = c;
 	}
 
 	@Override
-	public synchronized void update() {
+	public void update() {
 		setErrors("");
-		if (isRecent()) {
-			calculateNearestStations(all_stations);
+		boolean first = isFirst.compareAndSet(true, false);
+		if (!first) {
+			// somebody else is doing the job for me
 			return;
+		}
+		if (isRecent()) {
+			calculateNearestStations();
 		} else {
-			boolean first = isFirst.compareAndSet(true, false);
-			if (!first) {
-				// somebody else is doing the job for me
-				return;
-			}
 			fetchCurrentStations();
 		}
-
+	}
+	
+	private synchronized boolean isRecent() {
+		Date now = new Date();
+		return now.after(lastUpdate)
+				&& now.getTime() - lastUpdate.getTime() <= (3 * 60 * 1000);
 	}
 
 	/*
-	 * This issues the HTML requrest
+	 * TASK 1: This issues the HTTP requsest
 	 */
 	private synchronized void fetchCurrentStations() {
 		requestTask = new RequestTask(new HttpCallback() {
 			public void onReturn(String s) {
-				getCallBack1(s);
+				//The RequestTask checks isCancelled before invoking this method
+				handleHTTPResponse(s);
 			}
 		});
 		requestTask.execute(URL);
 	}
 
-	private void getCallBack1(String response) {
+	private void handleHTTPResponse(String response) {
 		try {
 			if (response == null || response.equals(""))
 				throw new Exception(
@@ -89,19 +97,13 @@ public class StationsCycleHireFetcher extends NearbyFetcher<CycleHireStation> {
 			}
 		} catch (Exception e) {
 			setErrors(getErrors() + e.getMessage());
+			Log.w(getClass().toString(), e);
+			isFirst.set(true);
 			notifyClients();
 		}
 	}
 
-	/*
-	 * THis issues the local request to calculate the nearest stations
-	 */
-	private synchronized void calculateNearestStations(
-			ArrayList<CycleHireStation> stations) {
-		nearbyStationsTask = new GetNearbyStationsTask();
-		nearbyStationsTask.execute(userLocation);
-	}
-	
+	// TASK 2: Parse the XML response
 	private class XMLDeserialiserTask extends AsyncTask<String, Integer, ArrayList<CycleHireStation>> {
 		@Override
 		protected ArrayList<CycleHireStation> doInBackground(
@@ -110,8 +112,7 @@ public class StationsCycleHireFetcher extends NearbyFetcher<CycleHireStation> {
 			try {
 				res = parseXMLResponse(params[0]);
 			} catch (Exception e) {
-				String s = e.toString();
-				s = s + s;
+				Log.w("CycleHireFetcher", e);
 				res = new ArrayList<CycleHireStation>();
 			}
 			return res;
@@ -191,59 +192,58 @@ public class StationsCycleHireFetcher extends NearbyFetcher<CycleHireStation> {
 											.parseInt(value));
 							}
 						} catch (Exception e) {
-							e.printStackTrace();
+							Log.w("CycleHireFetcher", e);
 						}
 						if (csStation.isValid())
 							result.add(csStation);
-
 					}
 				}
 			} catch (Exception e) {
-				// This should never happen
-				e.printStackTrace();
+				Log.w("CycleHireFetcher", e);
 			}
+			if (result.size()==0) resultDate = new Date(0);
 			return result;
 		}
 
 		protected void onPostExecute(ArrayList<CycleHireStation> result) {
-			if (isCancelled())
-				return;
+			if (isCancelled()) return;
 			synchronized (self) {
-				synchronized (lastUpdate) {
-					lastUpdate.setTime(resultDate.getTime());
-					all_stations = result;
-				}
-				isFirst.set(true);
-				calculateNearestStations(result);
+				lastUpdate.setTime(resultDate.getTime());
+				all_stations = result;
+				calculateNearestStations();
 			}
 		}
 	}
-
+	
 	/*
-	 * This an aSyncTask that does the stupid cluclation to get the nearest
-	 * stations, i.e. after the HTTP request has returned.
+	 * TASK 3: This calculates the nearest stations asynchronously
 	 */
+	private void calculateNearestStations() {
+		nearbyStationsTask = new GetNearbyStationsTask();
+		nearbyStationsTask.execute(userLocation);
+	}
+
 	private class GetNearbyStationsTask extends
 			AsyncTask<Location, Integer, ArrayList<? extends Station>> {
 		ArrayList<CycleHireStation> result = new ArrayList<CycleHireStation>();
 
-
 		@Override
 		protected ArrayList<? extends Station> doInBackground(Location... at) {
-			return getNearbyStations(userLocation, all_stations);
+			synchronized (self) {
+				return getNearbyStations(userLocation, all_stations);
+			}
 		}
 
 		@Override
 		protected void onPostExecute(ArrayList<? extends Station> res) {
-			if (isCancelled() || res == null || isFirst == null)
-				return;
+			if (isCancelled()) return;
 			synchronized (self) {
 				result = new ArrayList<CycleHireStation>();
 				for (Station s : res)
 					result.add((CycleHireStation) s);
-				isFirst.set(true);
-				notifyClients();
 			}
+			isFirst.set(true);
+			notifyClients();
 		}
 
 		public ArrayList<CycleHireStation> getResult() {
@@ -252,28 +252,23 @@ public class StationsCycleHireFetcher extends NearbyFetcher<CycleHireStation> {
 
 	}
 
-	private synchronized boolean isRecent() {
-		synchronized (lastUpdate) {
-			Date now = new Date();
-			return now.after(lastUpdate)
-					&& now.getTime() - lastUpdate.getTime() <= (3 * 60 * 1000);
-		}
-	}
-
 	@Override
 	public synchronized Date getUpdateTime() {
-		synchronized (lastUpdate) {
-			return new Date(lastUpdate.getTime());
-		}
+		return new Date(lastUpdate.getTime());
 	}
 
 	public synchronized void setLocation(Location l) {
-		this.userLocation = l;
-		if (nearbyStationsTask != null
-				&& nearbyStationsTask.getStatus() == AsyncTask.Status.RUNNING) {
+		if (nearbyStationsTask!=null && nearbyStationsTask.getStatus()==Status.RUNNING) {
+			//Abort TASK3 and make sure that the next update() will ignore TASKs 1&2.
+			lastUpdate=new Date(); //NOW!
+			isFirst.set(true);
 			nearbyStationsTask.cancel(true);
 		}
-
+		//If TASK 1 or 2 execute, then there is no need to cancel anything
+		//because the existing fetcher will get the job done
+		//The new update() will observe isFirst==false and not proceed.
+		//but TASK 2 will pick up the new location before launching TASK 3.
+		this.userLocation = l;
 	}
 
 	public synchronized ArrayList<CycleHireStation> getResult() {
@@ -281,6 +276,8 @@ public class StationsCycleHireFetcher extends NearbyFetcher<CycleHireStation> {
 	}
 
 	public synchronized void abort() {
+		lastUpdate=new Date(0);
+		isFirst.set(true);
 		if (nearbyStationsTask != null)
 			nearbyStationsTask.cancel(true);
 		if (requestTask != null)
@@ -289,17 +286,11 @@ public class StationsCycleHireFetcher extends NearbyFetcher<CycleHireStation> {
 			deserialiserTask.cancel(true);
 	}
 
-	/**
-	 * @return the errors
-	 */
-	public String getErrors() {
+	public synchronized String getErrors() {
 		return errors;
 	}
 
-	/**
-	 * @param errors the errors to set
-	 */
-	public void setErrors(String errors) {
+	public synchronized void setErrors(String errors) {
 		this.errors = errors;
 	}
 

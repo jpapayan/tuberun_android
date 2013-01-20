@@ -125,7 +125,7 @@ public class NearbyStationsListFragment extends ListFragment implements
 		try {
 			Station s = stations_nearby.get(position);
 			Intent i = new Intent(getActivity(), DirectionsMapActivity.class);
-			i.putExtra("station", s.toString());
+			i.putExtra("station", s);
 			i.putExtra("user_longtitude",
 					(int) (lastKnownLocation.getLongitude() * 1000000));
 			i.putExtra("user_latitude",

@@ -62,13 +62,14 @@ public class StationsBusFetcher extends Fetcher {
 		protected ArrayList<BusStation> doInBackground(Location... at) {
 //			android.os.Debug.waitForDebugger();
 			ArrayList<BusStation> res = new ArrayList<BusStation>();
+			DatabaseHelper myDbHelper = new DatabaseHelper(context);
 			try {
-				DatabaseHelper myDbHelper = new DatabaseHelper(context);
 				myDbHelper.openDataBase();
 				res = myDbHelper.getStationsNearby((long) (at[0].getLatitude()*1000000), (long) (at[0].getLongitude()*1000000));
-				myDbHelper.close();
 			} catch (Exception e) {
 				Log.w("StationsBusFetcher",e);
+			} finally {
+				myDbHelper.close();
 			}
 			return res;
 		}
