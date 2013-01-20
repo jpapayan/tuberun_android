@@ -371,18 +371,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return cc;
 	}
 	
-	public ArrayList<OysterShop> getOysterShopsNearby(long lat, long lng) {
-		long distance=500;
-		for (int i=0;i<4;i++) {
-			distance*=4;
+	public ArrayList<OysterShop> getOysterShopsNearby(final long lat, final long lng) {
+		long distance=5000;
+		ArrayList<OysterShop> res = new ArrayList<OysterShop>();
+		for (int i=0; i<4 ; i++, distance*=5) {
 			String query="SELECT name, longtitude, latitude "+
 					"FROM oyster_shops "+
-					"WHERE ABS(longtitude-(?))<? AND ABS(latitude-(?))<?";
-			ArrayList<OysterShop> res = new ArrayList<OysterShop>();
-			String distanceString=Long.toString(distance);
-			Cursor c = myDataBase.rawQuery(query,
-					new String[] { Long.toString(lng), distanceString,
-								   Long.toString(lat), distanceString });
+					"WHERE ?<longtitude AND longtitude<? AND ?<latitude AND latitude<?";
+			res = new ArrayList<OysterShop>();
+			String[] params=new String[] { Long.toString(lng-distance),
+						Long.toString(lng+distance),
+					    Long.toString(lat-distance), 
+					    Long.toString(lat+distance)};
+			Cursor c = myDataBase.rawQuery(query, params);
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
 				OysterShop s=new OysterShop(c.getString(0));
@@ -392,23 +393,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			}
 			if (res.size()>5) return res;
 		}
-		return new ArrayList<OysterShop>();
+		return res; /*always return the results of the last iteration no matter what*/
 	}
 	
 	public ArrayList<RailStation> getRailStationsNearby(long lat, long lng) {
 		long distance=40000;
-		for (int i=0;i<4;i++) {
-			distance*=2;
+		ArrayList<RailStation> res = new ArrayList<RailStation>();
+		for (int i=0; i<4; i++,distance*=5) {
 			String query="SELECT stations.name, longtitude, latitude " +
 					"FROM stations, station_lines "+
 					"WHERE stations.name=station_lines.name AND "+
 						  "station_lines.line=\"Rail\" AND " +
-						  "ABS(longtitude-(?))<? AND ABS(latitude-(?))<?";
-			ArrayList<RailStation> res = new ArrayList<RailStation>();
-			String distanceString=Long.toString(distance);
-			Cursor c = myDataBase.rawQuery(query,
-							new String[] { Long.toString(lng), distanceString,
-										   Long.toString(lat), distanceString });
+						  "?<stations.longtitude AND stations.longtitude<? AND " +
+						  "?<stations.latitude AND stations.latitude<?";
+			res = new ArrayList<RailStation>();
+			String[] params=new String[] { Long.toString(lng-distance),
+					Long.toString(lng+distance),
+				    Long.toString(lat-distance), 
+				    Long.toString(lat+distance)};
+			Cursor c = myDataBase.rawQuery(query, params);
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
 				RailStation s=new RailStation(c.getString(0));
@@ -418,7 +421,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			}
 			if (res.size()>5) return res;
 		}
-		return new ArrayList<RailStation>();
+		return res;
 	}
 
 	public int getVersion() {
