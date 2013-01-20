@@ -46,7 +46,7 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
 	public static final String VERSION = "1.2.6";
-	//Don't gorget to update the app version in the manifest
+	//Don't forget to update the app version in the manifest
 	//Don't forget to update the changelog later in this file
 	//Don't forget to change the Gmaps API key in full_screen_map.xml
 	public static final Boolean USE_LICENSING = false;
