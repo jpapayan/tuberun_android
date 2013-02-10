@@ -181,7 +181,7 @@
             android:windowSoftInputMode="stateUnchanged" >
         </activity>
         <activity
-            android:name=".AboutActivity"
+            android:name="com.papagiannis.tuberun.AboutActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="nosensor"
             android:windowSoftInputMode="stateUnchanged" >
@@ -202,7 +202,7 @@
                 android:readPermission="android.permission.GLOBAL_SEARCH" />
              >        </provider>
         <provider
-            android:name=".StationsProviderDepartures"
+            android:name="com.papagiannis.tuberun.StationsProviderDepartures"
             android:authorities="com.papagiannis.tuberun.stationsproviderdepartures"
             android:exported="true"
             android:readPermission="com.papagiannis.tuberun.READ_MY_DATA" >

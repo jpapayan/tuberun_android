@@ -1,30 +1,35 @@
-package com.papagiannis.tuberun;
+package com.papagiannis.tuberun.fragments;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
+import com.papagiannis.tuberun.R;
+import com.papagiannis.tuberun.R.drawable;
+import com.papagiannis.tuberun.R.id;
+import com.papagiannis.tuberun.R.layout;
 import com.papagiannis.tuberun.overlays.HereOverlay;
 import com.papagiannis.tuberun.overlays.LocationItemizedOverlay;
 import com.papagiannis.tuberun.overlays.RouteOverlay;
@@ -32,16 +37,16 @@ import com.papagiannis.tuberun.overlays.RouteOverlay;
 /*
  * A MapActivity that always shows the user's location
  */
-public abstract class MeMapActivity extends MapActivity implements
+public abstract class MeMapFragment extends Fragment implements
 		LocationListener {
 	
-	private MeMapActivity self = this;
 	protected MapView mapView;
 	protected MapController mapController;
 	protected LocationManager locationManager;
 	protected final GeoPoint gp_london = new GeoPoint(51501496, -124240);
 	protected static final int TWO_MINUTES = 1000 * 60 * 2;
 	private static final int LOCATION_SERVICE_FAILED = 0;
+	
 	protected Location lastKnownLocation;
 	protected Date started;
 	protected List<Overlay> mapOverlays;
@@ -53,30 +58,18 @@ public abstract class MeMapActivity extends MapActivity implements
 	protected Button myLocationButton;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.full_screen_map);
-		titleTextView = (TextView) findViewById(R.id.title_textview);
-		backButton = (Button) findViewById(R.id.back_button);
-		logoButton = (Button) findViewById(R.id.logo_button);
-		titleLayout = (LinearLayout) findViewById(R.id.title_layout);
-		myLocationButton = (Button) findViewById(R.id.mylocation_button);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
+	        Bundle savedInstanceState) {
 
-		OnClickListener back_listener = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				self.finish();
-			}
-		};
-		backButton.setOnClickListener(back_listener);
-		logoButton.setOnClickListener(back_listener);
+		View map = inflater.inflate(R.layout.me_map_fragment, container, false);
+		myLocationButton = (Button) map.findViewById(R.id.mylocation_button);
 
-		mapView = (MapView) findViewById(R.id.bus_mapview);
+		mapView = (MapView) map.findViewById(R.id.bus_mapview);
 		mapView.setBuiltInZoomControls(true);
 		mapOverlays = mapView.getOverlays();
 
 		// location stuff
-		locationManager = (LocationManager) this
+		locationManager = (LocationManager) getActivity()
 				.getSystemService(Context.LOCATION_SERVICE);
 		requestLocationUpdates();
 		mapController = mapView.getController();
@@ -108,6 +101,8 @@ public abstract class MeMapActivity extends MapActivity implements
 			myPushpin = generateMyLocationPushPin(l_london);
 			mapOverlays.add(myPushpin);
 		}
+		
+		return map;
 	}
 
 	public void onLocationChanged(Location l) {
@@ -125,7 +120,7 @@ public abstract class MeMapActivity extends MapActivity implements
 	private HereOverlay<OverlayItem> generateMyLocationPushPin(Location l) {
 		Drawable drawable = this.getResources().getDrawable(R.drawable.here_old);
 		HereOverlay<OverlayItem> hereo = new HereOverlay<OverlayItem>(drawable,
-				this);
+				getActivity());
 		hereo.setAccuracy((int) l.getAccuracy());
 		GeoPoint point = new GeoPoint((int) (l.getLatitude() * 1000000),
 				(int) (l.getLongitude() * 1000000));
@@ -240,28 +235,24 @@ public abstract class MeMapActivity extends MapActivity implements
 		// Check whether the new location fix is more or less accurate
 		int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation
 				.getAccuracy());
-		boolean isLessAccurate = accuracyDelta > 0;
-		boolean isMoreAccurate = accuracyDelta < 0;
-		boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+		boolean isSignificantlyMoreAccurate = accuracyDelta < -10;
 
 		// Check if the old and new location are from the same provider
-		boolean isFromSameProvider = isSameProvider(location.getProvider(),
-				currentBestLocation.getProvider());
-
-		// Determine location quality using a combination of timeliness and
-		// accuracy
-		if (isMoreAccurate) {
+//		boolean isFromSameProvider = isSameProvider(location.getProvider(),
+//				currentBestLocation.getProvider());
+		
+		float distance=location.distanceTo(currentBestLocation);
+		boolean hasMovedSignificantly=distance>5;
+		
+		if (isNewer && isSignificantlyMoreAccurate) {
 			return true;
-		} else if (isNewer && !isLessAccurate) {
-			return true;
-		} else if (isNewer && !isSignificantlyLessAccurate
-				&& isFromSameProvider) {
+		}
+		if (isNewer && hasMovedSignificantly) {
 			return true;
 		}
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	private void requestLocationUpdates() {
 		try {
 			if (locationManager != null) {
@@ -276,40 +267,37 @@ public abstract class MeMapActivity extends MapActivity implements
 		}
 	}
 	
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		Dialog result = null;
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	protected void showDialog(int id) {
+		DialogFragment newFragment;
+		String title="";
+		String message="";
 		switch (id) {
 		case LOCATION_SERVICE_FAILED:
-			builder.setTitle("Location Service Failed")
-					.setMessage(
-							"Does you device support location services? Turn them on in the settings.")
-					.setCancelable(true)
-					.setPositiveButton("OK", null);
-			result = builder.create();
+			title="Location Service Failed";
+			message="Does you device support location services? Turn them on in the settings.";
 			break;
 		}
-		return result;
+		newFragment=AlertDialogFragment.newInstance(title, message);
+	    newFragment.show(getFragmentManager(), "dialog");
 	}
 
 	/** Checks whether two providers are the same */
-	private static boolean isSameProvider(String provider1, String provider2) {
-		if (provider1 == null) {
-			return provider2 == null;
-		}
-		return provider1.equals(provider2);
-	}
+//	private static boolean isSameProvider(String provider1, String provider2) {
+//		if (provider1 == null) {
+//			return provider2 == null;
+//		}
+//		return provider1.equals(provider2);
+//	}
 
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		super.onPause();
 		if (locationManager != null)
 			locationManager.removeUpdates(this);
 	}
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
 		if (locationManager != null)
 			requestLocationUpdates();
