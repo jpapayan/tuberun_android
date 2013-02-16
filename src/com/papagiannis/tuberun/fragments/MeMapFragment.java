@@ -27,9 +27,6 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.papagiannis.tuberun.R;
-import com.papagiannis.tuberun.R.drawable;
-import com.papagiannis.tuberun.R.id;
-import com.papagiannis.tuberun.R.layout;
 import com.papagiannis.tuberun.overlays.HereOverlay;
 import com.papagiannis.tuberun.overlays.LocationItemizedOverlay;
 import com.papagiannis.tuberun.overlays.RouteOverlay;
@@ -37,7 +34,7 @@ import com.papagiannis.tuberun.overlays.RouteOverlay;
 /*
  * A MapActivity that always shows the user's location
  */
-public abstract class MeMapFragment extends Fragment implements
+public class MeMapFragment extends Fragment implements
 		LocationListener {
 	
 	protected MapView mapView;
@@ -61,47 +58,48 @@ public abstract class MeMapFragment extends Fragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 	        Bundle savedInstanceState) {
 
+		android.os.Debug.waitForDebugger();
 		View map = inflater.inflate(R.layout.me_map_fragment, container, false);
 		myLocationButton = (Button) map.findViewById(R.id.mylocation_button);
 
-		mapView = (MapView) map.findViewById(R.id.bus_mapview);
-		mapView.setBuiltInZoomControls(true);
-		mapOverlays = mapView.getOverlays();
-
-		// location stuff
-		locationManager = (LocationManager) getActivity()
-				.getSystemService(Context.LOCATION_SERVICE);
-		requestLocationUpdates();
-		mapController = mapView.getController();
-		mapController.setZoom(16);
-		myLocationButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (lastKnownLocation != null) {
-					animateToHere(lastKnownLocation);
-				}
-			}
-		});
-
-		lastKnownLocation = locationManager
-				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		if (lastKnownLocation == null)
-			lastKnownLocation = locationManager
-					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		if (lastKnownLocation != null) {
-			myPushpin = generateMyLocationPushPin(lastKnownLocation);
-			mapOverlays.add(myPushpin);
-			animateToHere(lastKnownLocation);
-		} else {
-			Location l_london = new Location("");
-			l_london.setLongitude(gp_london.getLongitudeE6() / (float) 1000000);
-			l_london.setLatitude(gp_london.getLatitudeE6() / (float) 1000000);
-			l_london.setAccuracy(200);
-			lastKnownLocation = l_london;
-			myPushpin = generateMyLocationPushPin(l_london);
-			mapOverlays.add(myPushpin);
-		}
-		
+//		mapView = (MapView) map.findViewById(R.id.bus_mapview);
+//		mapView.setBuiltInZoomControls(true);
+//		mapOverlays = mapView.getOverlays();
+//
+//		// location stuff
+//		locationManager = (LocationManager) getActivity()
+//				.getSystemService(Context.LOCATION_SERVICE);
+//		requestLocationUpdates();
+//		mapController = mapView.getController();
+//		mapController.setZoom(16);
+//		myLocationButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				if (lastKnownLocation != null) {
+//					animateToHere(lastKnownLocation);
+//				}
+//			}
+//		});
+//
+//		lastKnownLocation = locationManager
+//				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//		if (lastKnownLocation == null)
+//			lastKnownLocation = locationManager
+//					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//		if (lastKnownLocation != null) {
+//			myPushpin = generateMyLocationPushPin(lastKnownLocation);
+//			mapOverlays.add(myPushpin);
+//			animateToHere(lastKnownLocation);
+//		} else {
+//			Location l_london = new Location("");
+//			l_london.setLongitude(gp_london.getLongitudeE6() / (float) 1000000);
+//			l_london.setLatitude(gp_london.getLatitudeE6() / (float) 1000000);
+//			l_london.setAccuracy(200);
+//			lastKnownLocation = l_london;
+//			myPushpin = generateMyLocationPushPin(l_london);
+//			mapOverlays.add(myPushpin);
+//		}
+//		
 		return map;
 	}
 

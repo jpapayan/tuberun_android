@@ -6,7 +6,6 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
@@ -16,9 +15,11 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -32,7 +33,7 @@ import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.ReverseGeocodeFetcher;
 import com.papagiannis.tuberun.fetchers.StationsTubeFetcher;
 
-public class SelectLineActivity extends ListActivity implements
+public class SelectLineActivity extends FragmentActivity implements
 		OnClickListener, LocationListener, Observer {
 	private static final int FAILED_DIALOG = 1;
 	public static final String VIEW = "android.Intent.action.VIEW";
@@ -43,6 +44,7 @@ public class SelectLineActivity extends ListActivity implements
 	TextView locationAccuracyTextview;
 	LinearLayout locationLayout;
 	ProgressBar locationProgressbar;
+	ListView listView;
 
 	private final ArrayList<HashMap<String, Object>> lines_list = new ArrayList<HashMap<String, Object>>();
 	ArrayList<Station> stationsList = new ArrayList<Station>();
@@ -60,7 +62,9 @@ public class SelectLineActivity extends ListActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		new SlidingBehaviour(this, R.layout.select_line);
+		
+		setContentView(R.layout.select_line);
+//		new SlidingBehaviour(this, R.layout.select_line);
 		
 		fetcher.registerCallback(this);
 
@@ -68,7 +72,17 @@ public class SelectLineActivity extends ListActivity implements
 		locationAccuracyTextview = (TextView) findViewById(R.id.location_accuracy_textview);
 		locationProgressbar = (ProgressBar) findViewById(R.id.location_progressbar);
 		locationLayout = (LinearLayout) findViewById(R.id.location_layout);
+		listView = (ListView) findViewById(R.id.list_nearby);
 		
+		
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View view, int position,
+					long id) {
+				onListItemClick(view,position,id);
+			}
+		});
 		searchButton = (Button) findViewById(R.id.search_button);
 		searchButton.setOnClickListener(new OnClickListener() {
 
@@ -187,7 +201,7 @@ public class SelectLineActivity extends ListActivity implements
 				new String[] { "line_name", "line_color", "line_image", "line_more" },
 				new int[] { R.id.line_name, R.id.line_color, R.id.line_image, R.id.line_more });
 		adapter.setViewBinder(new SelectLinesBinder(this));
-		setListAdapter(adapter);
+		listView.setAdapter(adapter);
 	}
 
 	@Override
@@ -230,8 +244,7 @@ public class SelectLineActivity extends ListActivity implements
 	
 	private boolean hasNearby=false;
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
+	protected void onListItemClick(View v, int position, long id) {
 		try {
 			if (!hasNearby || position>=7) {
 				if (hasNearby && position>=7) position -= 6 + 1;

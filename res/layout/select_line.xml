@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
-    <!-- <ImageView -->
-    <!-- android:id="@+id/select_line_background" -->
-    <!-- android:layout_width="fill_parent" -->
-    <!-- android:layout_height="fill_parent" -->
-    <!-- android:scaleType="centerCrop" -->
-    <!-- android:src="@drawable/background_depart" /> -->
 
     <LinearLayout
         android:id="@+id/mainmenu_layout"
@@ -74,7 +68,7 @@
             android:background="@drawable/tuberun_red_bright" />
 
         <LinearLayout
-            android:id="@id/android:empty"
+            android:id="@+id/android:empty"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center"
@@ -90,18 +84,23 @@
         </LinearLayout>
 
         <ListView
-            android:id="@+id/android:list"
+            android:id="@+id/list_nearby"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="0dip"
             android:layout_marginTop="5dip"
+            android:layout_weight="1"
             android:cacheColorHint="@android:color/transparent" />
+
+        <fragment
+            android:id="@+id/map_fragment"
+            android:name="com.papagiannis.tuberun.fragments.MeMapFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip"
+            tools:layout="@layout/me_map_fragment" />
     </LinearLayout>
-    
-<!--     <fragment android:name="com.papagiannis.tuberun.fragments.MeMapFragment" -->
-<!--               android:id="@+id/map_fragment" -->
-<!--               android:layout_weight="1" -->
-<!--               android:layout_width="fill_parent" -->
-<!--               android:layout_height="0dp"/> -->
 
     <LinearLayout
         android:id="@+id/location_layout"
@@ -128,7 +127,8 @@
             android:layout_gravity="center"
             android:layout_marginLeft="5dip"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textIsSelectable="false" />
 
         <TextView
             android:id="@+id/location_accuracy_textview"
@@ -137,7 +137,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="5dip"
-            android:layout_marginRight="5dip" />
+            android:layout_marginRight="5dip"
+            android:textIsSelectable="false" />
     </LinearLayout>
 
 </LinearLayout>

@@ -22,10 +22,22 @@
         android:protectionLevel="normal">
     </permission>
     
+    <permission
+        android:name="com.papagiannis.tuberun.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature"/>
+    
+    <uses-permission android:name="com.example.mapdemo.permission.MAPS_RECEIVE"/>
+    
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
 
+	<uses-feature
+  		android:glEsVersion="0x00020000"
+  		android:required="true"/>
+	
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
@@ -213,6 +225,10 @@
         </provider>
 
         <uses-library android:name="com.google.android.maps" />
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBU0RJvblx--rYY9XdTFyQNwXB4xziG6j4" />
     </application>
 
 </manifest>
