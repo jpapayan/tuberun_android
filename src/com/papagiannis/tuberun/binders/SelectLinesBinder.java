@@ -69,6 +69,7 @@ public class SelectLinesBinder implements ViewBinder {
 				tv.setTextSize(13);
 				tv.setTypeface(null, Typeface.BOLD);
 				tv.setPadding(2, 0, 0, 0);
+				tv.setVisibility(View.GONE);
 			}
 			else {
 				tv.setTextColor(Color.WHITE);
@@ -77,6 +78,7 @@ public class SelectLinesBinder implements ViewBinder {
 				tv.setPadding(10, 0, 0, 0);
 			}
 			tv.setText(s);
+			tv.setVisibility(View.VISIBLE);
 		}
 		return true;
 	}

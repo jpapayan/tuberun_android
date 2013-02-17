@@ -58,7 +58,6 @@ public class MeMapFragment extends Fragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 	        Bundle savedInstanceState) {
 
-		android.os.Debug.waitForDebugger();
 		View map = inflater.inflate(R.layout.me_map_fragment, container, false);
 		myLocationButton = (Button) map.findViewById(R.id.mylocation_button);
 

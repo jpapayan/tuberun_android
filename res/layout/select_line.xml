@@ -7,68 +7,70 @@
     android:orientation="vertical" >
 
     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dip"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/back_button"
+            style="@style/BackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:minHeight="0dip"
+            android:minWidth="0dip" />
+
+        <Button
+            android:id="@+id/logo_button"
+            style="@style/MenuButton"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="3dip"
+            android:layout_marginTop="3dip"
+            android:layout_weight="0"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/title_textview"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dip"
+            android:layout_weight="5"
+            android:gravity="left"
+            android:text="Select Stop or Station" />
+
+        <Button
+            android:id="@+id/search_station_button"
+            style="@style/SearchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dip"
+            android:minHeight="0dip"
+            android:minWidth="0dip"
+            android:text="" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2dip"
+        android:layout_gravity="bottom"
+        android:background="@drawable/tuberun_red_bright" />
+
+    <LinearLayout
         android:id="@+id/mainmenu_layout"
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="48dip"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/back_button"
-                style="@style/BackButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:minHeight="0dip"
-                android:minWidth="0dip" />
-
-            <Button
-                android:id="@+id/logo_button"
-                style="@style/MenuButton"
-                android:layout_width="40dip"
-                android:layout_height="40dip"
-                android:layout_gravity="center_vertical"
-                android:layout_marginBottom="3dip"
-                android:layout_marginTop="3dip"
-                android:layout_weight="0"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/title_textview"
-                style="@android:style/TextAppearance.Medium"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dip"
-                android:layout_weight="5"
-                android:gravity="left"
-                android:text="Select Station" />
-
-            <Button
-                android:id="@+id/search_button"
-                style="@style/SearchButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="10dip"
-                android:minHeight="0dip"
-                android:minWidth="0dip"
-                android:text="" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="2dip"
-            android:layout_gravity="bottom"
-            android:background="@drawable/tuberun_red_bright" />
-
-        <LinearLayout
-            android:id="@+id/android:empty"
+            android:id="@+id/empty_layout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center"
@@ -83,62 +85,50 @@
                 android:indeterminate="true" />
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/list_nearby"
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_marginTop="5dip"
-            android:layout_weight="1"
-            android:cacheColorHint="@android:color/transparent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NEARBY BUS STOPS"
+            android:textColor="@drawable/tuberun_red_bright"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom"
+            android:background="@drawable/tuberun_red_bright" />
 
         <fragment
             android:id="@+id/map_fragment"
             android:name="com.papagiannis.tuberun.fragments.MeMapFragment"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="5dip"
-            android:layout_marginRight="5dip"
+            android:layout_weight="2"
             tools:layout="@layout/me_map_fragment" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/location_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="#99000000"
-        android:gravity="bottom"
-        android:orientation="horizontal" >
-
-        <ProgressBar
-            android:id="@+id/location_progressbar"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dip" />
 
         <TextView
-            android:id="@+id/location_textview"
-            style="@android:style/TextAppearance.Small"
-            android:layout_width="0dip"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dip"
+            android:layout_marginTop="10dp"
+            android:text="NEARBY TRAIN STATIONS"
+            android:textColor="@drawable/tuberun_red_bright"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom"
+            android:background="@drawable/tuberun_red_bright" />
+
+        <ListView
+            android:id="@+id/nearby_stations_list"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:textIsSelectable="false" />
-
-        <TextView
-            android:id="@+id/location_accuracy_textview"
-            style="@android:style/TextAppearance.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dip"
-            android:layout_marginRight="5dip"
-            android:textIsSelectable="false" />
+            android:layout_marginTop="5dip"
+            android:cacheColorHint="@android:color/transparent" />
     </LinearLayout>
 
 </LinearLayout>

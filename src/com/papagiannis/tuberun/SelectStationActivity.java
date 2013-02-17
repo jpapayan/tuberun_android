@@ -32,7 +32,7 @@ public class SelectStationActivity extends ListActivity implements OnClickListen
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.select_line);
 		
-		searchButton = (Button) findViewById(R.id.search_button);
+		searchButton = (Button) findViewById(R.id.search_station_button);
 		searchButton.setVisibility(View.GONE);
 		locationLayout = (LinearLayout) findViewById(R.id.location_layout);
 		locationLayout.setVisibility(View.GONE);

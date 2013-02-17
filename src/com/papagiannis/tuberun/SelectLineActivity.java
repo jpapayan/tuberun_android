@@ -2,13 +2,11 @@ package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -22,11 +20,8 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import com.papagiannis.tuberun.binders.SelectLinesBinder;
 import com.papagiannis.tuberun.fetchers.Observer;
@@ -40,50 +35,33 @@ public class SelectLineActivity extends FragmentActivity implements
 
 	protected Button searchButton;
 	protected EditText searchEditText;
-	TextView locationTextview;
-	TextView locationAccuracyTextview;
-	LinearLayout locationLayout;
-	ProgressBar locationProgressbar;
-	ListView listView;
+	private ListView listView;
+	private View emptyView;
 
-	private final ArrayList<HashMap<String, Object>> lines_list = new ArrayList<HashMap<String, Object>>();
 	ArrayList<Station> stationsList = new ArrayList<Station>();
 
 	private LocationManager locationManager;
 	ReverseGeocodeFetcher geocoder = new ReverseGeocodeFetcher(this, null);
-	Observer geolocationObserver = new Observer() {
-		@Override
-		public void update() {
-			displayLocation(geocoder.getResult());
-		}
-	};
 	private StationsTubeFetcher fetcher = new StationsTubeFetcher(this);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		setContentView(R.layout.select_line);
-//		new SlidingBehaviour(this, R.layout.select_line);
-		
+		new SlidingBehaviour(this, R.layout.select_line);
 		fetcher.registerCallback(this);
-
-		locationTextview = (TextView) findViewById(R.id.location_textview);
-		locationAccuracyTextview = (TextView) findViewById(R.id.location_accuracy_textview);
-		locationProgressbar = (ProgressBar) findViewById(R.id.location_progressbar);
-		locationLayout = (LinearLayout) findViewById(R.id.location_layout);
-		listView = (ListView) findViewById(R.id.list_nearby);
-		
-		
+		emptyView=findViewById(R.id.empty_layout);
+		emptyView.setVisibility(View.VISIBLE);
+		listView = (ListView) findViewById(R.id.nearby_stations_list);
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View view, int position,
-					long id) {
-				onListItemClick(view,position,id);
+			public void onItemClick(AdapterView<?> arg0, View view,
+					int position, long id) {
+				onListItemClick(view, position, id);
 			}
 		});
-		searchButton = (Button) findViewById(R.id.search_button);
+
+		searchButton = (Button) findViewById(R.id.search_station_button);
 		searchButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -98,35 +76,8 @@ public class SelectLineActivity extends FragmentActivity implements
 			finish();
 			return;
 		}
-
-		Iterable<LineType> lines = LineType.allDepartures();
-		addSeparator(lines_list, "ALL STATIONS");
-		for (LineType lt : lines) {
-			HashMap<String, Object> m = new HashMap<String, Object>();
-			m.put("line_name", LinePresentation.getStringRespresentation(lt));
-			m.put("line_color", lt);
-			Integer image = -1;
-			if (lt.equals(LineType.BUSES)) {
-				image = R.drawable.buses_inverted;
-			}
-			m.put("line_image", image);
-			m.put("line_more", true);
-			lines_list.add(m);
-		}
-		
-		populate(new ArrayList<Station>());
-
 		locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
-	}
-	
-	private void addSeparator( ArrayList<HashMap<String, Object>> list, String text) {
-		HashMap<String, Object> m = new HashMap<String, Object>();
-		m.put("line_name", "_"+text);
-		m.put("line_color", LineType.ALL);
-		m.put("line_image", -1);
-		m.put("line_more", false);
-		list.add(m);
 	}
 
 	@Override
@@ -156,7 +107,6 @@ public class SelectLineActivity extends FragmentActivity implements
 			lastKnownLocation = l;
 			fetcher.setLocation(l);
 			fetcher.update();
-			reverseGeocode(l);
 		}
 	}
 
@@ -177,15 +127,16 @@ public class SelectLineActivity extends FragmentActivity implements
 	public void update() {
 		stationsList = fetcher.getResult();
 		populate(stationsList);
+		emptyView.setVisibility(View.GONE);
 	}
 
-	private ArrayList<Station> nearbyPrevious=new ArrayList<Station>();
+	private ArrayList<Station> nearbyPrevious = new ArrayList<Station>();
+
 	private void populate(ArrayList<Station> nearby) {
-		if (nearby.size()>0) hasNearby=true;
-		if (nearbyPrevious.size()!=0 && nearbyPrevious.equals(nearby)) return;
+		if (nearbyPrevious.size() != 0 && nearbyPrevious.equals(nearby))
+			return;
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 
-		if (nearby.size()>0) addSeparator(list, "NEARBY STATIONS");
 		for (Station s : nearby) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("line_name", s.getName());
@@ -194,12 +145,10 @@ public class SelectLineActivity extends FragmentActivity implements
 			m.put("line_more", false);
 			list.add(m);
 		}
-
-		list.addAll(lines_list);
-
 		SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.line,
-				new String[] { "line_name", "line_color", "line_image", "line_more" },
-				new int[] { R.id.line_name, R.id.line_color, R.id.line_image, R.id.line_more });
+				new String[] { "line_name", "line_color", "line_image",
+						"line_more" }, new int[] { R.id.line_name,
+						R.id.line_color, R.id.line_image, R.id.line_more });
 		adapter.setViewBinder(new SelectLinesBinder(this));
 		listView.setAdapter(adapter);
 	}
@@ -209,65 +158,44 @@ public class SelectLineActivity extends FragmentActivity implements
 		try {
 			setIntent(intent);
 			handleIntent(intent);
-		}
-		catch (Exception e) {
-			Log.w("SelectLineActivity",e);
+		} catch (Exception e) {
+			Log.w("SelectLineActivity", e);
 		}
 	}
 
 	@SuppressWarnings("deprecation")
 	private void handleIntent(Intent intent) {
-		String a=intent.getAction();
+		String a = intent.getAction();
 		if (VIEW.equals(a) || Intent.ACTION_VIEW.equals(a)) {
-			//store the query as a future suggestion
+			// store the query as a future suggestion
 			String query = intent.getData().toString();
 			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(
 					this, StationsProvider.AUTHORITY, StationsProvider.MODE);
 			suggestions.saveRecentQuery(query, null);
-			
-			//and launch the new activity
+
+			// and launch the new activity
 			Uri data = intent.getData();
-			char first=data.toString().charAt(0);
-			if (first>='0' && first <='9') {
-				String[] tokens=data.toString().split("_");
-				if (tokens.length<2) showDialog(FAILED_DIALOG);
-				else startBusDepartures(tokens[1], tokens[0]);
-			}
-			else {
-				String[] tokens=data.toString().split("_");
-				if (tokens.length<2) showDialog(FAILED_DIALOG);
-				Station s=new Station(tokens[0],tokens[1]);
+			char first = data.toString().charAt(0);
+			if (first >= '0' && first <= '9') {
+				String[] tokens = data.toString().split("_");
+				if (tokens.length < 2)
+					showDialog(FAILED_DIALOG);
+				else
+					startBusDepartures(tokens[1], tokens[0]);
+			} else {
+				String[] tokens = data.toString().split("_");
+				if (tokens.length < 2)
+					showDialog(FAILED_DIALOG);
+				Station s = new Station(tokens[0], tokens[1]);
 				startDepartures(s);
 			}
 		}
 	}
-	
-	private boolean hasNearby=false;
 
 	protected void onListItemClick(View v, int position, long id) {
 		try {
-			if (!hasNearby || position>=7) {
-				if (hasNearby && position>=7) position -= 6 + 1;
-				if (position==0) return;
-				// display a list of stations
-				String line_name = (String) lines_list.get(position).get(
-						"line_name");
-				Intent i = null;
-				if (line_name.equals(LinePresentation
-						.getStringRespresentation(LineType.BUSES))) {
-					i = new Intent(this, SelectBusStationActivity.class);
-				} else {
-					i = new Intent(this, SelectStationActivity.class);
-					i.putExtra("line", line_name);
-					i.putExtra("type", "departures");
-				}
-				startActivity(i);
-			} else {
-				// jump to departures
-				Station s = stationsList.get(position-1);
-				startDepartures(s);
-			}
-
+			Station s = stationsList.get(position);
+			startDepartures(s);
 		} catch (Exception e) {
 			Log.w("SelectLine", e);
 		}
@@ -320,25 +248,6 @@ public class SelectLineActivity extends FragmentActivity implements
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-	}
-	
-	private void displayLocation(List<Address> result) {
-		if (result == null || result.size() < 1) {
-			locationTextview.setText("");
-			locationAccuracyTextview.setText(("accuracy="
-					+ lastKnownLocation.getAccuracy() + "m"));
-		} else {
-			String geoc_result = result.get(0).getAddressLine(0);
-			locationTextview.setText(geoc_result);
-			locationAccuracyTextview.setText("accuracy="
-					+ lastKnownLocation.getAccuracy() + "m");
-		}
-	}
-
-	private void reverseGeocode(Location l) {
-		geocoder.abort();
-		geocoder = new ReverseGeocodeFetcher(this, l);
-		geocoder.registerCallback(geolocationObserver).update();
 	}
 
 }
