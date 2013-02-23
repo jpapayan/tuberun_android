@@ -53,7 +53,7 @@ public abstract class NearbyFetcher<C extends Locatable> extends Fetcher{
 		while (!result.isEmpty()) {
 			res.add(result.poll());
 		}
-		for (int i=0 ; i <= maxStations/2 ; i++) {
+		for (int i=0 ; i < maxStations/2 ; i++) {
 			C tmp=res.get(i);
 			res.set(i, res.get(maxStations-i-1));
 			res.set(maxStations-i-1, tmp);

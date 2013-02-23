@@ -92,7 +92,7 @@ public class LinesBusFetcher extends Fetcher {
 
 		@Override
 		protected void onPostExecute(HashMap<String,Integer> res) {
-			result = res;
+			result =  res;
 			if (!isCancelled()) {
 				notifyClients();
 			}

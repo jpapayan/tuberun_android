@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,15 +14,17 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
-import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.papagiannis.tuberun.R;
@@ -37,10 +38,10 @@ import com.papagiannis.tuberun.overlays.RouteOverlay;
 public class MeMapFragment extends Fragment implements
 		LocationListener {
 	
-	protected MapView mapView;
+	protected GoogleMap gMap;
 	protected MapController mapController;
 	protected LocationManager locationManager;
-	protected final GeoPoint gp_london = new GeoPoint(51501496, -124240);
+	protected final LatLng LONDON=new LatLng(51.501496,-0.124240);
 	protected static final int TWO_MINUTES = 1000 * 60 * 2;
 	private static final int LOCATION_SERVICE_FAILED = 0;
 	
@@ -58,29 +59,17 @@ public class MeMapFragment extends Fragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 	        Bundle savedInstanceState) {
 
-		View map = inflater.inflate(R.layout.me_map_fragment, container, false);
-		myLocationButton = (Button) map.findViewById(R.id.mylocation_button);
+		View fragment = inflater.inflate(R.layout.me_map_fragment, container, false);
+		myLocationButton = (Button) fragment.findViewById(R.id.mylocation_button);
 
-//		mapView = (MapView) map.findViewById(R.id.bus_mapview);
-//		mapView.setBuiltInZoomControls(true);
-//		mapOverlays = mapView.getOverlays();
-//
-//		// location stuff
-//		locationManager = (LocationManager) getActivity()
-//				.getSystemService(Context.LOCATION_SERVICE);
-//		requestLocationUpdates();
-//		mapController = mapView.getController();
-//		mapController.setZoom(16);
-//		myLocationButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				if (lastKnownLocation != null) {
-//					animateToHere(lastKnownLocation);
-//				}
-//			}
-//		});
-//
-//		lastKnownLocation = locationManager
+		gMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		if (gMap==null) return fragment;
+		
+		gMap.setMyLocationEnabled(true);
+		gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LONDON, 16));
+
+
+		//		lastKnownLocation = locationManager
 //				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 //		if (lastKnownLocation == null)
 //			lastKnownLocation = locationManager
@@ -99,7 +88,7 @@ public class MeMapFragment extends Fragment implements
 //			mapOverlays.add(myPushpin);
 //		}
 //		
-		return map;
+		return fragment;
 	}
 
 	public void onLocationChanged(Location l) {

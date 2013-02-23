@@ -130,11 +130,7 @@ public class SelectLineActivity extends FragmentActivity implements
 		emptyView.setVisibility(View.GONE);
 	}
 
-	private ArrayList<Station> nearbyPrevious = new ArrayList<Station>();
-
 	private void populate(ArrayList<Station> nearby) {
-		if (nearbyPrevious.size() != 0 && nearbyPrevious.equals(nearby))
-			return;
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 
 		for (Station s : nearby) {
@@ -142,13 +138,13 @@ public class SelectLineActivity extends FragmentActivity implements
 			m.put("line_name", s.getName());
 			m.put("line_color", null);
 			m.put("line_image", s.getIcon());
-			m.put("line_more", false);
+			m.put("line_distance", (int)s.getDistanceTo(lastKnownLocation));
 			list.add(m);
 		}
 		SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.line,
 				new String[] { "line_name", "line_color", "line_image",
-						"line_more" }, new int[] { R.id.line_name,
-						R.id.line_color, R.id.line_image, R.id.line_more });
+						"line_distance" }, new int[] { R.id.line_name,
+						R.id.line_color, R.id.line_image, R.id.line_distance });
 		adapter.setViewBinder(new SelectLinesBinder(this));
 		listView.setAdapter(adapter);
 	}

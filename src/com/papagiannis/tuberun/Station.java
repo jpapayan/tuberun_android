@@ -77,5 +77,4 @@ public class Station  extends AbstractLocatable {
 		return true;
 	}
 
-	
 }

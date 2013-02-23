@@ -74,6 +74,11 @@ public class AbstractLocatable  implements Locatable, Serializable {
 	public int getLatitudeE6() {
 		return latitude;
 	}
+	
+	@Override
+	public float getDistanceTo(Location l) {
+		return getLocation().distanceTo(l);
+	}
 
 	@Override
 	public String toString() {

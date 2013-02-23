@@ -31,16 +31,22 @@
         android:layout_gravity="center_vertical|left"
         android:textColor="@android:color/white"
         android:layout_weight="1"
-        android:textSize="16sp" >
-    </TextView>
+        android:textSize="16sp"
+        android:textIsSelectable="false"
+     />
     
-    <ImageView 
-        android:id="@+id/line_more"
+    <TextView
+        android:id="@+id/line_distance"
+        style="@style/WhiteText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|right"
-        android:background="@drawable/ic_ab_forward_holo_light"
+        android:layout_gravity="right|center_vertical"
         android:layout_marginRight="15dip"
-        />
+        android:drawablePadding="10dip"
+        android:drawableRight="@drawable/ic_ab_forward_holo_light"
+        android:text="300m"
+        android:textColor="@drawable/tuberun_grey_darker"
+        android:textSize="14sp" >
+    </TextView>
 
 </LinearLayout>

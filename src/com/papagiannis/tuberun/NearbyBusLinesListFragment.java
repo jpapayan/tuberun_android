@@ -43,6 +43,8 @@ public class NearbyBusLinesListFragment extends ListFragment implements
 	@Override
 	public void update() {
 		HashMap<String,Integer> routes=fetcher.getResult();
+		//This sorts results by line NAME, not distance.
+		//This makes life easier when a lot of lines are nearby.
 		routesSorted=sortRoutes(routes);
 		to_display = new ArrayList<HashMap<String, Object>>();
 		

@@ -57,9 +57,16 @@ public class SelectLinesBinder implements ViewBinder {
 				view.setBackgroundColor(LinePresentation.getBackgroundColor(l));
 			}
 		}
-		else if (view.getId()==R.id.line_more) {
-			Boolean b=(Boolean)o;
-			view.setVisibility( b? View.VISIBLE : View.GONE);
+		else if (view.getId() == R.id.line_distance) {
+			TextView tv=(TextView)view;
+			int i=(Integer) o;
+			if (i>10000) {
+				i=(i/1000);
+				tv.setText(i+" km");
+			}
+			else {
+				tv.setText(i+" m");
+			}
 		}
 		else {
 			TextView tv=(TextView) view;

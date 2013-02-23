@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="0dip"
     android:layout_weight="1" >
 
 	<fragment 
-  		android:id="@+id/bus_mapview"
+  		android:id="@+id/map"
+  		class="com.google.android.gms.maps.SupportMapFragment"
   		android:layout_width="fill_parent"
-  		android:layout_height="fill_parent"
-  		class="com.google.android.gms.maps.SupportMapFragment"/>
+  		android:layout_height="fill_parent"	/>
 
     <LinearLayout
         android:id="@+id/key_layout"
@@ -23,16 +24,5 @@
         android:orientation="vertical"
         android:padding="5dip"
         android:visibility="gone" />
-
-    <Button
-        android:id="@+id/mylocation_button"
-        style="@style/LocatemeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
-        android:layout_marginRight="15dip"
-        android:layout_marginTop="15dip"
-        android:minHeight="0dip"
-        android:minWidth="0dip" />
 
 </FrameLayout>
