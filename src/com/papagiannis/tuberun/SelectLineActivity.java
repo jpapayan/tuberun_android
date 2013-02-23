@@ -131,7 +131,7 @@ public class SelectLineActivity extends FragmentActivity implements
 	private boolean hasMoved=false;
 	@Override
 	public void onLocationChanged(Location l) {
-		if (SelectBusStationActivity.isBetterLocation(l, lastKnownLocation)) {
+		if (MeMapFragment.isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
 			fetcherStations.setLocation(l);
 			fetcherStations.update();

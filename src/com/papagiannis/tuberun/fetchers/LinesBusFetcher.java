@@ -67,10 +67,10 @@ public class LinesBusFetcher extends Fetcher {
 			DatabaseHelper myDbHelper = new DatabaseHelper(context);
 			try {
 				myDbHelper.openDataBase();
-				res = myDbHelper.getLinesNearby((long) (at[0].getLatitude()*1000000), (long) (at[0].getLongitude()*1000000));
+				res = myDbHelper.getRoutesNearby((long) (at[0].getLatitude()*1000000), (long) (at[0].getLongitude()*1000000));
 				for (String route:res.keySet()) {
 					if (!endpoints.containsKey(route)) {
-						ArrayList<ArrayList<BusStation>> stations = myDbHelper.getStopsForLine(route);
+						ArrayList<ArrayList<BusStation>> stations = myDbHelper.getStopsForRoute(route);
 						if (stations.size()>0 && stations.get(0).size()>=2) {
 							endpoints.put(route, 
 									new LineEndpoints(

@@ -80,7 +80,7 @@ public class RoutesBusFetcher extends Fetcher {
 				myDbHelper.openDataBase();
 				for (String route : routes[0]) {
 					ArrayList<ArrayList<BusStation>> stations = myDbHelper
-							.getStopsForLine(route);
+							.getStopsForRoute(route);
 					if (stations.size() > 0 && stations.get(0).size() >= 2) {
 						result.put(route, stations);
 					}

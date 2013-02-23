@@ -65,7 +65,7 @@ public class StationsBusFetcher extends Fetcher {
 			DatabaseHelper myDbHelper = new DatabaseHelper(context);
 			try {
 				myDbHelper.openDataBase();
-				res = myDbHelper.getStationsNearby((long) (at[0].getLatitude()*1000000), (long) (at[0].getLongitude()*1000000));
+				res = myDbHelper.getStopsNearby((long) (at[0].getLatitude()*1000000), (long) (at[0].getLongitude()*1000000));
 			} catch (Exception e) {
 				Log.w("StationsBusFetcher",e);
 			} finally {

@@ -147,7 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// You could return cursors by doing "return myDataBase.query(....)" so it'd
 	// be easy
 	// to you to create adapters for your views.
-	public ArrayList<BusStation> getStationsNearby(long latitude,
+	public ArrayList<BusStation> getStopsNearby(long latitude,
 			long longtitude) {
 		ArrayList<BusStation> res = new ArrayList<BusStation>();
 		long window = 6000;
@@ -170,7 +170,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return res;
 	}
 
-	public HashMap<String, Integer> getLinesNearby(long latitude,
+	public HashMap<String, Integer> getRoutesNearby(long latitude,
 			long longtitude) {
 		HashMap<String, Integer> res = new HashMap<String, Integer>();
 		Location me = new Location("");
@@ -207,7 +207,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return res;
 	}
 
-	public ArrayList<ArrayList<BusStation>> getStopsForLine(String line) {
+	public ArrayList<ArrayList<BusStation>> getStopsForRoute(String line) {
 		ArrayList<ArrayList<BusStation>> res = new ArrayList<ArrayList<BusStation>>(
 				2);
 		ArrayList<BusStation> run1 = new ArrayList<BusStation>();
@@ -253,11 +253,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	private String getTubeStationsQuery(String subtitle) {
-		return getBasicStationQuery(R.drawable.tube, subtitle) + "AND is_tube ";
+		return getBasicStationQuery(R.drawable.tube, subtitle) + "AND line=\"All\" ";
 	}
 	
 	private String getDLRStationsQuery(String subtitle) {
-		return getBasicStationQuery(R.drawable.dlr, subtitle)+" AND NOT is_tube ";
+		return getBasicStationQuery(R.drawable.dlr, subtitle)+" AND line=\"DLR\" ";
+	}
+	
+	private String getOvergroundStationsQuery(String subtitle) {
+		return getBasicStationQuery(R.drawable.dlr, subtitle)+" AND line=\"Overground\" ";
 	}
 	
 	private String getJPDestinationsQuery(int imageId, String subtitle, Boolean modifyNames) {
@@ -415,6 +419,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
 				RailStation s=new RailStation(c.getString(0));
+				s.setLatitude(c.getInt(2)).setLongtitude(c.getInt(1));
+				res.add(s);
+				c.moveToNext();
+			}
+			if (res.size()>5) return res;
+		}
+		return res;
+	}
+	
+	public ArrayList<Station> getTubeStationsNearby(long lat, long lng) {
+		long distance=40000;
+		ArrayList<Station> res = new ArrayList<Station>();
+		for (int i=0; i<4; i++,distance*=5) {
+			String query="SELECT DISTINCT stations.name, longtitude, latitude " +
+					"FROM stations, station_lines "+
+					"WHERE stations.name=station_lines.name AND "+
+						  "station_lines.line!=\"Rail\" AND " +
+						  "station_lines.line!=\"DLR\" AND " +
+						  "station_lines.line!=\"Overground\" AND " +
+						  "?<stations.longtitude AND stations.longtitude<? AND " +
+						  "?<stations.latitude AND stations.latitude<?";
+			res = new ArrayList<Station>();
+			String[] params=new String[] { Long.toString(lng-distance),
+					Long.toString(lng+distance),
+				    Long.toString(lat-distance), 
+				    Long.toString(lat+distance)};
+			Cursor c = myDataBase.rawQuery(query, params);
+			c.moveToFirst();
+			while (!c.isAfterLast()) {
+				Station s=new Station(c.getString(0));
 				s.setLatitude(c.getInt(2)).setLongtitude(c.getInt(1));
 				res.add(s);
 				c.moveToNext();
