@@ -23,10 +23,20 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.papagiannis.tuberun.binders.SelectLinesBinder;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.ReverseGeocodeFetcher;
+import com.papagiannis.tuberun.fetchers.StationsBusFetcher;
 import com.papagiannis.tuberun.fetchers.StationsTubeFetcher;
+import com.papagiannis.tuberun.fragments.MeMapFragment;
 
 public class SelectLineActivity extends FragmentActivity implements
 		OnClickListener, LocationListener, Observer {
@@ -37,18 +47,28 @@ public class SelectLineActivity extends FragmentActivity implements
 	protected EditText searchEditText;
 	private ListView listView;
 	private View emptyView;
+	protected GoogleMap gMap;
+	protected MeMapFragment mapFragment;
 
 	ArrayList<Station> stationsList = new ArrayList<Station>();
 
 	private LocationManager locationManager;
 	ReverseGeocodeFetcher geocoder = new ReverseGeocodeFetcher(this, null);
-	private StationsTubeFetcher fetcher = new StationsTubeFetcher(this);
+	private StationsTubeFetcher fetcherStations = new StationsTubeFetcher(this);
+	private StationsBusFetcher fetcherBusStops = new StationsBusFetcher(this);
+	private final Observer observerFetcherBusStops=new Observer() {
+		
+		@Override
+		public void update() {
+			updateBusStops();
+		}
+	}; 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		new SlidingBehaviour(this, R.layout.select_line);
-		fetcher.registerCallback(this);
+		
 		emptyView=findViewById(R.id.empty_layout);
 		emptyView.setVisibility(View.VISIBLE);
 		listView = (ListView) findViewById(R.id.nearby_stations_list);
@@ -60,7 +80,6 @@ public class SelectLineActivity extends FragmentActivity implements
 				onListItemClick(view, position, id);
 			}
 		});
-
 		searchButton = (Button) findViewById(R.id.search_station_button);
 		searchButton.setOnClickListener(new OnClickListener() {
 
@@ -69,6 +88,9 @@ public class SelectLineActivity extends FragmentActivity implements
 				onSearchRequested();
 			}
 		});
+		
+		fetcherStations.registerCallback(this);
+		fetcherBusStops.registerCallback(observerFetcherBusStops);
 
 		Intent intent = getIntent();
 		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -78,6 +100,8 @@ public class SelectLineActivity extends FragmentActivity implements
 		}
 		locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
+		gMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+		mapFragment=(MeMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 	}
 
 	@Override
@@ -85,8 +109,10 @@ public class SelectLineActivity extends FragmentActivity implements
 		super.onPause();
 		if (locationManager != null)
 			locationManager.removeUpdates(this);
-		fetcher.abort();
-		fetcher.deregisterCallback(this);
+		fetcherStations.abort();
+		fetcherStations.deregisterCallback(this);
+		fetcherBusStops.abort();
+		fetcherBusStops.deregisterCallback(observerFetcherBusStops);
 	}
 
 	@Override
@@ -94,20 +120,34 @@ public class SelectLineActivity extends FragmentActivity implements
 		super.onResume();
 		if (locationManager != null) {
 			requestLocationUpdates();
-			fetcher.registerCallback(this);
+			fetcherStations.registerCallback(this);
+			fetcherBusStops.registerCallback(observerFetcherBusStops);
 		}
 	}
 
 	// LocationListener Methods
 	private Location lastKnownLocation;
 
+	private boolean hasMoved=false;
 	@Override
 	public void onLocationChanged(Location l) {
 		if (SelectBusStationActivity.isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
-			fetcher.setLocation(l);
-			fetcher.update();
+			fetcherStations.setLocation(l);
+			fetcherStations.update();
+			
+			fetcherBusStops.setLocation(l);
+			fetcherBusStops.update();
+			if (!hasMoved) {
+				animateTo(l);
+				hasMoved=true;
+			}
 		}
+	}
+	
+	private void animateTo(Location l) {
+		if (l==null || gMap==null) return;
+		gMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(l.getLatitude(), l.getLongitude())));
 	}
 
 	private void requestLocationUpdates() {
@@ -125,12 +165,41 @@ public class SelectLineActivity extends FragmentActivity implements
 
 	@Override
 	public void update() {
-		stationsList = fetcher.getResult();
-		populate(stationsList);
+		stationsList = fetcherStations.getResult();
+		populateStationsList(stationsList);
 		emptyView.setVisibility(View.GONE);
 	}
+	
+	private ArrayList<BusStation> prevResult=new ArrayList<BusStation>();
+	public void updateBusStops() {
+		ArrayList<BusStation> result=fetcherBusStops.getResult();
+		if (result.size()==0) return;
+		if (prevResult.size()!=result.size()) { //a bit dangerous...
+			gMap.clear();
+			ArrayList<Marker> markers=new ArrayList<Marker>(result.size());
+	        for (BusStation s: result){
+	        	MarkerOptions opt=new MarkerOptions();
+	        	Location l=s.getLocation();
+	        	opt.title(s.getCode());
+	        	opt.snippet(s.getName()+" (moving "+s.getHeading()+")");
+	        	opt.position(new LatLng(l.getLatitude(),l.getLongitude()));
+	        	opt.icon(BitmapDescriptorFactory.fromResource(R.drawable.buses));
+	        	markers.add(gMap.addMarker(opt));
+	        }
+	        if (prevResult.size()==0) mapFragment.animateToMarkers(markers);
+		}
+		prevResult=result;
+		gMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+			
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				startBusDepartures(marker.getSnippet(), marker.getTitle());
+				return true;
+			}
+		});
+	}
 
-	private void populate(ArrayList<Station> nearby) {
+	private void populateStationsList(ArrayList<Station> nearby) {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 
 		for (Station s : nearby) {

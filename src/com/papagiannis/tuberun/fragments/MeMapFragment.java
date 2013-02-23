@@ -1,10 +1,8 @@
 package com.papagiannis.tuberun.fragments;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -23,28 +21,24 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.maps.GeoPoint;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.maps.MapController;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 import com.papagiannis.tuberun.R;
-import com.papagiannis.tuberun.overlays.HereOverlay;
-import com.papagiannis.tuberun.overlays.LocationItemizedOverlay;
-import com.papagiannis.tuberun.overlays.RouteOverlay;
 
 /*
  * A MapActivity that always shows the user's location
  */
-public class MeMapFragment extends Fragment implements
-		LocationListener {
-	
+public class MeMapFragment extends Fragment implements LocationListener {
+
 	protected GoogleMap gMap;
 	protected MapController mapController;
 	protected LocationManager locationManager;
-	protected final LatLng LONDON=new LatLng(51.501496,-0.124240);
+	protected final LatLng LONDON = new LatLng(51.501496, -0.124240);
 	protected static final int TWO_MINUTES = 1000 * 60 * 2;
 	private static final int LOCATION_SERVICE_FAILED = 0;
-	
+
 	protected Location lastKnownLocation;
 	protected Date started;
 	protected List<Overlay> mapOverlays;
@@ -56,38 +50,41 @@ public class MeMapFragment extends Fragment implements
 	protected Button myLocationButton;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
-	        Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 
-		View fragment = inflater.inflate(R.layout.me_map_fragment, container, false);
-		myLocationButton = (Button) fragment.findViewById(R.id.mylocation_button);
+		View fragment = inflater.inflate(R.layout.me_map_fragment, container,
+				false);
+		myLocationButton = (Button) fragment
+				.findViewById(R.id.mylocation_button);
 
-		gMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-		if (gMap==null) return fragment;
-		
+		gMap = ((SupportMapFragment) getFragmentManager().findFragmentById(
+				R.id.map)).getMap();
+		if (gMap == null)
+			return fragment;
+
 		gMap.setMyLocationEnabled(true);
 		gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LONDON, 16));
 
-
-		//		lastKnownLocation = locationManager
-//				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//		if (lastKnownLocation == null)
-//			lastKnownLocation = locationManager
-//					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//		if (lastKnownLocation != null) {
-//			myPushpin = generateMyLocationPushPin(lastKnownLocation);
-//			mapOverlays.add(myPushpin);
-//			animateToHere(lastKnownLocation);
-//		} else {
-//			Location l_london = new Location("");
-//			l_london.setLongitude(gp_london.getLongitudeE6() / (float) 1000000);
-//			l_london.setLatitude(gp_london.getLatitudeE6() / (float) 1000000);
-//			l_london.setAccuracy(200);
-//			lastKnownLocation = l_london;
-//			myPushpin = generateMyLocationPushPin(l_london);
-//			mapOverlays.add(myPushpin);
-//		}
-//		
+		// lastKnownLocation = locationManager
+		// .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		// if (lastKnownLocation == null)
+		// lastKnownLocation = locationManager
+		// .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		// if (lastKnownLocation != null) {
+		// myPushpin = generateMyLocationPushPin(lastKnownLocation);
+		// mapOverlays.add(myPushpin);
+		// animateToHere(lastKnownLocation);
+		// } else {
+		// Location l_london = new Location("");
+		// l_london.setLongitude(gp_london.getLongitudeE6() / (float) 1000000);
+		// l_london.setLatitude(gp_london.getLatitudeE6() / (float) 1000000);
+		// l_london.setAccuracy(200);
+		// lastKnownLocation = l_london;
+		// myPushpin = generateMyLocationPushPin(l_london);
+		// mapOverlays.add(myPushpin);
+		// }
+		//
 		return fragment;
 	}
 
@@ -95,93 +92,16 @@ public class MeMapFragment extends Fragment implements
 		if (isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
 
-			// show a here marker on the map
-			mapOverlays.remove(0);
-			myPushpin = generateMyLocationPushPin(l);
-			mapOverlays.add(0, myPushpin);
-			// mapView.postInvalidate();
 		}
 	}
 
-	private HereOverlay<OverlayItem> generateMyLocationPushPin(Location l) {
-		Drawable drawable = this.getResources().getDrawable(R.drawable.here_old);
-		HereOverlay<OverlayItem> hereo = new HereOverlay<OverlayItem>(drawable,
-				getActivity());
-		hereo.setAccuracy((int) l.getAccuracy());
-		GeoPoint point = new GeoPoint((int) (l.getLatitude() * 1000000),
-				(int) (l.getLongitude() * 1000000));
-		OverlayItem overlayitem = new OverlayItem(point, "You are here",
-				"Accuracy: " + (int) l.getAccuracy() + " meters");
-		hereo.addOverlay(overlayitem);
-		return hereo;
-	}
-
-	protected void animateToHere(Location animateTarget) {
-		if (animateTarget == null)
-			return;
-
-		GeoPoint gp = new GeoPoint(
-				(int) (animateTarget.getLatitude() * 1000000),
-				(int) (animateTarget.getLongitude() * 1000000));
-
-		if (animateTarget.getAccuracy() > 60) {
-			int delta = (int) animateTarget.getAccuracy() / 2;
-			delta *= 1000000;
-			int minLat = gp.getLatitudeE6() - delta / (1852 * 60);
-			int maxLat = gp.getLatitudeE6() + delta / (1852 * 60);
-			int minLon = gp.getLongitudeE6() - delta / (1852 * 60);
-			int maxLon = gp.getLongitudeE6() + delta / (1852 * 60);
-			double fitFactor = 1.1;
-			mapController.zoomToSpan(
-					(int) (Math.abs(maxLat - minLat) * fitFactor),
-					(int) (Math.abs(maxLon - minLon) * fitFactor));
-		} else {
-			mapController.setZoom(18);
+	public void animateToMarkers(Iterable<Marker> markers) {
+		if (markers == null) return;
+		LatLngBounds.Builder bc = new LatLngBounds.Builder();
+		for (Marker item : markers) {
+			bc.include(item.getPosition());
 		}
-		mapController.animateTo(gp);
-	}
-
-
-	@SuppressWarnings("unchecked")
-	protected void animateToWithOverlays(GeoPoint animateTarget) {
-		int minLat = Integer.MAX_VALUE;
-		int maxLat = Integer.MIN_VALUE;
-		int minLon = Integer.MAX_VALUE;
-		int maxLon = Integer.MIN_VALUE;
-
-		for (Overlay overlay : mapOverlays) {
-			try {
-				Iterable<GeoPoint> points=new ArrayList<GeoPoint>();
-				if (overlay instanceof RouteOverlay) {
-					RouteOverlay ro=(RouteOverlay)overlay;
-					points=ro.getPoints();
-				}
-				else if (overlay instanceof LocationItemizedOverlay) {
-					LocationItemizedOverlay<OverlayItem> lo = (LocationItemizedOverlay<OverlayItem>) overlay;
-					points=lo.getPoints();
-				}
-				for (GeoPoint gp : points) {
-					int lat = gp.getLatitudeE6();
-					int lon = gp.getLongitudeE6();
-
-					maxLat = Math.max(lat, maxLat);
-					minLat = Math.min(lat, minLat);
-					maxLon = Math.max(lon, maxLon);
-					minLon = Math.min(lon, minLon);
-				}
-			} catch (ClassCastException e) {
-				Log.w("MeMapActivity", e);
-			}
-		}
-		double fitFactor = 1.1;
-		mapController.zoomToSpan((int) (Math.abs(maxLat - minLat) * fitFactor),
-				(int) (Math.abs(maxLon - minLon) * fitFactor));
-		// mapController.zoomToSpan(Math.abs(maxLat - minLat), Math.abs(maxLon -
-		// minLon));
-		if (animateTarget == null)
-			animateTarget = new GeoPoint((maxLat + minLat) / 2,
-					(maxLon + minLon) / 2);
-		mapController.animateTo(animateTarget);
+		gMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bc.build(), 50));
 	}
 
 	/**
@@ -224,12 +144,12 @@ public class MeMapFragment extends Fragment implements
 		boolean isSignificantlyMoreAccurate = accuracyDelta < -10;
 
 		// Check if the old and new location are from the same provider
-//		boolean isFromSameProvider = isSameProvider(location.getProvider(),
-//				currentBestLocation.getProvider());
-		
-		float distance=location.distanceTo(currentBestLocation);
-		boolean hasMovedSignificantly=distance>5;
-		
+		// boolean isFromSameProvider = isSameProvider(location.getProvider(),
+		// currentBestLocation.getProvider());
+
+		float distance = location.distanceTo(currentBestLocation);
+		boolean hasMovedSignificantly = distance > 5;
+
 		if (isNewer && isSignificantlyMoreAccurate) {
 			return true;
 		}
@@ -248,32 +168,24 @@ public class MeMapFragment extends Fragment implements
 						LocationManager.GPS_PROVIDER, 3 * 1000, 5, this);
 			}
 		} catch (Exception e) {
-			Log.w("LocationService",e);
+			Log.w("LocationService", e);
 			showDialog(LOCATION_SERVICE_FAILED);
 		}
 	}
-	
+
 	protected void showDialog(int id) {
 		DialogFragment newFragment;
-		String title="";
-		String message="";
+		String title = "";
+		String message = "";
 		switch (id) {
 		case LOCATION_SERVICE_FAILED:
-			title="Location Service Failed";
-			message="Does you device support location services? Turn them on in the settings.";
+			title = "Location Service Failed";
+			message = "Does you device support location services? Turn them on in the settings.";
 			break;
 		}
-		newFragment=AlertDialogFragment.newInstance(title, message);
-	    newFragment.show(getFragmentManager(), "dialog");
+		newFragment = AlertDialogFragment.newInstance(title, message);
+		newFragment.show(getFragmentManager(), "dialog");
 	}
-
-	/** Checks whether two providers are the same */
-//	private static boolean isSameProvider(String provider1, String provider2) {
-//		if (provider1 == null) {
-//			return provider2 == null;
-//		}
-//		return provider1.equals(provider2);
-//	}
 
 	@Override
 	public void onPause() {
