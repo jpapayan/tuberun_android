@@ -10,13 +10,13 @@ import android.util.Log;
 import com.papagiannis.tuberun.DatabaseHelper;
 import com.papagiannis.tuberun.Station;
 
-public class StationsTubeFetcher extends BasicLocationFetcher {
-	private static final long serialVersionUID = 2L;
+public class NearbyStationsForDeparturesFetcher extends BasicLocationFetcher {
+	private static final long serialVersionUID = 1L;
 
-	public StationsTubeFetcher(Context c) {
+	public NearbyStationsForDeparturesFetcher(Context c) {
 		super(c);
 	}
-
+	
 	@Override
 	protected AsyncTask<Location, Integer, ArrayList<Station>> getTask(Context c) {
 		return new GetNearbyStationsTask(c);
@@ -38,12 +38,12 @@ public class StationsTubeFetcher extends BasicLocationFetcher {
 			DatabaseHelper myDbHelper = new DatabaseHelper(context);
 			try {
 				myDbHelper.openDataBase();
-				res = myDbHelper.getTubeStationsNearby(
+				res = myDbHelper.getEverythingNearbyForDepartures(
 						(long) (at[0].getLatitude() * 1000000),
 						(long) (at[0].getLongitude() * 1000000));
 				res = getNearbyStations(at[0], res, 8);
 			} catch (Exception e) {
-				Log.w("StationsTubeFetcher", e);
+				Log.w("NearbyStationsForDeparturesFetcher", e);
 			} finally {
 				myDbHelper.close();
 			}
@@ -52,12 +52,12 @@ public class StationsTubeFetcher extends BasicLocationFetcher {
 
 		@Override
 		protected void onPostExecute(ArrayList<Station> res) {
-			result = res;
 			if (!isCancelled()) {
 				notifyClients();
 			}
 		}
 
 	}
+
 
 }

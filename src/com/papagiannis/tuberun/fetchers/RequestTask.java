@@ -7,7 +7,6 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -74,11 +73,10 @@ public class RequestTask extends AsyncTask<String, String, String> {
 				responseString = out.toString(encoding);
 			} else {
 				// Closes the connection.
-				response.getEntity().getContent().close();
+				if (response!=null && response.getEntity()!=null) response.getEntity().getContent().close();
 				throw new IOException(statusLine.getReasonPhrase());
 			}
-		} catch (ClientProtocolException e) {
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Log.e("Fetcher","Fetching", e);
 		}
 		return responseString;

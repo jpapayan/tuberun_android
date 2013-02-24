@@ -32,10 +32,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.papagiannis.tuberun.binders.SelectLinesBinder;
+import com.papagiannis.tuberun.fetchers.NearbyStationsForDeparturesFetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.ReverseGeocodeFetcher;
 import com.papagiannis.tuberun.fetchers.StationsBusFetcher;
-import com.papagiannis.tuberun.fetchers.StationsTubeFetcher;
 import com.papagiannis.tuberun.fragments.MeMapFragment;
 
 public class SelectLineActivity extends FragmentActivity implements
@@ -54,7 +54,7 @@ public class SelectLineActivity extends FragmentActivity implements
 
 	private LocationManager locationManager;
 	ReverseGeocodeFetcher geocoder = new ReverseGeocodeFetcher(this, null);
-	private StationsTubeFetcher fetcherStations = new StationsTubeFetcher(this);
+	private NearbyStationsForDeparturesFetcher fetcherStations = new NearbyStationsForDeparturesFetcher(this);
 	private StationsBusFetcher fetcherBusStops = new StationsBusFetcher(this);
 	private final Observer observerFetcherBusStops=new Observer() {
 		

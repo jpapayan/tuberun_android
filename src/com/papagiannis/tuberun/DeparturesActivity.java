@@ -8,8 +8,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -22,6 +24,8 @@ import com.papagiannis.tuberun.favorites.DeparturesFavorite;
 import com.papagiannis.tuberun.favorites.Favorite;
 import com.papagiannis.tuberun.fetchers.DeparturesDLRFetcher;
 import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
+import com.papagiannis.tuberun.fetchers.DeparturesTubeFetcher;
+import com.papagiannis.tuberun.fetchers.DeparturesOvergroundFetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.StationStatusesFetcher;
 
@@ -77,13 +81,50 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
     		stationcode=station.getCode();
     		stationnice=station.getName();
     		stationTextView.setVisibility(View.GONE);
-    		List<LineType> ls=station.getLinesForDepartures();
-    		if (ls.size()>1) showDialog(ASK_LINE_DIALOG);
-    		else if (ls.size()==1) {
-    			lt=ls.get(0);
+    		
+    		List<LineType> lines = station.getLinesForDepartures();
+    		//this should not happen
+			if (lines.size()==0) return;
+			//this is the case for overground, dlr and rail stations
+    		if (lines.size()==1 && !station.locatedOn(LineType.ALL)) {
+    			lt=lines.get(0);
     			showDepartures();
+    			return;
     		}
-    		//else no departures
+    		//Now the user has to select which tube line he wants to see
+    		AsyncTask<Station, Integer, ArrayList<LineType>> findLinesTask=new AsyncTask<Station, Integer, ArrayList<LineType>>(){
+
+				@Override
+				protected ArrayList<LineType> doInBackground(Station... stations) {
+					if (stations==null || stations.length==0) return new ArrayList<LineType>();
+					DatabaseHelper myDbHelper = new DatabaseHelper(DeparturesActivity.this);
+					ArrayList<LineType> ls=new ArrayList<LineType>();
+					try {
+						myDbHelper.openDataBase();
+						ls = myDbHelper.getDepartureLinesForTubeStation(stations[0]);
+						station.clearLineTypesForDepartures();
+						station.addLineTypesForDepartures(ls);
+					} catch (Exception e) {
+						Log.w("DeparturesActivity", e);
+					} finally {
+						myDbHelper.close();
+					}
+					return ls;
+				}
+				
+				@Override
+				protected void onPostExecute(ArrayList<LineType> ls) {
+					if (ls.size()>1) {
+		    			showDialog(ASK_LINE_DIALOG);
+		    		}
+		    		else if (ls.size()==1) {
+		    			lt=ls.get(0);
+		    			showDepartures();
+		    		}
+				}
+    		};
+    		findLinesTask.execute(station);
+    		
     	}
     	else {
     		String line = (String)extras.get("line");
@@ -101,7 +142,8 @@ public class DeparturesActivity extends ListActivity implements Observer, OnClic
 		stationTextView.setVisibility(View.VISIBLE);
     	
 		if (lt==LineType.DLR) departuresFetcher=new DeparturesDLRFetcher(lt, stationcode, stationnice);
-		else departuresFetcher=new DeparturesFetcher(lt, stationcode, stationnice);
+		else if (lt==LineType.OVERGROUND) departuresFetcher = new DeparturesOvergroundFetcher(stationcode,stationnice);
+		else departuresFetcher=new DeparturesTubeFetcher(lt, stationcode, stationnice);
 		
 		departuresFetcher.registerCallback(this);
 		emptyTextView.setVisibility(View.GONE);

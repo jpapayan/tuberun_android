@@ -1,13 +1,15 @@
 package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import android.location.Location;
 
 public class Station  extends AbstractLocatable {
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 	
 	public Station(String name) {
 		super(name);
@@ -32,7 +34,38 @@ public class Station  extends AbstractLocatable {
 		this.code = code;
 	}
 	
+	private int icon=-1;
+	public void setIcon(int icon) {
+		this.icon=icon;
+	}
+	public void setIcon(LineType lt) {
+		if (lt==LineType.DLR) icon=R.drawable.dlr;
+		else if (lt==LineType.RAIL) icon=R.drawable.rail;
+		else if (lt==LineType.OVERGROUND) icon=R.drawable.overground;
+		else icon=R.drawable.tube;
+	}
+	
+	private HashSet<LineType> linetypes=new HashSet<LineType>();
+	public void clearLineTypesForDepartures(){
+		linetypes.clear();
+	}
+	public void addLineTypeForDepartures(LineType lt) {
+		linetypes.add(lt);
+	}
+	public void addLineTypesForDepartures(Collection<LineType> lts) {
+		linetypes.addAll(lts);
+	}
+	public ArrayList<LineType> getLinesForDepartures() {
+		return new ArrayList<LineType>(linetypes);
+	}
+	public boolean locatedOn(LineType lt){
+		return linetypes.contains(lt);
+	}
+	
+	
 	public Integer getIcon() {
+		if (icon>=0) return icon;
+		//TODO don't use this stupid code below
 		List<LineType> all = StationDetails.FetchLinesForStationWikipedia(getName());
 		return (all.contains(LineType.DLR)) ? R.drawable.dlr : R.drawable.tube;
 	}
@@ -46,10 +79,6 @@ public class Station  extends AbstractLocatable {
 			if (all.containsKey(name)) result=all.get(name);
 		}
 		return result;
-	}
-
-	public List<LineType> getLinesForDepartures() {
-		return StationDetails.FetchLinesForStation(name);
 	}
 
 	@Override

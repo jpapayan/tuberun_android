@@ -76,7 +76,7 @@ public enum LineType
 			ln = LineType.METROPOLITAN;
 		else if (name.equalsIgnoreCase("northern"))
 			ln = LineType.NORTHERN;
-		else if (name.equalsIgnoreCase("piccadilly"))
+		else if (name.equalsIgnoreCase("piccadilly") || name.equalsIgnoreCase("piccadily"))
 			ln = LineType.PICACIDILY;
 		else if (name.equalsIgnoreCase("victoria"))
 			ln = LineType.VICTORIA;

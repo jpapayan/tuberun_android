@@ -3,6 +3,7 @@ package com.papagiannis.tuberun.binders;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.papagiannis.tuberun.favorites.DeparturesFavorite;
 import com.papagiannis.tuberun.favorites.Favorite;
 import com.papagiannis.tuberun.fetchers.DeparturesDLRFetcher;
 import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
+import com.papagiannis.tuberun.fetchers.DeparturesOvergroundFetcher;
+import com.papagiannis.tuberun.fetchers.DeparturesTubeFetcher;
 
 public class DeparturesBinder implements ViewBinder, OnClickListener {
 
@@ -39,6 +42,7 @@ public class DeparturesBinder implements ViewBinder, OnClickListener {
 	String last_platform;
 	HashMap<View,String> togglebutton_platforms=new HashMap<View, String>();
 	
+	@SuppressLint("DefaultLocale")
 	@Override
 	public boolean setViewValue(View view, Object o, String s) {
 
@@ -82,7 +86,8 @@ public class DeparturesBinder implements ViewBinder, OnClickListener {
 			String p=togglebutton_platforms.get(v);
 			DeparturesFetcher f;
 			if (lt.equals(LineType.DLR)) f=new DeparturesDLRFetcher(lt, station_code, station_nice);
-			else f=new DeparturesFetcher(lt,station_code,station_nice);
+			if (lt.equals(LineType.OVERGROUND)) f=new DeparturesOvergroundFetcher(station_code, station_nice);
+			else f=new DeparturesTubeFetcher(lt,station_code,station_nice);
 			DeparturesFavorite fav=new  DeparturesFavorite(lt,f);
 			fav.setIdentification(station_code);
 			fav.setStation_nice(station_nice);
@@ -93,7 +98,8 @@ public class DeparturesBinder implements ViewBinder, OnClickListener {
 			String p=togglebutton_platforms.get(v);
 			DeparturesFetcher f;
 			if (lt.equals(LineType.DLR)) f=new DeparturesDLRFetcher(lt, station_code, station_nice);
-			else f=new DeparturesFetcher(lt,station_code,station_nice);
+			if (lt.equals(LineType.OVERGROUND)) f=new DeparturesOvergroundFetcher(station_code, station_nice);
+			else f=new DeparturesTubeFetcher(lt,station_code,station_nice);
 			DeparturesFavorite fav=new  DeparturesFavorite(lt,f);
 			fav.setIdentification(station_code);
 			fav.setStation_nice(station_nice);

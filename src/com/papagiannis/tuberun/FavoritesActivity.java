@@ -23,7 +23,6 @@ import com.papagiannis.tuberun.binders.FavoritesBinder;
 import com.papagiannis.tuberun.favorites.DeparturesFavorite;
 import com.papagiannis.tuberun.favorites.Favorite;
 import com.papagiannis.tuberun.fetchers.BusDeparturesFetcher;
-import com.papagiannis.tuberun.fetchers.DeparturesDLRFetcher;
 import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
 import com.papagiannis.tuberun.fetchers.Fetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
@@ -138,7 +137,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 			Fetcher f = fav.getFetcher();
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("index", Integer.toString(fav_index++));
-			if ((f instanceof DeparturesFetcher) || (f instanceof DeparturesDLRFetcher)) {
+			if (f instanceof DeparturesFetcher) {
 				DeparturesFetcher fetcher = (DeparturesFetcher) f;
 				String platform = ((DeparturesFavorite) fav).getPlatform();
 				ArrayList<HashMap<String, String>> trains = fetcher

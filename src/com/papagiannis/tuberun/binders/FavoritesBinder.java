@@ -24,7 +24,7 @@ import com.papagiannis.tuberun.favorites.DeparturesFavorite;
 import com.papagiannis.tuberun.favorites.Favorite;
 import com.papagiannis.tuberun.fetchers.BusDeparturesFetcher;
 import com.papagiannis.tuberun.fetchers.DeparturesDLRFetcher;
-import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
+import com.papagiannis.tuberun.fetchers.DeparturesTubeFetcher;
 import com.papagiannis.tuberun.fetchers.Fetcher;
 import com.papagiannis.tuberun.fetchers.StatusesFetcher;
 
@@ -125,7 +125,7 @@ public class FavoritesBinder implements ViewBinder, OnClickListener {
 		try {
 			Favorite fav=Favorite.getFavorites(activity).get(i);
 			Fetcher f= fav.getFetcher();
-			if ((f instanceof DeparturesFetcher) || (f instanceof DeparturesDLRFetcher)) {
+			if ((f instanceof DeparturesTubeFetcher) || (f instanceof DeparturesDLRFetcher)) {
 				DeparturesFavorite dfav=(DeparturesFavorite) fav;
 				showTubeDepartures(fav.getLine(), fav.getIdentification(), dfav.getStation_nice());
 			}

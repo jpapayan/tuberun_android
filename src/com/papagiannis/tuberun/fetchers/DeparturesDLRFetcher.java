@@ -2,7 +2,6 @@ package com.papagiannis.tuberun.fetchers;
 
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -25,16 +24,14 @@ import android.util.Log;
 import com.papagiannis.tuberun.LinePresentation;
 import com.papagiannis.tuberun.LineType;
 
-public class DeparturesDLRFetcher extends DeparturesFetcher {
-	private static final long serialVersionUID = 1L;
+public class DeparturesDLRFetcher extends DeparturesTubeFetcher {
+	private static final long serialVersionUID = 3L;
 	public static final String none_msg = "";
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
-	private Date last_update = new Date();
 	protected int update_counter = 0;
 	protected String line, station_code, station_nice;
 	protected transient RequestTask task;
 	protected XMLDeserialiserTask deserialiserTask;
-	private String error = "";
 
 	protected ArrayList<HashMap<String, String>> departures = new ArrayList<HashMap<String, String>>();
 
@@ -294,7 +291,6 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 		protected void onPostExecute(ArrayList<HashMap<String, String>> result) {
 			if (isCancelled())
 				return;
-			last_update = new Date();
 			departures = result;
 			notifyClients();
 			isFirst.set(true);
@@ -302,43 +298,10 @@ public class DeparturesDLRFetcher extends DeparturesFetcher {
 	}
 
 	@Override
-	public Date getUpdateTime() {
-		return new Date(last_update.getTime());
-	}
-
-	public HashMap<String, ArrayList<HashMap<String, String>>> getDepartures() {
-		HashMap<String, ArrayList<HashMap<String, String>>> categorised = new HashMap<String, ArrayList<HashMap<String, String>>>();
-		for (HashMap<String, String> train : departures) {
-			String platform=train.get("platform");
-			if (!categorised.containsKey(platform)) {
-				categorised.put(platform,
-						new ArrayList<HashMap<String, String>>());
-			}
-			categorised.get(train.get("platform")).add(train);
-		}
-		return categorised;
-
-	}
-
-	public ArrayList<HashMap<String, String>> getDepartures(String platform) {
-		ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
-		for (HashMap<String, String> d : departures) {
-			if (d.get("platform").equalsIgnoreCase(platform)) {
-				result.add(d);
-			}
-		}
-		return result;
-	}
-	
-	@Override
     public void abort() {
 		isFirst.set(true);
     	if (task!=null) task.cancel(true);
     	if (deserialiserTask!=null) deserialiserTask.cancel(true);
     }
 	
-	public String getError() {
-		return error;
-	}
-
 }

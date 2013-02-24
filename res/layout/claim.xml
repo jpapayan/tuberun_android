@@ -25,16 +25,16 @@
                 android:layout_height="48dip"
                 android:background="#99000000"
                 android:orientation="horizontal" >
-
+
                 <Button
                     android:id="@+id/back_button"
                     style="@style/BackButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="0"
                     android:minHeight="0dip"
-                    android:minWidth="0dip"
-                    android:layout_gravity="center_vertical" />
+                    android:minWidth="0dip" />
 
                 <Button
                     android:id="@+id/logo_button"
@@ -172,8 +172,8 @@
                         android:id="@+id/journey_tab"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dip"
                         android:layout_gravity="center_horizontal"
+                        android:layout_margin="16dip"
                         android:orientation="vertical"
                         android:visibility="gone" >
 
@@ -188,26 +188,25 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_marginTop="5dip"
                             android:layout_marginLeft="16dip"
                             android:layout_marginRight="16dip"
-                            android:inputType="time"/>
+                            android:layout_marginTop="5dip"
+                            android:inputType="time" />
 
                         <TextView
                             style="@style/WhiteText"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dip"
-                            android:text="At which station did you start your journey?"
-                        />
+                            android:text="At which station did you start your journey?" />
 
                         <Spinner
                             android:id="@+id/claim_journey_startstation"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dip"
                             android:layout_marginLeft="16dip"
-                            android:layout_marginRight="16dip" />
+                            android:layout_marginRight="16dip"
+                            android:layout_marginTop="5dip" />
 
                         <TextView
                             style="@style/WhiteText"
@@ -220,9 +219,9 @@
                             android:id="@+id/claim_journey_lineused"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dip"
                             android:layout_marginLeft="16dip"
-                            android:layout_marginRight="16dip" />
+                            android:layout_marginRight="16dip"
+                            android:layout_marginTop="5dip" />
 
                         <TextView
                             style="@style/WhiteText"
@@ -258,11 +257,10 @@
                                 style="@style/WhiteText"
                                 android:layout_width="0dip"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
                                 android:gravity="center_vertical"
-                                android:text="When did the delay occur?"
-                            />
+                                android:text="When did the delay occur?" />
 
                             <Button
                                 android:id="@+id/claim_delay_when"
@@ -270,21 +268,21 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:gravity="center"
-                                android:inputType="time"/>
+                                android:inputType="time" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="16dip" >
+                            android:layout_marginTop="16dip"
+                            android:orientation="horizontal" >
 
                             <TextView
                                 style="@style/WhiteText"
                                 android:layout_width="0dip"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
                                 android:gravity="center_vertical"
                                 android:text="How long did the delay last?" />
 
@@ -295,13 +293,13 @@
                                 android:layout_gravity="center"
                                 android:gravity="center" />
                         </LinearLayout>
-                        
+
                         <TextView
-                                style="@style/WhiteText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="16dip"
-                                android:text="Where were you delayed?" />
+                            style="@style/WhiteText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dip"
+                            android:text="Where were you delayed?" />
 
                         <TableLayout
                             android:layout_width="fill_parent"
@@ -395,10 +393,10 @@
                         android:visibility="gone" >
 
                         <TextView
+                            style="@style/WhiteText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Personal data"
-                            style="@style/WhiteText" >
+                            android:text="Personal data" >
                         </TextView>
 
                         <LinearLayout
@@ -410,12 +408,12 @@
                             android:paddingTop="5dip" >
 
                             <TextView
+                                style="@style/WhiteText"
                                 android:layout_width="100dip"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_vertical"
-                                android:text="Title"
-                                style="@style/WhiteText" />
+                                android:text="Title" />
 
                             <Spinner
                                 android:id="@+id/claim_personal_title"
@@ -434,12 +432,12 @@
                             android:paddingTop="5dip" >
 
                             <TextView
+                                style="@style/WhiteText"
                                 android:layout_width="100dip"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_vertical"
-                                android:text="Surname"
-                                style="@style/WhiteText" />
+                                android:text="Surname" />
 
                             <EditText
                                 android:id="@+id/claim_personal_surname"
@@ -472,11 +470,11 @@
                         </LinearLayout>
 
                         <TextView
+                            style="@style/WhiteText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingTop="16dip"
-                            android:text="Address"
-                            style="@style/WhiteText" >
+                            android:text="Address" >
                         </TextView>
 
                         <LinearLayout
@@ -660,21 +658,21 @@
                         android:visibility="gone" >
 
                         <TextView
+                            style="@style/WhiteText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ticket Type"
-                            style="@style/WhiteText" >
+                            android:text="Ticket Type" >
                         </TextView>
 
                         <Spinner
                             android:id="@+id/ticket_type_spinner"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:entries="@array/ticket_type_spinner"
-                            android:orientation="horizontal"
                             android:layout_marginLeft="16dip"
                             android:layout_marginRight="16dip"
-                            android:layout_marginTop="5dip" >
+                            android:layout_marginTop="5dip"
+                            android:entries="@array/ticket_type_spinner"
+                            android:orientation="horizontal" >
                         </Spinner>
 
                         <LinearLayout
@@ -685,20 +683,20 @@
                             android:paddingTop="16dip" >
 
                             <TextView
+                                style="@style/WhiteText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dip"
-                                android:text="Oyster details"
-                                style="@style/WhiteText" >
+                                android:text="Oyster details" >
                             </TextView>
 
                             <FrameLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
-                                android:gravity="center"
                                 android:layout_marginLeft="16dip"
-                                android:layout_marginRight="16dip" >
+                                android:layout_marginRight="16dip"
+                                android:gravity="center" >
 
                                 <ImageView
                                     android:layout_width="wrap_content"
@@ -719,16 +717,16 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dip"
-                                android:text="Oyster number"/>
+                                android:text="Oyster number" />
 
                             <EditText
                                 android:id="@+id/claim_ticket_oyster_number"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="number"
                                 android:layout_marginLeft="16dip"
                                 android:layout_marginRight="16dip"
-                                android:layout_marginTop="5dip" />
+                                android:layout_marginTop="5dip"
+                                android:inputType="number" />
 
                             <TextView
                                 style="@style/WhiteText"
@@ -741,10 +739,10 @@
                                 android:id="@+id/claim_ticket_oyster_card_type"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:entries="@array/oyster_card_type_spinner"
                                 android:layout_marginLeft="16dip"
                                 android:layout_marginRight="16dip"
-                                android:layout_marginTop="5dip" />
+                                android:layout_marginTop="5dip"
+                                android:entries="@array/oyster_card_type_spinner" />
 
                             <TextView
                                 style="@style/WhiteText"
@@ -757,10 +755,10 @@
                                 android:id="@+id/claim_ticket_oyster_ticket_type"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:entries="@array/oyster_ticket_type_spinner"
                                 android:layout_marginLeft="16dip"
                                 android:layout_marginRight="16dip"
-                                android:layout_marginTop="5dip" />
+                                android:layout_marginTop="5dip"
+                                android:entries="@array/oyster_ticket_type_spinner" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -772,10 +770,10 @@
                             android:visibility="gone" >
 
                             <TextView
+                                style="@style/WhiteText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="TfL travelcard details"
-                                style="@style/WhiteText" >
+                                android:text="TfL travelcard details" >
                             </TextView>
 
                             <TableLayout
@@ -855,10 +853,10 @@
                                 android:id="@+id/claim_ticket_tfl_number"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="number"
                                 android:layout_marginLeft="16dip"
                                 android:layout_marginRight="16dip"
-                                android:layout_marginTop="5dip" />
+                                android:layout_marginTop="5dip"
+                                android:inputType="number" />
 
                             <TextView
                                 style="@style/WhiteText"
@@ -880,7 +878,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dip"
-                                android:text="Station where the ticket was retained (if so)"/>
+                                android:text="Station where the ticket was retained (if so)" />
 
                             <EditText
                                 android:id="@+id/claim_ticket_tfl_retainedstn"
@@ -901,10 +899,10 @@
                                 android:id="@+id/claim_ticket_tfl_duration"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:entries="@array/tfl_duration_spinner"
                                 android:layout_marginLeft="16dip"
                                 android:layout_marginRight="16dip"
-                                android:layout_marginTop="5dip" />
+                                android:layout_marginTop="5dip"
+                                android:entries="@array/tfl_duration_spinner" />
 
                             <TextView
                                 style="@style/WhiteText"
@@ -917,9 +915,9 @@
                                 android:id="@+id/claim_ticket_tfl_type"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:entries="@array/oyster_card_type_spinner"
                                 android:layout_marginLeft="16dip"
                                 android:layout_marginRight="16dip"
+                                android:entries="@array/oyster_card_type_spinner"
                                 android:paddingTop="5dip" />
                         </LinearLayout>
 
@@ -931,11 +929,11 @@
                             android:visibility="gone" >
 
                             <TextView
+                                style="@style/WhiteText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dip"
-                                android:text="National Rail Travelcard details"
-                                style="@style/WhiteText" >
+                                android:text="National Rail Travelcard details" >
                             </TextView>
 
                             <TableLayout
@@ -990,8 +988,8 @@
                             <LinearLayout
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginTop="16dip" >
+                                android:layout_marginTop="16dip"
+                                android:orientation="horizontal" >
 
                                 <TextView
                                     style="@style/WhiteText"
@@ -1018,7 +1016,7 @@
                                     android:layout_width="150dip"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
-                                    android:text="Valid until"/>
+                                    android:text="Valid until" />
 
                                 <Button
                                     android:id="@+id/claim_ticket_rail_validuntil"
@@ -1038,7 +1036,7 @@
                                     android:layout_width="150dip"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
-                                    android:text="Ticket number"/>
+                                    android:text="Ticket number" />
 
                                 <EditText
                                     android:id="@+id/claim_ticket_rail_number"
@@ -1051,8 +1049,8 @@
                             <LinearLayout
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginTop="16dip" >
+                                android:layout_marginTop="16dip"
+                                android:orientation="horizontal" >
 
                                 <TextView
                                     style="@style/WhiteText"
@@ -1080,7 +1078,7 @@
                                     android:layout_width="150dip"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
-                                    android:text="Travelcard type"/>
+                                    android:text="Travelcard type" />
 
                                 <Spinner
                                     android:id="@+id/claim_ticket_rail_type"

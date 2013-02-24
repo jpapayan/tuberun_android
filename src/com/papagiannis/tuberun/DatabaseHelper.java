@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -18,10 +19,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-
 	// The Android's default system path of your application database.
 	private static String DB_PATH = "/data/data/com.papagiannis.tuberun/databases/";
 	private static String DB_NAME = "busstops.db";
+	private static String DB_FULL_NAME=DB_PATH+DB_NAME;
 	private SQLiteDatabase myDataBase;
 	private final Context myContext;
 
@@ -32,8 +33,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	 * @param context
 	 */
 	public DatabaseHelper(Context context) {
-
 		super(context, DB_NAME, null, 1);
+		if (context!=null) { //TODO: it should always be like that!
+			DB_FULL_NAME=context.getDatabasePath(DB_NAME).getAbsolutePath();
+		}
 		this.myContext = context;
 	}
 
@@ -52,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		InputStream myInput = myContext.getAssets().open(DB_NAME);
 
 		// Path to the just created empty db
-		String outFileName = DB_PATH + DB_NAME;
+		String outFileName = DB_FULL_NAME;
 
 		// Open the empty db as the output stream
 		OutputStream myOutput = new FileOutputStream(outFileName);
@@ -260,10 +263,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return getBasicStationQuery(R.drawable.dlr, subtitle)+" AND line=\"DLR\" ";
 	}
 	
-	private String getOvergroundStationsQuery(String subtitle) {
-		return getBasicStationQuery(R.drawable.dlr, subtitle)+" AND line=\"Overground\" ";
-	}
-	
 	private String getJPDestinationsQuery(int imageId, String subtitle, Boolean modifyNames) {
 		String m1="";
 		String m2="";
@@ -458,6 +457,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return res;
 	}
 
+	public ArrayList<Station> getEverythingNearbyForDepartures(long lat, long lng) {
+		long distance=40000;
+		ArrayList<Station> res = new ArrayList<Station>();
+		for (int i=0; i<4; i++,distance*=5) {
+			String query="SELECT stations.name, longtitude, latitude, line, code " +
+					"FROM stations, station_departures_code "+
+					"WHERE stations.name=station_departures_code.name AND "+
+						  "station_departures_code.line!=\"Rail\" AND " +
+						  "?<stations.longtitude AND stations.longtitude<? AND " +
+						  "?<stations.latitude AND stations.latitude<?";
+			res = new ArrayList<Station>();
+			String[] params=new String[] { Long.toString(lng-distance),
+					Long.toString(lng+distance),
+				    Long.toString(lat-distance), 
+				    Long.toString(lat+distance)};
+			Cursor c = myDataBase.rawQuery(query, params);
+			c.moveToFirst();
+			while (!c.isAfterLast()) {
+				LineType lt=LineType.fromString(c.getString(3));
+//				if (lt==LineType.RAIL) continue;
+				Station s=new Station(c.getString(0));
+				s.setIcon(lt);
+				s.addLineTypeForDepartures(lt);
+				s.setCode(c.getString(4));
+				s.setLatitude(c.getInt(2)).setLongtitude(c.getInt(1));
+				res.add(s);
+				c.moveToNext();
+			}
+			if (res.size()>5) return res;
+		}
+		return res;
+	}
+	
+	public ArrayList<LineType> getDepartureLinesForTubeStation(Station station) {
+		ArrayList<LineType> result=new ArrayList<LineType>();
+		if (station==null) return result; 
+		
+		String query="SELECT line " +
+				"FROM station_lines "+
+				"WHERE name=? AND "+
+					  "line!=\"Rail\" AND " +
+					  "line!=\"DLR\" AND " +
+					  "line!=\"Overground\"";
+		Cursor c = myDataBase.rawQuery(query, new String[]{station.getName()});
+		c.moveToFirst();
+		while (!c.isAfterLast()) {
+			LineType lt=LineType.fromString(c.getString(0));
+			result.add(lt);
+			c.moveToNext();
+		}
+		return result;
+	}
+
+	
 	public int getVersion() {
 		int res = 1;
 		Cursor c = myDataBase.rawQuery("SELECT version "
