@@ -19,11 +19,11 @@ import android.widget.ToggleButton;
 import com.papagiannis.tuberun.binders.BusDeparturesBinder;
 import com.papagiannis.tuberun.favorites.DeparturesFavorite;
 import com.papagiannis.tuberun.favorites.Favorite;
-import com.papagiannis.tuberun.fetchers.BusDeparturesFetcher;
+import com.papagiannis.tuberun.fetchers.DeparturesBusFetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
 
 public class BusDeparturesActivity extends ListActivity implements Observer, OnClickListener {
-	private BusDeparturesFetcher fetcher;
+	private DeparturesBusFetcher fetcher;
 	private final ArrayList<HashMap<String,Object>> departures_list=new ArrayList<HashMap<String,Object>>();
 	private String code;
 	private String name;
@@ -70,7 +70,7 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 		name = (String) extras.get("name");
 		lineTextView.setText(name.toUpperCase());
     	
-		fetcher=new BusDeparturesFetcher(code,name);
+		fetcher=new DeparturesBusFetcher(code,name);
 		fetcher.registerCallback(this);
 		fetcher.update();
 		
@@ -87,7 +87,7 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
         });
         
         ToggleButton favButton = (ToggleButton) findViewById(R.id.add_favorite);
-        DeparturesFavorite fav=new  DeparturesFavorite(LineType.BUSES,new BusDeparturesFetcher(code,name));
+        DeparturesFavorite fav=new  DeparturesFavorite(LineType.BUSES,new DeparturesBusFetcher(code,name));
 		fav.setIdentification(code);
 		favButton.setChecked(Favorite.isFavorite(fav));
         favButton.setOnClickListener(this);
@@ -139,19 +139,19 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 	public void onClick(View v) {
 		ToggleButton tb=(ToggleButton)v;
 		if (tb.isChecked()) {
-			DeparturesFavorite fav=new  DeparturesFavorite(LineType.BUSES,new BusDeparturesFetcher(code,name));
+			DeparturesFavorite fav=new  DeparturesFavorite(LineType.BUSES,new DeparturesBusFetcher(code,name));
 			fav.setStation_nice(name);
 			fav.setIdentification(code);
 			Favorite.addFavorite(fav, this);
 		}
 		else {
-			DeparturesFavorite fav=new  DeparturesFavorite(LineType.BUSES,new BusDeparturesFetcher(code,name));
+			DeparturesFavorite fav=new  DeparturesFavorite(LineType.BUSES,new DeparturesBusFetcher(code,name));
 			fav.setIdentification(code);
 			fav.setStation_nice(name);
 			Favorite.removeFavorite(fav, this);
 			
 			//also try this without station_nice for compatibility before 1.2.3
-			fav=new  DeparturesFavorite(LineType.BUSES,new BusDeparturesFetcher(code,name));
+			fav=new  DeparturesFavorite(LineType.BUSES,new DeparturesBusFetcher(code,name));
 			fav.setIdentification(code);
 			Favorite.removeFavorite(fav, this);
 		}

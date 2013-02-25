@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -245,22 +244,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ "WHERE lower(sms_code) LIKE lower(?) AND name!=\"\" ";
 	}
 	
-	private String getBasicStationQuery(int imageId, String subtitle) {
+	private String getBasicStationQuery(int imageId, String subtitle, String addedData) {
 		return "SELECT code AS _id, " +
 				  "       name AS "+SearchManager.SUGGEST_COLUMN_TEXT_1+"," +
 				  "       "+subtitle+" AS "+SearchManager.SUGGEST_COLUMN_TEXT_2+"," +
-				  "	      name || \"_\" || code  AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
+				  "	      name || \"_\" || code || \"_"+addedData+"\" AS "+SearchManager.SUGGEST_COLUMN_INTENT_DATA+"," +
 				  "	      \"android.resource://com.papagiannis.tuberun/"+imageId+"\" AS "+SearchManager.SUGGEST_COLUMN_ICON_1+" "
 				+ "FROM station_departures_code "
 				+ "WHERE lower(name) LIKE lower(?) ";
 	}
 	
 	private String getTubeStationsQuery(String subtitle) {
-		return getBasicStationQuery(R.drawable.tube, subtitle) + "AND line=\"All\" ";
+		return getBasicStationQuery(R.drawable.tube, subtitle, "All") + "AND line=\"All\" ";
 	}
 	
 	private String getDLRStationsQuery(String subtitle) {
-		return getBasicStationQuery(R.drawable.dlr, subtitle)+" AND line=\"DLR\" ";
+		return getBasicStationQuery(R.drawable.dlr, subtitle, "DLR")+" AND line=\"DLR\" ";
+	}
+	
+	private String getOvergroundStationsQuery(String subtitle) {
+		return getBasicStationQuery(R.drawable.overground, subtitle, "Overground")+" AND line=\"Overground\" ";
 	}
 	
 	private String getJPDestinationsQuery(int imageId, String subtitle, Boolean modifyNames) {
@@ -340,10 +343,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 						+ "ORDER BY name "
 						+ "LIMIT 10", new String[] { namePrefix });
 		else c=myDataBase.rawQuery( getTubeStationsQuery(subtitle)				  
-				+ "UNION "
+				+ " UNION "
 				+ getDLRStationsQuery(subtitle)
-				+ "ORDER BY name "
-				+ "LIMIT 50", new String[] { namePrefix, namePrefix });				
+				+ " UNION "
+				+ getOvergroundStationsQuery(subtitle)
+				+ " ORDER BY name "
+				+ " LIMIT 50", new String[] { namePrefix, namePrefix, namePrefix });				
 		c.moveToFirst();
 		return c;
 	}
@@ -464,7 +469,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			String query="SELECT stations.name, longtitude, latitude, line, code " +
 					"FROM stations, station_departures_code "+
 					"WHERE stations.name=station_departures_code.name AND "+
-						  "station_departures_code.line!=\"Rail\" AND " +
+						  "station_departures_code.line=\"Rail\" AND " +
 						  "?<stations.longtitude AND stations.longtitude<? AND " +
 						  "?<stations.latitude AND stations.latitude<?";
 			res = new ArrayList<Station>();

@@ -95,6 +95,11 @@
             android:screenOrientation="nosensor" >
         </activity>
         <activity
+            android:name=".RailDeparturesActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="nosensor" >
+        </activity>
+        <activity
             android:name=".DeparturesActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="nosensor" >

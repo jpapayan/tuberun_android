@@ -86,7 +86,7 @@ public class DeparturesBinder implements ViewBinder, OnClickListener {
 			String p=togglebutton_platforms.get(v);
 			DeparturesFetcher f;
 			if (lt.equals(LineType.DLR)) f=new DeparturesDLRFetcher(lt, station_code, station_nice);
-			if (lt.equals(LineType.OVERGROUND)) f=new DeparturesOvergroundFetcher(station_code, station_nice);
+			else if (lt.equals(LineType.OVERGROUND)) f=new DeparturesOvergroundFetcher(station_code, station_nice);
 			else f=new DeparturesTubeFetcher(lt,station_code,station_nice);
 			DeparturesFavorite fav=new  DeparturesFavorite(lt,f);
 			fav.setIdentification(station_code);
@@ -98,7 +98,7 @@ public class DeparturesBinder implements ViewBinder, OnClickListener {
 			String p=togglebutton_platforms.get(v);
 			DeparturesFetcher f;
 			if (lt.equals(LineType.DLR)) f=new DeparturesDLRFetcher(lt, station_code, station_nice);
-			if (lt.equals(LineType.OVERGROUND)) f=new DeparturesOvergroundFetcher(station_code, station_nice);
+			else if (lt.equals(LineType.OVERGROUND)) f=new DeparturesOvergroundFetcher(station_code, station_nice);
 			else f=new DeparturesTubeFetcher(lt,station_code,station_nice);
 			DeparturesFavorite fav=new  DeparturesFavorite(lt,f);
 			fav.setIdentification(station_code);

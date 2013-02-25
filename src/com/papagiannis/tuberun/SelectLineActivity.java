@@ -249,9 +249,10 @@ public class SelectLineActivity extends FragmentActivity implements
 					startBusDepartures(tokens[1], tokens[0]);
 			} else {
 				String[] tokens = data.toString().split("_");
-				if (tokens.length < 2)
+				if (tokens.length != 3)
 					showDialog(FAILED_DIALOG);
 				Station s = new Station(tokens[0], tokens[1]);
+				s.addLineTypeForDepartures(LineType.fromString(tokens[2]));
 				startDepartures(s);
 			}
 		}
@@ -260,7 +261,8 @@ public class SelectLineActivity extends FragmentActivity implements
 	protected void onListItemClick(View v, int position, long id) {
 		try {
 			Station s = stationsList.get(position);
-			startDepartures(s);
+			if (s.locatedOn(LineType.RAIL)) startRailDepartures(s);
+			else startDepartures(s);
 		} catch (Exception e) {
 			Log.w("SelectLine", e);
 		}
@@ -279,6 +281,12 @@ public class SelectLineActivity extends FragmentActivity implements
 		Intent i = new Intent(this, BusDeparturesActivity.class);
 		i.putExtra("code", code);
 		i.putExtra("name", name);
+		startActivity(i);
+	}
+	
+	private void startRailDepartures(Station s) {
+		Intent i = new Intent(this, RailDeparturesActivity.class);
+		i.putExtra("station", s);
 		startActivity(i);
 	}
 

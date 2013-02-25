@@ -46,6 +46,18 @@
                 android:gravity="left|center_vertical"
                 android:text="Bus Departures" />
 
+            <Button
+                android:id="@+id/button_update"
+                style="@style/RefreshButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="5dip"
+                android:minHeight="0dip"
+                android:minWidth="0dip"
+                android:text="" />
+            
             <ToggleButton
                 android:id="@+id/add_favorite"
                 style="@style/FavoriteButton"
@@ -59,17 +71,7 @@
                 android:textOff=""
                 android:textOn="" />
 
-            <Button
-                android:id="@+id/button_update"
-                style="@style/RefreshButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dip"
-                android:layout_marginRight="5dip"
-                android:minHeight="0dip"
-                android:minWidth="0dip"
-                android:text="" />
+            
         </LinearLayout>
         
         <ImageView

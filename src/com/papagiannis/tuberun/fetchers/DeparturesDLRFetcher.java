@@ -25,15 +25,13 @@ import com.papagiannis.tuberun.LinePresentation;
 import com.papagiannis.tuberun.LineType;
 
 public class DeparturesDLRFetcher extends DeparturesTubeFetcher {
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 	public static final String none_msg = "";
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
 	protected int update_counter = 0;
 	protected String line, station_code, station_nice;
 	protected transient RequestTask task;
-	protected XMLDeserialiserTask deserialiserTask;
-
-	protected ArrayList<HashMap<String, String>> departures = new ArrayList<HashMap<String, String>>();
+	protected transient XMLDeserialiserTask deserialiserTask;
 
 	public DeparturesDLRFetcher(LineType line, String stationcode,
 			String stationnice) {

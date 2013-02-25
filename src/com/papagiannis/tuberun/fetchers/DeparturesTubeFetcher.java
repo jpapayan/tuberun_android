@@ -25,15 +25,16 @@ public class DeparturesTubeFetcher extends DeparturesFetcher {
 	private static final long serialVersionUID = 3L;
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
 	protected int update_counter = 0;
-	protected String line, station_code, station_nice;
+	protected LineType line;
+	protected String station_code, station_nice;
 	private transient RequestTask task = null;
-	protected XMLDeserialiserTask deserialiserTask;
+	protected transient XMLDeserialiserTask deserialiserTask;
 
 	public DeparturesTubeFetcher(LineType line, String stationcode,
 			String stationnice) {
-		this.line = LinePresentation.getDeparturesRespresentation(line);
-		station_code = stationcode;
-		station_nice = stationnice;
+		this.line = line;
+		this.station_code = stationcode;
+		this.station_nice = stationnice;
 	}
 	
 	@Override
@@ -41,7 +42,9 @@ public class DeparturesTubeFetcher extends DeparturesFetcher {
 		boolean first = isFirst.compareAndSet(true, false);
 		if (!first) return; 
 		String request_query = "http://cloud.tfl.gov.uk/TrackerNet/PredictionDetailed/";
-		request_query+=line.charAt(0);
+		if (line==LineType.CIRCLE) request_query+="H";
+		else request_query+= LinePresentation.getDeparturesRespresentation(line).charAt(0);
+		
 		request_query+="/"+station_code;
 		error = "";
 		task = new RequestTask(new HttpCallback() {

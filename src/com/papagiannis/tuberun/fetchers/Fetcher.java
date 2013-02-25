@@ -9,7 +9,7 @@ import android.util.Log;
 public abstract class Fetcher implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	public static  String UserAgent = "TubeRun 1.0 (Android)";
+	protected static String UserAgent = "TubeRun 1.0 (Android)";
     transient protected ArrayList<Observer> callbacks = new ArrayList<Observer>();
     public synchronized Fetcher registerCallback(Observer cb)
     {

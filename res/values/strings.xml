@@ -2,7 +2,7 @@
 <resources>
 	<string name="app_name">TubeRun</string>
 	<string name="search_settings_description">Departures, Journey Planning</string>
-	<string name="search_hint">Enter station name</string>
+	<string name="search_hint">Enter station or bus stop code</string>
 	<string name="search_hint_plan">Enter station, postcode, address or POI</string>
 	<string name="status_title">Status</string>
 	<string name="departures_title">Departures</string>

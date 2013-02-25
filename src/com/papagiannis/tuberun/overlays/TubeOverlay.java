@@ -51,6 +51,7 @@ public class TubeOverlay<T extends OverlayItem> extends HereOverlay<T> {
 	public void showTubeDepartures(String code, String name) {
 		Intent i=new Intent(mContext, DeparturesActivity.class);
 		Station s=new Station(name, code);
+		s.addLineTypeForDepartures(LineType.ALL);
 		i.putExtra("type", "station");
 		i.putExtra("station", s);
 		mContext.startActivity(i);

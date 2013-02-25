@@ -102,12 +102,6 @@
                 android:gravity="center"
                 android:text="Do you know that you can claim your ticket money back if your underground train is delayed for more than 15min? Why don&apos;t you fill the form while waiting?" />
             
-            <ImageView 
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                style="@style/AddButton"
-                android:layout_gravity="center_horizontal"/>
-
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="0dip"

@@ -22,9 +22,9 @@ import com.papagiannis.tuberun.LineType;
 import com.papagiannis.tuberun.R;
 import com.papagiannis.tuberun.favorites.DeparturesFavorite;
 import com.papagiannis.tuberun.favorites.Favorite;
-import com.papagiannis.tuberun.fetchers.BusDeparturesFetcher;
+import com.papagiannis.tuberun.fetchers.DeparturesBusFetcher;
 import com.papagiannis.tuberun.fetchers.DeparturesDLRFetcher;
-import com.papagiannis.tuberun.fetchers.DeparturesTubeFetcher;
+import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
 import com.papagiannis.tuberun.fetchers.Fetcher;
 import com.papagiannis.tuberun.fetchers.StatusesFetcher;
 
@@ -125,11 +125,11 @@ public class FavoritesBinder implements ViewBinder, OnClickListener {
 		try {
 			Favorite fav=Favorite.getFavorites(activity).get(i);
 			Fetcher f= fav.getFetcher();
-			if ((f instanceof DeparturesTubeFetcher) || (f instanceof DeparturesDLRFetcher)) {
+			if (f instanceof DeparturesFetcher) {
 				DeparturesFavorite dfav=(DeparturesFavorite) fav;
 				showTubeDepartures(fav.getLine(), fav.getIdentification(), dfav.getStation_nice());
 			}
-			else if (f instanceof BusDeparturesFetcher) {
+			else if (f instanceof DeparturesBusFetcher) {
 				DeparturesFavorite dfav=(DeparturesFavorite) fav;
 				showBusDepartures(fav.getIdentification(), dfav.getStation_nice() );
 			}

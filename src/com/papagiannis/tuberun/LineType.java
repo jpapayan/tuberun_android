@@ -68,7 +68,7 @@ public enum LineType
 			ln = LineType.CIRCLE;
 		else if (name.equalsIgnoreCase("district"))
 			ln = LineType.DISTRICT;
-		else if (name.equalsIgnoreCase("hammersmithandcity"))
+		else if (name.equalsIgnoreCase("hammersmithandcity") || name.equalsIgnoreCase("hammersmith"))
 			ln = LineType.HAMMERSMITH;
 		else if (name.equalsIgnoreCase("jubilee"))
 			ln = LineType.JUBILEE;
