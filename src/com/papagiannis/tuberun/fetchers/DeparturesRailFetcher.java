@@ -55,17 +55,24 @@ public class DeparturesRailFetcher extends DeparturesFetcher{
             	String[] tags=new String[]{"<td>", "<td class=\"destination\">",
             			"<td class=\"status\">", "<td>","<td>"};
             	String[] keys=new String[]{"time", "destination", 
-            			"position", "platform","" };
+            			"position", "platform", "" };
             	
             	int iTr=reply.indexOf("<tr ");
             	if (iTr==-1) break;
             	reply=reply.substring(iTr);
             	int iTrEnd=reply.indexOf(">");
             	if (iTrEnd==-1) break;
+            	int iTrFullEnd=reply.indexOf("</tr>");
+            	if (iTrFullEnd==-1) break;
             	String trType=reply.substring(0,iTrEnd);
+            	String trFull=reply.substring(0,iTrFullEnd);
             	if (trType.contains("delayed")) {
             		tags=new String[]{"<td class=\"status status-delay\">", "<td class=\"destination\">",
             				"<td class=\"status-delay\">", "<td>","<td>"};
+            	}
+            	else if (trFull.contains("status-minor-delay")) {
+            		tags=new String[]{"<td class=\"status status-minor-delay\">", "<td class=\"destination\">",
+            				"<td class=\"status status-minor-delay\">", "<td>","<td>"};
             	}
             	
             	for (int a=0;a<tags.length;a++) {

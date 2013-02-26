@@ -33,6 +33,10 @@ public abstract class DeparturesFetcher extends Fetcher {
 		return result;
 	}
 	
+	public ArrayList<HashMap<String, String>> getUnsortedDepartures() {
+		return new ArrayList<HashMap<String,String>>(departures);
+	}
+	
 	@Override
 	public Date getUpdateTime() {
 		return new Date();
