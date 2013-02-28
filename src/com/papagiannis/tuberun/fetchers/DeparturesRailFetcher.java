@@ -1,32 +1,41 @@
 package com.papagiannis.tuberun.fetchers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import android.os.AsyncTask;
+
 import com.papagiannis.tuberun.Station;
 
-public class DeparturesRailFetcher extends DeparturesFetcher{
+public class DeparturesRailFetcher extends DeparturesFetcher {
 	private static final long serialVersionUID = 1L;
 	private AtomicBoolean isFirst = new AtomicBoolean(true);
-	private transient RequestTask task=null;
-	protected int update_counter=0;
-    protected String line, station_code,station_nice;
-	
-	public DeparturesRailFetcher(Station s)
-    {
-        station_code = s.getCode();
-        station_nice = s.getName();
-    }
-	
+	private transient RequestTask task = null;
+	private transient ParserTask parserTask = null;
+	protected int update_counter = 0;
+	protected String line, station_code, station_nice;
+
+	public DeparturesRailFetcher(Station s) {
+		station_code = s.getCode();
+		station_nice = s.getName();
+	}
+
 	@Override
 	public void update() {
 		boolean first = isFirst.compareAndSet(true, false);
 		if (!first)
 			return; // only one at a time
-		String request_query = "http://ojp.nationalrail.co.uk/service/ldbboard/dep/" +station_code;
-		task=new RequestTask(new HttpCallback() {
-			
+		String request_query = "http://ojp.nationalrail.co.uk/service/ldbboard/dep/"
+				+ station_code;
+		task = new RequestTask(new HttpCallback() {
+
 			public void onReturn(String s) {
 				getDeparturesCallBack(s);
 			}
@@ -39,84 +48,70 @@ public class DeparturesRailFetcher extends DeparturesFetcher{
 	public Date getUpdateTime() {
 		return new Date();
 	}
-	
-    private void getDeparturesCallBack(String reply)
-    {
-        try
-        {
-            departures.clear();
 
-            boolean loop=true;
-            while (loop)
-            {
-            	HashMap<String, String> train=new HashMap<String, String>();
-            	
-            	//these tags are used for default entries
-            	String[] tags=new String[]{"<td>", "<td class=\"destination\">",
-            			"<td class=\"status\">", "<td>","<td>"};
-            	String[] keys=new String[]{"time", "destination", 
-            			"position", "platform", "" };
-            	
-            	int iTr=reply.indexOf("<tr ");
-            	if (iTr==-1) break;
-            	reply=reply.substring(iTr);
-            	int iTrEnd=reply.indexOf(">");
-            	if (iTrEnd==-1) break;
-            	int iTrFullEnd=reply.indexOf("</tr>");
-            	if (iTrFullEnd==-1) break;
-            	String trType=reply.substring(0,iTrEnd);
-            	String trFull=reply.substring(0,iTrFullEnd);
-            	if (trType.contains("delayed")) {
-            		tags=new String[]{"<td class=\"status status-delay\">", "<td class=\"destination\">",
-            				"<td class=\"status-delay\">", "<td>","<td>"};
-            	}
-            	else if (trFull.contains("status-minor-delay")) {
-            		tags=new String[]{"<td class=\"status status-minor-delay\">", "<td class=\"destination\">",
-            				"<td class=\"status status-minor-delay\">", "<td>","<td>"};
-            	}
-            	
-            	for (int a=0;a<tags.length;a++) {
-            		String t=tags[a];
-            		String k=keys[a];
-            		
-            		int i = reply.indexOf(t);
-            		if (i == -1 ) {
-                    	loop=false;
-                    	break;
-                    }
-            		reply=reply.substring(i);
-            		i=0;
-                    int j = reply.indexOf("</td>");
-                    if (j == -1) {
-                    	loop=false;
-                    	break;
-                    }
-                    String value = reply.substring(i+t.length(), j).trim();
-                    reply=reply.substring(j+5);
-                    if (k.equals("")) {
-                    	continue;
-                    }
-                    train.put(k, value);
-            	}
-            	
-            	if (loop) departures.add(train);
-            	
-            }
-            notifyClients();
-            isFirst.set(true);
-        }
-        catch (Exception e)
-        {
-            notifyClients();
-            isFirst.set(true);
-        }
-    }
-  
-    
-    @Override
-    public void abort() {
-    	isFirst.set(true);
-    	if (task!=null) task.cancel(true);
-    }
+	private void getDeparturesCallBack(String reply) {
+		try {
+			departures.clear();
+			if (reply==null || reply.length()==0) {
+				notifyClients();
+				isFirst.set(true);
+			}
+			parserTask=new ParserTask();
+			parserTask.execute(reply);
+		} catch (Exception e) {
+			notifyClients();
+			isFirst.set(true);
+		}
+	}
+
+	@Override
+	public void abort() {
+		if (task != null)
+			task.cancel(true);
+		if (parserTask!=null)
+			parserTask.cancel(true);
+		isFirst.set(true);
+	}
+	
+	private class ParserTask extends AsyncTask<String, Integer, ArrayList<HashMap<String,String>>> {
+		
+		@Override
+		protected ArrayList<HashMap<String, String>> doInBackground(
+				String... params) {
+			ArrayList<HashMap<String, String>> result=new ArrayList<HashMap<String,String>>();
+			if (params==null || params.length!=1) return result;
+			Document doc = Jsoup.parse(params[0]);
+			Elements table = doc.getElementsByTag("tbody");
+			if (table==null || table.size()==0) return result;
+			Elements rows = table.first().getElementsByTag("tr");
+			for (Element row : rows) {
+				HashMap<String, String> train = new HashMap<String, String>();
+				if (row.childNodeSize()<4) continue;
+				String[] keys = new String[] { "time", "destination",
+						"position", "platform" };
+				int i=0;
+				for (String key:keys) {
+					String value = row.child(i++).text();
+					train.put(key, cleanString(value));
+				}
+				result.add(train);
+			}
+			return result;
+		}
+		
+		protected String cleanString(String in) {
+			if (in==null) return "";
+//			String temp=android.text.Html.fromHtml(in).toString();
+			return in.replaceAll("\\s+", " ");
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<HashMap<String, String>> result) {
+			departures=result;
+			notifyClients();
+			isFirst.set(true);
+		}
+	}
+	
 
 }
