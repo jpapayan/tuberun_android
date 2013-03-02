@@ -45,7 +45,7 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
-	public static final String VERSION = "1.2.6";
+	public static final String VERSION = "1.2.7";
 	//Don't forget to update the app version in the manifest
 	//Don't forget to update the changelog later in this file
 	//Don't forget to change the Gmaps API key in full_screen_map.xml
@@ -597,9 +597,9 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		ProgressDialog.Builder builder = new ProgressDialog.Builder(this);
 		builder.setTitle(APPNAME+" "+VERSION)
 				.setMessage("What's new:\n\n"+
-						"*Added: Overground departures\n\n"+
-						"*Added: Departures section overhaul\n\n"+
-						"*SORRY: YOUR FAVORITES ARE LOST!")
+						"*New: Overground & Rail departures\n\n"+
+						"*New: Departures section overhaul\n\n"+
+						"*Sorry: your favorites are now lost")
 				.setCancelable(false).setPositiveButton("OK", null);
 		return builder.create();
 	}
