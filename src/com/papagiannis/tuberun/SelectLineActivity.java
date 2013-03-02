@@ -261,8 +261,7 @@ public class SelectLineActivity extends FragmentActivity implements
 	protected void onListItemClick(View v, int position, long id) {
 		try {
 			Station s = stationsList.get(position);
-			if (s.locatedOn(LineType.RAIL)) startRailDepartures(s);
-			else startDepartures(s);
+			startDepartures(s);
 		} catch (Exception e) {
 			Log.w("SelectLine", e);
 		}
@@ -270,13 +269,18 @@ public class SelectLineActivity extends FragmentActivity implements
 	}
 
 	private void startDepartures(Station s) {
+		if (s==null) return;
+		if (s.locatedOn(LineType.RAIL)) {
+			startRailDepartures(s);
+			return;
+		}
 		Intent i = null;
 		i = new Intent(this, DeparturesActivity.class);
 		i.putExtra("type", "station");
 		i.putExtra("station", s);
 		startActivity(i);
 	}
-
+	
 	private void startBusDepartures(String name, String code) {
 		Intent i = new Intent(this, BusDeparturesActivity.class);
 		i.putExtra("code", code);

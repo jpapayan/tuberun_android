@@ -266,6 +266,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return getBasicStationQuery(R.drawable.overground, subtitle, "Overground")+" AND line=\"Overground\" ";
 	}
 	
+	private String getRailStationsQuery(String subtitle) {
+		return getBasicStationQuery(R.drawable.rail, subtitle, "Rail")+" AND line=\"Rail\" ";
+	}
+	
 	private String getJPDestinationsQuery(int imageId, String subtitle, Boolean modifyNames) {
 		String m1="";
 		String m2="";
@@ -347,8 +351,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ getDLRStationsQuery(subtitle)
 				+ " UNION "
 				+ getOvergroundStationsQuery(subtitle)
+				+ " UNION "
+				+ getRailStationsQuery(subtitle)
 				+ " ORDER BY name "
-				+ " LIMIT 50", new String[] { namePrefix, namePrefix, namePrefix });				
+				+ " LIMIT 50", new String[] { namePrefix, namePrefix, namePrefix, namePrefix });				
 		c.moveToFirst();
 		return c;
 	}
@@ -469,7 +475,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			String query="SELECT stations.name, longtitude, latitude, line, code " +
 					"FROM stations, station_departures_code "+
 					"WHERE stations.name=station_departures_code.name AND "+
-						  "station_departures_code.line=\"Rail\" AND " +
+//						  "station_departures_code.line=\"Rail\" AND " +
 						  "?<stations.longtitude AND stations.longtitude<? AND " +
 						  "?<stations.latitude AND stations.latitude<?";
 			res = new ArrayList<Station>();
