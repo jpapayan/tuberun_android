@@ -52,17 +52,6 @@
                 android:layout_weight="5"
                 android:gravity="left"
                 android:text="Status" />
-
-            <Button
-                android:id="@+id/map_button"
-                style="@style/MapButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dip"
-                android:layout_gravity="center_vertical|right"
-                android:text=""
-                android:minWidth="0dip"
-                android:minHeight="0dip" />
             
             <Button
                 android:id="@+id/update_button"
@@ -75,6 +64,18 @@
                 android:text=""
                 android:minWidth="0dip"
                 android:minHeight="0dip" />
+
+            <Button
+                android:id="@+id/map_button"
+                style="@style/MapButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dip"
+                android:layout_gravity="center_vertical|right"
+                android:text=""
+                android:minWidth="0dip"
+                android:minHeight="0dip" />
+            
         </LinearLayout>
 
         <TabWidget

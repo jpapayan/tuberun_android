@@ -1,52 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:shrinkColumns="4"
+    android:stretchColumns="3" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+    <TableRow>
 
         <TextView
-            android:id="@+id/time"
-            android:layout_width="60dp"
+            android:id="@+id/time1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="fill_horizontal"
-            android:padding="10dp"
-            android:textColor="@android:color/white" >
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:textColor="@android:color/white"
+            android:textIsSelectable="false"
+            android:textSize="26sp"
+            android:textStyle="bold" >
         </TextView>
-        
+
+        <TextView
+            android:id="@+id/time2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="@android:color/white"
+            android:textIsSelectable="false"
+            android:textSize="26sp" >
+        </TextView>
+
+        <ImageView
+            android:layout_width="2dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/tuberun_red_bright" />
+
         <TextView
             android:id="@+id/destination"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|left"
             android:layout_weight="1"
             android:gravity="left"
-            android:padding="10dp"
-            android:textColor="@android:color/white" >
-        </TextView>
-        
-        <TextView
-            android:id="@+id/platform"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="fill_horizontal"
-            android:padding="10dp"
+            android:layout_marginLeft="10dp"
             android:textColor="@android:color/white" >
         </TextView>
 
-    </LinearLayout>
-    
-    <TextView
-            android:id="@+id/status"
-            android:layout_marginBottom="10dp"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@android:color/white" >
-     </TextView>
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_margin="10dp" >
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical|right"
+                android:textColor="@android:color/white" >
+            </TextView>
+            
+             <TextView
+                android:id="@+id/platform"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical|right"
+                android:textColor="@android:color/white" >
+            </TextView>
+            
+        </LinearLayout>
+    </TableRow>
+
+</TableLayout>

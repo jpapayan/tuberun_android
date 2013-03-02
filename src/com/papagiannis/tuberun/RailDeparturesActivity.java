@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
-import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.papagiannis.tuberun.binders.BusDeparturesBinder;
 import com.papagiannis.tuberun.binders.RailDeparturesBinder;
 import com.papagiannis.tuberun.favorites.DeparturesFavorite;
 import com.papagiannis.tuberun.favorites.Favorite;
@@ -99,7 +97,8 @@ public class RailDeparturesActivity extends ListActivity implements Observer,
 		ArrayList<HashMap<String, String>> trains = fetcher.getUnsortedDepartures();
 		for (HashMap<String, String> train : trains) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
-			m.put("time", train.get("time"));
+			m.put("time1", train.get("time"));
+			m.put("time2", train.get("time"));
 			m.put("destination", train.get("destination"));
 			m.put("status", train.get("position"));
 			// m.put("status", "random crap");
@@ -117,11 +116,11 @@ public class RailDeparturesActivity extends ListActivity implements Observer,
 		}
 
 		SimpleAdapter adapter = new SimpleAdapter(this, departures_list,
-				R.layout.rail_departures_status, new String[] { "time",
+				R.layout.rail_departures_status, new String[] { "time1", "time2",
 						"platform", "destination", "status", "favorite" },
-				new int[] { R.id.time, R.id.platform, R.id.destination,
-						R.id.status, R.id.add_favorite });
-		adapter.setViewBinder(new RailDeparturesBinder());
+				new int[] { R.id.time1, R.id.time2, R.id.platform, 
+					R.id.destination,R.id.status, R.id.add_favorite });
+		adapter.setViewBinder(new RailDeparturesBinder(this));
 		setListAdapter(adapter);
 		listView.setVisibility(View.VISIBLE);
 
