@@ -20,6 +20,8 @@ import com.papagiannis.tuberun.FavoritesActivity;
 import com.papagiannis.tuberun.LinePresentation;
 import com.papagiannis.tuberun.LineType;
 import com.papagiannis.tuberun.R;
+import com.papagiannis.tuberun.RailDeparturesActivity;
+import com.papagiannis.tuberun.Station;
 import com.papagiannis.tuberun.favorites.DeparturesFavorite;
 import com.papagiannis.tuberun.favorites.Favorite;
 import com.papagiannis.tuberun.fetchers.DeparturesBusFetcher;
@@ -150,10 +152,23 @@ public class FavoritesBinder implements ViewBinder, OnClickListener {
 	}
 	
 	public void showTubeDepartures(LineType lt, String code, String nice) {
+		if (lt==LineType.RAIL) {
+			showRailDepartures(code, nice);
+			return;
+		}
 		Intent i=new Intent(activity, DeparturesActivity.class);
 		i.putExtra("stationcode", code);
 		i.putExtra("stationnice", nice);
 		i.putExtra("line", LinePresentation.getStringRespresentation(lt));
+		activity.startActivity(i);
+	}
+
+	private void showRailDepartures(String code, String nice) {
+		if (code==null || nice==null) return;
+		Station s=new Station(nice, code);
+		s.addLineTypeForDepartures(LineType.RAIL);
+		Intent i=new Intent(activity, RailDeparturesActivity.class);
+		i.putExtra("station", s);
 		activity.startActivity(i);
 	}
 }

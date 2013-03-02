@@ -43,7 +43,7 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 	ArrayList<Station> tubeStations=new ArrayList<Station>();
 	ArrayList<CycleHireStation> csStations=new ArrayList<CycleHireStation>();
 	ArrayList<OysterShop> oysterShops=new ArrayList<OysterShop>();
-	ArrayList<RailStation> railStations=new ArrayList<RailStation>();
+	ArrayList<Station> railStations=new ArrayList<Station>();
 	RoutesBusFetcher busFetcher=new RoutesBusFetcher(this);
 
 	@SuppressWarnings("unchecked")
@@ -74,7 +74,7 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 				showOysterPushPins();
 			}
 			else if (type.equals("rail")) {
-				railStations = (ArrayList<RailStation>) extras.get("stations");
+				railStations = (ArrayList<Station>) extras.get("stations");
 				showRailPushPins();
 			}
 		} catch (Exception e) {
@@ -193,7 +193,7 @@ public class NearbyMapActivity extends MeMapActivity implements Observer {
 	}
 	
 	private void showRailPushPins() {
-		for (RailStation s : railStations) {
+		for (Station s : railStations) {
 			Drawable d=this.getResources().getDrawable(R.drawable.rail); 
 			HereOverlay<OverlayItem> overlay = new HereOverlay<OverlayItem>(d, this);
 			GeoPoint gp = new GeoPoint(s.getLatitudeE6(), s.getLongtitudeE6());

@@ -86,6 +86,7 @@ public class RailDeparturesActivity extends ListActivity implements Observer,
 		DeparturesFavorite fav = new DeparturesFavorite(LineType.RAIL,
 				new DeparturesRailFetcher(station));
 		fav.setIdentification(station.getCode());
+		fav.setStation_nice(station.getName());
 		favButton.setChecked(Favorite.isFavorite(fav));
 		favButton.setOnClickListener(this);
 	}
@@ -103,8 +104,6 @@ public class RailDeparturesActivity extends ListActivity implements Observer,
 			m.put("status", train.get("position"));
 			// m.put("status", "random crap");
 			String plat = train.get("platform").trim();
-			if (plat.length() > 0)
-				plat = "Platform " + plat;
 			m.put("platform", plat);
 			departures_list.add(m);
 		}
@@ -138,8 +137,8 @@ public class RailDeparturesActivity extends ListActivity implements Observer,
 		} else {
 			DeparturesFavorite fav = new DeparturesFavorite(LineType.RAIL,
 					new DeparturesRailFetcher(station));
-			fav.setIdentification(station.getName());
-			fav.setStation_nice(station.getCode());
+			fav.setIdentification(station.getCode());
+			fav.setStation_nice(station.getName());
 			Favorite.removeFavorite(fav, this);
 
 			// also try this without station_nice for compatibility before 1.2.3

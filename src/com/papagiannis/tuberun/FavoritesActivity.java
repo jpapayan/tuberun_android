@@ -43,7 +43,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		new SlidingBehaviour(this, R.layout.favorites);
-		
+
 		View updateButton = findViewById(R.id.button_update);
 		updateButton.setOnClickListener(this);
 		create();
@@ -54,9 +54,9 @@ public class FavoritesActivity extends ListActivity implements Observer,
 
 		listView = (DragNDropListView) getListView();
 		listView.setDropListener(mDropListener);
-        listView.setRemoveListener(mRemoveListener);
-        listView.setDragListener(mDragListener);
-        
+		listView.setRemoveListener(mRemoveListener);
+		listView.setDragListener(mDragListener);
+
 		emptyLayout = (LinearLayout) findViewById(R.id.empty_layout);
 
 		updateFavorites();
@@ -64,10 +64,10 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	}
 
 	private void updateFavorites() {
-		//count how many unique fetchers are needed
-		//and initialise those with this as a callback
+		// count how many unique fetchers are needed
+		// and initialise those with this as a callback
 		favorites = Favorite.getFavorites(this);
-		lastFavoritesCount=favorites.size();
+		lastFavoritesCount = favorites.size();
 		fetchers_count = 0;
 		uses_status_weekend = false;
 		uses_status_now = false;
@@ -130,8 +130,8 @@ public class FavoritesActivity extends ListActivity implements Observer,
 
 	private void updateList(Boolean asEmpty) {
 		ArrayList<HashMap<String, Object>> favorites_list = new ArrayList<HashMap<String, Object>>();
-		ArrayList<String> content=new ArrayList<String>(); 
-		
+		ArrayList<String> content = new ArrayList<String>();
+
 		int fav_index = 0;
 		for (Favorite fav : favorites) {
 			Fetcher f = fav.getFetcher();
@@ -144,7 +144,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 						.getDepartures(platform);
 				m.put("line", LinePresentation.getStringRespresentation(fav
 						.getLine()));
-				content.add((String)m.get("line"));
+				content.add((String) m.get("line"));
 				m.put("icon", LinePresentation.getIcon(fav.getLine()));
 				DeparturesFavorite dfav = (DeparturesFavorite) fav;
 				String platform_trimmed = dfav.getStation_nice() + " "
@@ -155,13 +155,23 @@ public class FavoritesActivity extends ListActivity implements Observer,
 					for (HashMap<String, String> train : trains) {
 						String s = train.get("destination");
 						m.put("destination" + i, s);
+
 						s = train.get("position");
+						//display per train platform
+						//only if the favourite is not associated with a platform
+						if (platform.length() == 0) { 
+							String plat = train.get("platform").trim();
+							if (plat.length() > 0) {
+								s += "/" + plat;
+							}
+						}
 						m.put("position" + i, s);
 						s = train.get("time");
 						if (s.equals(""))
 							s = "due";
 						m.put("time" + i, s);
-						i++;
+						if (i++ > 3)
+							break; // show only up to 3 departures
 					}
 				}
 				favorites_list.add(m);
@@ -176,7 +186,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 					m.put("index", Integer.toString(fav_index - 1));
 					m.put("line", LinePresentation
 							.getStringRespresentation(LineType.BUSES));
-					content.add((String)m.get("line"));
+					content.add((String) m.get("line"));
 					m.put("icon", LinePresentation.getIcon(LineType.BUSES));
 					m.put("platform", platform.toUpperCase(Locale.ENGLISH));
 					int i = 1;
@@ -191,15 +201,16 @@ public class FavoritesActivity extends ListActivity implements Observer,
 						}
 					}
 					favorites_list.add(m);
-
 				}
 			} else if (f instanceof StatusesFetcher) {
 				StatusesFetcher fetcher = (StatusesFetcher) f;
 				m.put("line", LinePresentation.getStringRespresentation(fav
 						.getLine()));
-				content.add((String)m.get("line"));
-				m.put("platform", LinePresentation.getStringRespresentation(fav
-						.getLine()).toUpperCase(Locale.ENGLISH));
+				content.add((String) m.get("line"));
+				m.put("platform",
+						LinePresentation
+								.getStringRespresentation(fav.getLine())
+								.toUpperCase(Locale.ENGLISH));
 				m.put("icon", LinePresentation.getIcon(fav.getLine()));
 				if (!asEmpty) {
 					m.put("time1", "");
@@ -217,22 +228,21 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		}
 
 		DragNDropAdapter adapter = new DragNDropAdapter(this, favorites_list,
-				R.layout.favorites_item, new String[] { "line", "platform", "index",
-						"icon", "index", 
-						"destination1", "position1",
+				R.layout.favorites_item, new String[] { "line", "platform",
+						"index", "icon", "index", "destination1", "position1",
 						"time1", "destination2", "position2", "time2",
-						"destination3", "position3", "time3"}, new int[] {
-						R.id.linee_favorites, R.id.platform_favorites, R.id.platform_favorites, 
-						R.id.icon_favorites , R.id.remove_favorite,
-						R.id.favorites_destination1, R.id.favorites_position1,
-						R.id.favorites_time1, R.id.favorites_destination2,
-						R.id.favorites_position2, R.id.favorites_time2,
-						R.id.favorites_destination3, R.id.favorites_position3,
-						R.id.favorites_time3});
+						"destination3", "position3", "time3" }, new int[] {
+						R.id.linee_favorites, R.id.platform_favorites,
+						R.id.platform_favorites, R.id.icon_favorites,
+						R.id.remove_favorite, R.id.favorites_destination1,
+						R.id.favorites_position1, R.id.favorites_time1,
+						R.id.favorites_destination2, R.id.favorites_position2,
+						R.id.favorites_time2, R.id.favorites_destination3,
+						R.id.favorites_position3, R.id.favorites_time3 });
 		adapter.setData(favorites_list);
 		adapter.setViewBinder(new FavoritesBinder(this));
 		setListAdapter(adapter);
-		
+
 	}
 
 	private void updateFavoritesOrder(int from, int to) {
@@ -280,18 +290,18 @@ public class FavoritesActivity extends ListActivity implements Observer,
 
 	};
 
-	
-	private int lastFavoritesCount=0;
+	private int lastFavoritesCount = 0;
+
 	@Override
 	protected void onPause() {
-		lastFavoritesCount=Favorite.getFavorites(this).size();
+		lastFavoritesCount = Favorite.getFavorites(this).size();
 		super.onPause();
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (Favorite.getFavorites(this).size()!=lastFavoritesCount) {
+		if (Favorite.getFavorites(this).size() != lastFavoritesCount) {
 			updateFavorites();
 			onClick(null);
 		}

@@ -24,7 +24,7 @@ import com.papagiannis.tuberun.fetchers.StationsRailFetcher;
 public class NearbyRailListFragment extends ListFragment implements Observer {
 	private StationsRailFetcher fetcher;
 	private Location lastKnownLocation;
-	private ArrayList<RailStation> stations_nearby = new ArrayList<RailStation>();
+	private ArrayList<Station> stations_nearby = new ArrayList<Station>();
 	private ArrayList<HashMap<String, Object>> to_display = new ArrayList<HashMap<String,Object>>();
 	
 	@Override
@@ -55,7 +55,7 @@ public class NearbyRailListFragment extends ListFragment implements Observer {
 	public void update() {
 		 to_display = new ArrayList<HashMap<String, Object>>();
 		stations_nearby = fetcher.getResult();
-		for (RailStation s : stations_nearby) {
+		for (Station s : stations_nearby) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("name", s.getName());
 			m.put("distance",
@@ -102,7 +102,7 @@ public class NearbyRailListFragment extends ListFragment implements Observer {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		try {
-			RailStation s = stations_nearby.get(position);
+			Station s = stations_nearby.get(position);
 			Intent i = new Intent(getActivity(), DirectionsMapActivity.class);
 			i.putExtra("station", s);
 			i.putExtra("type", "rail");

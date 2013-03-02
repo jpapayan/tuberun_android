@@ -410,17 +410,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return res; /*always return the results of the last iteration no matter what*/
 	}
 	
-	public ArrayList<RailStation> getRailStationsNearby(long lat, long lng) {
+	public ArrayList<Station> getRailStationsNearby(long lat, long lng) {
 		long distance=40000;
-		ArrayList<RailStation> res = new ArrayList<RailStation>();
+		ArrayList<Station> res = new ArrayList<Station>();
 		for (int i=0; i<4; i++,distance*=5) {
-			String query="SELECT stations.name, longtitude, latitude " +
-					"FROM stations, station_lines "+
-					"WHERE stations.name=station_lines.name AND "+
-						  "station_lines.line=\"Rail\" AND " +
+			String query="SELECT stations.name, longtitude, latitude, station_departures_code.code " +
+					"FROM stations, station_departures_code "+
+					"WHERE stations.name=station_departures_code.name AND " +
+						  "station_departures_code.line=\"Rail\" AND " +
 						  "?<stations.longtitude AND stations.longtitude<? AND " +
 						  "?<stations.latitude AND stations.latitude<?";
-			res = new ArrayList<RailStation>();
+			res = new ArrayList<Station>();
 			String[] params=new String[] { Long.toString(lng-distance),
 					Long.toString(lng+distance),
 				    Long.toString(lat-distance), 
@@ -428,7 +428,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			Cursor c = myDataBase.rawQuery(query, params);
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
-				RailStation s=new RailStation(c.getString(0));
+				Station s=new Station(c.getString(0),c.getString(3));
+				s.addLineTypeForDepartures(LineType.RAIL);
 				s.setLatitude(c.getInt(2)).setLongtitude(c.getInt(1));
 				res.add(s);
 				c.moveToNext();

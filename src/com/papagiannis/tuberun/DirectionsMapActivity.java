@@ -19,6 +19,7 @@ import com.papagiannis.tuberun.cyclehire.CycleHireStation;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.RouteFetcher;
 import com.papagiannis.tuberun.overlays.HereOverlay;
+import com.papagiannis.tuberun.overlays.RailOverlay;
 import com.papagiannis.tuberun.overlays.RouteOverlay;
 import com.papagiannis.tuberun.overlays.TubeOverlay;
 
@@ -55,10 +56,6 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 			setTitle("Route to " + st.getName() + " ("
 					+ (int) l.distanceTo(st.getLocation()) + "m)");
 
-			fetcher = new RouteFetcher(me, to);
-			fetcher.registerCallback(this);
-			fetcher.update();
-
 			Drawable drawable;
 			if (isCycleHire)
 				drawable = this.getResources().getDrawable(
@@ -74,11 +71,19 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 				drawable = this.getResources().getDrawable(R.drawable.tube);
 			}
 				
-			HereOverlay<OverlayItem> overlays = isTubeStation ? new TubeOverlay<OverlayItem>(drawable, this) 
-					: new HereOverlay<OverlayItem>(drawable, this);
+			HereOverlay<OverlayItem> overlays;
+			if (isTubeStation) {
+				overlays=new TubeOverlay<OverlayItem>(drawable, this);
+			}
+			else if (isRailStation) {
+				overlays=new RailOverlay<OverlayItem>(drawable, this);
+			}
+			else {
+				overlays=new HereOverlay<OverlayItem>(drawable, this);
+			}
 
 			OverlayItem overlayitem;
-			if (isTubeStation) {
+			if (isTubeStation || isRailStation) {
 				Station tst=(Station) st;
 				overlayitem = new OverlayItem(to, tst.getName(), tst.getCode());
 			}
@@ -94,9 +99,12 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 			overlays.addOverlay(overlayitem);
 			mapOverlays.add(overlays);
 
+			fetcher = new RouteFetcher(me, to);
+			fetcher.registerCallback(this);
+			fetcher.update();
+
 			showDialog(0);
 			mapView.invalidate();
-
 		} catch (Exception e) {
 			Log.w("Directions",e);
 		}
@@ -130,7 +138,7 @@ public class DirectionsMapActivity extends MeMapActivity implements Observer {
 
 	@Override
 	public void update() {
-		wait_dialog.dismiss();
+		if (wait_dialog!=null) wait_dialog.dismiss();
 		displayRoute = true;
 
 		ArrayList<GeoPoint> points = fetcher.getPoints();

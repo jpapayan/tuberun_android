@@ -23,7 +23,7 @@ public class DeparturesFavorite extends Favorite implements Serializable {
 	
 	private String platform;
 	public String getPlatform() {
-		return platform;
+		return (platform!=null) ? platform: "";
 	}
 
 	public void setPlatform(String platform) {

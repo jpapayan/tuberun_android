@@ -2,6 +2,7 @@ package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import android.app.ListActivity;
 import android.os.Bundle;
@@ -68,7 +69,7 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
 		Bundle extras = getIntent().getExtras();
 		code = (String) extras.get("code");
 		name = (String) extras.get("name");
-		lineTextView.setText(name.toUpperCase());
+		lineTextView.setText(name.toUpperCase(Locale.UK));
     	
 		fetcher=new DeparturesBusFetcher(code,name);
 		fetcher.registerCallback(this);
@@ -89,6 +90,7 @@ public class BusDeparturesActivity extends ListActivity implements Observer, OnC
         ToggleButton favButton = (ToggleButton) findViewById(R.id.add_favorite);
         DeparturesFavorite fav=new  DeparturesFavorite(LineType.BUSES,new DeparturesBusFetcher(code,name));
 		fav.setIdentification(code);
+		fav.setStation_nice(name);
 		favButton.setChecked(Favorite.isFavorite(fav));
         favButton.setOnClickListener(this);
     }

@@ -9,15 +9,15 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.papagiannis.tuberun.DatabaseHelper;
-import com.papagiannis.tuberun.RailStation;
+import com.papagiannis.tuberun.Station;
 
-public class StationsRailFetcher extends NearbyFetcher<RailStation> {
-	private static final long serialVersionUID = 1L;
+public class StationsRailFetcher extends NearbyFetcher<Station> {
+	private static final long serialVersionUID = 2L;
 	private Context context;
 	private transient GetNearbyShopsTask task = new GetNearbyShopsTask(context);
 	Location userLocation;
 	Location lastLocation;
-	ArrayList<RailStation> result=new ArrayList<RailStation>();
+	ArrayList<Station> result=new ArrayList<Station>();
 	
 	public StationsRailFetcher(Context c) {
 		super();
@@ -47,8 +47,8 @@ public class StationsRailFetcher extends NearbyFetcher<RailStation> {
 	}
 
 	private class GetNearbyShopsTask extends
-			AsyncTask<Location, Integer, ArrayList<RailStation>> {
-		ArrayList<RailStation> result;
+			AsyncTask<Location, Integer, ArrayList<Station>> {
+		ArrayList<Station> result;
 		Context context;
 		
 		public GetNearbyShopsTask(Context c) {
@@ -57,9 +57,9 @@ public class StationsRailFetcher extends NearbyFetcher<RailStation> {
 		}
 
 		@Override
-		protected ArrayList<RailStation> doInBackground(Location... at) {
+		protected ArrayList<Station> doInBackground(Location... at) {
 //			android.os.Debug.waitForDebugger();
-			ArrayList<RailStation> res = new ArrayList<RailStation>();
+			ArrayList<Station> res = new ArrayList<Station>();
 			DatabaseHelper myDbHelper = new DatabaseHelper(context);
 			try {
 				myDbHelper.openDataBase();
@@ -75,22 +75,22 @@ public class StationsRailFetcher extends NearbyFetcher<RailStation> {
 		}
 
 		@Override
-		protected void onPostExecute(ArrayList<RailStation> res) {
+		protected void onPostExecute(ArrayList<Station> res) {
 			result = res;
 			if (!isCancelled()) {
 				notifyClients();
 			}
 		}
 
-		public ArrayList<RailStation> getResult() {
+		public ArrayList<Station> getResult() {
 			return result;
 		}
 		
 
 	}
 
-	public ArrayList<RailStation> getResult() {
-		return (task!=null) ? task.getResult() : new ArrayList<RailStation>();
+	public ArrayList<Station> getResult() {
+		return (task!=null) ? task.getResult() : new ArrayList<Station>();
 	}
 	
 	

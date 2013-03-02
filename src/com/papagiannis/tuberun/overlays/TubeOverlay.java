@@ -34,8 +34,9 @@ public class TubeOverlay<T extends OverlayItem> extends HereOverlay<T> {
 			sb.append("\n");
 		}
 		if (sb.length()>0 && sb.charAt(sb.length()-1)=='\n') sb.deleteCharAt(sb.length()-1);
-
 		dialog.setMessage(sb.toString());
+		
+		
 		dialog.setPositiveButton("Departures", new AlertDialog.OnClickListener() {
 			
 			@Override

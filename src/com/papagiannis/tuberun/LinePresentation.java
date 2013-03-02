@@ -60,7 +60,7 @@ public class LinePresentation
         else if (line.equals( LineType.CENTRAL) ) result = 0xFFE41F1F;
         else if (line.equals( LineType.BUSES) ) result = Color.RED;
         else if (line.equals( LineType.ALL) ) result=Color.WHITE;  
-        else if (line.equals( LineType.RAIL) ) result = Color.RED;
+        else if (line.equals( LineType.RAIL) ) result = 0xFFDD423D;
         return result;
     }
     public static int getForegroundColor(LineType line)

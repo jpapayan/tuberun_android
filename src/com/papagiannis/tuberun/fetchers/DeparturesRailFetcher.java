@@ -92,7 +92,10 @@ public class DeparturesRailFetcher extends DeparturesFetcher {
 				int i=0;
 				for (String key:keys) {
 					String value = row.child(i++).text();
-					train.put(key, cleanString(value));
+					value=cleanString(value);
+					if (key.equals("platform") && value!=null && value.length() > 0)
+						value = "Platform " + value;
+					train.put(key, value);
 				}
 				result.add(train);
 			}
@@ -111,6 +114,11 @@ public class DeparturesRailFetcher extends DeparturesFetcher {
 			notifyClients();
 			isFirst.set(true);
 		}
+	}
+	
+	@Override
+	public ArrayList<HashMap<String, String>> getDepartures(String platform) {
+		return getUnsortedDepartures();
 	}
 	
 
