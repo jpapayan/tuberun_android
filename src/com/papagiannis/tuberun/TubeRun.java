@@ -45,14 +45,14 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
-	public static final String VERSION = "1.2.7";
-	//Don't forget to update the app version in the manifest
-	//Don't forget to update the changelog later in this file
-	//Don't forget to change the Gmaps API key in full_screen_map.xml
+	public static final String VERSION = "1.2.8";
+	// Don't forget to update the app version in the manifest
+	// Don't forget to update the changelog later in this file
+	// Don't forget to change the Gmaps API key in full_screen_map.xml
 	public static final Boolean USE_LICENSING = false;
 
-	private static final String TUBE_MAP_URL = "https://www.tfl.gov.uk/assets/downloads/standard-tube-map.gif";
-	private static final String LOCAL_PATH = "standard-tube-map.gif";
+	private static final String TUBE_MAP_URL1 = "https://www.tfl.gov.uk/assets/downloads/standard-tube-map.gif";
+	private static final String TUBE_MAP_URL2 = "https://dl.dropbox.com/s/u206bwzgdy3smn3/london-rail-and-tube-services-map.png?token_hash=AAEb4dT2kKWRIFkQ1H4TL0X4I2-V7g_nmb9aNGqYBSpy9Q";//"http://yia.nnis.gr/tuberun/london-rail-and-tube-services-map.png";
 	private static final String LICENCING_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnskzkZ7GjJBChKebZfXVqdDnuqWDLNHuhhpIwL6a+g8OiNE52+LxolCAZJmOnHr3zvgdPw0vuRKrFfGjuPgVJV13nx1DKFi7LuXuK4rpmMucZ1qZf4kwbNw+iOmp6YqWT8OQ1RN94biWluZhwcee5sb16xmtJEeH2iHEKVtjheJUGebSm6mxiQO3S3LE4p9pWadPDfPmFEvw2vjVLtwyxUqBIhiMiEtOF3e6JDBE6kLndI97jZY4LXsfL7IDhiBe1pLCZrO90TQTKMzqwz8nowXqoQLvDJ78bUaCuJm7WwPPTgpZmAyL5P2bi+c5NDoJrZsntq82EL2hRnDPiP2+nwIDAQAB";
 	private static final byte[] LICENCING_SALT = new byte[] { 100, 78, 89, 45,
 			21, 45, 21, 90, 23, 45, 67, 12, 11, 54 };
@@ -62,12 +62,13 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	private static final int DOWNLOAD_IMAGE_FAILED_DIALOG = -3;
 	private static final int LICENCING_ERROR = -4;
 	private static final int SHOW_WELCOME = -5;
-	
-	public static final String PREFERENCES="Preferences";
-	public static final String AUTOSTART="autostart";
-	public static final Integer AUTOSTART_NONE=-1;
-	public static final String TUBEMAP_EXISTS="tubeMapDownloaded";
-	
+	private static final int ERASE_IMAGE_DIALOG = -6;
+
+	public static final String PREFERENCES = "Preferences";
+	public static final String AUTOSTART = "autostart";
+	public static final Integer AUTOSTART_NONE = -1;
+	public static final String TUBEMAP_EXISTS = "tubeMapDownloaded";
+
 	TextView oysterBalance;
 	ProgressBar oysterProgress;
 	LinearLayout oysterLayout;
@@ -89,7 +90,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 
 		preferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
 		tubeMapDownloaded = preferences.getBoolean(TUBEMAP_EXISTS, false);
-		
+
 		View statusButton = findViewById(R.id.button_status);
 		statusButton.setOnClickListener(this);
 		View departuresButton = findViewById(R.id.button_departures);
@@ -114,40 +115,53 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		oysterProgress = (ProgressBar) findViewById(R.id.progressbar_balance);
 		oysterLayout = (LinearLayout) findViewById(R.id.layout_balance);
 
+		mapsButton.setOnLongClickListener(new View.OnLongClickListener() {
+
+			@SuppressWarnings("deprecation")
+			@Override
+			public boolean onLongClick(View v) {
+				showDialog(ERASE_IMAGE_DIALOG);
+				return true;
+			}
+		});
+
 		if (USE_LICENSING)
 			initializeLicencing();
-		Intent i=getIntent();
-		Boolean showMap=i.getBooleanExtra(MainMenu.SHOWMAP, false);
-		if (showMap) onNewIntent(i);
+		Intent i = getIntent();
+		Boolean showMap = i.getBooleanExtra(MainMenu.SHOWMAP, false);
+		if (showMap)
+			onNewIntent(i);
 		else {
 			setIntent(new Intent());
 			showWelcome();
 		}
 	}
-	
+
 	@Override
 	protected void onNewIntent(Intent intent) {
 		setIntent(intent);
-		Boolean showMap=intent.getBooleanExtra(MainMenu.SHOWMAP, false);
-		if (showMap)onClick(mapsButton);
+		Boolean showMap = intent.getBooleanExtra(MainMenu.SHOWMAP, false);
+		if (showMap)
+			onClick(mapsButton);
 	};
 
 	@SuppressWarnings("deprecation")
 	private void showWelcome() {
-		String l=preferences.getString("lastNotice", "");
+		String l = preferences.getString("lastNotice", "");
 		if (!l.equals(VERSION)) {
 			Editor editor = preferences.edit();
 			editor.putString("lastNotice", VERSION);
 			editor.commit();
 			copyDatabase();
 			showDialog(SHOW_WELCOME);
-		}
-		else jump();
+		} else
+			jump();
 	}
-	
+
 	private void jump() {
-		SharedPreferences shPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
-		int viewId = shPrefs.getInt( AUTOSTART, AUTOSTART_NONE);
+		SharedPreferences shPrefs = getSharedPreferences(PREFERENCES,
+				MODE_PRIVATE);
+		int viewId = shPrefs.getInt(AUTOSTART, AUTOSTART_NONE);
 		if (viewId != AUTOSTART_NONE) {
 			onClick(findViewById(viewId));
 			finish();
@@ -195,7 +209,8 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			i = new Intent(this, AboutActivity.class);
 			break;
 		}
-		if (i!=null) startActivity(i);
+		if (i != null)
+			startActivity(i);
 	}
 
 	private Intent getMapIntent() {
@@ -249,16 +264,18 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 
 	@Override
 	public void update() {
-		SharedPreferences preferences = getSharedPreferences(TubeRun.PREFERENCES, MODE_PRIVATE);
-		String defaultCard = preferences.getString(OysterActivity.DEFAULT_CARD, "");
-		
-		CharSequence balance="";
-		HashMap<String,String> cards = fetcher.getCards();
+		SharedPreferences preferences = getSharedPreferences(
+				TubeRun.PREFERENCES, MODE_PRIVATE);
+		String defaultCard = preferences.getString(OysterActivity.DEFAULT_CARD,
+				"");
+
+		CharSequence balance = "";
+		HashMap<String, String> cards = fetcher.getCards();
 		if (!defaultCard.equals("") && cards.containsKey(defaultCard)) {
-			balance=cards.get(defaultCard);
-		}
-		else balance = fetcher.getResult();
-		
+			balance = cards.get(defaultCard);
+		} else
+			balance = fetcher.getResult();
+
 		oysterBalance.setText(balance);
 		oysterButtonActive.setVisibility(View.VISIBLE);
 		oysterButton.setVisibility(View.GONE);
@@ -275,31 +292,39 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		Dialog result = null;
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		switch (id) {
+		case ERASE_IMAGE_DIALOG:
+			if (tubeMapDownloaded) {
+				wait_dialog = getEraseMapDialog();
+				result = wait_dialog;
+			}
+			break;
 		case DOWNLOAD_IMAGE_DIALOG:
 			builder.setTitle("Tube Map Required")
 					.setMessage(
 							"The official Tube Map is property of TfL and is not included in this app. "
 									+ "However, TubeRun can fetch it from TfL and cache it for future use.\n\n"
-									+ "File size: ~550KB")
+									+ "File sizes: ~2300KB / ~550KB\n\n" 
+									+ "PS: Long-press the map button to delete the map.")
 					.setCancelable(true)
-					.setPositiveButton("Download",
+					.setPositiveButton("Get Tube Map",
 							new DialogInterface.OnClickListener() {
 								@SuppressWarnings("deprecation")
 								public void onClick(DialogInterface dialog,
 										int id) {
 									dismissDialog(DOWNLOAD_IMAGE_DIALOG);
 									showDialog(DOWNLOAD_IMAGE_PROGRESS_DIALOG);
-									fetchTubeMap();
+									fetchTubeMap(TUBE_MAP_URL1);
 								}
 							})
-					.setNegativeButton("Cancel",
+					.setNeutralButton("Get Tube+Rail Map",
 							new DialogInterface.OnClickListener() {
-
-								@SuppressWarnings("deprecation")
-								@Override
+							
+								@Override @SuppressWarnings("deprecation")
 								public void onClick(DialogInterface dialog,
 										int which) {
 									dismissDialog(DOWNLOAD_IMAGE_DIALOG);
+									showDialog(DOWNLOAD_IMAGE_PROGRESS_DIALOG);
+									fetchTubeMap(TUBE_MAP_URL2);
 								}
 							});
 			wait_dialog = builder.create();
@@ -352,18 +377,40 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		return result;
 	}
 
+	private Dialog getEraseMapDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Delete Tube Map")
+				.setMessage(
+						"Do you want to delete the stored tube map? This will allow you to download another version.")
+				.setCancelable(true)
+				.setNegativeButton("Cancel", null)
+				.setPositiveButton("Delete",
+						new DialogInterface.OnClickListener() {
+							@SuppressWarnings("deprecation")
+							public void onClick(DialogInterface dialog, int id) {
+								Editor editor = preferences.edit();
+								editor.putBoolean(TUBEMAP_EXISTS, false);
+								editor.commit();
+								tubeMapDownloaded = false;
+								removeDialog(ERASE_IMAGE_DIALOG);
+							}
+						});
+		return builder.create();
+	}
+
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		switch (id) {
 		case DOWNLOAD_IMAGE_PROGRESS_DIALOG:
 			progressDialog.setProgress(0);
 			progressDialog.setMax(100);
+			break;
 		}
 	};
 
-	private void fetchTubeMap() {
+	private void fetchTubeMap(String url) {
 		task = new ImageDownloadTask();
-		task.execute(TUBE_MAP_URL, LOCAL_PATH);
+		task.execute(url);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -413,6 +460,9 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 				// Let's read everything to RAM first
 				InputStream inputStream = urlConnection.getInputStream();
 				int totalSize = urlConnection.getContentLength();
+				if (totalSize <= 0) {
+					return false;
+				}
 				int downloadedSize = 0;
 				byte[] buffer = new byte[1024];
 				byte[] fullFile = new byte[totalSize];
@@ -443,19 +493,6 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 				r.insert(
 						Uri.parse("content://"
 								+ TubeMapContentProvider.AUTHORITY + "/map"), v);
-
-				// This is an attempt to read from the ContentProvider, it
-				// works!
-				// Cursor
-				// rrr=r.query(Uri.parse("content://"+TubeMapContentProvider.AUTHORITY+"/map"),
-				// new String[]{},"",new String[]{},"");
-				// Boolean suc=rrr.moveToFirst();
-				// if (suc) {
-				// byte[] res=rrr.getBlob(0);
-				// int iii=res.length;
-				// i=i+i;
-				// }
-
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 				return false;
@@ -473,7 +510,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 			if (result) {
 				tubeMapDownloaded = true;
 				Editor editor = preferences.edit();
-				editor.putBoolean("tubeMapDownloaded", tubeMapDownloaded);
+				editor.putBoolean(TUBEMAP_EXISTS, tubeMapDownloaded);
 				editor.commit();
 				Intent i = getMapIntent();
 				startActivity(i);
@@ -592,14 +629,15 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 	}
 
 	// *****************Welcome to TubeRun operations**************************
-	
+
 	private Dialog getWelcomeDialog() {
 		ProgressDialog.Builder builder = new ProgressDialog.Builder(this);
-		builder.setTitle(APPNAME+" "+VERSION)
-				.setMessage("What's new:\n\n"+
-						"*New: Overground & Rail departures\n\n"+
-						"*New: Departures section overhaul\n\n"+
-						"*Sorry: your favorites are now lost")
+		builder.setTitle(APPNAME + " " + VERSION)
+				.setMessage(
+						"What's new:\n\n"
+								+ "*New: added a tube map with rail lines.\n\n"
+								+ "*New: you can delete the stored tube map by a long press in the Map section button.\n\n"
+								+ "*Fixes: bus stop selection bug in departures.")
 				.setCancelable(false).setPositiveButton("OK", null);
 		return builder.create();
 	}

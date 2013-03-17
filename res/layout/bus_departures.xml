@@ -92,14 +92,15 @@
 			android:paddingRight="10dp"
 			android:textSize="14sp"
             android:textStyle="bold"
+            android:textIsSelectable="false"
             android:textColor="@drawable/tuberun_red_bright" />
         
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="2dip"
-            android:layout_gravity="bottom"
+            android:layout_width="fill_parent"
+            android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
+            android:layout_height="2dip"
+            android:layout_gravity="bottom|center_horizontal"
             android:background="@drawable/tuberun_red_bright" />
 
         <LinearLayout
@@ -176,6 +177,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dip"
             android:maxLines="4"
+            android:textIsSelectable="false"
             android:scrollbars="vertical"/>
         
     </RelativeLayout>

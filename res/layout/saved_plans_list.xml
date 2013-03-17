@@ -22,11 +22,7 @@
 			android:layout_marginRight="16dip"
             android:gravity="center"
             android:text="Store journey plans for offline use by pressing the save button" />
-        <ImageView 
-            android:src="@drawable/content_save"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"/>
+
     </LinearLayout>
 
     <ListView

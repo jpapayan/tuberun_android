@@ -102,6 +102,14 @@ public class SelectLineActivity extends FragmentActivity implements
 				.getSystemService(Context.LOCATION_SERVICE);
 		gMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 		mapFragment=(MeMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
+		gMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+			
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				startBusDepartures(marker.getSnippet(), marker.getTitle());
+				return true;
+			}
+		});
 	}
 
 	@Override
@@ -186,17 +194,20 @@ public class SelectLineActivity extends FragmentActivity implements
 	        	opt.icon(BitmapDescriptorFactory.fromResource(R.drawable.buses));
 	        	markers.add(gMap.addMarker(opt));
 	        }
-	        if (prevResult.size()==0) mapFragment.animateToMarkers(markers);
+	        if (prevResult.size()==0) {
+	        	try {
+	        		//WARNING: If the nearby stations are returned very early, that is
+	        		//before the fragment manager has managed to finish the fragment
+	        		//transaction and display the gMap, this will fail because the map
+	        		//is not yet active. This happens in old phones. 
+	        		mapFragment.animateToMarkers(markers);
+	        	}
+	        	catch (IllegalStateException e) {
+	        		Log.w(this.getClass().toString(), e);
+	        	}
+	        }
 		}
 		prevResult=result;
-		gMap.setOnMarkerClickListener(new OnMarkerClickListener() {
-			
-			@Override
-			public boolean onMarkerClick(Marker marker) {
-				startBusDepartures(marker.getSnippet(), marker.getTitle());
-				return true;
-			}
-		});
 	}
 
 	private void populateStationsList(ArrayList<Station> nearby) {

@@ -53,7 +53,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="2dip"
-        android:layout_gravity="bottom"
+        android:layout_gravity="bottom|center_horizontal"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
         android:background="@drawable/tuberun_red_bright" />

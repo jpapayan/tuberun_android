@@ -24,7 +24,8 @@ import com.papagiannis.tuberun.plan.Plan;
 import com.papagiannis.tuberun.plan.Route;
 
 public class PlanFetcher extends Fetcher {
-	final String q = "http://tuberun.dyndns.org:55559/getPlan.php";
+	final String q = "http://yia.nnis.gr/tuberun/getPlan.php";
+//	final String q = "http://tuberun.dyndns.org:55559/getPlan.php";
 	private Plan plan;
 	private transient RequestTask task=null;
 	private static final long serialVersionUID = 1L;
