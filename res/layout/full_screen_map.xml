@@ -85,7 +85,7 @@
             android:id="@+id/bus_mapview"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:apiKey="0dl-DOBdbuAppcA7UOEUHCKwpl9_gD8G5lealfw"
+            android:apiKey="0dl-DOBdbuArzbkNHPavhZ3AXr8F0oiQK18i5HA"
             android:clickable="true" />
         
         <LinearLayout 
