@@ -61,7 +61,7 @@
         style="@style/WhiteText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/tuberun_red"
+        android:background="@drawable/tuberun_red_bright"
         android:gravity="center_horizontal|bottom"
         android:text="TubeRunn" />
 
