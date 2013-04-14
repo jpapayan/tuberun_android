@@ -9,7 +9,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.pm.FeatureInfo;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -38,6 +37,8 @@ import com.papagiannis.tuberun.cyclehire.CycleHireStation;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.RoutesBusFetcher;
 import com.papagiannis.tuberun.fragments.MeMapFragment;
+import com.papagiannis.tuberun.overlays.TubeMarkerClickListener;
+import com.papagiannis.tuberun.overlays.RailMarkerClickListener;
 
 public class NearbyMapActivity extends FragmentActivity implements Observer {
 	private static final int SELECT_DIRECTION_DIALOG = -1;
@@ -177,42 +178,7 @@ public class NearbyMapActivity extends FragmentActivity implements Observer {
 	}
 
 	private void showTubePushPins() {
-		gMap.setOnMarkerClickListener(new OnMarkerClickListener() {
-			@Override
-			public boolean onMarkerClick(final Marker marker) {
-				gMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-				AlertDialog.Builder dialog = new AlertDialog.Builder(self);
-				dialog.setTitle(marker.getTitle());
-				dialog.setIcon(R.drawable.tube);
-				StringBuffer sb = new StringBuffer();
-				Iterable<LineType> lines = StationDetails
-						.FetchLinesForStation(marker.getTitle());
-				for (LineType lt : lines) {
-					sb.append(LinePresentation.getStringRespresentation(lt));
-					if (lt != LineType.DLR)
-						sb.append(" Line");
-					sb.append("\n");
-				}
-				if (sb.length() > 0 && sb.charAt(sb.length() - 1) == '\n')
-					sb.deleteCharAt(sb.length() - 1);
-				dialog.setMessage(sb.toString());
-
-				dialog.setPositiveButton("Departures",
-						new AlertDialog.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								showTubeDepartures(marker.getSnippet(),
-										marker.getTitle());
-							}
-						});
-				dialog.setNegativeButton("Cancel", null);
-				dialog.show();
-				return true;
-			}
-
-		});
+		gMap.setOnMarkerClickListener(new TubeMarkerClickListener(this));
 		animateToMarkers(createMarkers(tubeStations, R.drawable.tube, new SnippetGenerator() {
 
 			@Override
@@ -224,14 +190,6 @@ public class NearbyMapActivity extends FragmentActivity implements Observer {
 
 	}
 
-	public void showTubeDepartures(String code, String name) {
-		Intent i = new Intent(this, DeparturesActivity.class);
-		Station s = new Station(name, code);
-		s.addLineTypeForDepartures(LineType.ALL);
-		i.putExtra("type", "station");
-		i.putExtra("station", s);
-		startActivity(i);
-	}
 	
 	private void showBusPushpins(int direction) {
 		gMap.setOnMarkerClickListener(new OnMarkerClickListener() {
@@ -315,32 +273,7 @@ public class NearbyMapActivity extends FragmentActivity implements Observer {
 	}
 
 	private void showRailPushPins() {
-		gMap.setOnMarkerClickListener(new OnMarkerClickListener() {
-			@Override
-			public boolean onMarkerClick(final Marker marker) {
-				gMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-				AlertDialog.Builder dialog = new AlertDialog.Builder(self);
-				dialog.setTitle(marker.getTitle());
-				dialog.setIcon(R.drawable.rail);
-				dialog.setMessage("Rail Station");
-				dialog.setPositiveButton("Departures",
-						new AlertDialog.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								Station s=new Station(marker.getTitle());
-								s.setCode(marker.getSnippet());
-								showRailDepartures(s);
-							}
-						});
-				dialog.setNegativeButton("Cancel", null);
-				dialog.show();
-				return true;
-			}
-
-		});
-		
+		gMap.setOnMarkerClickListener(new RailMarkerClickListener(this));
 		animateToMarkers(createMarkers(railStations, R.drawable.rail,
 				new SnippetGenerator() {
 					@Override
@@ -351,13 +284,6 @@ public class NearbyMapActivity extends FragmentActivity implements Observer {
 				}));
 	}
 	
-	private void showRailDepartures(Station s) {
-		Intent i = new Intent(this, RailDeparturesActivity.class);
-		i.putExtra("station", s);
-		startActivity(i);
-	}
-	
-
 	private Dialog wait_dialog;
 	@Override
 	protected Dialog onCreateDialog(int id) {
