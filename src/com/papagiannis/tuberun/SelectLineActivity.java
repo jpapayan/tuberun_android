@@ -184,7 +184,7 @@ public class SelectLineActivity extends FragmentActivity implements
 		if (result.size()==0) return;
 		if (prevResult.size()!=result.size()) { //a bit dangerous...
 			gMap.clear();
-			ArrayList<Marker> markers=new ArrayList<Marker>(result.size());
+			final ArrayList<Marker> markers=new ArrayList<Marker>(result.size());
 	        for (BusStation s: result){
 	        	MarkerOptions opt=new MarkerOptions();
 	        	Location l=s.getLocation();
@@ -195,16 +195,12 @@ public class SelectLineActivity extends FragmentActivity implements
 	        	markers.add(gMap.addMarker(opt));
 	        }
 	        if (prevResult.size()==0) {
-	        	try {
-	        		//WARNING: If the nearby stations are returned very early, that is
-	        		//before the fragment manager has managed to finish the fragment
-	        		//transaction and display the gMap, this will fail because the map
-	        		//is not yet active. This happens in old phones. 
-	        		mapFragment.animateToMarkers(markers);
-	        	}
-	        	catch (IllegalStateException e) {
-	        		Log.w(this.getClass().toString(), e);
-	        	}
+	        	mapFragment.getView().post(new Runnable() {
+	    			@Override
+	    			public void run() {
+	    				mapFragment.animateToMarkers(markers);
+	    			}
+	    		});
 	        }
 		}
 		prevResult=result;

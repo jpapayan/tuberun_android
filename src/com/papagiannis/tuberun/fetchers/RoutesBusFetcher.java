@@ -11,6 +11,9 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
@@ -87,6 +90,7 @@ public class RoutesBusFetcher extends Fetcher {
 				}
 				results=result;
 				generateOverlays();
+				generatePolylines();
 				
 			} catch (Exception e) {
 				Log.w("LinesBusFetcher", e);
@@ -96,7 +100,9 @@ public class RoutesBusFetcher extends Fetcher {
 			return result;
 		}
 		
+		private ArrayList<PolylineOptions> polylines;
 		private ArrayList<Overlay> overlays;
+		private LatLngBounds bounds;
 		private final int[] colors=new int[]{Color.RED, Color.BLUE, Color.BLACK, 
 				Color.argb(255, 0, 127, 14), Color.MAGENTA, Color.YELLOW, Color.CYAN, 
 				Color.DKGRAY, Color.GRAY, Color.LTGRAY, Color.WHITE};
@@ -137,8 +143,56 @@ public class RoutesBusFetcher extends Fetcher {
 			return overlays;
 		}
 		
+		public ArrayList<PolylineOptions> generatePolylines() {
+			polylines=new ArrayList<PolylineOptions>();
+			LatLng sw=null;
+			LatLng ne=null;
+			int color=0;
+			int strokeWidth= (routes.size()==1) ? 8 : 5+routes.size()/2;
+			for (String route:routes) {
+				ArrayList<ArrayList<BusStation>> directions = getRouteStops(route);
+				ArrayList<BusStation> stops = directions.get(direction); 
+				PolylineOptions line=new PolylineOptions();
+				for (int i = 0; i < stops.size(); i++) {
+					BusStation stop1=stops.get(i);
+					LatLng point=new LatLng( stop1.getLocation().getLatitude(),  stop1.getLocation().getLongitude() );
+					if (sw==null) {
+						sw=new LatLng(point.latitude, point.longitude);
+					}
+					if (ne==null) {
+						ne=new LatLng(point.latitude, point.longitude);
+					}
+					if (point.latitude<sw.latitude) {
+						sw=new LatLng(point.latitude, sw.longitude);
+					}
+					if (point.longitude<sw.longitude) {
+						sw=new LatLng(sw.latitude, point.longitude);
+					}
+					if (point.latitude>ne.latitude) {
+						ne=new LatLng(point.latitude, ne.longitude);
+					}
+					if (point.longitude>ne.longitude) {
+						ne=new LatLng(ne.latitude, point.longitude);
+					}
+					line.add(point);
+				}
+				polylines.add(line);
+				line.width(strokeWidth);
+				line.color(colors[color%colors.length]);
+				resultColors.put(route, colors[color%colors.length]);
+				color++;
+				if (color%2==0) strokeWidth--;
+			}
+			bounds=new LatLngBounds(sw, ne);
+			return polylines;
+		}
+		
 		public ArrayList<Overlay> getResultOverlays() {
 			return overlays;
+		}
+		
+		public ArrayList<PolylineOptions> getPolylines() {
+			return polylines;
 		}
 		
 		public HashMap<String, Integer> getResultLineColors() {
@@ -159,6 +213,9 @@ public class RoutesBusFetcher extends Fetcher {
 			}
 		}
 
+		public LatLngBounds getBounds() {
+			return bounds;
+		}
 	}
 
 	public ArrayList<ArrayList<BusStation>> getRouteStops(String route) {
@@ -168,6 +225,15 @@ public class RoutesBusFetcher extends Fetcher {
 	public ArrayList<Overlay> getOverlays() {
 		ArrayList<Overlay> o=task.getResultOverlays();
 		return o;
+	}
+	
+	public ArrayList<PolylineOptions> getPolylines() {
+		ArrayList<PolylineOptions> o=task.getPolylines();
+		return o;
+	}
+	
+	public LatLngBounds getBounds() {
+		return task.getBounds();
 	}
 	
 	public HashMap<String, Integer> getResultColors() {
@@ -183,4 +249,5 @@ public class RoutesBusFetcher extends Fetcher {
 		this.direction=direction;
 		
 	}
+
 }

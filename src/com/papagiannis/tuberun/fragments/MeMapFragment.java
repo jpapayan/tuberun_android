@@ -48,6 +48,7 @@ public class MeMapFragment extends Fragment implements LocationListener {
 	protected TextView titleTextView;
 	protected LinearLayout titleLayout;
 	protected Button myLocationButton;
+	private boolean navigateOnLocationOnce;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,32 +67,16 @@ public class MeMapFragment extends Fragment implements LocationListener {
 		gMap.setMyLocationEnabled(true);
 		gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LONDON, 16));
 
-		// lastKnownLocation = locationManager
-		// .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		// if (lastKnownLocation == null)
-		// lastKnownLocation = locationManager
-		// .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		// if (lastKnownLocation != null) {
-		// myPushpin = generateMyLocationPushPin(lastKnownLocation);
-		// mapOverlays.add(myPushpin);
-		// animateToHere(lastKnownLocation);
-		// } else {
-		// Location l_london = new Location("");
-		// l_london.setLongitude(gp_london.getLongitudeE6() / (float) 1000000);
-		// l_london.setLatitude(gp_london.getLatitudeE6() / (float) 1000000);
-		// l_london.setAccuracy(200);
-		// lastKnownLocation = l_london;
-		// myPushpin = generateMyLocationPushPin(l_london);
-		// mapOverlays.add(myPushpin);
-		// }
-		//
 		return fragment;
 	}
 
 	public void onLocationChanged(Location l) {
 		if (isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
-
+			if (navigateOnLocationOnce) {
+				navigateOnLocationOnce=false;
+				gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(l.getLatitude(), l.getLongitude()), 16));
+			}
 		}
 	}
 
@@ -217,5 +202,9 @@ public class MeMapFragment extends Fragment implements LocationListener {
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setNavigateOnLocationOnce(boolean v) {
+		navigateOnLocationOnce=v;
 	}
 }
