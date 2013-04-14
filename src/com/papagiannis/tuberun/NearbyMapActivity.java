@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.pm.FeatureInfo;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -23,14 +24,15 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.papagiannis.tuberun.cyclehire.CycleHireStation;
 import com.papagiannis.tuberun.fetchers.Observer;
@@ -115,27 +117,12 @@ public class NearbyMapActivity extends FragmentActivity implements Observer {
 		displayRoute = true;
 		wait_dialog.dismiss();
 		if (isBus()) {
-			showBusPushpins(0);
+			showBusPushpins(busFetcher.getDirection());
 		} else if (isCycle()) {
 
 		} else if (isTube()) {
 
 		}
-	}
-
-	private void showBusPushpins(int direction) {
-		generateKey(busFetcher.getResultColors());
-		for (PolylineOptions line:busFetcher.getPolylines()) {
-			 gMap.addPolyline(line);
-		}
-		final LatLngBounds bounds=busFetcher.getBounds();
-		if (bounds==null) return;
-		mapFragment.getView().post(new Runnable() {
-			@Override
-			public void run() {
-				gMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 20));
-			}
-		});
 	}
 
 	private void generateKey(HashMap<String, Integer> resultColors) {
@@ -163,11 +150,10 @@ public class NearbyMapActivity extends FragmentActivity implements Observer {
 		keyLayout.setVisibility(View.VISIBLE);
 	}
 
-	private void createMarkers(List<? extends AbstractLocatable> stations, int bitmap,
+	private ArrayList<Marker> createMarkers(List<? extends AbstractLocatable> stations, int bitmap,
 			SnippetGenerator sGen) {
 		if (stations.size() == 0)
-			return;
-		gMap.clear();
+			return new ArrayList<Marker>();
 		final ArrayList<Marker> markers = new ArrayList<Marker>(stations.size());
 		for (AbstractLocatable s : stations) {
 			MarkerOptions opt = new MarkerOptions();
@@ -178,6 +164,10 @@ public class NearbyMapActivity extends FragmentActivity implements Observer {
 			opt.icon(BitmapDescriptorFactory.fromResource(bitmap));
 			markers.add(gMap.addMarker(opt));
 		}
+		return markers;
+	}
+
+	private void animateToMarkers(final ArrayList<Marker> markers) {
 		mapFragment.getView().post(new Runnable() {
 			@Override
 			public void run() {
@@ -223,14 +213,14 @@ public class NearbyMapActivity extends FragmentActivity implements Observer {
 			}
 
 		});
-		createMarkers(tubeStations, R.drawable.tube, new SnippetGenerator() {
+		animateToMarkers(createMarkers(tubeStations, R.drawable.tube, new SnippetGenerator() {
 
 			@Override
 			public String getSnippet(AbstractLocatable l) {
 				Station st=(Station)l;
 				return st.getCode();
 			}
-		});
+		}));
 
 	}
 
@@ -242,9 +232,67 @@ public class NearbyMapActivity extends FragmentActivity implements Observer {
 		i.putExtra("station", s);
 		startActivity(i);
 	}
+	
+	private void showBusPushpins(int direction) {
+		gMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+			@Override
+			public boolean onMarkerClick(final Marker marker) {
+				showBusDepartures(marker.getSnippet(), marker.getTitle());
+				return true;
+			}
+		});
+		generateKey(busFetcher.getResultColors());
+		for (PolylineOptions line:busFetcher.getPolylines()) {
+			 gMap.addPolyline(line);
+		}
+		final ArrayList<Marker> markers = new ArrayList<Marker>();
+		for (String route:routes) {
+			markers.addAll(createMarkers(
+					busFetcher.getRouteStops(route).get(direction),
+					R.drawable.buses,
+					new SnippetGenerator() {
+
+						@Override
+						public String getSnippet(AbstractLocatable st) {
+							BusStation bs=(BusStation) st;
+							return bs.getCode();
+						}
+						
+					}));
+		}
+		gMap.setOnCameraChangeListener(new OnCameraChangeListener() {
+			double previousZoom=-1.0;
+			final int ZOOM_LIMIT=14;
+			@Override
+			public void onCameraChange(CameraPosition position) {
+				if (position.zoom>ZOOM_LIMIT && (previousZoom<=ZOOM_LIMIT || previousZoom==-1.0)) {
+					for (Marker m:markers) m.setVisible(true);
+				}
+				else if (position.zoom<=ZOOM_LIMIT && (previousZoom>ZOOM_LIMIT || previousZoom==-1.0)) {
+					for (Marker m:markers) m.setVisible(false);
+				}
+			}
+		});
+		
+		final LatLngBounds bounds=busFetcher.getBounds();
+		if (bounds==null) return;
+		mapFragment.getView().post(new Runnable() {
+			@Override
+			public void run() {
+				gMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 20));
+			}
+		});
+	}
+	
+	public void showBusDepartures(String code, String snippet) {
+		Intent i=new Intent(this, BusDeparturesActivity.class);
+		i.putExtra("code", code);
+		i.putExtra("name", snippet);
+		startActivity(i);
+	}
 
 	private void showCycleHirePushPins() {
-		createMarkers(csStations, R.drawable.cycle_hire_pushpin,
+		animateToMarkers(createMarkers(csStations, R.drawable.cycle_hire_pushpin,
 				new SnippetGenerator() {
 					@Override
 					public String getSnippet(AbstractLocatable st) {
@@ -253,17 +301,17 @@ public class NearbyMapActivity extends FragmentActivity implements Observer {
 								+ "\n" + "Available Docks: "
 								+ cst.getnEmptyDocks();
 					}
-				});
+				}));
 	}
 
 	private void showOysterPushPins() {
-		createMarkers(oysterShops, R.drawable.ic_oyster_selected,
+		animateToMarkers(createMarkers(oysterShops, R.drawable.ic_oyster_selected,
 				new SnippetGenerator() {
 					@Override
 					public String getSnippet(AbstractLocatable st) {
 						return null;
 					}
-				});
+				}));
 	}
 
 	private void showRailPushPins() {
@@ -293,14 +341,14 @@ public class NearbyMapActivity extends FragmentActivity implements Observer {
 
 		});
 		
-		createMarkers(railStations, R.drawable.rail,
+		animateToMarkers(createMarkers(railStations, R.drawable.rail,
 				new SnippetGenerator() {
 					@Override
 					public String getSnippet(AbstractLocatable st) {
 						Station s=(Station) st;
 						return s.getCode();
 					}
-				});
+				}));
 	}
 	
 	private void showRailDepartures(Station s) {
