@@ -195,7 +195,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 
 	@Override
 	public void onLocationChanged(Location l) {
-		if (SelectBusStationActivity.isBetterLocation(l, lastKnownLocation)) {
+		if (MeMapActivity.isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
 			reverseGeocode(lastKnownLocation);
 			if (undergroundFragment!=null) undergroundFragment.locationChanged(lastKnownLocation);

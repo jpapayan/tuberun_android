@@ -221,7 +221,7 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location l) {
-		if (SelectBusStationActivity.isBetterLocation(l, lastKnownLocation)) {
+		if (MeMapActivity.isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
 			plan.setStartingLocation(lastKnownLocation);
 			reverseGeocode(l);

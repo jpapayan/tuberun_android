@@ -47,7 +47,6 @@ public class MeMapFragment extends Fragment implements LocationListener {
 	protected Button logoButton;
 	protected TextView titleTextView;
 	protected LinearLayout titleLayout;
-	protected Button myLocationButton;
 	private boolean navigateOnLocationOnce;
 
 	@Override
@@ -56,9 +55,6 @@ public class MeMapFragment extends Fragment implements LocationListener {
 
 		View fragment = inflater.inflate(R.layout.me_map_fragment, container,
 				false);
-		myLocationButton = (Button) fragment
-				.findViewById(R.id.mylocation_button);
-
 		gMap = ((SupportMapFragment) getFragmentManager().findFragmentById(
 				R.id.map)).getMap();
 		if (gMap == null)

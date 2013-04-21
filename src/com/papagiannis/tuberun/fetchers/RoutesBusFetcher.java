@@ -6,22 +6,15 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.maps.GeoPoint;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 import com.papagiannis.tuberun.BusStation;
 import com.papagiannis.tuberun.DatabaseHelper;
-import com.papagiannis.tuberun.R;
-import com.papagiannis.tuberun.overlays.RouteOverlay;
-import com.papagiannis.tuberun.overlays.ZoomingBusStationsOverlay;
 
 public class RoutesBusFetcher extends Fetcher {
 	private static final long serialVersionUID = 1L;
@@ -89,7 +82,6 @@ public class RoutesBusFetcher extends Fetcher {
 					}
 				}
 				results=result;
-				generateOverlays();
 				generatePolylines();
 				
 			} catch (Exception e) {
@@ -107,41 +99,6 @@ public class RoutesBusFetcher extends Fetcher {
 				Color.argb(255, 0, 127, 14), Color.MAGENTA, Color.YELLOW, Color.CYAN, 
 				Color.DKGRAY, Color.GRAY, Color.LTGRAY, Color.WHITE};
 
-		private ZoomingBusStationsOverlay<OverlayItem> stopsOverlay;
-		public ArrayList<Overlay> generateOverlays() {
-			overlays=new ArrayList<Overlay>();
-			Drawable dw=context.getResources().getDrawable(R.drawable.buses);
-			stopsOverlay=new ZoomingBusStationsOverlay<OverlayItem>(dw, context);
-			int color=0;
-			int strokeWidth= (routes.size()==1) ? 8 : 5+routes.size()/2;
-			for (String route:routes) {
-				ArrayList<ArrayList<BusStation>> directions = getRouteStops(route);
-				ArrayList<BusStation> stops = directions.get(direction); 
-				for (int i = 1; i < stops.size(); i++) {
-					BusStation stop1=stops.get(i - 1);
-					BusStation stop2=stops.get(i);
-					
-					GeoPoint fromGP=new GeoPoint( stop1.getLatitudeE6(), stop1.getLongtitudeE6() );
-					GeoPoint toGP = new GeoPoint( stop2.getLatitudeE6(), stop2.getLongtitudeE6() );
-					
-					overlays.add(new RouteOverlay(fromGP, toGP ,colors[color%colors.length], strokeWidth));
-					if (i==1) resultColors.put(route, colors[color%colors.length]);
-					
-					if (routes.size()==1) {
-						stopsOverlay.addOverlay(addBusStopPushPin(stop1));
-						if (stops.size()-1==i) { 
-							stopsOverlay.addOverlay(addBusStopPushPin(stop2));
-						}
-					}
-				}
-				if (stopsOverlay.size()>0) {
-					overlays.add(stopsOverlay);
-				}
-				color++;
-				if (color%2==0) strokeWidth--;
-			}
-			return overlays;
-		}
 		
 		public ArrayList<PolylineOptions> generatePolylines() {
 			polylines=new ArrayList<PolylineOptions>();
@@ -199,11 +156,6 @@ public class RoutesBusFetcher extends Fetcher {
 			return resultColors;
 		}
 		
-		private OverlayItem addBusStopPushPin(BusStation bs) {
-			Location l=bs.getLocation();
-			GeoPoint point = new GeoPoint((int) (l.getLatitude() * 1000000),(int) (l.getLongitude() * 1000000));
-			return new OverlayItem(point, bs.getCode(), bs.getName());
-		}
 		
 		@Override
 		protected void onPostExecute(HashMap<String, ArrayList<ArrayList<BusStation>>> res) {
