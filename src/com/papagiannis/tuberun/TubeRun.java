@@ -45,10 +45,9 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
-	public static final String VERSION = "1.2.8";
+	public static final String VERSION = "1.3.0";
 	// Don't forget to update the app version in the manifest
 	// Don't forget to update the changelog later in this file
-	// Don't forget to change the Gmaps API key in full_screen_map.xml
 	public static final Boolean USE_LICENSING = false;
 
 	private static final String TUBE_MAP_URL1 = "https://www.tfl.gov.uk/assets/downloads/standard-tube-map.gif";
@@ -635,9 +634,8 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		builder.setTitle(APPNAME + " " + VERSION)
 				.setMessage(
 						"What's new:\n\n"
-								+ "*New: added a tube map with rail lines.\n\n"
-								+ "*New: you can delete the stored tube map by a long press in the Map section button.\n\n"
-								+ "*Fixes: bus stop selection bug in departures.")
+								+ "*New, hi-resolution, application icon.\n\n"
+								+ "*Migrated to the Google Maps v2 API. Significant performance improvements in Map views.\n\n")
 				.setCancelable(false).setPositiveButton("OK", null);
 		return builder.create();
 	}
