@@ -154,7 +154,7 @@ public class OysterFetcher extends Fetcher {
 			}
 			if (i<0) throw new Exception("Cannot parse server response");
 			response=response.substring(i+mark.length());
-			oyster_balance="Â£"+response.substring(0,response.indexOf("</span>"));
+			oyster_balance="£"+response.substring(0,response.indexOf("</span>"));
 			
 			cards.put(number, oyster_balance);
 			update_time=new Date();
