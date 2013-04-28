@@ -72,7 +72,10 @@ public class OysterFetcher extends Fetcher {
 	String param = "";
 	private int totalCards=0;
 	private AtomicInteger cardsReturned=new AtomicInteger(0);
-
+	private static final String mark1="Choose card number";
+	private static final String mark2="Balance: &pound;";
+	private static final String mark3="<span class=\"label\">Balance:</span>\r\n\t<span class=\"content\">&pound;";
+	
 	private void getCallBack1(String response) {
 		try {
 			if (response==null || response.equals("")) 
@@ -80,8 +83,9 @@ public class OysterFetcher extends Fetcher {
 			if (response.contains("Login failed")) {
 				throw new Exception("Login failed, please check your credentials.");
 			}
-			int i=response.indexOf("Choose card number");
-			int j=response.indexOf("Balance: &pound;");
+			int i=response.indexOf(mark1);
+			int j=response.indexOf(mark2);
+			int k=response.indexOf(mark3);
 			if (i>0) {
 				totalCards=0;
 				response=response.substring(i);
@@ -115,7 +119,7 @@ public class OysterFetcher extends Fetcher {
 				
 				//multiple cards parsing
 			}
-			else if (j>0) {
+			else if (j>0 || k>0) {
 				totalCards=1;
 				//single card parsing
 				getCallBack2(response);
