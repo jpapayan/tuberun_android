@@ -221,7 +221,7 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location l) {
-		if (MeMapActivity.isBetterLocation(l, lastKnownLocation)) {
+		if (LocationHelper.isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
 			plan.setStartingLocation(lastKnownLocation);
 			reverseGeocode(l);
@@ -246,16 +246,10 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 
 	void requestLocationUpdates() {
 		try {
-			if (locationManager != null) {
-				locationManager.requestLocationUpdates(
-						LocationManager.NETWORK_PROVIDER, 2 * 1000, 5, this);
-				locationManager.requestLocationUpdates(
-						LocationManager.GPS_PROVIDER, 3 * 1000, 5, this);
-			}
+			LocationHelper.requestLocationUpdates(locationManager, this);
 		} catch (Exception e) {
 			Log.w("LocationService", e);
 			planFragment.showDialog(PlanFragment.LOCATION_SERVICE_FAILED);
-
 		}
 	}
 

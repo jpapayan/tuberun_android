@@ -1,24 +1,26 @@
 package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.ListActivity;
-import android.graphics.Color;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
-import com.ericharlow.DragNDrop.DragListener;
-import com.ericharlow.DragNDrop.DragNDropAdapter;
-import com.ericharlow.DragNDrop.DragNDropListView;
-import com.ericharlow.DragNDrop.DropListener;
-import com.ericharlow.DragNDrop.RemoveListener;
 import com.papagiannis.tuberun.binders.FavoritesBinder;
 import com.papagiannis.tuberun.favorites.DeparturesFavorite;
 import com.papagiannis.tuberun.favorites.Favorite;
@@ -29,9 +31,10 @@ import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.StatusesFetcher;
 
 public class FavoritesActivity extends ListActivity implements Observer,
-		OnClickListener {
-	private DragNDropListView listView;
+		OnClickListener, LocationListener {
+	private ListView listView;
 	private ArrayList<Favorite> favorites = new ArrayList<Favorite>();
+	private HashMap<Favorite, Location> locations = null;
 	private int fetchers_count = 0;
 	private boolean uses_status_weekend = false;
 	private boolean uses_status_now = false;
@@ -51,14 +54,10 @@ public class FavoritesActivity extends ListActivity implements Observer,
 
 	public void create() {
 		setListAdapter(null);
-
-		listView = (DragNDropListView) getListView();
-		listView.setDropListener(mDropListener);
-		listView.setRemoveListener(mRemoveListener);
-		listView.setDragListener(mDragListener);
-
+		listView = (ListView) getListView();
 		emptyLayout = (LinearLayout) findViewById(R.id.empty_layout);
 
+		setupLocationManager();
 		updateFavorites();
 		onClick(null);
 	}
@@ -97,6 +96,37 @@ public class FavoritesActivity extends ListActivity implements Observer,
 			fc.clearCallbacks();
 			fc.registerCallback(this);
 		}
+		findLocations(favorites);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void findLocations(ArrayList<Favorite> list) {
+		AsyncTask<ArrayList<Favorite>, Integer,HashMap<Favorite,Location>> 
+		findLocationsTask=new AsyncTask<ArrayList<Favorite>, Integer,HashMap<Favorite,Location>>(){
+
+			@Override
+			protected HashMap<Favorite,Location> doInBackground(ArrayList<Favorite>... favs) {
+				if (favs==null || favs.length==0) return new HashMap<Favorite, Location>();
+				DatabaseHelper myDbHelper = new DatabaseHelper(FavoritesActivity.this);
+				HashMap<Favorite,Location> res=new HashMap<Favorite,Location>();
+				try {
+					myDbHelper.openDataBase();
+					res = myDbHelper.getFavoriteLocations(favs[0]);
+				} catch (Exception e) {
+					Log.w("DeparturesActivity", e);
+				} finally {
+					myDbHelper.close();
+				}
+				return res;
+			}
+			
+			@Override
+			protected void onPostExecute(HashMap<Favorite,Location> res) {
+				locations = res;
+				showFavorites();
+			}
+		};
+		findLocationsTask.execute(list);
 	}
 
 	@Override
@@ -104,6 +134,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		if (favorites.size() > 0) {
 			emptyLayout.setVisibility(View.GONE);
 			setListAdapter(null);
+			replies.set(0);
 			for (Favorite f : favorites) {
 				f.getFetcher().update();
 			}
@@ -113,27 +144,87 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	}
 
 	private AtomicInteger replies = new AtomicInteger(0);
-
+	
+	@Override
+	public void update() {
+		if (!countReply()) {
+			return;
+		}
+		showFavorites();
+	}
+	
+	private boolean countReply() {
+		return replies.incrementAndGet() == fetchers_count;
+	}
+	
 	private boolean repliesReceived() {
-		boolean result = replies.incrementAndGet() == fetchers_count;
-		if (result == true)
-			replies = new AtomicInteger(0);
+		return replies.get() == fetchers_count; 
+	}
+	
+	/**
+	 * Call this method when there is reasonable reason to believe
+	 * that the favorites should be drawn right now. This method
+	 * ensures all data has been loaded before proceeding with drawing. 
+	 */
+	public void showFavorites() {
+		if (!repliesReceived()) {
+			return;
+		}
+		if (lastKnownLocation.getProvider() == LocationHelper.FAKE_PROVIDER) {
+			return;
+		}
+		if (locations == null) {
+			return;
+		}
+		updateList(false, sortByDistance(lastKnownLocation, favorites));
+	}
+	
+	private ArrayList<Favorite> sortByDistance(final Location l, ArrayList<Favorite> list) {
+		if (l == null || l.getProvider()==LocationHelper.FAKE_PROVIDER) return list;
+		ArrayList<Favorite> result = new ArrayList<Favorite>(list);
+		Collections.sort(result, new Comparator<Favorite>() {
+
+			@Override
+			public int compare(Favorite lhs, Favorite rhs) {
+				Fetcher fLeft = lhs.getFetcher();
+				Fetcher fRight = rhs.getFetcher();
+				//status favorites are displayed on top
+				if (fLeft instanceof StatusesFetcher && fRight instanceof StatusesFetcher) {
+					return lhs.getIdentification().compareTo(rhs.getIdentification());
+				}
+				else if (fLeft instanceof StatusesFetcher) {
+					return -1;
+				}
+				else if (fRight instanceof StatusesFetcher) {
+					return 1;
+				}
+				
+				Location lLeft = locations.get(lhs);
+				Location lRight = locations.get(rhs);
+				if (lLeft != null && lRight != null) {
+					Float dLeft = lLeft.distanceTo(l);
+					Float dRight = lRight.distanceTo(l);
+					return dLeft.compareTo(dRight);
+				}
+				//unknown locations are displayed last
+				else if (lLeft != null && lRight == null) {
+					return -1;
+				}
+				else if (lLeft == null && lRight != null) {
+					return 1;
+				}
+			    return lhs.getIdentification().compareTo(rhs.getIdentification());
+			}
+		});
 		return result;
 	}
 
-	@Override
-	public void update() {
-		if (!repliesReceived())
-			return;
-		updateList(false);
-	}
-
-	private void updateList(Boolean asEmpty) {
+	private void updateList(Boolean asEmpty, ArrayList<Favorite> list) {
 		ArrayList<HashMap<String, Object>> favorites_list = new ArrayList<HashMap<String, Object>>();
 		ArrayList<String> content = new ArrayList<String>();
 
 		int fav_index = 0;
-		for (Favorite fav : favorites) {
+		for (Favorite fav : list) {
 			Fetcher f = fav.getFetcher();
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("index", Integer.toString(fav_index++));
@@ -157,9 +248,10 @@ public class FavoritesActivity extends ListActivity implements Observer,
 						m.put("destination" + i, s);
 
 						s = train.get("position");
-						//display per train platform
-						//only if the favourite is not associated with a platform
-						if (platform.length() == 0) { 
+						// display per train platform
+						// only if the favourite is not associated with a
+						// platform
+						if (platform.length() == 0) {
 							String plat = train.get("platform").trim();
 							if (plat.length() > 0) {
 								s += "/" + plat;
@@ -227,7 +319,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 			}
 		}
 
-		DragNDropAdapter adapter = new DragNDropAdapter(this, favorites_list,
+		SimpleAdapter adapter = new SimpleAdapter(this, favorites_list,
 				R.layout.favorites_item, new String[] { "line", "platform",
 						"index", "icon", "index", "destination1", "position1",
 						"time1", "destination2", "position2", "time2",
@@ -239,64 +331,13 @@ public class FavoritesActivity extends ListActivity implements Observer,
 						R.id.favorites_destination2, R.id.favorites_position2,
 						R.id.favorites_time2, R.id.favorites_destination3,
 						R.id.favorites_position3, R.id.favorites_time3 });
-		adapter.setData(favorites_list);
+		//adapter.setData(favorites_list);
 		adapter.setViewBinder(new FavoritesBinder(this));
 		setListAdapter(adapter);
 
 	}
 
-	private void updateFavoritesOrder(int from, int to) {
-		Favorite temp = favorites.get(from);
-		Favorite.removeIndex(from, this);
-		Favorite.addFavorite(temp, to, this);
-		updateFavorites();
-	}
-
-	private DropListener mDropListener = new DropListener() {
-		public void onDrop(int from, int to) {
-			ListAdapter adapter = getListAdapter();
-			if (adapter instanceof DragNDropAdapter) {
-				((DragNDropAdapter) adapter).onDrop(from, to);
-				updateFavoritesOrder(from, to);
-				getListView().invalidateViews();
-			}
-		}
-	};
-
-	private RemoveListener mRemoveListener = new RemoveListener() {
-		public void onRemove(int which) {
-			ListAdapter adapter = getListAdapter();
-			if (adapter instanceof DragNDropAdapter) {
-				((DragNDropAdapter) adapter).onRemove(which);
-				getListView().invalidateViews();
-			}
-		}
-	};
-
-	private DragListener mDragListener = new DragListener() {
-
-		public void onDrag(int x, int y, ListView listView) {
-		}
-
-		public void onStartDrag(View itemView) {
-			itemView.setVisibility(View.INVISIBLE);
-			itemView.setBackgroundColor(Color.YELLOW);
-		}
-
-		public void onStopDrag(View itemView) {
-			itemView.setVisibility(View.VISIBLE);
-			itemView.setBackgroundColor(Color.TRANSPARENT);
-		}
-
-	};
-
 	private int lastFavoritesCount = 0;
-
-	@Override
-	protected void onPause() {
-		lastFavoritesCount = Favorite.getFavorites(this).size();
-		super.onPause();
-	}
 
 	@Override
 	protected void onStart() {
@@ -305,5 +346,65 @@ public class FavoritesActivity extends ListActivity implements Observer,
 			updateFavorites();
 			onClick(null);
 		}
+	}
+	
+	@Override
+	protected void onPause() {
+		lastFavoritesCount = Favorite.getFavorites(this).size();
+		if (locationManager != null) {
+			locationManager.removeUpdates(this);
+		}
+		super.onPause();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (locationManager != null)
+			requestLocationUpdates();
+	}
+
+	// LocationListener Methods
+	private LocationManager locationManager;
+	private Location lastKnownLocation;
+
+	private void setupLocationManager() {
+		locationManager = (LocationManager) this
+				.getSystemService(Context.LOCATION_SERVICE);
+		lastKnownLocation = LocationHelper.getLastKnownLocation(locationManager);
+	}
+
+	private void requestLocationUpdates() {
+		try {
+			LocationHelper.requestLocationUpdates(locationManager, this);
+		} catch (Exception e) {
+			Log.w("LocationService", e);
+		}
+	}
+
+	@Override
+	public void onLocationChanged(Location l) {
+		if (LocationHelper.isBetterLocation(l, lastKnownLocation)) {
+			lastKnownLocation = l;
+			showFavorites();
+		}
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Show Err message
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Trigger nearby calculation
+
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
 	}
 }

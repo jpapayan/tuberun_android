@@ -34,8 +34,8 @@
                 android:id="@+id/icon_favorites"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dip"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dip" />
 
             <Button
                 android:id="@+id/remove_favorite"
@@ -58,167 +58,153 @@
         android:layout_marginRight="10dip"
         android:background="@drawable/tuberun_red_bright" />
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:shrinkColumns="1"
+        android:stretchColumns="1" >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="5dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="12dip"
-            android:layout_marginTop="5dip"
-            android:background="@drawable/ic_move" />
-
-        <TableLayout
+        <TableRow
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:shrinkColumns="1"
-            android:stretchColumns="1" >
+            android:layout_height="wrap_content" >
 
-            <TableRow
+            <TextView
+                android:id="@+id/favorites_time1"
+                style="@style/WhiteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left|top"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:textSize="16sp"
+                android:visibility="gone" >
+            </TextView>
+
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/favorites_time1"
+                    android:id="@+id/favorites_destination1"
                     style="@style/WhiteText"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left|top"
-                    android:paddingBottom="10dp"
+                    android:gravity="left"
                     android:paddingRight="10dp"
                     android:paddingTop="10dp"
                     android:textSize="16sp"
                     android:visibility="gone" >
                 </TextView>
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/favorites_destination1"
-                        style="@style/WhiteText"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:paddingRight="10dp"
-                        android:paddingTop="10dp"
-                        android:textSize="16sp"
-                        android:visibility="gone" >
-                    </TextView>
-
-                    <TextView
-                        android:id="@+id/favorites_position1"
-                        style="@style/PositionText"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:paddingBottom="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="3dp"
-                        android:visibility="gone" >
-                    </TextView>
-                </LinearLayout>
-            </TableRow>
-
-            <TableRow>
-
                 <TextView
-                    android:id="@+id/favorites_time2"
-                    style="@style/WhiteText"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/favorites_position1"
+                    style="@style/PositionText"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:paddingBottom="10dp"
                     android:paddingRight="10dp"
-                    android:paddingTop="10dp"
-                    android:textSize="16sp"
+                    android:paddingTop="3dp"
                     android:visibility="gone" >
                 </TextView>
+            </LinearLayout>
+        </TableRow>
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+        <TableRow>
 
-                    <TextView
-                        android:id="@+id/favorites_destination2"
-                        style="@style/WhiteText"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:paddingRight="10dp"
-                        android:paddingTop="10dp"
-                        android:textSize="16sp"
-                        android:visibility="gone" >
-                    </TextView>
+            <TextView
+                android:id="@+id/favorites_time2"
+                style="@style/WhiteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:textSize="16sp"
+                android:visibility="gone" >
+            </TextView>
 
-                    <TextView
-                        android:id="@+id/favorites_position2"
-                        style="@style/PositionText"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:paddingBottom="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="3dp"
-                        android:visibility="gone" >
-                    </TextView>
-                </LinearLayout>
-            </TableRow>
-
-            <TableRow>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/favorites_time3"
+                    android:id="@+id/favorites_destination2"
                     style="@style/WhiteText"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:paddingBottom="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="10dp"
                     android:textSize="16sp"
                     android:visibility="gone" >
                 </TextView>
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/favorites_position2"
+                    style="@style/PositionText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:gravity="left"
+                    android:paddingBottom="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="3dp"
+                    android:visibility="gone" >
+                </TextView>
+            </LinearLayout>
+        </TableRow>
 
-                    <TextView
-                        android:id="@+id/favorites_destination3"
-                        style="@style/WhiteText"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:paddingRight="10dp"
-                        android:paddingTop="10dp"
-                        android:textSize="16sp"
-                        android:visibility="gone" >
-                    </TextView>
+        <TableRow>
 
-                    <TextView
-                        android:id="@+id/favorites_position3"
-                        style="@style/PositionText"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:paddingBottom="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="3dp"
-                        android:visibility="gone" >
-                    </TextView>
-                </LinearLayout>
-            </TableRow>
-        </TableLayout>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/favorites_time3"
+                style="@style/WhiteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:textSize="16sp"
+                android:visibility="gone" >
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/favorites_destination3"
+                    style="@style/WhiteText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:paddingRight="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="16sp"
+                    android:visibility="gone" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/favorites_position3"
+                    style="@style/PositionText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:paddingBottom="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="3dp"
+                    android:visibility="gone" >
+                </TextView>
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
 
 </LinearLayout>

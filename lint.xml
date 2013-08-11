@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="BadMethodUse-android.os.AsyncTask.execute" severity="informational" />
+    <issue id="BadMethodUse-java.util.ArrayList._Constructor" severity="informational" />
+    <issue id="BadMethodUse-java.util.HashMap._Constructor" severity="informational" />
     <issue id="ContentDescription" severity="ignore" />
     <issue id="Deprecated" severity="informational" />
     <issue id="HardcodedText" severity="ignore" />
+    <issue id="LogUse" severity="informational" />
     <issue id="NestedWeights" severity="ignore" />
+    <issue id="TodoWithoutTask" severity="ignore" />
 </lint>

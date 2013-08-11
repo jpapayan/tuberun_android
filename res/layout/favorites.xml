@@ -5,12 +5,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-<!--     <ImageView -->
-<!--         android:layout_width="fill_parent" -->
-<!--         android:layout_height="fill_parent" -->
-<!--         android:scaleType="centerCrop" -->
-<!--         android:src="@drawable/background_favorites" /> -->
-
     <LinearLayout
         android:id="@+id/mainmenu"
         android:layout_width="fill_parent"
@@ -111,7 +105,8 @@
                 android:indeterminate="true" />
         </LinearLayout>
 
-        <com.ericharlow.DragNDrop.DragNDropListView
+        <!-- <com.ericharlow.DragNDrop.DragNDropListView -->
+        <ListView
             android:id="@+id/android:list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

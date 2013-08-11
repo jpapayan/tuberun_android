@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -16,6 +17,12 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
+
+import com.papagiannis.tuberun.favorites.DeparturesFavorite;
+import com.papagiannis.tuberun.favorites.Favorite;
+import com.papagiannis.tuberun.fetchers.DeparturesBusFetcher;
+import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
+import com.papagiannis.tuberun.fetchers.Fetcher;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 	// The Android's default system path of your application database.
@@ -521,7 +528,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 		return result;
 	}
-
+	
+	public HashMap<Favorite,Location> getFavoriteLocations(List<Favorite> favs) {
+		HashMap<Favorite,Location> result=new HashMap<Favorite,Location>();
+		if (favs==null) return result; 
+		ArrayList<DeparturesFavorite> busFavorites=new ArrayList<DeparturesFavorite>();
+		ArrayList<DeparturesFavorite> stationFavorites=new ArrayList<DeparturesFavorite>();
+		for (Favorite f : favs) {
+			Fetcher fetcher = f.getFetcher();
+			if (fetcher instanceof DeparturesBusFetcher) {
+				busFavorites.add((DeparturesFavorite) f);
+			}
+			else if (fetcher instanceof DeparturesFetcher) {
+				stationFavorites.add((DeparturesFavorite) f);
+			}
+		}
+		
+		//TODO: this can be made to work with a single data fetch
+		for (DeparturesFavorite f : stationFavorites) {
+			String query="SELECT longtitude, latitude FROM stations WHERE name=?";
+			Cursor c = myDataBase.rawQuery(query, new String[]{f.getStation_nice()});
+			c.moveToFirst();
+			if (!c.isAfterLast()) {
+				Location l=new Location("DB");
+				l.setLongitude(c.getDouble(0));
+				l.setLatitude(c.getDouble(1));
+				result.put(f, l);
+			}
+			c.close();
+		}
+		//TODO: this can be made to work with a single data fetch
+		for (DeparturesFavorite f : busFavorites) {
+			String query="SELECT longtitude, latitude FROM stops WHERE sms_code=?";
+			Cursor c = myDataBase.rawQuery(query, new String[]{f.getIdentification()});
+			c.moveToFirst();
+			if (!c.isAfterLast()) {
+				Location l=new Location("DB");
+				l.setLongitude(c.getDouble(0));
+				l.setLatitude(c.getDouble(1));
+				result.put(f, l);
+			}
+			c.close();
+		}
+		return result;
+	}
 	
 	public int getVersion() {
 		int res = 1;
