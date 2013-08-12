@@ -198,19 +198,18 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 
 	private void displayLocation(List<Address> result) {
 		if (result == null || result.size() < 1) {
-			location_textview.setText("");
-			location_accuracy_textview.setText(("accuracy="
-					+ lastKnownLocation.getAccuracy() + "m"));
+			location_textview.setText("Fetching address...");
 			planFragment.updateLocationDialog(null, "",
 					"" + lastKnownLocation.getAccuracy());
 		} else {
 			String geoc_result = result.get(0).getAddressLine(0);
 			location_textview.setText(geoc_result);
-			location_accuracy_textview.setText("accuracy="
-					+ lastKnownLocation.getAccuracy() + "m");
 			planFragment.updateLocationDialog(null, geoc_result, ""
 					+ lastKnownLocation.getAccuracy());
 		}
+		location_accuracy_textview.setText("accuracy="
+				+ lastKnownLocation.getAccuracy() + "m");
+
 	}
 
 	private void reverseGeocode(Location l) {
@@ -224,6 +223,7 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 		if (LocationHelper.isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
 			plan.setStartingLocation(lastKnownLocation);
+			displayLocation(null);
 			reverseGeocode(l);
 		}
 	}

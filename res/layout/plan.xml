@@ -66,7 +66,6 @@
     </LinearLayout>
 
     <TabHost
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@android:id/tabhost"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
@@ -121,7 +120,8 @@
             android:layout_gravity="center"
             android:layout_marginLeft="5dip"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="Fetching location..." />
 
         <TextView
             android:id="@+id/location_accuracy_textview"

@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -19,7 +21,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.papagiannis.tuberun.binders.FavoritesBinder;
 import com.papagiannis.tuberun.favorites.DeparturesFavorite;
@@ -28,11 +32,17 @@ import com.papagiannis.tuberun.fetchers.DeparturesBusFetcher;
 import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
 import com.papagiannis.tuberun.fetchers.Fetcher;
 import com.papagiannis.tuberun.fetchers.Observer;
+import com.papagiannis.tuberun.fetchers.ReverseGeocodeFetcher;
 import com.papagiannis.tuberun.fetchers.StatusesFetcher;
 
 public class FavoritesActivity extends ListActivity implements Observer,
 		OnClickListener, LocationListener {
 	private ListView listView;
+	private TextView location_textview;
+	private TextView location_accuracy_textview;
+	private LinearLayout location_layout;
+	private ProgressBar location_progressbar;
+	
 	private ArrayList<Favorite> favorites = new ArrayList<Favorite>();
 	private HashMap<Favorite, Location> locations = null;
 	private int fetchers_count = 0;
@@ -56,6 +66,10 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		setListAdapter(null);
 		listView = (ListView) getListView();
 		emptyLayout = (LinearLayout) findViewById(R.id.empty_layout);
+		location_textview = (TextView) findViewById(R.id.location_textview);
+		location_accuracy_textview = (TextView) findViewById(R.id.location_accuracy_textview);
+		location_progressbar = (ProgressBar) findViewById(R.id.location_progressbar);
+		location_layout = (LinearLayout) findViewById(R.id.location_layout);
 
 		setupLocationManager();
 		updateFavorites();
@@ -123,7 +137,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 			@Override
 			protected void onPostExecute(HashMap<Favorite,Location> res) {
 				locations = res;
-				showFavorites();
+				showFavorites(false);
 			}
 		};
 		findLocationsTask.execute(list);
@@ -150,7 +164,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		if (!countReply()) {
 			return;
 		}
-		showFavorites();
+		showFavorites(true);
 	}
 	
 	private boolean countReply() {
@@ -166,7 +180,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	 * that the favorites should be drawn right now. This method
 	 * ensures all data has been loaded before proceeding with drawing. 
 	 */
-	public void showFavorites() {
+	public void showFavorites(boolean isDataUpdate) {
 		if (!repliesReceived()) {
 			return;
 		}
@@ -176,10 +190,11 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		if (locations == null) {
 			return;
 		}
-		updateList(false, sortByDistance(lastKnownLocation, favorites));
+		updateList(false, sortByDistance(lastKnownLocation, favorites), isDataUpdate);
 	}
 	
 	private ArrayList<Favorite> sortByDistance(final Location l, ArrayList<Favorite> list) {
+		
 		if (l == null || l.getProvider()==LocationHelper.FAKE_PROVIDER) return list;
 		ArrayList<Favorite> result = new ArrayList<Favorite>(list);
 		Collections.sort(result, new Comparator<Favorite>() {
@@ -219,15 +234,25 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		return result;
 	}
 
-	private void updateList(Boolean asEmpty, ArrayList<Favorite> list) {
+	private ArrayList<Favorite> reorderedList = new ArrayList<Favorite>();
+	
+	private void updateList(
+			Boolean asEmpty,
+			ArrayList<Favorite> list,
+			boolean forceUpdate) {
+		
+		if (!forceUpdate && list.equals(reorderedList)) {
+			reorderedList = list;
+			return;
+		}
+		
 		ArrayList<HashMap<String, Object>> favorites_list = new ArrayList<HashMap<String, Object>>();
 		ArrayList<String> content = new ArrayList<String>();
 
-		int fav_index = 0;
 		for (Favorite fav : list) {
 			Fetcher f = fav.getFetcher();
 			HashMap<String, Object> m = new HashMap<String, Object>();
-			m.put("index", Integer.toString(fav_index++));
+			m.put("index", Integer.toString(favorites.indexOf(fav)));
 			if (f instanceof DeparturesFetcher) {
 				DeparturesFetcher fetcher = (DeparturesFetcher) f;
 				String platform = ((DeparturesFavorite) fav).getPlatform();
@@ -275,7 +300,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 					ArrayList<HashMap<String, String>> trains = reply
 							.get(platform);
 					m = new HashMap<String, Object>();
-					m.put("index", Integer.toString(fav_index - 1));
+					m.put("index", Integer.toString(favorites.indexOf(fav)));
 					m.put("line", LinePresentation
 							.getStringRespresentation(LineType.BUSES));
 					content.add((String) m.get("line"));
@@ -334,7 +359,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		//adapter.setData(favorites_list);
 		adapter.setViewBinder(new FavoritesBinder(this));
 		setListAdapter(adapter);
-
+		reorderedList = list;
 	}
 
 	private int lastFavoritesCount = 0;
@@ -365,8 +390,16 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	}
 
 	// LocationListener Methods
+	
 	private LocationManager locationManager;
 	private Location lastKnownLocation;
+	ReverseGeocodeFetcher geocoder = new ReverseGeocodeFetcher(this, null);
+	Observer geolocationObserver = new Observer() {
+		@Override
+		public void update() {
+			displayLocation(geocoder.getResult());
+		}
+	};
 
 	private void setupLocationManager() {
 		locationManager = (LocationManager) this
@@ -386,8 +419,27 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	public void onLocationChanged(Location l) {
 		if (LocationHelper.isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
-			showFavorites();
+			showFavorites(false);
+			displayLocation(null);
+			reverseGeocode(l);
 		}
+	}
+	
+	private void reverseGeocode(Location l) {
+		geocoder.abort();
+		geocoder = new ReverseGeocodeFetcher(this, l);
+		geocoder.registerCallback(geolocationObserver).update();
+	}
+	
+	private void displayLocation(List<Address> result) {
+		if (result == null || result.size() < 1) {
+			location_textview.setText("Fetching address...");
+		} else {
+			String geoc_result = result.get(0).getAddressLine(0);
+			location_textview.setText(geoc_result);
+		}
+		location_accuracy_textview.setText("accuracy="
+				+ lastKnownLocation.getAccuracy() + "m");
 	}
 
 	@Override

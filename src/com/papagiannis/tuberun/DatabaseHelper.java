@@ -551,8 +551,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			c.moveToFirst();
 			if (!c.isAfterLast()) {
 				Location l=new Location("DB");
-				l.setLongitude(c.getDouble(0));
-				l.setLatitude(c.getDouble(1));
+				l.setLongitude(c.getDouble(0)/1000000);
+				l.setLatitude(c.getDouble(1)/1000000);
 				result.put(f, l);
 			}
 			c.close();
@@ -564,8 +564,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			c.moveToFirst();
 			if (!c.isAfterLast()) {
 				Location l=new Location("DB");
-				l.setLongitude(c.getDouble(0));
-				l.setLatitude(c.getDouble(1));
+				l.setLongitude(c.getDouble(0)/1000000);
+				l.setLatitude(c.getDouble(1)/1000000);
 				result.put(f, l);
 			}
 			c.close();

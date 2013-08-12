@@ -10,6 +10,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class ReverseGeocodeFetcher extends Fetcher {
 	private static final long serialVersionUID = 1L;
@@ -35,6 +36,7 @@ public class ReverseGeocodeFetcher extends Fetcher {
 						result = myLocation.getFromLocation(params[0],
 								params[1], 1);
 					} catch (Exception e) {
+						Log.w(getClass().toString(), e);
 					}
 					return result;
 				}
