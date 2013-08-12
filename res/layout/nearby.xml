@@ -110,7 +110,8 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dip"
                 android:layout_weight="1"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="Fetching location..." />
 
             <TextView
                 android:id="@+id/location_accuracy_textview"

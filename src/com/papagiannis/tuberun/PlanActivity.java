@@ -208,7 +208,7 @@ public class PlanActivity extends FragmentActivity implements LocationListener {
 					+ lastKnownLocation.getAccuracy());
 		}
 		location_accuracy_textview.setText("accuracy="
-				+ lastKnownLocation.getAccuracy() + "m");
+				+ Math.round(lastKnownLocation.getAccuracy()) + "m");
 
 	}
 

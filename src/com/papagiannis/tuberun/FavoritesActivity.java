@@ -419,9 +419,9 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	public void onLocationChanged(Location l) {
 		if (LocationHelper.isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
-			showFavorites(false);
 			displayLocation(null);
 			reverseGeocode(l);
+			showFavorites(false);
 		}
 	}
 	
@@ -439,7 +439,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 			location_textview.setText(geoc_result);
 		}
 		location_accuracy_textview.setText("accuracy="
-				+ lastKnownLocation.getAccuracy() + "m");
+				+ Math.round(lastKnownLocation.getAccuracy()) + "m");
 	}
 
 	@Override

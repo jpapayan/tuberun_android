@@ -197,6 +197,7 @@ public class NearbyStationsActivity extends FragmentActivity implements
 	public void onLocationChanged(Location l) {
 		if (LocationHelper.isBetterLocation(l, lastKnownLocation)) {
 			lastKnownLocation = l;
+			displayLocation(null);
 			reverseGeocode(lastKnownLocation);
 			if (undergroundFragment!=null) undergroundFragment.locationChanged(lastKnownLocation);
 			if (busesFragment!=null) busesFragment.locationChanged(lastKnownLocation);
@@ -213,16 +214,16 @@ public class NearbyStationsActivity extends FragmentActivity implements
 	}
 
 	private void displayLocation(List<Address> result) {
-		if (result.size() == 0)
-			return;
-		String previous_location = result.get(0).getAddressLine(0);
-		if (result != null && result.size() >= 1) {
-			location_textview.setText(previous_location);
-			location_accuracy_textview.setText("accuracy="
-					+ lastKnownLocation.getAccuracy() + "m");
+		if (result == null || result.size() < 1) {
+			location_textview.setText("Fetching address...");
+		} else {
+			String geoc_result = result.get(0).getAddressLine(0);
+			location_textview.setText(geoc_result);
 		}
+		location_accuracy_textview.setText("accuracy="
+				+ Math.round(lastKnownLocation.getAccuracy()) + "m");
 	}
-
+	
 	@Override
 	public void onProviderDisabled(String arg0) {
 
