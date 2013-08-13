@@ -4,7 +4,7 @@ import com.papagiannis.tuberun.R;
 import android.graphics.Color;
 
 public enum PartialRouteType  {
-	BOAT, BUS, DLR, RAIL, TUBE, COACH, WALK, OVERGROUND;
+	BOAT, BUS, DLR, RAIL, TUBE, COACH, WALK, OVERGROUND, TRAMLINK;
 
 	public static String toString(PartialRouteType p) {
 		switch (p) {
@@ -24,6 +24,8 @@ public enum PartialRouteType  {
 			return "walk";
 		case OVERGROUND:
 			return "overground";
+		case TRAMLINK:
+			return "tramlink";
 		}
 		return "";
 	}
@@ -36,6 +38,7 @@ public enum PartialRouteType  {
 		else if (s.equals("tube") || s.equals("2")) return TUBE;
 		else if (s.equals("coach") || s.equals("7")) return COACH;
 		else if (s.equals("overground") || s.equals("3")) return OVERGROUND;
+		else if (s.equals("tramlink") || s.equals("4")) return TRAMLINK;
 		else return WALK;
 	}
 	
@@ -57,6 +60,8 @@ public enum PartialRouteType  {
 			return "Take the overground towards "+destination+".";	
 		case WALK:
 			return "Walk to "+destination+".";
+		case TRAMLINK:
+			return "Take the tramlink towards "+destination+".";
 		}
 		return "";
 	}
@@ -88,6 +93,9 @@ public enum PartialRouteType  {
 		case WALK:
 			ret=Color.WHITE;
 			break;
+		case TRAMLINK:
+			ret=Color.argb(255, 167, 222, 92);
+			break;
 		}
 		return ret;
 	}
@@ -118,6 +126,9 @@ public enum PartialRouteType  {
 			break;
 		case WALK:
 			ret=R.drawable.walk;
+			break;
+		case TRAMLINK:
+			ret=R.drawable.tramlink;
 			break;
 		}
 		return ret;
