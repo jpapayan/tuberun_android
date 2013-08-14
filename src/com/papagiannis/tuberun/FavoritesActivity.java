@@ -14,6 +14,7 @@ import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -74,6 +75,11 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		setupLocationManager();
 		updateFavorites();
 		onClick(null);
+	}
+	
+	private boolean shouldStartLocationManager() {
+		ArrayList<Favorite> favs = Favorite.getFavorites(this);
+		return favs!=null && favs.size()>0;
 	}
 
 	private void updateFavorites() {
@@ -181,7 +187,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	 * ensures all data has been loaded before proceeding with drawing. 
 	 */
 	public void showFavorites(boolean isDataUpdate) {
-		if (!repliesReceived()) {
+		if (!repliesReceived() || lastKnownLocation==null) {
 			return;
 		}
 		if (lastKnownLocation.getProvider() == LocationHelper.FAKE_PROVIDER) {
@@ -392,7 +398,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (locationManager != null)
+		if (shouldStartLocationManager() && locationManager != null)
 			requestLocationUpdates();
 	}
 
@@ -409,9 +415,15 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	};
 
 	private void setupLocationManager() {
-		locationManager = (LocationManager) this
+		if (shouldStartLocationManager()) {
+			location_layout.setVisibility(View.VISIBLE);
+			locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
-		lastKnownLocation = LocationHelper.getLastKnownLocation(locationManager);
+			lastKnownLocation = LocationHelper.getLastKnownLocation(locationManager);
+		}
+		else {
+			location_layout.setVisibility(View.GONE);
+		}
 	}
 
 	private void requestLocationUpdates() {

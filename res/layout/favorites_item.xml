@@ -17,6 +17,7 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
+            android:layout_marginRight="5dip"
             android:layout_weight="1"
             android:gravity="left"
             android:singleLine="false"
@@ -36,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="4dip" />
-
+            
             <Button
                 android:id="@+id/remove_favorite"
                 style="@style/RemoveFavoriteButton"
