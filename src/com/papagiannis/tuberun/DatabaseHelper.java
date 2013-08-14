@@ -23,6 +23,7 @@ import com.papagiannis.tuberun.favorites.Favorite;
 import com.papagiannis.tuberun.fetchers.DeparturesBusFetcher;
 import com.papagiannis.tuberun.fetchers.DeparturesFetcher;
 import com.papagiannis.tuberun.fetchers.Fetcher;
+import com.papagiannis.tuberun.fetchers.StatusesFetcher;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 	// The Android's default system path of your application database.
@@ -529,11 +530,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return result;
 	}
 	
-	public HashMap<Favorite,Location> getFavoriteLocations(List<Favorite> favs) {
-		HashMap<Favorite,Location> result=new HashMap<Favorite,Location>();
-		if (favs==null) return result; 
+	public HashMap<Favorite,ArrayList<Location>> getFavoriteLocations(List<Favorite> favs) {
+		HashMap<Favorite,ArrayList<Location>> result=new HashMap<Favorite,ArrayList<Location>>();
+		if (favs==null) return result;
+		
 		ArrayList<DeparturesFavorite> busFavorites=new ArrayList<DeparturesFavorite>();
 		ArrayList<DeparturesFavorite> stationFavorites=new ArrayList<DeparturesFavorite>();
+		ArrayList<Favorite> statusFavorites=new ArrayList<Favorite>();
+		
 		for (Favorite f : favs) {
 			Fetcher fetcher = f.getFetcher();
 			if (fetcher instanceof DeparturesBusFetcher) {
@@ -541,6 +545,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			}
 			else if (fetcher instanceof DeparturesFetcher) {
 				stationFavorites.add((DeparturesFavorite) f);
+			}
+			else if (fetcher instanceof StatusesFetcher) {
+				statusFavorites.add(f);
 			}
 		}
 		
@@ -553,7 +560,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				Location l=new Location("DB");
 				l.setLongitude(c.getDouble(0)/1000000);
 				l.setLatitude(c.getDouble(1)/1000000);
-				result.put(f, l);
+				ArrayList<Location> r=new ArrayList<Location>();
+				r.add(l);
+				result.put(f, r);
 			}
 			c.close();
 		}
@@ -566,10 +575,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				Location l=new Location("DB");
 				l.setLongitude(c.getDouble(0)/1000000);
 				l.setLatitude(c.getDouble(1)/1000000);
-				result.put(f, l);
+				ArrayList<Location> r=new ArrayList<Location>();
+				r.add(l);
+				result.put(f, r);
 			}
 			c.close();
 		}
+		for (Favorite f : statusFavorites) {
+			String query="SELECT longtitude, latitude "
+					+ "FROM stations AS st, station_lines AS lines "
+					+ "WHERE st.name = lines.name AND line = ?";
+			String line = LinePresentation.getStringRespresentation(f.getLine());
+			Cursor c = myDataBase.rawQuery(query, new String[]{line});
+			c.moveToFirst();
+			ArrayList<Location> r=new ArrayList<Location>();
+			while (!c.isAfterLast()) {
+				Location l=new Location("DB");
+				l.setLongitude(c.getDouble(0)/1000000);
+				l.setLatitude(c.getDouble(1)/1000000);
+				r.add(l);
+				c.moveToNext();
+			}
+			result.put(f, r);
+			c.close();
+		}
+		
 		return result;
 	}
 	

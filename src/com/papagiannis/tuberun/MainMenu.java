@@ -2,7 +2,7 @@ package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import com.google.android.maps.MapActivity;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.OysterFetcher;
@@ -176,11 +175,12 @@ public class MainMenu extends FrameLayout
 		editor.commit();
 	}
 	
+	@SuppressLint("NewApi")
 	public void onClick(View v) {
 		Intent i = null;
 		Activity a=(Activity)context;
 		Class<? extends Activity> c=a.getClass();
-		boolean finishActivity=true;
+		boolean finishActivity=true; //closes the old activity
 		switch (v.getId()) {
 		case R.id.status_row:
 			i = (c!=StatusActivity.class) ? new Intent(context, StatusActivity.class) : null;

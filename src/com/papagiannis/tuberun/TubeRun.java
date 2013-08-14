@@ -45,7 +45,7 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
-	public static final String VERSION = "1.3.0";
+	public static final String VERSION = "1.3.1";
 	// Don't forget to update the app version in the manifest
 	// Don't forget to update the changelog later in this file
 	public static final Boolean USE_LICENSING = false;
@@ -634,8 +634,8 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		builder.setTitle(APPNAME + " " + VERSION)
 				.setMessage(
 						"What's new:\n\n"
-								+ "*New, hi-resolution, application icon.\n\n"
-								+ "*Migrated to the Google Maps v2 API. Significant performance improvements in Map views.\n\n")
+								+ "*Favorites are now sorted automatically by distance!\n\n"
+								+ "*Numerous bug fixes.\n")
 				.setCancelable(false).setPositiveButton("OK", null);
 		return builder.create();
 	}

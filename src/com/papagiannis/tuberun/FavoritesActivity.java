@@ -44,7 +44,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	private ProgressBar location_progressbar;
 	
 	private ArrayList<Favorite> favorites = new ArrayList<Favorite>();
-	private HashMap<Favorite, Location> locations = null;
+	private HashMap<Favorite, ArrayList<Location>> locations = null;
 	private int fetchers_count = 0;
 	private boolean uses_status_weekend = false;
 	private boolean uses_status_now = false;
@@ -115,14 +115,14 @@ public class FavoritesActivity extends ListActivity implements Observer,
 	
 	@SuppressWarnings("unchecked")
 	private void findLocations(ArrayList<Favorite> list) {
-		AsyncTask<ArrayList<Favorite>, Integer,HashMap<Favorite,Location>> 
-		findLocationsTask=new AsyncTask<ArrayList<Favorite>, Integer,HashMap<Favorite,Location>>(){
+		AsyncTask<ArrayList<Favorite>, Integer,HashMap<Favorite,ArrayList<Location>>> 
+		findLocationsTask=new AsyncTask<ArrayList<Favorite>, Integer,HashMap<Favorite,ArrayList<Location>>>(){
 
 			@Override
-			protected HashMap<Favorite,Location> doInBackground(ArrayList<Favorite>... favs) {
-				if (favs==null || favs.length==0) return new HashMap<Favorite, Location>();
+			protected HashMap<Favorite,ArrayList<Location>> doInBackground(ArrayList<Favorite>... favs) {
+				if (favs==null || favs.length==0) return new HashMap<Favorite, ArrayList<Location>>();
 				DatabaseHelper myDbHelper = new DatabaseHelper(FavoritesActivity.this);
-				HashMap<Favorite,Location> res=new HashMap<Favorite,Location>();
+				HashMap<Favorite,ArrayList<Location>> res=new HashMap<Favorite,ArrayList<Location>>();
 				try {
 					myDbHelper.openDataBase();
 					res = myDbHelper.getFavoriteLocations(favs[0]);
@@ -135,7 +135,7 @@ public class FavoritesActivity extends ListActivity implements Observer,
 			}
 			
 			@Override
-			protected void onPostExecute(HashMap<Favorite,Location> res) {
+			protected void onPostExecute(HashMap<Favorite,ArrayList<Location>> res) {
 				locations = res;
 				showFavorites(false);
 			}
@@ -198,24 +198,31 @@ public class FavoritesActivity extends ListActivity implements Observer,
 		if (l == null || l.getProvider()==LocationHelper.FAKE_PROVIDER) return list;
 		ArrayList<Favorite> result = new ArrayList<Favorite>(list);
 		Collections.sort(result, new Comparator<Favorite>() {
+			
+			private HashMap<List<Location>, Location> minLocations = 
+					new HashMap<List<Location>, Location>();
+			
+			private Location findMin(List<Location> locArr) {
+				if (locArr.size()==1) return locArr.get(0);
+				if (minLocations.containsKey(locArr)) return minLocations.get(locArr);
+				
+				Float maxDistance = Float.MAX_VALUE;
+				Location closestLoc = null;
+				for (Location lCandidate : locArr) {
+					Float distance=l.distanceTo(lCandidate);
+					if (distance<maxDistance) {
+						maxDistance=distance;
+						closestLoc=lCandidate;
+					}
+				}
+				minLocations.put(locArr, closestLoc);
+				return closestLoc;
+			}
 
 			@Override
 			public int compare(Favorite lhs, Favorite rhs) {
-				Fetcher fLeft = lhs.getFetcher();
-				Fetcher fRight = rhs.getFetcher();
-				//status favorites are displayed on top
-				if (fLeft instanceof StatusesFetcher && fRight instanceof StatusesFetcher) {
-					return lhs.getIdentification().compareTo(rhs.getIdentification());
-				}
-				else if (fLeft instanceof StatusesFetcher) {
-					return -1;
-				}
-				else if (fRight instanceof StatusesFetcher) {
-					return 1;
-				}
-				
-				Location lLeft = locations.get(lhs);
-				Location lRight = locations.get(rhs);
+				Location lLeft = findMin(locations.get(lhs));
+				Location lRight = findMin(locations.get(rhs));
 				if (lLeft != null && lRight != null) {
 					Float dLeft = lLeft.distanceTo(l);
 					Float dRight = lRight.distanceTo(l);

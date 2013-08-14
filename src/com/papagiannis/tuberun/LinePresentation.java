@@ -146,7 +146,7 @@ public class LinePresentation
     public static LineType  getLineTypeRespresentation(String line)
     {
         LineType result=LineType.BAKERLOO;
-        if (line.equals( "Piccadilly") ) result = LineType.PICACIDILY;
+        if (line.equals( "Piccadilly") || line.equals( "Piccadily") ) result = LineType.PICACIDILY;
         else if (line.equals( "Metropolitan") ) result = LineType.METROPOLITAN;
         else if (line.equals( "District") ) result = LineType.DISTRICT;
         else if (line.equals( "Hammersmith") ) result = LineType.HAMMERSMITH;
@@ -165,10 +165,22 @@ public class LinePresentation
         return result;
     }
     public static boolean isValidLine(String line) {    	
-        return (line.equals( "Piccadilly" ) || line.equals( "Metropolitan" ) || line.equals( "District" ) || line.equals( "Hammersmith" )
-        	|| line =="Circle" ) || line.equals( "Northern" ) || line.equals( "DLR" ) || line.equals( "Overground" )
-            || line.equals( "Jubilee" ) || line.equals( "Victoria" ) || line.equals( "Bakerloo" ) || line.equals( "Waterloo" )
-            || line.equals( "Central" ) || line.equals( "Buses" )  || line.equals( "All") ;
+        return  line.equals( "Piccadilly" ) ||
+        		line.equals( "Piccadily" ) ||
+        		line.equals( "Metropolitan" ) ||
+        		line.equals( "District" ) ||
+        		line.equals( "Hammersmith" ) ||
+        		line.equals( "Circle") ||
+        		line.equals( "Northern" ) ||
+        		line.equals( "DLR" ) ||
+        		line.equals( "Overground" ) ||
+        		line.equals( "Jubilee" ) ||
+        		line.equals( "Victoria" ) ||
+        		line.equals( "Bakerloo" ) ||
+        		line.equals( "Waterloo" ) ||
+        		line.equals( "Central" ) ||
+        		line.equals( "Buses" )  ||
+        		line.equals( "All") ;
     }
 	public static int getIcon(LineType lt) {
 		int res=-1;
