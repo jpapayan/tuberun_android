@@ -44,6 +44,10 @@
     <style name="BackButton" parent="@android:style/Widget.Button">
         <item name="android:background">@layout/back_button_selector</item>
     </style>
+    
+    <style name="BackMenuButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@layout/back_menu_button_selector</item>
+    </style>
 
     <style name="MenuButton" parent="@android:style/Widget.Button">
         <item name="android:background">@layout/menu_button_selector</item>
