@@ -2,7 +2,6 @@ package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
 
-import uk.me.jstott.jcoord.OSRef;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -24,6 +23,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.papagiannis.tuberun.fragments.MeMapFragment;
+import com.papagiannis.tuberun.osref.OSRef;
 
 public class PartialRouteMapActivity extends FragmentActivity {
 	final PartialRouteMapActivity self = this;
