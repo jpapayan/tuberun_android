@@ -2,6 +2,7 @@ package com.papagiannis.tuberun;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -21,16 +22,19 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TableRow;
 import android.widget.TextView;
+
 import com.google.android.maps.MapActivity;
 import com.papagiannis.tuberun.fetchers.Observer;
 import com.papagiannis.tuberun.fetchers.OysterFetcher;
 import com.papagiannis.tuberun.stores.CredentialsStore;
+import com.slidingmenu.lib.SlidingMenu;
 
 public class MainMenu extends FrameLayout 
 		implements OnClickListener, OnCheckedChangeListener, Observer {
 	public static final String SHOWMAP="showMap";
 	
 	private Context context;
+	private SlidingMenu menu;
 	
 	Button menuButton;
 	Button oysterButton;
@@ -51,20 +55,10 @@ public class MainMenu extends FrameLayout
 	ProgressBar balanceProgressbar;
 	TextView balanceTextview;
 	
-	public MainMenu(Context context, AttributeSet attrs,
-			int defStyle) {
-		super(context, attrs, defStyle);
-		init(context);
-	}
-
-	public MainMenu(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		init(context);
-	}
-
-	public MainMenu(Context context) {
+	public MainMenu(Context context, SlidingMenu menu) {
 		super(context);
 		init(context);
+		this.menu = menu;
 	}
 	
 	private void init(Context context) {
@@ -180,7 +174,7 @@ public class MainMenu extends FrameLayout
 		Intent i = null;
 		Activity a=(Activity)context;
 		Class<? extends Activity> c=a.getClass();
-		boolean finishActivity=true; //closes the old activity
+		boolean finishActivity=false; //closes the old activity
 		switch (v.getId()) {
 		case R.id.status_row:
 			i = (c!=StatusActivity.class) ? new Intent(context, StatusActivity.class) : null;
@@ -223,14 +217,14 @@ public class MainMenu extends FrameLayout
 			break;
 		}
 		if (i!=null) {
-			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			if (finishActivity) {
 				//OysterFetcher (which is reused) holds a reference to this. To enable garbage collection:
 				if (fetcher!=null) fetcher.deregisterCallback(this);
 				a.finish();
 			}
 			else {
-				//TODO slide off the menu
+				menu.toggle();
 			}
 			context.startActivity(i);
 		}

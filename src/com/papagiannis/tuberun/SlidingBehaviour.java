@@ -23,8 +23,8 @@ public class SlidingBehaviour {
         menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         menu.setFadeDegree(0.35f);
         menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
-        menu.setMenu(new MainMenu(activity));
-    	
+        menu.setMenu(new MainMenu(activity, menu));
+        
         //find the menu buttons in the layout.
 		LayoutInflater inflater = LayoutInflater.from(activity);
 		View app = inflater.inflate(mainLayout, null);
