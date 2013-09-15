@@ -6,7 +6,7 @@ public enum Point {
 	public static String toRequestString(Point p) {
 		switch (p) {
 		case STATION:
-			return "station";
+			return "stop";
 		case LOCATION:
 			return "coord";
 		case POSTCODE:

@@ -3,6 +3,7 @@ package com.papagiannis.tuberun.fetchers;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -24,7 +25,7 @@ import com.papagiannis.tuberun.plan.Plan;
 import com.papagiannis.tuberun.plan.Route;
 
 public class PlanFetcher extends Fetcher {
-	final String q = "http://yia.nnis.gr/tuberun/getPlan.php";
+	final String q = "http://yia.nnis.gr/tuberun/getPlanTest.php";
 //	final String q = "http://tuberun.dyndns.org:55559/getPlan.php";
 	private Plan plan;
 	private transient RequestTask task=null;
@@ -59,9 +60,11 @@ public class PlanFetcher extends Fetcher {
 				getCallBack1(s);
 			}
 		});
+		r.setDesktopUserAgent();
 		r.setCookies(cookies);
 		task=r;
-		r.execute(q + "?" + plan.getRequestString());
+		String query = q + "?" + plan.getRequestString();
+		r.execute(query);
 	}
 
 	String param = "";
@@ -87,6 +90,7 @@ public class PlanFetcher extends Fetcher {
 					plan.copyRoutesFrom(result);
 					plan.copyAlterativeDestinationsFrom(result);
 					plan.copyAlterativeOriginsFrom(result);
+					plan.copyAcquiredStareFrom(result);
 					notifyClients();
 				}
 			};
@@ -108,7 +112,6 @@ public class PlanFetcher extends Fetcher {
 
 	private Plan parseXMLResponse(String response) throws Exception {
 		Plan plan = new Plan();
-		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document dom = builder
@@ -126,24 +129,35 @@ public class PlanFetcher extends Fetcher {
 					Node route = routes.item(j);
 					plan.addRoute(getRouteFromNode(route));
 				}
-
 			}
 		}
 		else {
 			//Need more details about options
-			
+			plan.setRequestId(getRequestId(dom));
+			plan.setSessionId(getSessionId(dom));
 			NodeList odvlist = dom.getElementsByTagName("itdOdv");
-			ArrayList<String> alternatives=getAlternatives(odvlist,"destination");
-			for (String s:alternatives) plan.addAlternativeDestination(s);
+			HashMap<String,String> alternatives=getAlternatives(odvlist,"destination");
+			for (String s:alternatives.keySet()) plan.addAlternativeDestination(s, alternatives.get(s));
 			alternatives=getAlternatives(odvlist,"origin");
-			for (String s:alternatives) plan.addAlternativeOrigin(s);
+			for (String s:alternatives.keySet()) plan.addAlternativeOrigin(s, alternatives.get(s));
 		}
-		
 		return plan;
 	}
 
-	private ArrayList<String> getAlternatives(NodeList odvList, String type) {
-		HashSet<String> result=new HashSet<String>();
+	private String getSessionId(Document dom) {
+		NodeList requestlist = dom.getElementsByTagName("itdRequest");
+		if (requestlist.getLength()==0) return "";
+		return requestlist.item(0).getAttributes().getNamedItem("sessionID").getNodeValue();
+	}
+
+	private String getRequestId(Document dom) {
+		NodeList requestlist = dom.getElementsByTagName("itdTripRequest");
+		if (requestlist.getLength()==0) return "";
+		return requestlist.item(0).getAttributes().getNamedItem("requestID").getNodeValue();
+	}
+
+	private HashMap<String,String> getAlternatives(NodeList odvList, String type) {
+		HashMap<String,String> result=new HashMap<String,String>();
 		for (int i = 0; i < odvList.getLength(); i++) {
 			Node odvNode = odvList.item(i);
 			Node odvNodeUsage=odvNode.getAttributes().getNamedItem("usage");
@@ -161,15 +175,16 @@ public class PlanFetcher extends Fetcher {
 					for (int k = 0; k < nameChildren.getLength(); k++) {
 						Node nameChild = nameChildren.item(k);
 						if (nameChild.getNodeName().equalsIgnoreCase("odvNameElem")) {
-							String s=nameChild.getChildNodes().item(0).getNodeValue();
-							if (s!=null && !result.contains(s)) result.add(s);
+							Node n = nameChild.getChildNodes().item(0);
+							String value = nameChild.getAttributes().getNamedItem("value").getNodeValue();
+							result.put(n.getNodeValue(), value);
 						}
 					}
 				}
 			}
 
 		}
-		return new ArrayList<String>(result);
+		return result;
 	}
 
 	@SuppressWarnings("deprecation")

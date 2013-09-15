@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import android.location.Location;
@@ -15,17 +16,17 @@ import android.location.Location;
  * The fetcher issues the request and then assigns to plan the resulting Routes. 
  */
 public class Plan implements Serializable {
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 	private static final SimpleDateFormat timeFormat = new SimpleDateFormat(
 			"HH:mm", Locale.US);
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"yyyyMMdd", Locale.US);
 
 	private String destination = "";
-	private transient ArrayList<String> destinationAlternatives = new ArrayList<String>();
+	private transient HashMap<String,String> destinationAlternatives = new HashMap<String,String>();
 	private Point destinationType = Point.STATION;
 	private String startingString = "";
-	private transient ArrayList<String> startingAlternatives = new ArrayList<String>();
+	private transient HashMap<String,String> startingAlternatives = new HashMap<String,String>();
 	private Point startingType = Point.LOCATION;
 	private transient Location startingLocation = null;
 
@@ -39,6 +40,11 @@ public class Plan implements Serializable {
 	private transient boolean useRail = true;
 	private transient boolean useBoat = true;
 	private transient boolean useOverground = true;
+
+	private String destinationCode = "";
+	private String originCode = "";
+	private transient String sessionId = "0";
+	private transient String requestId = "0";
 
 	private ArrayList<Route> routes = new ArrayList<Route>();
 	private transient String error = "";
@@ -70,8 +76,11 @@ public class Plan implements Serializable {
 		// return the GET request string according to the JP API.
 		StringBuilder sb = new StringBuilder();
 		try {
-			sb.append("language=en");
-			sb.append("&sessionID=0");
+			//sb.append("language=en");
+			sb.append("&sessionID=");
+			sb.append(sessionId);
+			sb.append("&requestID=");
+			sb.append(requestId);
 			if (timeDepartureLater != null) {
 				sb.append("&itdTripDateTimeDepArr=dep");
 				if (travelDate != null) {
@@ -90,25 +99,53 @@ public class Plan implements Serializable {
 				sb.append(timeFormat.format(timeArrivalLater));
 			}
 
-			sb.append("&name_destination=");
-			sb.append(URLEncoder.encode(destination, "utf-8"));
-			sb.append("&place_destination=London");
-			sb.append("&type_destination=");
-			sb.append(Point.toRequestString(destinationType));
+			if (destinationCode.length() == 0 && originCode.length() == 0) {
+				sb.append("&name_destination=");			
+				sb.append(URLEncoder.encode(destination, "utf-8"));
+				sb.append("&place_destination=London");
+				sb.append("&type_destination=");
+				sb.append(Point.toRequestString(destinationType));
 
-			sb.append("&name_origin=");
-			if (startingType == Point.LOCATION) {
-				sb.append(startingLocation.getLongitude());
-				sb.append(":");
-				sb.append(startingLocation.getLatitude());
-				sb.append(":WGS84[DD.ddddd]");
-
-			} else {
-				sb.append(URLEncoder.encode(startingString, "utf-8"));
 			}
-			sb.append("&place_origin=London");
-			sb.append("&type_origin=");
-			sb.append(Point.toRequestString(startingType));
+			else if (destinationCode.length() > 0) {
+				sb.append("&name_destination=");
+				sb.append(destinationCode);
+				sb.append("&nameState_destination=list");
+				sb.append("&placeState_destination=identified");
+				sb.append("&place_destination=31117000:20060403");
+				sb.append("&type_destination=");
+				sb.append(Point.toRequestString(destinationType));
+				//sb.append("&command=");
+				//sb.append("&refine=1");
+				//sb.append("&Submit=Continue");
+				//sb.append("&routeType=LEASTTIME");
+				
+			}
+			
+			if (destinationCode.length() == 0 && originCode.length() == 0) {
+				sb.append("&name_origin=");
+				if (startingType == Point.LOCATION) {
+					sb.append(startingLocation.getLongitude());
+					sb.append(":");
+					sb.append(startingLocation.getLatitude());
+					sb.append(":WGS84[DD.ddddd]");
+					
+				} else {
+					sb.append(URLEncoder.encode(startingString, "utf-8"));
+				}
+				sb.append("&place_origin=London");
+				sb.append("&type_origin=");
+				sb.append(Point.toRequestString(startingType));
+			}
+			else if (originCode.length() > 0) {
+				sb.append("&name_origin=");
+				sb.append(originCode);
+				sb.append("&nameState_origin=list");
+				sb.append("&placeState_origin=identified");
+				sb.append("&place_origin=31117000:20060403");
+				sb.append("&type_origin=");
+				sb.append(Point.toRequestString(startingType));
+			}
 
 			if (!useBoat || !useBuses || !useDLR ||
 					!useRail || !useTube || !useOverground) {
@@ -130,8 +167,8 @@ public class Plan implements Serializable {
 		} catch (Exception e) {
 
 		}
-		String reply = sb.toString();
-		return reply;
+		String request = sb.toString();
+		return request;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -296,31 +333,31 @@ public class Plan implements Serializable {
 		this.useOverground = useOverground;
 	}
 
-	public void addAlternativeDestination(String destination) {
-		destinationAlternatives.add(destination);
+	public void addAlternativeDestination(String destination, String code) {
+		destinationAlternatives.put(destination, code);
 	}
 
 	public ArrayList<String> getAlternativeDestinations() {
-		return destinationAlternatives;
+		return new ArrayList<String>(destinationAlternatives.keySet());
 	}
 
-	public void addAlternativeOrigin(String destination) {
-		startingAlternatives.add(destination);
+	public void addAlternativeOrigin(String destination, String code) {
+		startingAlternatives.put(destination, code);
 	}
 
 	public ArrayList<String> getAlternativeOrigins() {
-		return startingAlternatives;
+		return new ArrayList<String>(startingAlternatives.keySet());
 	}
 
 	public void copyAlterativeDestinationsFrom(Plan result) {
 		for (String s : result.getAlternativeDestinations())
-			destinationAlternatives.add(s);
+			destinationAlternatives.put(s,result.destinationAlternatives.get(s));
 
 	}
 
 	public void copyAlterativeOriginsFrom(Plan result) {
 		for (String s : result.getAlternativeOrigins())
-			startingAlternatives.add(s);
+			startingAlternatives.put(s, result.startingAlternatives.get(s));
 	}
 
 	public boolean hasAlternatives() {
@@ -379,6 +416,36 @@ public class Plan implements Serializable {
 		result.useRail=useRail;
 		result.useTube=useTube;
 		return result;
+	}
+	
+	public void clearAcquiredState() {
+		destinationCode = "";
+		originCode = "";
+		sessionId = "0";
+		requestId = "0";
+	}
+
+	public void setDestinationCode(String name) {
+		destinationCode= destinationAlternatives.get(name);
+	}
+
+	public void setOriginCode(String name) {
+		originCode = startingAlternatives.get(name);
+	}
+	
+	public void setSessionId(String id) {
+		sessionId = id;
+	}
+	
+	public void setRequestId(String id) {
+		requestId = id;
+	}
+
+	public void copyAcquiredStareFrom(Plan result) {
+		destinationCode = result.destinationCode;
+		originCode = result.originCode;
+		sessionId = result.sessionId;
+		requestId = result.requestId;
 	}
 
 }

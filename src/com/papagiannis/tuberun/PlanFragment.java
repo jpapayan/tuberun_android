@@ -522,8 +522,10 @@ public class PlanFragment extends Fragment implements Observer,
 				builder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
 						showAlternativeDestinations = false;
-						PlanActivity.getPlan().setDestination(items[item]);
-						PlanActivity.getPlan().clearAlternativeDestinations();
+						Plan p = PlanActivity.getPlan();
+						p.setDestination(items[item]);
+						p.setDestinationCode(items[item]);
+						p.clearAlternativeDestinations();
 						programmaticTextChange = true;
 						destination_edittext.setText(items[item]);
 						if (showAlternativeOrigins)
@@ -539,8 +541,7 @@ public class PlanFragment extends Fragment implements Observer,
 				builder.setOnCancelListener(new OnCancelListener() {
 					@Override
 					public void onCancel(DialogInterface dialog) {
-						// self.removeDialog(SELECT_ALTERNATIVE); // prevent
-						// caching
+						PlanActivity.getPlan().clearAcquiredState();
 					}
 				});
 				AlertDialog alert = builder.create();
@@ -568,10 +569,11 @@ public class PlanFragment extends Fragment implements Observer,
 				builder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
 						showAlternativeOrigins = false;
-						// self.removeDialog(SELECT_ALTERNATIVE); // prevent
-						// caching
-						PlanActivity.getPlan().setStartingString(items[item]);
-						PlanActivity.getPlan().clearAlternativeOrigins();
+						Plan p = PlanActivity.getPlan();
+						p.setStartingString(items[item]);
+						p.setOriginCode(items[item]);
+						p.clearAlternativeOrigins();
+						programmaticTextChange = true;
 						from_edittext.setText(items[item]);
 						if (showAlternativeDestinations)
 							showDialog(SELECT_ALTERNATIVE);
@@ -586,8 +588,7 @@ public class PlanFragment extends Fragment implements Observer,
 				builder.setOnCancelListener(new OnCancelListener() {
 					@Override
 					public void onCancel(DialogInterface dialog) {
-						// self.removeDialog(SELECT_ALTERNATIVE); // prevent
-						// caching
+						PlanActivity.getPlan().clearAcquiredState();
 					}
 				});
 				AlertDialog alert = builder.create();
@@ -751,18 +752,18 @@ public class PlanFragment extends Fragment implements Observer,
 	@SuppressWarnings("deprecation")
 	@Override
 	public void update() {
+		Plan p = fetcher.getResult();
 		is_wait_dialog = false;
 		wait_dialog.dismiss();
 		planActivity.removeDialog(WAIT_DIALOG);
 		if (!fetcher.isErrorResult()) {
-			PlanActivity.setPlan(fetcher.getResult());
-			if (PlanActivity.getPlan().hasAlternatives()) {
-				showAlternativeDestinations = PlanActivity.getPlan()
-						.getAlternativeDestinations().size() > 0;
-				showAlternativeOrigins = PlanActivity.getPlan()
-						.getAlternativeOrigins().size() > 0;
+			PlanActivity.setPlan(p);
+			if (p.hasAlternatives()) {
+				showAlternativeDestinations = p.getAlternativeDestinations().size() > 0;
+				showAlternativeOrigins = p.getAlternativeOrigins().size() > 0;
 				showDialog(SELECT_ALTERNATIVE);
 			} else {
+				p.clearAcquiredState();
 				Intent i = new Intent(getActivity(), RouteResultsActivity.class);
 				startActivity(i);
 			}
