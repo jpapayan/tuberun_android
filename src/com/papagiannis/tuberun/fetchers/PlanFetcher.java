@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,7 +27,7 @@ import com.papagiannis.tuberun.plan.Plan;
 import com.papagiannis.tuberun.plan.Route;
 
 public class PlanFetcher extends Fetcher {
-	final String q = "http://yia.nnis.gr/tuberun/getPlanTest.php";
+	final String q = "http://yia.nnis.gr/tuberun/getPlan.php";
 //	final String q = "http://tuberun.dyndns.org:55559/getPlan.php";
 	private Plan plan;
 	private transient RequestTask task=null;
@@ -136,10 +138,10 @@ public class PlanFetcher extends Fetcher {
 			plan.setRequestId(getRequestId(dom));
 			plan.setSessionId(getSessionId(dom));
 			NodeList odvlist = dom.getElementsByTagName("itdOdv");
-			HashMap<String,String> alternatives=getAlternatives(odvlist,"destination");
-			for (String s:alternatives.keySet()) plan.addAlternativeDestination(s, alternatives.get(s));
+			LinkedHashMap<String,String> alternatives=getAlternatives(odvlist,"destination");
+			for (Entry<String, String> s:alternatives.entrySet()) plan.addAlternativeDestination(s.getKey(), s.getValue());
 			alternatives=getAlternatives(odvlist,"origin");
-			for (String s:alternatives.keySet()) plan.addAlternativeOrigin(s, alternatives.get(s));
+			for (Entry<String, String> s:alternatives.entrySet()) plan.addAlternativeOrigin(s.getKey(), s.getValue());
 		}
 		return plan;
 	}
@@ -156,8 +158,8 @@ public class PlanFetcher extends Fetcher {
 		return requestlist.item(0).getAttributes().getNamedItem("requestID").getNodeValue();
 	}
 
-	private HashMap<String,String> getAlternatives(NodeList odvList, String type) {
-		HashMap<String,String> result=new HashMap<String,String>();
+	private LinkedHashMap<String,String> getAlternatives(NodeList odvList, String type) {
+		LinkedHashMap<String,String> result=new LinkedHashMap<String,String>();
 		for (int i = 0; i < odvList.getLength(); i++) {
 			Node odvNode = odvList.item(i);
 			Node odvNodeUsage=odvNode.getAttributes().getNamedItem("usage");

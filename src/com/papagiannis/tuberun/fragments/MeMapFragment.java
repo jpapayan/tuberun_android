@@ -77,12 +77,20 @@ public class MeMapFragment extends Fragment implements LocationListener {
 	}
 
 	public void animateToMarkers(Iterable<Marker> markers) {
+		animateToMarkers(markers, 1, 1);
+	}
+	
+	public void animateToMarkers(Iterable<Marker> markers, double wPercent, double hPercent) {
 		if (markers == null) return;
 		LatLngBounds.Builder bc = new LatLngBounds.Builder();
 		for (Marker item : markers) {
 			bc.include(item.getPosition());
 		}
-		gMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bc.build(), 50));
+		gMap.moveCamera(CameraUpdateFactory.newLatLngBounds(
+				bc.build(),
+				(int) (this.getResources().getDisplayMetrics().widthPixels * wPercent), 
+                (int) (this.getResources().getDisplayMetrics().heightPixels * hPercent),
+				50));
 	}
 
 	/**

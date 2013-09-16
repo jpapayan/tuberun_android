@@ -198,7 +198,7 @@ public class SelectLineActivity extends FragmentActivity implements
 	        	mapFragment.getView().post(new Runnable() {
 	    			@Override
 	    			public void run() {
-	    				mapFragment.animateToMarkers(markers);
+	    				mapFragment.animateToMarkers(markers, 0.95, 0.6);
 	    			}
 	    		});
 	        }

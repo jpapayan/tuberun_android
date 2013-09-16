@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
 
 import android.location.Location;
 
@@ -23,10 +25,10 @@ public class Plan implements Serializable {
 			"yyyyMMdd", Locale.US);
 
 	private String destination = "";
-	private transient HashMap<String,String> destinationAlternatives = new HashMap<String,String>();
+	private transient LinkedHashMap<String,String> destinationAlternatives = new LinkedHashMap<String,String>();
 	private Point destinationType = Point.STATION;
 	private String startingString = "";
-	private transient HashMap<String,String> startingAlternatives = new HashMap<String,String>();
+	private transient LinkedHashMap<String,String> startingAlternatives = new LinkedHashMap<String,String>();
 	private Point startingType = Point.LOCATION;
 	private transient Location startingLocation = null;
 
@@ -338,7 +340,9 @@ public class Plan implements Serializable {
 	}
 
 	public ArrayList<String> getAlternativeDestinations() {
-		return new ArrayList<String>(destinationAlternatives.keySet());
+		ArrayList<String> result =  new ArrayList<String>();
+		for (Entry<String, String> s:destinationAlternatives.entrySet()) result.add(s.getKey());
+		return result;
 	}
 
 	public void addAlternativeOrigin(String destination, String code) {
@@ -346,7 +350,9 @@ public class Plan implements Serializable {
 	}
 
 	public ArrayList<String> getAlternativeOrigins() {
-		return new ArrayList<String>(startingAlternatives.keySet());
+		ArrayList<String> result =  new ArrayList<String>();
+		for (Entry<String, String> s:startingAlternatives.entrySet()) result.add(s.getKey());
+		return result;
 	}
 
 	public void copyAlterativeDestinationsFrom(Plan result) {

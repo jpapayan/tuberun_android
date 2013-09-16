@@ -45,7 +45,7 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
-	public static final String VERSION = "1.3.1";
+	public static final String VERSION = "1.3.2";
 	// Don't forget to update the app version in the manifest
 	// Don't forget to update the changelog later in this file
 	public static final Boolean USE_LICENSING = false;
