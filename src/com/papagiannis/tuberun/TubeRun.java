@@ -634,8 +634,9 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		builder.setTitle(APPNAME + " " + VERSION)
 				.setMessage(
 						"What's new:\n\n"
-								+ "*Favorites are now sorted automatically by distance!\n\n"
-								+ "*Numerous bug fixes.\n")
+								+ "*Journey planner suggestions improvements.\n\n"
+								+ "*Minor sliding menu UI updates.\n\n"
+								+ "*Better support for the Galaxy S4.\n")
 				.setCancelable(false).setPositiveButton("OK", null);
 		return builder.create();
 	}
