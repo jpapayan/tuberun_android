@@ -100,7 +100,7 @@
                 android:layout_width="100dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Username"
+                android:text="Email"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <EditText

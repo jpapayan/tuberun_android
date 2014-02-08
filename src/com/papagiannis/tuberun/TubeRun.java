@@ -45,7 +45,7 @@ import com.papagiannis.tuberun.stores.CredentialsStore;
 
 public class TubeRun extends Activity implements OnClickListener, Observer {
 	public static final String APPNAME = "TubeRun";
-	public static final String VERSION = "1.3.2";
+	public static final String VERSION = "1.3.3";
 	// Don't forget to update the app version in the manifest
 	// Don't forget to update the changelog later in this file
 	public static final Boolean USE_LICENSING = false;
@@ -634,9 +634,7 @@ public class TubeRun extends Activity implements OnClickListener, Observer {
 		builder.setTitle(APPNAME + " " + VERSION)
 				.setMessage(
 						"What's new:\n\n"
-								+ "*Journey planner suggestions improvements.\n\n"
-								+ "*Minor sliding menu UI updates.\n\n"
-								+ "*Better support for the Galaxy S4.\n")
+								+ "*Support for the new Oyster login.\n")
 				.setCancelable(false).setPositiveButton("OK", null);
 		return builder.create();
 	}

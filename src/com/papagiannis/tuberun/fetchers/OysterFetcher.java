@@ -55,8 +55,12 @@ public class OysterFetcher extends Fetcher {
 		cardsReturned.set(0);
 		postData = new StringBuilder();
 		cookies = new BasicCookieStore();
-		String q1 = "https://oyster.tfl.gov.uk/oyster/security_check";
-		postData.append("j_username="+username+"&j_password="+password+"&Sign+in=Sign+in");
+		String q1 = "https://account.tfl.gov.uk/Oyster/";
+		postData.append(
+				"UserName="+username+
+				"&Password="+password+
+				"&Sign+in=Sign+in"
+		);
 
 		PostRequestTask r = new PostRequestTask(new HttpCallback() {
 			public void onReturn(String s) {
